@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>my-order</title>
+    <title>myorder</title>
     <style>
         :root {
             --primary: #4F46E5;
@@ -213,7 +213,7 @@
                     <span>ธ.ไทยพาณิชย์ SCB<br>407-811653-8<br>กุลจิรา ตู้จินดา</span>
                 </label>
                 <label>
-                    <input type="radio" name="bank" value="SCB"> 
+                    <input type="radio" name="bank" value="KBANK"> 
                     <span>ธ.กสิกร KBANK<br>026-1-56003-8<br>กุลจิรา ตู้จินดา</span>
                 </label>
             </div>
@@ -421,7 +421,7 @@
         
         let finalProductsText = '';
         let validPrices = [];
-        let hasMissingPrice = false; // ตัวแปรเช็คว่ามีช่องราคากลวงหรือเปล่า
+        let hasMissingPrice = false;
         let productsSum = 0;
         
         const blocks = document.querySelectorAll('.collection-block');
@@ -443,7 +443,6 @@
                     const sizeText = (sizeVal === '-' || sizeVal === '') ? '' : ` (${sizeVal})`;
                     colText += `- ${nameVal}${sizeText}\n`;
                     
-                    // เช็คช่องราคา
                     if (rawPrice === '') {
                         validPrices.push('***');
                         hasMissingPrice = true;
@@ -453,7 +452,6 @@
                             validPrices.push(priceVal);
                             productsSum += priceVal;
                         }
-                        // ถ้ากรอกเลข 0 คือให้ฟรี ก็จะไม่เอาเข้า validPrices 
                     }
                 }
             });
@@ -473,7 +471,6 @@
 
         let priceString = '';
         if (validPrices.length > 0) {
-            // ถ้าราคาหายไปบางตัว ยอดรวมจะแสดงเป็น *** เพื่อดึงดูดสายตากันลืม
             const totalSum = hasMissingPrice ? '***' : (productsSum + shippingValue); 
             
             if (shippingValue > 0) {
@@ -504,6 +501,7 @@
             if (radio.checked) {
                 if (radio.value === 'TTB') bankText = "ธ.ไทยธนชาต TTB\n622-2-84950-4\nกุลจิรา ล้อพงศ์ไพบูลย์";
                 else if (radio.value === 'SCB') bankText = "ธ.ไทยพาณิชย์ SCB\n407-811653-8\nกุลจิรา ตู้จินดา";
+                else if (radio.value === 'KBANK') bankText = "ธ.กสิกร KBANK\n026-1-56003-8\nกุลจิรา ตู้จินดา";
             }
         }
 
