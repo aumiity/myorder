@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ระบบสร้างข้อความสั่งซื้อ</title>
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --bg: #F3F4F6;
+            --surface: #FFFFFF;
+            --text: #1F2937;
+            --border: #E5E7EB;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1000px;
+            width: 100%;
+        }
+        .panel {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        h2 { margin-top: 0; color: var(--primary); }
+        .form-group { margin-bottom: 1.5rem; }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        input[type="text"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 16px; 
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        select {
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.7rem top 50%;
+            background-size: 0.65rem auto;
+            padding-right: 2rem;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+        .collection-block {
+            background-color: #F8FAFC;
+            border: 2px dashed #CBD5E1;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        .collection-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        .product-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            align-items: center;
+        }
+        .product-checkbox {
+            width: 24px !important;
+            height: 24px !important;
+            cursor: pointer;
+            margin: 0;
+            padding: 0;
+            accent-color: var(--primary);
+        }
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.85rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: background-color 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn:hover, .btn:active { background-color: var(--primary-hover); }
+        .btn-icon {
+            padding: 0.5rem;
+            width: 44px;
+            height: 44px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-remove { background-color: #EF4444; }
+        .btn-remove:hover, .btn-remove:active { background-color: #DC2626; }
+        .btn-remove-col {
+            background-color: transparent;
+            color: #EF4444;
+            border: 1px solid #EF4444;
+            padding: 0.4rem 0.75rem;
+            font-size: 0.85rem;
+            border-radius: 6px;
+        }
+        .btn-remove-col:hover { background-color: #FEF2F2; color: #DC2626; }
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .radio-group label {
+            display: flex;
+            align-items: flex-start;
+            font-weight: normal;
+            gap: 0.75rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: white;
+        }
+        input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+        }
+        textarea {
+            height: 400px;
+            resize: vertical;
+            background-color: #F9FAFB;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .container { 
+                grid-template-columns: 1fr; 
+                gap: 1rem;
+            }
+            .panel { padding: 1.25rem; }
+            .collection-block { padding: 1rem; }
+            .product-row {
+                flex-wrap: wrap;
+                background: #FFFFFF;
+                padding: 0.75rem;
+                border-radius: 8px;
+                border: 1px solid var(--border);
+            }
+            .product-checkbox {
+                flex: 0 0 auto !important;
+            }
+            .productName {
+                flex: 1 1 80% !important;
+                margin-bottom: 0.5rem;
+            }
+            .productSizeSelect, .productSizeInput, .productPrice {
+                flex: 1 1 35% !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="panel">
+        <h2 style="margin-bottom: 1.5rem;">📝 ข้อมูลออเดอร์</h2>
+        
+        <div id="collectionsContainer">
+            </div>
+
+        <button class="btn" style="width: 100%; background-color: #F59E0B; color: white; margin-bottom: 2rem;" onclick="addCollectionBlock()">+ เพิ่มคอลเลคชั่นใหม่</button>
+        
+        <hr style="border: 0; border-top: 1px solid var(--border); margin-bottom: 1.5rem;">
+
+        <div class="form-group">
+            <label>ค่าส่ง (บาท)</label>
+            <input type="number" id="shippingCost" placeholder="เช่น 50" value="0">
+        </div>
+
+        <div class="form-group">
+            <label>บัญชีธนาคาร</label>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" name="bank" value="TTB" checked> 
+                    <span>ธ.ไทยธนชาต TTB<br>622-2-84950-4<br>กุลจิรา ล้อพงศ์ไพบูลย์</span>
+                </label>
+                <label>
+                    <input type="radio" name="bank" value="SCB"> 
+                    <span>ธ.ไทยพาณิชย์ SCB<br>407-811653-8<br>กุลจิรา ตู้จินดา</span>
+                </label>
+            </div>
+        </div>
+
+        <button class="btn" style="width: 100%; font-size: 1.1rem; background-color: #EF4444; margin-top: 1rem;" onclick="clearData()">🗑️ ล้างข้อมูลทั้งหมด</button>
+    </div>
+
+    <div class="panel">
+        <h2>📋 ข้อความที่ได้</h2>
+        <div class="form-group">
+            <textarea id="outputText" readonly placeholder="ข้อความที่สร้างจะแสดงตรงนี้..."></textarea>
+        </div>
+        <button class="btn" style="width: 100%; background-color: #3B82F6; font-size: 1.1rem;" onclick="copyText()">📄 คัดลอกไปใช้งาน</button>
+    </div>
+</div>
+
+<script>
+    window.onload = function() {
+        loadData();
+        
+        const updateData = () => { saveData(); generateText(); };
+        
+        document.getElementById('shippingCost').addEventListener('input', updateData);
+        document.querySelectorAll('input[name="bank"]').forEach(radio => radio.addEventListener('change', updateData));
+        
+        document.getElementById('collectionsContainer').addEventListener('input', updateData);
+        document.getElementById('collectionsContainer').addEventListener('change', updateData);
+        
+        generateText(); 
+    };
+
+    function saveData() {
+        localStorage.setItem('shippingCost', document.getElementById('shippingCost').value);
+        localStorage.setItem('bank', document.querySelector('input[name="bank"]:checked').value);
+
+        const collections = [];
+        document.querySelectorAll('.collection-block').forEach(block => {
+            const colName = block.querySelector('.collectionName').value;
+            const products = [];
+            
+            block.querySelectorAll('.product-row').forEach(row => {
+                const sizeSelect = row.querySelector('.productSizeSelect');
+                const sizeInput = row.querySelector('.productSizeInput');
+                const sizeVal = sizeInput.style.display !== 'none' ? sizeInput.value.trim() : sizeSelect.value;
+
+                products.push({
+                    isChecked: row.querySelector('.productInclude').checked,
+                    name: row.querySelector('.productName').value,
+                    size: sizeVal,
+                    price: row.querySelector('.productPrice').value
+                });
+            });
+            collections.push({ colName, products });
+        });
+        localStorage.setItem('orderData', JSON.stringify(collections));
+    }
+
+    function loadData() {
+        if (localStorage.getItem('shippingCost')) document.getElementById('shippingCost').value = localStorage.getItem('shippingCost');
+        
+        if (localStorage.getItem('bank')) {
+            const bankVal = localStorage.getItem('bank');
+            const bankInput = document.querySelector(`input[name="bank"][value="${bankVal}"]`);
+            if(bankInput) bankInput.checked = true;
+        }
+
+        const container = document.getElementById('collectionsContainer');
+        container.innerHTML = ''; 
+
+        const savedData = JSON.parse(localStorage.getItem('orderData'));
+        if (savedData && savedData.length > 0) {
+            savedData.forEach(col => {
+                const block = addCollectionBlock(col.colName);
+                if(col.products.length > 0) {
+                    col.products.forEach(p => addProductToBlock(block, p.name, p.size, p.price, p.isChecked));
+                } else {
+                    addProductToBlock(block); 
+                }
+            });
+        } else {
+            const block = addCollectionBlock('');
+            addProductToBlock(block);
+        }
+    }
+
+    function addCollectionBlock(colName = '') {
+        const container = document.getElementById('collectionsContainer');
+        const block = document.createElement('div');
+        block.className = 'collection-block';
+        
+        block.innerHTML = `
+            <div class="collection-header">
+                <label style="margin: 0; font-size: 1.1rem; color: var(--primary);">📦 คอลเลคชั่น</label>
+                <button class="btn btn-remove-col" onclick="removeCollectionBlock(this)">ลบชุดนี้</button>
+            </div>
+            <div class="form-group">
+                <input type="text" class="collectionName" placeholder="ชื่อคอลเลคชั่น เช่น Summer 2026" value="${colName}">
+            </div>
+            <label>รายการสินค้า <small style="color: #6B7280; font-weight: normal;">(ติ๊กถูกเพื่อใช้งาน)</small></label>
+            <div class="productList"></div>
+            <button class="btn" style="margin-top: 0.5rem; width: 100%; background-color: #10B981;" onclick="handleAddProductClick(this)">+ เพิ่มสินค้า</button>
+        `;
+        container.appendChild(block);
+        
+        if(colName === '' && arguments.length === 0) {
+            addProductToBlock(block);
+            saveData();
+            generateText();
+        }
+        
+        return block;
+    }
+
+    function removeCollectionBlock(btn) {
+        if(confirm('ต้องการลบคอลเลคชั่นนี้พร้อมสินค้าทั้งหมดในนี้ใช่ไหม?')) {
+            btn.closest('.collection-block').remove();
+            saveData();
+            generateText();
+        }
+    }
+
+    function handleAddProductClick(btn) {
+        const block = btn.closest('.collection-block');
+        addProductToBlock(block);
+        saveData();
+        generateText();
+    }
+
+    function addProductToBlock(block, name = '', size = '-', price = '', isChecked = true) {
+        const productList = block.querySelector('.productList');
+        const newRow = document.createElement('div');
+        newRow.className = 'product-row';
+        
+        const predefinedSizes = ['-', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', 'FS'];
+        const isCustomSize = !predefinedSizes.includes(size) && size !== '';
+        
+        const optionsHtml = predefinedSizes.map(s => `<option value="${s}" ${!isCustomSize && size === s ? 'selected' : ''}>${s}</option>`).join('');
+
+        newRow.innerHTML = `
+            <input type="checkbox" class="productInclude product-checkbox" title="เลือกเพื่อนำเข้าข้อความ" ${isChecked ? 'checked' : ''}>
+            <input type="text" class="productName" placeholder="ชื่อสินค้า" style="flex: 2;" value="${name}">
+            
+            <select class="productSizeSelect" style="flex: 1; ${isCustomSize ? 'display: none;' : ''}" onchange="checkCustomSize(this)">
+                ${optionsHtml}
+                <option value="other">อื่นๆ (พิมพ์เอง)</option>
+            </select>
+            
+            <input type="text" class="productSizeInput" placeholder="ระบุไซส์" style="flex: 1; ${isCustomSize ? '' : 'display: none;'}" value="${isCustomSize ? size : ''}" onblur="checkEmptySize(this)">
+            
+            <input type="number" class="productPrice" placeholder="ราคา" style="flex: 1;" value="${price}">
+            <button class="btn btn-icon btn-remove" onclick="removeProduct(this)">-</button>
+        `;
+        productList.appendChild(newRow);
+    }
+
+    function checkCustomSize(selectObj) {
+        if (selectObj.value === 'other') {
+            const inputObj = selectObj.nextElementSibling;
+            selectObj.style.display = 'none';
+            inputObj.style.display = ''; 
+            inputObj.focus(); 
+            saveData(); generateText();
+        }
+    }
+
+    function checkEmptySize(inputObj) {
+        if (inputObj.value.trim() === '') {
+            const selectObj = inputObj.previousElementSibling;
+            inputObj.style.display = 'none'; 
+            selectObj.style.display = ''; 
+            selectObj.value = '-'; 
+            saveData(); generateText();
+        }
+    }
+
+    function removeProduct(btn) {
+        btn.parentElement.remove();
+        saveData(); 
+        generateText(); 
+    }
+
+    function clearData() {
+        if(confirm('คุณแน่ใจหรือไม่ว่าต้องการล้างข้อมูลทั้งหมดเพื่อเริ่มออเดอร์ใหม่?')) {
+            localStorage.clear();
+
+            document.getElementById('shippingCost').value = '0';
+            document.getElementById('outputText').value = '';
+            document.querySelector('input[name="bank"][value="TTB"]').checked = true;
+
+            const container = document.getElementById('collectionsContainer');
+            container.innerHTML = ''; 
+            
+            const block = addCollectionBlock('');
+            addProductToBlock(block);
+
+            saveData();
+            generateText();
+        }
+    }
+
+    function generateText() {
+        const shipping = document.getElementById('shippingCost').value || '0';
+        const shippingValue = parseFloat(shipping) || 0;
+        
+        let finalProductsText = '';
+        let validPrices = [];
+        let hasMissingPrice = false; // ตัวแปรเช็คว่ามีช่องราคากลวงหรือเปล่า
+        let productsSum = 0;
+        
+        const blocks = document.querySelectorAll('.collection-block');
+        blocks.forEach(block => {
+            const colName = block.querySelector('.collectionName').value.trim();
+            const productRows = block.querySelectorAll('.product-row');
+            
+            let colText = '';
+            
+            productRows.forEach(row => {
+                const isIncluded = row.querySelector('.productInclude').checked;
+                const nameVal = row.querySelector('.productName').value;
+                const sizeSelect = row.querySelector('.productSizeSelect');
+                const sizeInput = row.querySelector('.productSizeInput');
+                const sizeVal = sizeInput.style.display !== 'none' ? sizeInput.value.trim() : sizeSelect.value;
+                const rawPrice = row.querySelector('.productPrice').value.trim();
+
+                if (isIncluded && nameVal.trim() !== '') {
+                    const sizeText = (sizeVal === '-' || sizeVal === '') ? '' : ` (${sizeVal})`;
+                    colText += `- ${nameVal}${sizeText}\n`;
+                    
+                    // เช็คช่องราคา
+                    if (rawPrice === '') {
+                        validPrices.push('***');
+                        hasMissingPrice = true;
+                    } else {
+                        const priceVal = parseFloat(rawPrice);
+                        if (priceVal > 0) {
+                            validPrices.push(priceVal);
+                            productsSum += priceVal;
+                        }
+                        // ถ้ากรอกเลข 0 คือให้ฟรี ก็จะไม่เอาเข้า validPrices 
+                    }
+                }
+            });
+
+            if (colText !== '') {
+                if (colName !== '') {
+                    finalProductsText += `${colName}\n${colText}\n`;
+                } else {
+                    finalProductsText += `${colText}\n`;
+                }
+            }
+        });
+        
+        if (finalProductsText === '') {
+            finalProductsText = '- ไม่มีรายการสินค้า -\n\n';
+        }
+
+        let priceString = '';
+        if (validPrices.length > 0) {
+            // ถ้าราคาหายไปบางตัว ยอดรวมจะแสดงเป็น *** เพื่อดึงดูดสายตากันลืม
+            const totalSum = hasMissingPrice ? '***' : (productsSum + shippingValue); 
+            
+            if (shippingValue > 0) {
+                priceString = `${validPrices.join(' + ')} + ${shippingValue} = ${totalSum}`;
+            } else {
+                priceString = `${validPrices.join(' + ')} = ${totalSum}`;
+            }
+        } else {
+            if (hasMissingPrice) {
+                 const totalSum = '***';
+                 if (shippingValue > 0) {
+                     priceString = `*** + ${shippingValue} = ${totalSum}`;
+                 } else {
+                     priceString = `*** = ***`;
+                 }
+            } else {
+                if (shippingValue > 0) {
+                    priceString = `${shippingValue} = ${shippingValue}`;
+                } else {
+                    priceString = '0 = 0';
+                }
+            }
+        }
+
+        const bankRadios = document.getElementsByName('bank');
+        let bankText = '';
+        for (const radio of bankRadios) {
+            if (radio.checked) {
+                if (radio.value === 'TTB') bankText = "ธ.ไทยธนชาต TTB\n622-2-84950-4\nกุลจิรา ล้อพงศ์ไพบูลย์";
+                else if (radio.value === 'SCB') bankText = "ธ.ไทยพาณิชย์ SCB\n407-811653-8\nกุลจิรา ตู้จินดา";
+            }
+        }
+
+        const finalOutput = `${finalProductsText}ค่าจัดส่ง: ${shipping} บาท
+ยอดรวม: ${priceString} บาท
+
+--------------------------
+ชำระเงินได้ที่:
+${bankText}
+
+โอนเงินแล้วกรุณาส่งสลิป และที่อยู่ให้ด้วยนะคะ`;
+
+        document.getElementById('outputText').value = finalOutput;
+    }
+
+    function copyText() {
+        const outputArea = document.getElementById('outputText');
+        if(outputArea.value.trim() === '') return;
+        
+        outputArea.select();
+        document.execCommand('copy');
+        
+        window.getSelection().removeAllRanges();
+    }
+</script>
+
+</body>
+</html>
