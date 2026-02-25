@@ -35,7 +35,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-        h2 { margin-top: 0; color: var(--primary); }
+        h2 { margin-top: 0; color: var(--primary); font-size: 1.5rem; }
         .form-group { margin-bottom: 1.5rem; }
         label {
             display: block;
@@ -143,7 +143,6 @@
             align-items: center;
             justify-content: center;
         }
-        /* สีปุ่มคัดลอกและลบ */
         .btn-clone { background-color: #3B82F6; }
         .btn-clone:hover, .btn-clone:active { background-color: #2563EB; }
         .btn-remove { background-color: #EF4444; }
@@ -181,7 +180,7 @@
             margin-top: 2px;
         }
         textarea {
-            height: 400px;
+            height: 280px; /* ลดความสูงลงให้พอดีจอเวลาโชว์ 2 กล่อง */
             resize: vertical;
             background-color: #F9FAFB;
             line-height: 1.5;
@@ -241,11 +240,17 @@
     </div>
 
     <div class="panel">
-        <h2>📋 ข้อความที่ได้</h2>
+        <h2>📋 ข้อความสรุปยอดโอน</h2>
         <div class="form-group">
-            <textarea id="outputText" readonly placeholder="ข้อความที่สร้างจะแสดงตรงนี้..."></textarea>
+            <textarea id="outputText" readonly placeholder="ข้อความสรุปยอดจะแสดงตรงนี้..."></textarea>
         </div>
-        <button class="btn" style="width: 100%; background-color: #3B82F6; font-size: 1.1rem;" onclick="copyText()">📄 คัดลอกไปใช้งาน</button>
+        <button class="btn" style="width: 100%; background-color: #3B82F6; font-size: 1.1rem; margin-bottom: 2rem;" onclick="copyText('outputText')">📄 คัดลอกสรุปยอด</button>
+
+        <h2>📦 ข้อความใบปะหน้า</h2>
+        <div class="form-group">
+            <textarea id="outputLabelText" readonly placeholder="ข้อความสำหรับใบปะหน้าจะแสดงตรงนี้..."></textarea>
+        </div>
+        <button class="btn" style="width: 100%; background-color: #10B981; font-size: 1.1rem;" onclick="copyText('outputLabelText')">📄 คัดลอกใบปะหน้า</button>
     </div>
 </div>
 
@@ -367,7 +372,6 @@
         generateText();
     }
 
-    // ฟังก์ชันสร้างชิ้นส่วนรายการสินค้า (ใช้ซ้ำได้ทั้งตอนเพิ่มใหม่ และตอนคัดลอก)
     function createProductItemElement(name = '', price = '', selectedSizes = []) {
         const newItem = document.createElement('div');
         newItem.className = 'product-item';
@@ -397,17 +401,11 @@
         return newItem;
     }
 
-    // ฟังก์ชันโคลนรายการสินค้า (สำหรับไซส์ที่ราคาไม่เท่ากัน)
     function cloneProduct(btn) {
         const currentItem = btn.closest('.product-item');
         const name = currentItem.querySelector('.productName').value;
-        
-        // สร้างรายการใหม่โดยเอาแค่ชื่อมา ราคาและไซส์เว้นว่างไว้ให้กรอกใหม่
         const newItem = createProductItemElement(name, '', []);
-        
-        // แทรกรายการใหม่เข้าไปต่อท้ายรายการเดิมทันที
         currentItem.parentNode.insertBefore(newItem, currentItem.nextSibling);
-        
         saveData();
         generateText();
     }
@@ -446,6 +444,7 @@
 
             document.getElementById('shippingCost').value = '0';
             document.getElementById('outputText').value = '';
+            document.getElementById('outputLabelText').value = '';
             document.querySelector('input[name="bank"][value="TTB"]').checked = true;
 
             const container = document.getElementById('collectionsContainer');
@@ -463,6 +462,7 @@
         const shippingValue = parseFloat(shipping) || 0;
         
         let finalProductsText = '';
+        let labelLines = []; // ตัวแปรเก็บข้อความสำหรับใบปะหน้า
         let validPrices = [];
         let hasMissingPrice = false;
         let productsSum = 0;
@@ -473,6 +473,7 @@
             const productItems = block.querySelectorAll('.product-item');
             
             let colText = '';
+            let colLabelProducts = []; // เก็บสินค้าในคอลเลคชั่นนี้ (สำหรับใบปะหน้า)
             
             productItems.forEach(item => {
                 const nameVal = item.querySelector('.productName').value.trim();
@@ -483,8 +484,14 @@
                     activePills.forEach(pill => {
                         const sizeVal = pill.getAttribute('data-size');
                         const sizeText = (sizeVal === '-' || sizeVal === '') ? '' : ` (${sizeVal})`;
+                        
+                        // สร้างข้อความบิลปกติ
                         colText += `- ${nameVal}${sizeText}\n`;
                         
+                        // สร้างข้อความใบปะหน้า (เก็บไว้เชื่อมด้วย / ทีหลัง)
+                        colLabelProducts.push(`${nameVal}${sizeText}`);
+                        
+                        // เช็คและคำนวณราคา
                         if (rawPrice === '') {
                             validPrices.push('***');
                             hasMissingPrice = true;
@@ -499,11 +506,21 @@
                 }
             });
 
+            // ประกอบข้อความบิลโอนเงิน
             if (colText !== '') {
                 if (colName !== '') {
                     finalProductsText += `${colName}\n${colText}\n`;
                 } else {
                     finalProductsText += `${colText}\n`;
+                }
+            }
+
+            // ประกอบข้อความใบปะหน้า
+            if (colLabelProducts.length > 0) {
+                if (colName !== '') {
+                    labelLines.push(`${colName} = ${colLabelProducts.join(' / ')}`);
+                } else {
+                    labelLines.push(colLabelProducts.join(' / '));
                 }
             }
         });
@@ -548,6 +565,7 @@
             }
         }
 
+        // นำข้อความไปใส่ในกล่องสรุปยอดโอน
         const finalOutput = `${finalProductsText}ค่าจัดส่ง: ${shipping} บาท
 ยอดรวม: ${priceString} บาท
 
@@ -556,12 +574,15 @@
 ${bankText}
 
 โอนเงินแล้วกรุณาส่งสลิป และที่อยู่ให้ด้วยนะคะ`;
-
         document.getElementById('outputText').value = finalOutput;
+
+        // นำข้อความไปใส่ในกล่องใบปะหน้า
+        document.getElementById('outputLabelText').value = labelLines.join('\n');
     }
 
-    function copyText() {
-        const outputArea = document.getElementById('outputText');
+    // ฟังก์ชันคัดลอกแบบใหม่ รับค่า id ของกล่องที่ต้องการก๊อปปี้
+    function copyText(elementId) {
+        const outputArea = document.getElementById(elementId);
         if(outputArea.value.trim() === '') return;
         
         outputArea.select();
