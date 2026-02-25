@@ -185,7 +185,6 @@
             .productSizeSelect, .productSizeInput, .productPrice {
                 flex: 1 1 35% !important;
             }
-            /* ปรับปุ่มบนมือถือให้ซ้อนกันจะได้กดง่ายๆ */
             .btn-group-row {
                 flex-direction: column;
             }
@@ -314,7 +313,6 @@
         const block = document.createElement('div');
         block.className = 'collection-block';
         
-        // เพิ่มปุ่ม 2 แบบ (แบบทีละรายการ และ แบบรวดเดียวครบไซส์)
         block.innerHTML = `
             <div class="collection-header">
                 <label style="margin: 0; font-size: 1.1rem; color: var(--primary);">📦 คอลเลคชั่น</label>
@@ -357,16 +355,17 @@
         generateText();
     }
 
-    // ฟังก์ชันใหม่: สร้างรวดเดียวครบไซส์
     function handleAddFullSizeClick(btn) {
         const block = btn.closest('.collection-block');
-        const productName = prompt('กรอกชื่อสินค้าที่ต้องการเพิ่ม (เช่น เสื้อยืด):\nระบบจะสร้างไซส์ S ถึง 4XL ให้อัตโนมัติ');
+        const productName = prompt('1. กรอกชื่อสินค้าที่ต้องการเพิ่ม (เช่น เสื้อยืด):\nระบบจะสร้างไซส์ S ถึง 4XL ให้อัตโนมัติ');
         
-        if (productName !== null) { // ถ้าผู้ใช้ไม่ได้กด Cancel (กดยกเลิก)
+        if (productName !== null && productName.trim() !== '') {
+            let productPrice = prompt('2. กรอกราคาสินค้า (ตัวเลข):\nระบบจะใส่ราคานี้ให้ทุกไซส์อัตโนมัติ (ปล่อยว่างได้)');
+            if (productPrice === null) productPrice = ''; // ถ้ากดยกเลิกตอนถามราคา ให้ถือว่าเว้นว่าง
+            
             const fullSizes = ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'];
             fullSizes.forEach(size => {
-                // ใส่ชื่อสินค้าที่พิมพ์มา และใส่ไซส์ไปให้เลย
-                addProductToBlock(block, productName.trim(), size, '', true);
+                addProductToBlock(block, productName.trim(), size, productPrice.trim(), true);
             });
             saveData();
             generateText();
