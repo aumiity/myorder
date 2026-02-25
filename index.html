@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>myorder</title>
     <style>
         :root {
@@ -11,54 +11,59 @@
             --bg: #F3F4F6;
             --surface: #FFFFFF;
             --text: #1F2937;
-            --border: #E5E7EB;
+            --border: #D1D5DB; 
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
-            padding: 2rem;
+            padding: 3rem; 
             display: flex;
             justify-content: center;
         }
         .container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            max-width: 1000px;
+            grid-template-columns: 1.4fr 1fr; /* ขยายฝั่งซ้ายเพิ่มอีกนิดให้พอดีกับแถวแนวยาว */
+            gap: 2.5rem; 
+            max-width: 1500px; 
             width: 100%;
         }
         .panel {
             background: var(--surface);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 2rem; 
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
         .main-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
-        h2 { margin: 0; color: var(--primary); font-size: 1.5rem; }
+        h2 { margin: 0; color: var(--primary); font-size: 1.8rem; display: flex; align-items: baseline; gap: 0.5rem; }
+        .version-badge { font-size: 0.9rem; color: #9CA3AF; font-weight: normal; }
+        
         .form-group { margin-bottom: 1.5rem; }
         label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 1.05rem; 
         }
+        
+        /* ช่องกรอกทั่วไป */
         input[type="text"], input[type="number"], textarea {
             width: 100%;
-            padding: 0.75rem;
+            padding: 0.75rem 1rem;
             border: 1px solid var(--border);
             border-radius: 8px;
             box-sizing: border-box;
             font-family: inherit;
-            font-size: 16px; 
+            font-size: 1.05rem; 
             -webkit-appearance: none;
             appearance: none;
+            transition: border-color 0.2s;
         }
         input:focus, textarea:focus {
             outline: none;
@@ -77,46 +82,61 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
         }
         
+        /* --- ดีไซน์แถวสินค้าแบบใหม่ (แนวยาวบรรทัดเดียว) --- */
         .product-item {
             background: #FFFFFF;
-            padding: 1rem;
+            padding: 0.6rem 0.75rem; /* ลดขนาดกรอบให้กะทัดรัด */
             border-radius: 8px;
             border: 1px solid var(--border);
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
-        .product-inputs {
             display: flex;
+            align-items: center;
             gap: 0.5rem;
-            margin-bottom: 0.75rem;
+            flex-wrap: nowrap; /* บังคับให้อยู่บรรทัดเดียวกัน */
         }
+
+        /* ปรับขนาดช่องกรอกในแถวสินค้าให้พอดี */
+        .product-item input[type="text"], .product-item input[type="number"] {
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+        .productName { width: 180px; flex-shrink: 1; }
+        .productPrice { width: 80px; flex-shrink: 0; }
+        .productQty { width: 65px; flex-shrink: 0; text-align: center; }
         
+        /* โซนปุ่มไซส์ */
         .size-pills {
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
+            flex-wrap: nowrap;
+            gap: 0.35rem;
+            align-items: center;
+            margin-left: 0.5rem;
+            margin-right: auto; /* ดันปุ่มลบไปชิดขวา */
         }
+        
         .pill {
-            padding: 0.4rem 0.85rem;
+            padding: 0.35rem 0.7rem;
             border: 1px solid var(--border);
             border-radius: 20px;
             background: #F3F4F6;
             color: #4B5563;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 500;
             cursor: pointer;
             user-select: none;
             transition: all 0.2s ease;
+            white-space: nowrap; /* ป้องกันข้อความในปุ่มตกบรรทัด */
         }
-        .pill:hover { border-color: #9CA3AF; }
+        .pill:hover { border-color: #9CA3AF; background: #E5E7EB; }
         .pill.active {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
-            box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3);
         }
         .pill-custom {
             border-style: dashed;
@@ -126,6 +146,7 @@
         }
         .pill-custom:hover { background: #EEF2FF; }
 
+        /* ปุ่มกดทั่วไป */
         .btn {
             background-color: var(--primary);
             color: white;
@@ -134,20 +155,22 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 16px;
+            font-size: 1.1rem;
             transition: background-color 0.2s;
-            -webkit-tap-highlight-color: transparent;
         }
         .btn:hover, .btn:active { background-color: var(--primary-hover); }
+        
+        /* ปุ่มไอคอน คัดลอก/ลบ ย่อให้พอดีกับบรรทัด */
         .btn-icon {
             padding: 0;
-            width: 44px;
-            height: 44px;
+            width: 36px;
+            height: 36px;
             flex-shrink: 0;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 6px;
         }
         .btn-clone { background-color: #3B82F6; }
         .btn-clone:hover, .btn-clone:active { background-color: #2563EB; }
@@ -158,9 +181,10 @@
             background-color: transparent;
             color: #EF4444;
             border: 1px solid #EF4444;
-            padding: 0.4rem 0.75rem;
-            font-size: 0.85rem;
+            padding: 0.4rem 0.85rem;
+            font-size: 0.95rem;
             border-radius: 6px;
+            cursor: pointer;
         }
         .btn-remove-col:hover { background-color: #FEF2F2; color: #DC2626; }
 
@@ -179,8 +203,8 @@
         
         .radio-group {
             display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
+            flex-direction: row; 
+            gap: 1rem;
         }
         .radio-group label {
             display: flex;
@@ -188,42 +212,34 @@
             font-weight: normal;
             gap: 0.75rem;
             cursor: pointer;
-            padding: 0.5rem;
+            padding: 0.85rem;
             border: 1px solid var(--border);
             border-radius: 8px;
             background: white;
+            flex: 1; 
+            font-size: 1rem;
         }
         input[type="radio"] {
             width: 20px;
             height: 20px;
             margin-top: 2px;
+            cursor: pointer;
         }
         textarea {
-            height: 280px;
+            height: 350px; 
             resize: vertical;
             background-color: #F9FAFB;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
-        @media (max-width: 768px) {
-            body { padding: 1rem; }
-            .container { 
-                grid-template-columns: 1fr; 
-                gap: 1rem;
-            }
-            .panel { padding: 1.25rem; }
-            .collection-block { padding: 1rem; }
-            .product-inputs { flex-wrap: wrap; }
-            .productName { flex: 1 1 100% !important; }
-            .productPrice { flex: 1 1 45% !important; }
-            .productQty { flex: 1 1 30% !important; }
-            
-            .main-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.75rem;
-            }
-            .btn-clear-all-sizes { width: 100%; }
+        /* รองรับมือถือเผื่อไปเปิด (มันจะยอมพับลงมาให้ถ้าจอเล็กไป) */
+        @media (max-width: 1000px) {
+            .container { grid-template-columns: 1fr; }
+            .product-item { flex-wrap: wrap; }
+            .productName { width: 100%; flex: 1 1 100%; }
+            .productPrice { flex: 1 1 40%; }
+            .productQty { flex: 1 1 30%; }
+            .size-pills { flex-wrap: wrap; margin-left: 0; width: 100%; }
         }
     </style>
 </head>
@@ -232,7 +248,7 @@
 <div class="container">
     <div class="panel">
         <div class="main-header">
-            <h2>📝 ข้อมูลออเดอร์</h2>
+            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v3.2</span></h2>
             <button class="btn-clear-all-sizes" onclick="clearAllPills()">↺ ล้างไซส์ทั้งหมด</button>
         </div>
         
@@ -241,7 +257,7 @@
 
         <button class="btn" style="width: 100%; background-color: #F59E0B; color: white; margin-bottom: 2rem;" onclick="addCollectionBlock()">+ เพิ่มคอลเลคชั่นใหม่</button>
         
-        <hr style="border: 0; border-top: 1px solid var(--border); margin-bottom: 1.5rem;">
+        <hr style="border: 0; border-top: 1px solid var(--border); margin-bottom: 2rem;">
 
         <div class="form-group">
             <label>ค่าส่ง (บาท)</label>
@@ -266,11 +282,11 @@
             </div>
         </div>
 
-        <button class="btn" style="width: 100%; font-size: 1.1rem; background-color: #EF4444; margin-top: 1rem;" onclick="clearData()">🗑️ ล้างข้อมูลทั้งหมด (ลบรายการสินค้าทิ้ง)</button>
+        <button class="btn" style="width: 100%; background-color: #EF4444; margin-top: 1.5rem;" onclick="clearData()">🗑️ ล้างข้อมูลทั้งหมด (ลบรายการสินค้าทิ้ง)</button>
         
-        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-            <button class="btn" style="flex: 1; background-color: #8B5CF6; font-size: 1rem; padding: 0.7rem;" onclick="exportData()">📤 ส่งออกข้อมูล</button>
-            <button class="btn" style="flex: 1; background-color: #14B8A6; font-size: 1rem; padding: 0.7rem;" onclick="importData()">📥 นำเข้าข้อมูล</button>
+        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+            <button class="btn" style="flex: 1; background-color: #8B5CF6;" onclick="exportData()">📤 ส่งออกข้อมูล</button>
+            <button class="btn" style="flex: 1; background-color: #14B8A6;" onclick="importData()">📥 นำเข้าข้อมูล</button>
         </div>
     </div>
 
@@ -279,13 +295,13 @@
         <div class="form-group">
             <textarea id="outputText" readonly placeholder="ข้อความสรุปยอดจะแสดงตรงนี้..."></textarea>
         </div>
-        <button class="btn" style="width: 100%; background-color: #3B82F6; font-size: 1.1rem; margin-bottom: 2rem;" onclick="copyText('outputText')">📄 คัดลอกสรุปยอด</button>
+        <button class="btn" style="width: 100%; background-color: #3B82F6; margin-bottom: 3rem;" onclick="copyText('outputText')">📄 คัดลอกสรุปยอด</button>
 
         <h2 style="margin-bottom: 1.5rem;">📦 ข้อความใบปะหน้า</h2>
         <div class="form-group">
             <textarea id="outputLabelText" readonly placeholder="ข้อความสำหรับใบปะหน้าจะแสดงตรงนี้..."></textarea>
         </div>
-        <button class="btn" style="width: 100%; background-color: #10B981; font-size: 1.1rem;" onclick="copyText('outputLabelText')">📄 คัดลอกใบปะหน้า</button>
+        <button class="btn" style="width: 100%; background-color: #10B981;" onclick="copyText('outputLabelText')">📄 คัดลอกใบปะหน้า</button>
     </div>
 </div>
 
@@ -362,7 +378,6 @@
         }
     }
 
-    // --- ฟังก์ชันนำเข้า/ส่งออกข้อมูลข้ามเครื่อง ---
     function exportData() {
         saveData();
         const data = localStorage.getItem('orderDataV2');
@@ -370,15 +385,10 @@
             alert('ยังไม่มีข้อมูลสินค้าให้ส่งออกครับ');
             return;
         }
-        
-        // เข้ารหัสข้อความให้เป็น 1 บรรทัดติดกัน จะได้ก็อปลง LINE ง่ายๆ ไม่พัง
         const encodedData = btoa(encodeURIComponent(data));
-        
-        // คัดลอกลง Clipboard อัตโนมัติ
         navigator.clipboard.writeText(encodedData).then(() => {
             alert('📋 คัดลอก "โค้ดข้อมูลร้าน" เรียบร้อยแล้ว!\n\nเอาโค้ดนี้ไปส่งเข้า LINE แล้วเอาไปกด "นำเข้าข้อมูล" ในเครื่องอื่นได้เลยครับ');
         }).catch(err => {
-            // สำรองเผื่อเบราว์เซอร์ไม่ให้สิทธิ์ออโต้ก๊อปปี้
             prompt('คัดลอกโค้ดด้านล่างนี้ ไปวางในเครื่องอื่น:', encodedData);
         });
     }
@@ -386,11 +396,9 @@
     function importData() {
         const code = prompt('📥 วาง "โค้ดข้อมูลร้าน" ที่คัดลอกมา ลงในช่องนี้:');
         if (!code) return;
-        
         try {
             const decodedData = decodeURIComponent(atob(code));
-            JSON.parse(decodedData); // เช็คว่าไฟล์ที่ใส่มาไม่พัง
-            
+            JSON.parse(decodedData); 
             if(confirm('🚨 การนำเข้า จะ "เขียนทับ" รายการสินค้าที่มีอยู่บนหน้าจอตอนนี้ทั้งหมด\nคุณแน่ใจหรือไม่?')) {
                 localStorage.setItem('orderDataV2', decodedData);
                 loadData();
@@ -401,7 +409,6 @@
             alert('❌ โค้ดไม่ถูกต้อง หรือข้อมูลไม่สมบูรณ์ครับ กรุณาก๊อปปี้มาใหม่');
         }
     }
-    // ---------------------------------------------
 
     function addCollectionBlock(colName = '') {
         const container = document.getElementById('collectionsContainer');
@@ -410,16 +417,16 @@
         
         block.innerHTML = `
             <div class="collection-header">
-                <label style="margin: 0; font-size: 1.1rem; color: var(--primary);">📦 คอลเลคชั่น</label>
+                <label style="margin: 0; font-size: 1.2rem; color: var(--primary);">📦 คอลเลคชั่น</label>
                 <button class="btn btn-remove-col" onclick="removeCollectionBlock(this)">ลบชุดนี้</button>
             </div>
             <div class="form-group">
                 <input type="text" class="collectionName" placeholder="ชื่อคอลเลคชั่น เช่น Summer 2026" value="${colName}">
             </div>
-            <label style="margin-bottom: 0.75rem;">รายการสินค้า <small style="color: #6B7280; font-weight: normal;">(จิ้มเลือกไซส์ที่ลูกค้าสั่งได้เลย)</small></label>
+            <label style="margin-bottom: 0.75rem;">รายการสินค้า <small style="color: #6B7280; font-weight: normal;">(พิมพ์ชื่อ แล้วจิ้มไซส์ได้เลย)</small></label>
             <div class="productList"></div>
             
-            <button class="btn" style="margin-top: 0.5rem; width: 100%; background-color: #10B981;" onclick="handleAddProductClick(this)">+ เพิ่มสินค้า</button>
+            <button class="btn" style="margin-top: 0.5rem; width: 100%; background-color: #10B981; padding: 0.6rem; font-size: 1rem;" onclick="handleAddProductClick(this)">+ เพิ่มสินค้าบรรทัดใหม่</button>
         `;
         container.appendChild(block);
         
@@ -429,7 +436,6 @@
             saveData();
             generateText();
         }
-        
         return block;
     }
 
@@ -446,11 +452,9 @@
         activePills.forEach(pill => {
             pill.classList.remove('active');
         });
-        
         document.querySelectorAll('.productQty').forEach(qtyInput => {
             qtyInput.value = 1;
         });
-
         saveData();
         generateText();
     }
@@ -467,7 +471,8 @@
         const newItem = document.createElement('div');
         newItem.className = 'product-item';
         
-        const defaultSizes = ['-', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', 'FS'];
+        // ลบไซส์ FS ออกตามที่สั่งครับ
+        const defaultSizes = ['-', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'];
         const allSizes = [...new Set([...defaultSizes, ...selectedSizes])]; 
 
         let pillsHtml = '';
@@ -477,18 +482,17 @@
             pillsHtml += `<div class="pill ${isActive}" onclick="togglePill(this)" data-size="${s}">${displayTxt}</div>`;
         });
 
+        // จัดเรียงใหม่ในบรรทัดเดียว
         newItem.innerHTML = `
-            <div class="product-inputs">
-                <input type="text" class="productName" placeholder="ชื่อสินค้า" style="flex: 2;" value="${name}">
-                <input type="number" class="productPrice" placeholder="ราคา" style="flex: 1;" value="${price}">
-                <input type="number" class="productQty" placeholder="จำนวน" title="จำนวนชิ้น" style="flex: 0.5; min-width: 65px;" value="${qty || 1}" min="1">
-                <button class="btn btn-icon btn-clone" title="คัดลอกสินค้านี้เพื่อตั้งราคาใหม่" onclick="cloneProduct(this)">📄</button>
-                <button class="btn btn-icon btn-remove" title="ลบรายการ" onclick="removeProduct(this)">-</button>
-            </div>
+            <input type="text" class="productName" placeholder="ชื่อสินค้า" value="${name}">
+            <input type="number" class="productPrice" placeholder="ราคา" value="${price}">
+            <input type="number" class="productQty" placeholder="จำนวน" title="จำนวนชิ้น (ต่อ 1 ไซส์)" value="${qty || 1}" min="1">
             <div class="size-pills">
                 ${pillsHtml}
                 <div class="pill pill-custom" onclick="addCustomPill(this)">+ พิมพ์เอง</div>
             </div>
+            <button class="btn btn-icon btn-clone" title="คัดลอกสินค้านี้เพื่อตั้งราคา/จำนวนใหม่" onclick="cloneProduct(this)">📄</button>
+            <button class="btn btn-icon btn-remove" title="ลบรายการ" onclick="removeProduct(this)">-</button>
         `;
         return newItem;
     }
@@ -496,7 +500,8 @@
     function cloneProduct(btn) {
         const currentItem = btn.closest('.product-item');
         const name = currentItem.querySelector('.productName').value;
-        const newItem = createProductItemElement(name, '', [], 1);
+        const price = currentItem.querySelector('.productPrice').value;
+        const newItem = createProductItemElement(name, price, [], 1);
         currentItem.parentNode.insertBefore(newItem, currentItem.nextSibling);
         saveData();
         generateText();
@@ -567,24 +572,40 @@
             let colText = '';
             let colLabelProducts = []; 
             
+            // ระบบยุบรวมข้อความตาม "ชื่อสินค้า" (Auto-Merge)
+            let mergedProductsMap = {};
+            let mergedProductsOrder = [];
+            
             productItems.forEach(item => {
                 const nameVal = item.querySelector('.productName').value.trim();
                 const rawPrice = item.querySelector('.productPrice').value.trim();
                 const rawQty = item.querySelector('.productQty').value.trim();
                 
                 const qtyVal = parseInt(rawQty) || 1; 
-                const qtyText = qtyVal > 1 ? ` x${qtyVal}` : '';
 
                 const activePills = item.querySelectorAll('.pill.active');
 
                 if (nameVal !== '' && activePills.length > 0) {
+                    if (!mergedProductsMap[nameVal]) {
+                        mergedProductsMap[nameVal] = [];
+                        mergedProductsOrder.push(nameVal);
+                    }
+
                     activePills.forEach(pill => {
                         const sizeVal = pill.getAttribute('data-size');
-                        const sizeText = (sizeVal === '-' || sizeVal === '') ? '' : ` (${sizeVal})`;
+                        const sizeText = (sizeVal === '-' || sizeVal === '') ? '' : `(${sizeVal})`;
                         
-                        colText += `- ${nameVal}${sizeText}${qtyText}\n`;
-                        colLabelProducts.push(`${nameVal}${sizeText}${qtyText}`);
+                        let token = '';
+                        if (sizeText !== '') {
+                            token = sizeText + (qtyVal > 1 ? `x${qtyVal}` : '');
+                        } else if (qtyVal > 1) {
+                            token = `x${qtyVal}`;
+                        }
                         
+                        if (token !== '') {
+                            mergedProductsMap[nameVal].push(token);
+                        }
+
                         if (rawPrice === '') {
                             validPrices.push('***');
                             hasMissingPrice = true;
@@ -600,6 +621,17 @@
                             }
                         }
                     });
+                }
+            });
+
+            mergedProductsOrder.forEach(name => {
+                const sizesArr = mergedProductsMap[name];
+                if (sizesArr.length > 0) {
+                    colText += `- ${name} ${sizesArr.join(',')}\n`;
+                    colLabelProducts.push(`${name} ${sizesArr.join(',')}`);
+                } else {
+                    colText += `- ${name}\n`;
+                    colLabelProducts.push(`${name}`);
                 }
             });
 
@@ -627,7 +659,6 @@
         let priceString = '';
         if (validPrices.length > 0) {
             const totalSum = hasMissingPrice ? '***' : (productsSum + shippingValue); 
-            
             if (shippingValue > 0) {
                 priceString = `${validPrices.join(' + ')} + ${shippingValue} = ${totalSum}`;
             } else {
@@ -675,10 +706,8 @@ ${bankText}
     function copyText(elementId) {
         const outputArea = document.getElementById(elementId);
         if(outputArea.value.trim() === '') return;
-        
         outputArea.select();
         document.execCommand('copy');
-        
         window.getSelection().removeAllRanges();
     }
 </script>
