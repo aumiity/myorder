@@ -246,7 +246,7 @@
 <div class="container">
     <div class="panel">
         <div class="main-header">
-            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v3.0</span></h2>
+            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v3.1</span></h2>
             <button class="btn-clear-all-sizes" onclick="clearAllPills()">↺ ล้างไซส์ทั้งหมด</button>
         </div>
         
@@ -484,7 +484,7 @@
                 <input type="text" class="productName" placeholder="ชื่อสินค้า" value="${name}">
                 <input type="number" class="productPrice" placeholder="ราคา" value="${price}">
                 <input type="number" class="productQty" placeholder="จำนวน" title="จำนวนชิ้น (ต่อ 1 ไซส์)" value="${qty || 1}" min="1">
-                <button class="btn btn-icon btn-clone" title="คัดลอกสินค้านี้เพื่อตั้งราคาใหม่" onclick="cloneProduct(this)">📄</button>
+                <button class="btn btn-icon btn-clone" title="คัดลอกสินค้านี้เพื่อเพิ่มไซส์อื่นๆ" onclick="cloneProduct(this)">📄</button>
                 <button class="btn btn-icon btn-remove" title="ลบรายการ" onclick="removeProduct(this)">-</button>
             </div>
             <div class="size-pills">
@@ -498,7 +498,9 @@
     function cloneProduct(btn) {
         const currentItem = btn.closest('.product-item');
         const name = currentItem.querySelector('.productName').value;
-        const newItem = createProductItemElement(name, '', [], 1);
+        const price = currentItem.querySelector('.productPrice').value;
+        // โคลนชื่อและราคาเดิมมาให้เลย แต่ไซส์เว้นว่าง จำนวนตั้งเป็น 1 ใหม่
+        const newItem = createProductItemElement(name, price, [], 1);
         currentItem.parentNode.insertBefore(newItem, currentItem.nextSibling);
         saveData();
         generateText();
@@ -569,26 +571,43 @@
             let colText = '';
             let colLabelProducts = []; 
             
+            // ระบบยุบรวมข้อความตาม "ชื่อสินค้า" (Auto-Merge)
+            let mergedProductsMap = {};
+            let mergedProductsOrder = [];
+            
             productItems.forEach(item => {
                 const nameVal = item.querySelector('.productName').value.trim();
                 const rawPrice = item.querySelector('.productPrice').value.trim();
                 const rawQty = item.querySelector('.productQty').value.trim();
                 
                 const qtyVal = parseInt(rawQty) || 1; 
-                const qtyText = qtyVal > 1 ? ` x${qtyVal}` : '';
 
                 const activePills = item.querySelectorAll('.pill.active');
 
                 if (nameVal !== '' && activePills.length > 0) {
-                    let sizeTexts = [];
-                    
+                    // สร้างตะกร้าเก็บชื่อสินค้า ถ้ายกมาใหม่
+                    if (!mergedProductsMap[nameVal]) {
+                        mergedProductsMap[nameVal] = [];
+                        mergedProductsOrder.push(nameVal);
+                    }
+
                     activePills.forEach(pill => {
                         const sizeVal = pill.getAttribute('data-size');
-                        if (sizeVal !== '-' && sizeVal !== '') {
-                            sizeTexts.push(`(${sizeVal})`); // วงเล็บไซส์เก็บไว้รวบยอด
+                        const sizeText = (sizeVal === '-' || sizeVal === '') ? '' : `(${sizeVal})`;
+                        
+                        // สร้างข้อความไซส์+จำนวน เช่น (S)x2 หรือ (L) เฉยๆ
+                        let token = '';
+                        if (sizeText !== '') {
+                            token = sizeText + (qtyVal > 1 ? `x${qtyVal}` : '');
+                        } else if (qtyVal > 1) {
+                            token = `x${qtyVal}`;
                         }
                         
-                        // คำนวณราคาตามจำนวนปุ่มที่กด x จำนวน qty
+                        if (token !== '') {
+                            mergedProductsMap[nameVal].push(token);
+                        }
+
+                        // คำนวณราคา
                         if (rawPrice === '') {
                             validPrices.push('***');
                             hasMissingPrice = true;
@@ -604,15 +623,19 @@
                             }
                         }
                     });
+                }
+            });
 
-                    // รวบรวมไซส์ติดกัน เช่น (S),(L)
-                    const sizeStr = sizeTexts.length > 0 ? ` ${sizeTexts.join(',')}` : '';
-                    
-                    // ปริ้นต์ออกเป็น 1 บรรทัด
-                    colText += `- ${nameVal}${sizeStr}${qtyText}\n`;
-                    
-                    const labelSizeStr = sizeTexts.length > 0 ? `${sizeTexts.join(',')}` : '';
-                    colLabelProducts.push(`${nameVal}${labelSizeStr}${qtyText}`);
+            // ปริ้นต์ข้อความที่โดนยุบรวมแล้วออกมา
+            mergedProductsOrder.forEach(name => {
+                const sizesArr = mergedProductsMap[name];
+                if (sizesArr.length > 0) {
+                    colText += `- ${name} ${sizesArr.join(',')}\n`;
+                    colLabelProducts.push(`${name} ${sizesArr.join(',')}`);
+                } else {
+                    // กรณีแปลกๆ ที่ไม่มีไซส์และจำนวน 1
+                    colText += `- ${name}\n`;
+                    colLabelProducts.push(`${name}`);
                 }
             });
 
