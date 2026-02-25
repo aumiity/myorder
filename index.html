@@ -2,26 +2,25 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>myorder</title>
     <style>
         :root {
-            /* โทนสี Dark Mode */
-            --primary: #6366F1; /* สีม่วงสว่างขึ้นให้เด่นในพื้นดำ */
+            --primary: #6366F1; 
             --primary-hover: #818CF8;
-            --bg: #111827; /* พื้นหลังจอสีดำหม่น */
-            --surface: #1F2937; /* พื้นหลังกล่องสีเทาเข้ม */
-            --surface-alt: #374151; /* สีช่องกรอกข้อมูล */
-            --text: #F9FAFB; /* สีตัวหนังสือสีขาว */
-            --text-muted: #9CA3AF; /* สีตัวหนังสือรองสีเทา */
-            --border: #4B5563; /* สีเส้นขอบ */
+            --bg: #111827; 
+            --surface: #1F2937; 
+            --surface-alt: #374151; 
+            --text: #F9FAFB; 
+            --text-muted: #9CA3AF; 
+            --border: #4B5563; 
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
-            padding: 3rem; 
+            padding: 2rem 3rem; /* ค่าเริ่มต้นของ PC */
             display: flex;
             justify-content: center;
         }
@@ -29,14 +28,14 @@
             display: grid;
             grid-template-columns: 1.4fr 1fr;
             gap: 2.5rem; 
-            max-width: 1500px; 
-            width: 100%;
+            width: 98%; /* ปรับให้ขยายเต็มจอบน MacBook/PC */
+            max-width: 1800px; 
         }
         .panel {
             background: var(--surface);
             padding: 2rem; 
             border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); /* ปรับเงาให้เข้ากับพื้นดำ */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); 
         }
         .main-header {
             display: flex;
@@ -55,7 +54,6 @@
             font-size: 1.05rem; 
         }
         
-        /* ช่องกรอกข้อมูลสไตล์ Dark Mode */
         input[type="text"], input[type="number"], textarea {
             width: 100%;
             padding: 0.75rem 1rem;
@@ -65,19 +63,19 @@
             border-radius: 8px;
             box-sizing: border-box;
             font-family: inherit;
-            font-size: 1.05rem; 
+            font-size: 16px; /* บังคับ 16px เพื่อไม่ให้ iPhone ซูมหน้าจออัตโนมัติ */
             -webkit-appearance: none;
             appearance: none;
             transition: all 0.2s;
         }
         input::placeholder, textarea::placeholder {
-            color: #6B7280;
+            color: #9CA3AF;
         }
         input:focus, textarea:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
-            background-color: #4B5563; /* สว่างขึ้นนิดนึงตอนพิมพ์ */
+            background-color: #4B5563; 
         }
         
         .collection-block {
@@ -130,7 +128,7 @@
             display: none;
         }
         
-        /* --- ดีไซน์แถวสินค้า Grid 2 บรรทัด --- */
+        /* --- ดีไซน์แถวสินค้าแบบ Default (PC/Mac) --- */
         .product-item {
             background: var(--surface);
             padding: 1rem;
@@ -139,20 +137,14 @@
             margin-bottom: 0.75rem;
             
             display: grid;
-            grid-template-columns: 1fr 100px 80px auto; 
+            grid-template-columns: 1fr 100px 90px auto; 
             gap: 0.75rem; 
             align-items: center;
         }
-
         .productName { grid-column: 1 / 2; width: 100%; }
         .productPrice { grid-column: 2 / 3; width: 100%; }
         .productQty { grid-column: 3 / 4; width: 100%; text-align: center; }
-        
-        .product-actions { 
-            grid-column: 4 / 5; 
-            display: flex; 
-            gap: 0.5rem; 
-        }
+        .product-actions { grid-column: 4 / 5; display: flex; gap: 0.5rem; }
         
         .size-pills {
             grid-column: 1 / 5; 
@@ -165,12 +157,12 @@
         
         /* ปุ่มไซส์ */
         .pill {
-            padding: 0.35rem 0.8rem;
+            padding: 0.4rem 0.85rem;
             border: 1px solid var(--border);
             border-radius: 20px;
             background: var(--surface-alt);
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 500;
             cursor: pointer;
             user-select: none;
@@ -208,15 +200,15 @@
         
         .btn-icon {
             padding: 0;
-            width: 38px;
-            height: 38px;
+            width: 42px;
+            height: 42px;
             flex-shrink: 0;
             font-size: 1.2rem;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 8px;
-            color: white; /* บังคับให้ไอคอนเป็นสีขาวเสมอ */
+            color: white; 
         }
         .btn-clone { background-color: #3B82F6; }
         .btn-clone:hover, .btn-clone:active { background-color: #2563EB; }
@@ -225,7 +217,7 @@
         
         .btn-remove-col {
             background-color: transparent;
-            color: #F87171; /* แดงสว่างขึ้นสำหรับ Dark Mode */
+            color: #F87171; 
             border: 1px solid #F87171;
             padding: 0.4rem 0.85rem;
             font-size: 0.95rem;
@@ -278,24 +270,43 @@
         textarea {
             height: 350px; 
             resize: vertical;
-            background-color: var(--bg); /* พื้นหลังข้อความสีดำลึก */
+            background-color: var(--bg); 
             line-height: 1.6;
         }
+        .action-buttons-group {
+            display: flex; gap: 1rem; margin-top: 1rem;
+        }
 
-        @media (max-width: 1000px) {
-            .container { grid-template-columns: 1fr; }
-            .product-item { 
-                grid-template-columns: 1fr auto; 
-                grid-template-rows: auto auto auto;
+        /* ========================================= */
+        /* --- ระบบปรับจออัตโนมัติ สำหรับ iPhone --- */
+        /* ========================================= */
+        @media (max-width: 800px) {
+            body { padding: 1rem 0.5rem; } /* ลดขอบให้เต็มจอมือถือ */
+            .container { 
+                grid-template-columns: 1fr; /* ยุบเหลือ 1 คอลัมน์ */
+                gap: 1.5rem; 
+                width: 100%;
             }
-            .productName { grid-column: 1 / 2; grid-row: 1; }
-            .product-actions { grid-column: 2 / 3; grid-row: 1; justify-content: flex-end; }
-            .productPrice { grid-column: 1 / 2; grid-row: 2; }
-            .productQty { grid-column: 2 / 3; grid-row: 2; }
-            .size-pills { grid-column: 1 / 3; grid-row: 3; }
-            
+            .panel { padding: 1.25rem; }
+            .main-header { flex-direction: column; align-items: stretch; gap: 1rem; }
+            .btn-clear-all-sizes { width: 100%; padding: 0.75rem; }
             .collection-header { flex-wrap: wrap; }
             .header-left { width: 100%; flex: none; }
+            
+            /* จัดเรียงแถวสินค้าใหม่สำหรับจอมือถือ */
+            .product-item { 
+                grid-template-columns: 1fr 1fr auto; 
+                grid-template-rows: auto auto auto;
+                gap: 0.6rem;
+            }
+            .productName { grid-column: 1 / 4; grid-row: 1; }
+            .productPrice { grid-column: 1 / 2; grid-row: 2; }
+            .productQty { grid-column: 2 / 3; grid-row: 2; }
+            .product-actions { grid-column: 3 / 4; grid-row: 2; justify-content: flex-end; }
+            .size-pills { grid-column: 1 / 4; grid-row: 3; margin-top: 0; }
+            
+            .action-buttons-group { flex-direction: column; gap: 0.5rem; }
+            textarea { height: 250px; } /* กล่องข้อความเตี้ยลงในมือถือ */
         }
     </style>
 </head>
@@ -304,7 +315,7 @@
 <div class="container">
     <div class="panel">
         <div class="main-header">
-            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v3.6 (Dark)</span></h2>
+            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v4.0 (Auto-Responsive)</span></h2>
             <button class="btn-clear-all-sizes" onclick="clearAllPills()">↺ ล้างไซส์ทั้งหมด</button>
         </div>
         
@@ -340,7 +351,7 @@
 
         <button class="btn" style="width: 100%; background-color: #EF4444; margin-top: 1.5rem;" onclick="clearData()">🗑️ ล้างข้อมูลทั้งหมด (ลบรายการสินค้าทิ้ง)</button>
         
-        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+        <div class="action-buttons-group">
             <button class="btn" style="flex: 1; background-color: #8B5CF6;" onclick="exportData()">📤 ส่งออกข้อมูล</button>
             <button class="btn" style="flex: 1; background-color: #14B8A6;" onclick="importData()">📥 นำเข้าข้อมูล</button>
         </div>
