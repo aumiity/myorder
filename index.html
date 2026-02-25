@@ -24,7 +24,7 @@
         }
         .container {
             display: grid;
-            grid-template-columns: 1.4fr 1fr; /* ขยายฝั่งซ้ายเพิ่มอีกนิดให้พอดีกับแถวแนวยาว */
+            grid-template-columns: 1.4fr 1fr; 
             gap: 2.5rem; 
             max-width: 1500px; 
             width: 100%;
@@ -52,7 +52,6 @@
             font-size: 1.05rem; 
         }
         
-        /* ช่องกรอกทั่วไป */
         input[type="text"], input[type="number"], textarea {
             width: 100%;
             padding: 0.75rem 1rem;
@@ -77,18 +76,55 @@
             border-radius: 12px;
             padding: 1.25rem;
             margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
         }
+        
+        /* --- ดีไซน์หัวข้อคอลเลคชั่น (เพิ่มปุ่มยุบ/ขยาย) --- */
         .collection-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 1rem;
             margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px dashed #CBD5E1;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex: 1;
+        }
+        .btn-toggle-col {
+            background: #E5E7EB;
+            color: #4B5563;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+        .btn-toggle-col:hover { background: #D1D5DB; }
+        
+        /* สไตล์ตอนคอลเลคชั่นถูกยุบไว้ */
+        .collection-block.collapsed .collection-header {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .collection-block.collapsed .collection-body {
+            display: none;
         }
         
-        /* --- ดีไซน์แถวสินค้าแบบใหม่ (แนวยาวบรรทัดเดียว) --- */
         .product-item {
             background: #FFFFFF;
-            padding: 0.6rem 0.75rem; /* ลดขนาดกรอบให้กะทัดรัด */
+            padding: 0.6rem 0.75rem; 
             border-radius: 8px;
             border: 1px solid var(--border);
             margin-bottom: 0.5rem;
@@ -96,10 +132,9 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            flex-wrap: nowrap; /* บังคับให้อยู่บรรทัดเดียวกัน */
+            flex-wrap: nowrap; 
         }
 
-        /* ปรับขนาดช่องกรอกในแถวสินค้าให้พอดี */
         .product-item input[type="text"], .product-item input[type="number"] {
             padding: 0.5rem;
             font-size: 1rem;
@@ -108,14 +143,13 @@
         .productPrice { width: 80px; flex-shrink: 0; }
         .productQty { width: 65px; flex-shrink: 0; text-align: center; }
         
-        /* โซนปุ่มไซส์ */
         .size-pills {
             display: flex;
             flex-wrap: nowrap;
             gap: 0.35rem;
             align-items: center;
             margin-left: 0.5rem;
-            margin-right: auto; /* ดันปุ่มลบไปชิดขวา */
+            margin-right: auto; 
         }
         
         .pill {
@@ -129,7 +163,7 @@
             cursor: pointer;
             user-select: none;
             transition: all 0.2s ease;
-            white-space: nowrap; /* ป้องกันข้อความในปุ่มตกบรรทัด */
+            white-space: nowrap; 
         }
         .pill:hover { border-color: #9CA3AF; background: #E5E7EB; }
         .pill.active {
@@ -146,7 +180,6 @@
         }
         .pill-custom:hover { background: #EEF2FF; }
 
-        /* ปุ่มกดทั่วไป */
         .btn {
             background-color: var(--primary);
             color: white;
@@ -160,7 +193,6 @@
         }
         .btn:hover, .btn:active { background-color: var(--primary-hover); }
         
-        /* ปุ่มไอคอน คัดลอก/ลบ ย่อให้พอดีกับบรรทัด */
         .btn-icon {
             padding: 0;
             width: 36px;
@@ -232,7 +264,6 @@
             line-height: 1.6;
         }
 
-        /* รองรับมือถือเผื่อไปเปิด (มันจะยอมพับลงมาให้ถ้าจอเล็กไป) */
         @media (max-width: 1000px) {
             .container { grid-template-columns: 1fr; }
             .product-item { flex-wrap: wrap; }
@@ -240,6 +271,8 @@
             .productPrice { flex: 1 1 40%; }
             .productQty { flex: 1 1 30%; }
             .size-pills { flex-wrap: wrap; margin-left: 0; width: 100%; }
+            .collection-header { flex-wrap: wrap; }
+            .header-left { width: 100%; flex: none; }
         }
     </style>
 </head>
@@ -248,7 +281,7 @@
 <div class="container">
     <div class="panel">
         <div class="main-header">
-            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v3.2</span></h2>
+            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v3.3</span></h2>
             <button class="btn-clear-all-sizes" onclick="clearAllPills()">↺ ล้างไซส์ทั้งหมด</button>
         </div>
         
@@ -325,6 +358,8 @@
         const collections = [];
         document.querySelectorAll('.collection-block').forEach(block => {
             const colName = block.querySelector('.collectionName').value;
+            // บันทึกสถานะว่าคอลเลคชั่นนี้ถูกยุบไว้หรือไม่
+            const isCollapsed = block.classList.contains('collapsed');
             const products = [];
             
             block.querySelectorAll('.product-item').forEach(item => {
@@ -339,7 +374,7 @@
                 
                 products.push({ name, price, qty, selectedSizes });
             });
-            collections.push({ colName, products });
+            collections.push({ colName, isCollapsed, products });
         });
         localStorage.setItem('orderDataV2', JSON.stringify(collections));
     }
@@ -360,7 +395,7 @@
 
         if (savedDataV2 && savedDataV2.length > 0) {
             savedDataV2.forEach(col => {
-                const block = addCollectionBlock(col.colName);
+                const block = addCollectionBlock(col.colName, col.isCollapsed);
                 if(col.products.length > 0) {
                     col.products.forEach(p => {
                         const productList = block.querySelector('.productList');
@@ -410,23 +445,43 @@
         }
     }
 
-    function addCollectionBlock(colName = '') {
+    // เพิ่มฟังก์ชันสำหรับสลับการยุบ/ขยาย
+    function toggleCollection(btn) {
+        const block = btn.closest('.collection-block');
+        block.classList.toggle('collapsed');
+        
+        if (block.classList.contains('collapsed')) {
+            btn.innerHTML = '▶'; // สัญลักษณ์ตอนโดนยุบ
+            btn.title = 'คลิกเพื่อขยาย';
+        } else {
+            btn.innerHTML = '▼'; // สัญลักษณ์ตอนขยาย
+            btn.title = 'คลิกเพื่อยุบ';
+        }
+        saveData(); // จำสถานะการยุบ/ขยายเอาไว้ด้วย
+    }
+
+    function addCollectionBlock(colName = '', isCollapsed = false) {
         const container = document.getElementById('collectionsContainer');
         const block = document.createElement('div');
         block.className = 'collection-block';
+        if(isCollapsed) block.classList.add('collapsed');
+        
+        const icon = isCollapsed ? '▶' : '▼';
         
         block.innerHTML = `
             <div class="collection-header">
-                <label style="margin: 0; font-size: 1.2rem; color: var(--primary);">📦 คอลเลคชั่น</label>
+                <div class="header-left">
+                    <button class="btn-toggle-col" onclick="toggleCollection(this)" title="คลิกเพื่อยุบ/ขยาย">${icon}</button>
+                    <input type="text" class="collectionName" placeholder="ชื่อคอลเลคชั่น เช่น Summer 2026" value="${colName}" style="margin: 0; padding: 0.6rem 1rem;">
+                </div>
                 <button class="btn btn-remove-col" onclick="removeCollectionBlock(this)">ลบชุดนี้</button>
             </div>
-            <div class="form-group">
-                <input type="text" class="collectionName" placeholder="ชื่อคอลเลคชั่น เช่น Summer 2026" value="${colName}">
-            </div>
-            <label style="margin-bottom: 0.75rem;">รายการสินค้า <small style="color: #6B7280; font-weight: normal;">(พิมพ์ชื่อ แล้วจิ้มไซส์ได้เลย)</small></label>
-            <div class="productList"></div>
             
-            <button class="btn" style="margin-top: 0.5rem; width: 100%; background-color: #10B981; padding: 0.6rem; font-size: 1rem;" onclick="handleAddProductClick(this)">+ เพิ่มสินค้าบรรทัดใหม่</button>
+            <div class="collection-body">
+                <label style="margin-bottom: 0.75rem;">รายการสินค้า <small style="color: #6B7280; font-weight: normal;">(พิมพ์ชื่อ 1 แถว จิ้มไซส์ได้หลายปุ่มเลย)</small></label>
+                <div class="productList"></div>
+                <button class="btn" style="margin-top: 0.5rem; width: 100%; background-color: #10B981; padding: 0.6rem; font-size: 1rem;" onclick="handleAddProductClick(this)">+ เพิ่มสินค้าบรรทัดใหม่</button>
+            </div>
         `;
         container.appendChild(block);
         
@@ -471,7 +526,6 @@
         const newItem = document.createElement('div');
         newItem.className = 'product-item';
         
-        // ลบไซส์ FS ออกตามที่สั่งครับ
         const defaultSizes = ['-', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'];
         const allSizes = [...new Set([...defaultSizes, ...selectedSizes])]; 
 
@@ -482,7 +536,6 @@
             pillsHtml += `<div class="pill ${isActive}" onclick="togglePill(this)" data-size="${s}">${displayTxt}</div>`;
         });
 
-        // จัดเรียงใหม่ในบรรทัดเดียว
         newItem.innerHTML = `
             <input type="text" class="productName" placeholder="ชื่อสินค้า" value="${name}">
             <input type="number" class="productPrice" placeholder="ราคา" value="${price}">
@@ -572,7 +625,6 @@
             let colText = '';
             let colLabelProducts = []; 
             
-            // ระบบยุบรวมข้อความตาม "ชื่อสินค้า" (Auto-Merge)
             let mergedProductsMap = {};
             let mergedProductsOrder = [];
             
