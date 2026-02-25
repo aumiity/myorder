@@ -35,7 +35,13 @@
             border-radius: 12px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-        h2 { margin-top: 0; color: var(--primary); font-size: 1.5rem; }
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        h2 { margin: 0; color: var(--primary); font-size: 1.5rem; }
         .form-group { margin-bottom: 1.5rem; }
         label {
             display: block;
@@ -158,18 +164,19 @@
         }
         .btn-remove-col:hover { background-color: #FEF2F2; color: #DC2626; }
 
-        /* ดีไซน์ปุ่มเคลียร์ไซส์ */
-        .btn-clear-sizes {
-            background-color: #6B7280;
+        /* ปุ่มเคลียร์ไซส์ทั้งหมดด้านบน */
+        .btn-clear-all-sizes {
+            background-color: #4B5563;
             color: white;
-            padding: 0.35rem 0.75rem;
-            border-radius: 6px;
-            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
             border: none;
             cursor: pointer;
             transition: background-color 0.2s;
         }
-        .btn-clear-sizes:hover { background-color: #4B5563; }
+        .btn-clear-all-sizes:hover { background-color: #374151; }
         
         .radio-group {
             display: flex;
@@ -211,12 +218,13 @@
             .productName { flex: 1 1 100% !important; }
             .productPrice { flex: 1 1 auto !important; }
             
-            /* จัดเรียงบรรทัดปุ่มเคลียร์ไซส์ในมือถือ */
-            .product-list-header {
+            /* จัดเรียงหัวข้อบนมือถือ */
+            .main-header {
                 flex-direction: column;
-                align-items: flex-start !important;
-                gap: 0.5rem;
+                align-items: flex-start;
+                gap: 0.75rem;
             }
+            .btn-clear-all-sizes { width: 100%; }
         }
     </style>
 </head>
@@ -224,7 +232,10 @@
 
 <div class="container">
     <div class="panel">
-        <h2 style="margin-bottom: 1.5rem;">📝 ข้อมูลออเดอร์</h2>
+        <div class="main-header">
+            <h2>📝 ข้อมูลออเดอร์</h2>
+            <button class="btn-clear-all-sizes" onclick="clearAllPills()">↺ ล้างไซส์ทั้งหมด</button>
+        </div>
         
         <div id="collectionsContainer">
             </div>
@@ -256,17 +267,17 @@
             </div>
         </div>
 
-        <button class="btn" style="width: 100%; font-size: 1.1rem; background-color: #EF4444; margin-top: 1rem;" onclick="clearData()">🗑️ ล้างข้อมูลทั้งหมด</button>
+        <button class="btn" style="width: 100%; font-size: 1.1rem; background-color: #EF4444; margin-top: 1rem;" onclick="clearData()">🗑️ ล้างข้อมูลทั้งหมด (ลบรายการสินค้าทิ้ง)</button>
     </div>
 
     <div class="panel">
-        <h2>📋 ข้อความสรุปยอดโอน</h2>
+        <h2 style="margin-bottom: 1.5rem;">📋 ข้อความสรุปยอดโอน</h2>
         <div class="form-group">
             <textarea id="outputText" readonly placeholder="ข้อความสรุปยอดจะแสดงตรงนี้..."></textarea>
         </div>
         <button class="btn" style="width: 100%; background-color: #3B82F6; font-size: 1.1rem; margin-bottom: 2rem;" onclick="copyText('outputText')">📄 คัดลอกสรุปยอด</button>
 
-        <h2>📦 ข้อความใบปะหน้า</h2>
+        <h2 style="margin-bottom: 1.5rem;">📦 ข้อความใบปะหน้า</h2>
         <div class="form-group">
             <textarea id="outputLabelText" readonly placeholder="ข้อความสำหรับใบปะหน้าจะแสดงตรงนี้..."></textarea>
         </div>
@@ -359,12 +370,7 @@
             <div class="form-group">
                 <input type="text" class="collectionName" placeholder="ชื่อคอลเลคชั่น เช่น Summer 2026" value="${colName}">
             </div>
-            
-            <div class="product-list-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                <label style="margin: 0;">รายการสินค้า <small style="color: #6B7280; font-weight: normal;">(จิ้มเลือกไซส์ที่สั่ง)</small></label>
-                <button class="btn-clear-sizes" onclick="clearPillsInCollection(this)">↺ ล้างตัวเลือกไซส์</button>
-            </div>
-            
+            <label style="margin-bottom: 0.75rem;">รายการสินค้า <small style="color: #6B7280; font-weight: normal;">(จิ้มเลือกไซส์ที่ลูกค้าสั่งได้เลย)</small></label>
             <div class="productList"></div>
             
             <button class="btn" style="margin-top: 0.5rem; width: 100%; background-color: #10B981;" onclick="handleAddProductClick(this)">+ เพิ่มสินค้า</button>
@@ -389,10 +395,9 @@
         }
     }
 
-    // ฟังก์ชันใหม่: ล้างการจิ้มไซส์ออกทั้งหมดในคอลเลคชั่นนั้น (เตรียมออเดอร์ใหม่)
-    function clearPillsInCollection(btn) {
-        const block = btn.closest('.collection-block');
-        const activePills = block.querySelectorAll('.pill.active');
+    // ฟังก์ชันเคลียร์ไซส์ทั้งหมดบนหน้าเว็บ
+    function clearAllPills() {
+        const activePills = document.querySelectorAll('.pill.active');
         activePills.forEach(pill => {
             pill.classList.remove('active');
         });
@@ -475,7 +480,7 @@
     }
 
     function clearData() {
-        if(confirm('คุณแน่ใจหรือไม่ว่าต้องการล้างข้อมูลทั้งหมด (รวมถึงลบรายการสินค้า) เพื่อเริ่มใหม่? \n*ถ้าอยากเคลียร์แค่ไซส์ ให้กด "ล้างตัวเลือกไซส์" แทนครับ*')) {
+        if(confirm('คุณแน่ใจหรือไม่ว่าต้องการล้างข้อมูลทั้งหมด (ลบรายการสินค้าทิ้งทั้งหมด) เพื่อเริ่มใหม่? \n*ถ้าอยากเคลียร์แค่ไซส์ ให้กด "ล้างไซส์ทั้งหมด" ด้านบนแทนครับ*')) {
             localStorage.clear();
 
             document.getElementById('shippingCost').value = '0';
