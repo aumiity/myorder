@@ -164,7 +164,6 @@
         }
         .btn-remove-col:hover { background-color: #FEF2F2; color: #DC2626; }
 
-        /* ปุ่มเคลียร์ไซส์ทั้งหมดด้านบน */
         .btn-clear-all-sizes {
             background-color: #4B5563;
             color: white;
@@ -216,9 +215,9 @@
             .collection-block { padding: 1rem; }
             .product-inputs { flex-wrap: wrap; }
             .productName { flex: 1 1 100% !important; }
-            .productPrice { flex: 1 1 auto !important; }
+            .productPrice { flex: 1 1 45% !important; }
+            .productQty { flex: 1 1 30% !important; }
             
-            /* จัดเรียงหัวข้อบนมือถือ */
             .main-header {
                 flex-direction: column;
                 align-items: flex-start;
@@ -268,6 +267,11 @@
         </div>
 
         <button class="btn" style="width: 100%; font-size: 1.1rem; background-color: #EF4444; margin-top: 1rem;" onclick="clearData()">🗑️ ล้างข้อมูลทั้งหมด (ลบรายการสินค้าทิ้ง)</button>
+        
+        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+            <button class="btn" style="flex: 1; background-color: #8B5CF6; font-size: 1rem; padding: 0.7rem;" onclick="exportData()">📤 ส่งออกข้อมูล</button>
+            <button class="btn" style="flex: 1; background-color: #14B8A6; font-size: 1rem; padding: 0.7rem;" onclick="importData()">📥 นำเข้าข้อมูล</button>
+        </div>
     </div>
 
     <div class="panel">
@@ -310,13 +314,14 @@
             block.querySelectorAll('.product-item').forEach(item => {
                 const name = item.querySelector('.productName').value;
                 const price = item.querySelector('.productPrice').value;
+                const qty = item.querySelector('.productQty').value;
                 const selectedSizes = [];
                 
                 item.querySelectorAll('.pill.active').forEach(pill => {
                     selectedSizes.push(pill.getAttribute('data-size'));
                 });
                 
-                products.push({ name, price, selectedSizes });
+                products.push({ name, price, qty, selectedSizes });
             });
             collections.push({ colName, products });
         });
@@ -343,19 +348,60 @@
                 if(col.products.length > 0) {
                     col.products.forEach(p => {
                         const productList = block.querySelector('.productList');
-                        productList.appendChild(createProductItemElement(p.name, p.price, p.selectedSizes));
+                        productList.appendChild(createProductItemElement(p.name, p.price, p.selectedSizes, p.qty));
                     });
                 } else {
                     const productList = block.querySelector('.productList');
-                    productList.appendChild(createProductItemElement('', '', [])); 
+                    productList.appendChild(createProductItemElement('', '', [], 1)); 
                 }
             });
         } else {
             const block = addCollectionBlock('');
             const productList = block.querySelector('.productList');
-            productList.appendChild(createProductItemElement('', '', []));
+            productList.appendChild(createProductItemElement('', '', [], 1));
         }
     }
+
+    // --- ฟังก์ชันนำเข้า/ส่งออกข้อมูลข้ามเครื่อง ---
+    function exportData() {
+        saveData();
+        const data = localStorage.getItem('orderDataV2');
+        if (!data || data === '[]') {
+            alert('ยังไม่มีข้อมูลสินค้าให้ส่งออกครับ');
+            return;
+        }
+        
+        // เข้ารหัสข้อความให้เป็น 1 บรรทัดติดกัน จะได้ก็อปลง LINE ง่ายๆ ไม่พัง
+        const encodedData = btoa(encodeURIComponent(data));
+        
+        // คัดลอกลง Clipboard อัตโนมัติ
+        navigator.clipboard.writeText(encodedData).then(() => {
+            alert('📋 คัดลอก "โค้ดข้อมูลร้าน" เรียบร้อยแล้ว!\n\nเอาโค้ดนี้ไปส่งเข้า LINE แล้วเอาไปกด "นำเข้าข้อมูล" ในเครื่องอื่นได้เลยครับ');
+        }).catch(err => {
+            // สำรองเผื่อเบราว์เซอร์ไม่ให้สิทธิ์ออโต้ก๊อปปี้
+            prompt('คัดลอกโค้ดด้านล่างนี้ ไปวางในเครื่องอื่น:', encodedData);
+        });
+    }
+
+    function importData() {
+        const code = prompt('📥 วาง "โค้ดข้อมูลร้าน" ที่คัดลอกมา ลงในช่องนี้:');
+        if (!code) return;
+        
+        try {
+            const decodedData = decodeURIComponent(atob(code));
+            JSON.parse(decodedData); // เช็คว่าไฟล์ที่ใส่มาไม่พัง
+            
+            if(confirm('🚨 การนำเข้า จะ "เขียนทับ" รายการสินค้าที่มีอยู่บนหน้าจอตอนนี้ทั้งหมด\nคุณแน่ใจหรือไม่?')) {
+                localStorage.setItem('orderDataV2', decodedData);
+                loadData();
+                generateText();
+                alert('✅ นำเข้าข้อมูลเรียบร้อย! รายการสินค้ามาครบแล้วครับ');
+            }
+        } catch(e) {
+            alert('❌ โค้ดไม่ถูกต้อง หรือข้อมูลไม่สมบูรณ์ครับ กรุณาก๊อปปี้มาใหม่');
+        }
+    }
+    // ---------------------------------------------
 
     function addCollectionBlock(colName = '') {
         const container = document.getElementById('collectionsContainer');
@@ -379,7 +425,7 @@
         
         if(colName === '' && arguments.length === 0) {
             const productList = block.querySelector('.productList');
-            productList.appendChild(createProductItemElement('', '', []));
+            productList.appendChild(createProductItemElement('', '', [], 1));
             saveData();
             generateText();
         }
@@ -395,12 +441,16 @@
         }
     }
 
-    // ฟังก์ชันเคลียร์ไซส์ทั้งหมดบนหน้าเว็บ
     function clearAllPills() {
         const activePills = document.querySelectorAll('.pill.active');
         activePills.forEach(pill => {
             pill.classList.remove('active');
         });
+        
+        document.querySelectorAll('.productQty').forEach(qtyInput => {
+            qtyInput.value = 1;
+        });
+
         saveData();
         generateText();
     }
@@ -408,12 +458,12 @@
     function handleAddProductClick(btn) {
         const block = btn.closest('.collection-block');
         const productList = block.querySelector('.productList');
-        productList.appendChild(createProductItemElement('', '', []));
+        productList.appendChild(createProductItemElement('', '', [], 1));
         saveData();
         generateText();
     }
 
-    function createProductItemElement(name = '', price = '', selectedSizes = []) {
+    function createProductItemElement(name = '', price = '', selectedSizes = [], qty = 1) {
         const newItem = document.createElement('div');
         newItem.className = 'product-item';
         
@@ -431,6 +481,7 @@
             <div class="product-inputs">
                 <input type="text" class="productName" placeholder="ชื่อสินค้า" style="flex: 2;" value="${name}">
                 <input type="number" class="productPrice" placeholder="ราคา" style="flex: 1;" value="${price}">
+                <input type="number" class="productQty" placeholder="จำนวน" title="จำนวนชิ้น" style="flex: 0.5; min-width: 65px;" value="${qty || 1}" min="1">
                 <button class="btn btn-icon btn-clone" title="คัดลอกสินค้านี้เพื่อตั้งราคาใหม่" onclick="cloneProduct(this)">📄</button>
                 <button class="btn btn-icon btn-remove" title="ลบรายการ" onclick="removeProduct(this)">-</button>
             </div>
@@ -445,7 +496,7 @@
     function cloneProduct(btn) {
         const currentItem = btn.closest('.product-item');
         const name = currentItem.querySelector('.productName').value;
-        const newItem = createProductItemElement(name, '', []);
+        const newItem = createProductItemElement(name, '', [], 1);
         currentItem.parentNode.insertBefore(newItem, currentItem.nextSibling);
         saveData();
         generateText();
@@ -519,6 +570,11 @@
             productItems.forEach(item => {
                 const nameVal = item.querySelector('.productName').value.trim();
                 const rawPrice = item.querySelector('.productPrice').value.trim();
+                const rawQty = item.querySelector('.productQty').value.trim();
+                
+                const qtyVal = parseInt(rawQty) || 1; 
+                const qtyText = qtyVal > 1 ? ` x${qtyVal}` : '';
+
                 const activePills = item.querySelectorAll('.pill.active');
 
                 if (nameVal !== '' && activePills.length > 0) {
@@ -526,8 +582,8 @@
                         const sizeVal = pill.getAttribute('data-size');
                         const sizeText = (sizeVal === '-' || sizeVal === '') ? '' : ` (${sizeVal})`;
                         
-                        colText += `- ${nameVal}${sizeText}\n`;
-                        colLabelProducts.push(`${nameVal}${sizeText}`);
+                        colText += `- ${nameVal}${sizeText}${qtyText}\n`;
+                        colLabelProducts.push(`${nameVal}${sizeText}${qtyText}`);
                         
                         if (rawPrice === '') {
                             validPrices.push('***');
@@ -535,8 +591,12 @@
                         } else {
                             const priceVal = parseFloat(rawPrice);
                             if (priceVal > 0) {
-                                validPrices.push(priceVal);
-                                productsSum += priceVal;
+                                if (qtyVal > 1) {
+                                    validPrices.push(`${priceVal}x${qtyVal}`);
+                                } else {
+                                    validPrices.push(priceVal);
+                                }
+                                productsSum += (priceVal * qtyVal);
                             }
                         }
                     });
