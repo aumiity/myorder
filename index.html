@@ -52,7 +52,6 @@
             font-size: 1.05rem; 
         }
         
-        /* ช่องกรอกทั่วไป */
         input[type="text"], input[type="number"], textarea {
             width: 100%;
             padding: 0.75rem 1rem;
@@ -80,7 +79,6 @@
             transition: all 0.3s ease;
         }
         
-        /* Header คอลเลคชั่น */
         .collection-header {
             display: flex;
             justify-content: space-between;
@@ -122,7 +120,7 @@
             display: none;
         }
         
-        /* --- ดีไซน์แถวสินค้าแบบใหม่ (Grid 2 บรรทัด) --- */
+        /* --- ดีไซน์แถวสินค้า Grid 2 บรรทัด (ปุ่มอยู่บรรทัดบน) --- */
         .product-item {
             background: #FFFFFF;
             padding: 1rem;
@@ -131,38 +129,32 @@
             margin-bottom: 0.75rem;
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
             
-            /* ใช้ Grid เพื่อจัด 2 บรรทัดเป๊ะๆ */
             display: grid;
-            /* บรรทัด 1: ชื่อ(ยืดได้) ราคา(คงที่) จำนวน(คงที่) */
-            grid-template-columns: 1fr 100px 80px; 
-            /* บรรทัด 2: ไซส์และปุ่ม */
-            grid-template-rows: auto auto;
-            gap: 0.75rem; /* ระยะห่างระหว่างช่องและบรรทัด */
+            /* จัดสัดส่วนบรรทัดบน: ชื่อ | ราคา | จำนวน | ปุ่ม(กินที่แค่พอดี) */
+            grid-template-columns: 1fr 100px 80px auto; 
+            gap: 0.75rem; 
             align-items: center;
         }
 
-        /* จัดตำแหน่ง Input ใน Grid */
-        .productName { grid-column: 1 / 2; grid-row: 1; width: 100%; }
-        .productPrice { grid-column: 2 / 3; grid-row: 1; }
-        .productQty { grid-column: 3 / 4; grid-row: 1; text-align: center; }
-
-        /* คอนเทนเนอร์บรรทัดที่ 2 (ไซส์ + ปุ่ม) */
-        .product-row-2 {
-            grid-column: 1 / 4; /* กินพื้นที่เต็มความกว้าง */
-            grid-row: 2;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
+        .productName { grid-column: 1 / 2; width: 100%; }
+        .productPrice { grid-column: 2 / 3; width: 100%; }
+        .productQty { grid-column: 3 / 4; width: 100%; text-align: center; }
+        
+        /* ปุ่มขยับมาอยู่บรรทัดบนสุด (คอลัมน์ที่ 4) */
+        .product-actions { 
+            grid-column: 4 / 5; 
+            display: flex; 
+            gap: 0.5rem; 
         }
         
-        /* โซนปุ่มไซส์ */
+        /* ไซส์อยู่บรรทัดที่ 2 ยืดเต็ม 4 คอลัมน์ */
         .size-pills {
+            grid-column: 1 / 5; 
             display: flex;
             flex-wrap: wrap;
             gap: 0.4rem;
             align-items: center;
-            flex: 1; /* ให้ขยายเต็มพื้นที่ที่เหลือ */
+            margin-top: 0.25rem;
         }
         
         .pill {
@@ -193,13 +185,6 @@
         }
         .pill-custom:hover { background: #EEF2FF; }
 
-        /* โซนปุ่ม Action ขวาล่าง */
-        .product-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        /* ปุ่มกดทั่วไป */
         .btn {
             background-color: var(--primary);
             color: white;
@@ -213,7 +198,6 @@
         }
         .btn:hover, .btn:active { background-color: var(--primary-hover); }
         
-        /* ปุ่มไอคอน คัดลอก/ลบ */
         .btn-icon {
             padding: 0;
             width: 38px;
@@ -254,10 +238,9 @@
         }
         .btn-clear-all-sizes:hover { background-color: #374151; }
         
-        /* ปรับธนาคารกลับมาแนวตั้ง */
         .radio-group {
             display: flex;
-            flex-direction: column; /* กลับมาแนวตั้ง */
+            flex-direction: column;
             gap: 0.75rem;
         }
         .radio-group label {
@@ -285,17 +268,18 @@
             line-height: 1.6;
         }
 
+        /* รองรับการเปิดบนมือถือ (จัดเรียงใหม่ให้ไม่ล้นจอ) */
         @media (max-width: 1000px) {
             .container { grid-template-columns: 1fr; }
-            /* บนมือถือให้ยุบเหลือคอลัมน์เดียว */
             .product-item { 
-                grid-template-columns: 1fr 1fr; 
+                grid-template-columns: 1fr auto; 
                 grid-template-rows: auto auto auto;
             }
-            .productName { grid-column: 1 / 3; grid-row: 1; }
+            .productName { grid-column: 1 / 2; grid-row: 1; }
+            .product-actions { grid-column: 2 / 3; grid-row: 1; justify-content: flex-end; }
             .productPrice { grid-column: 1 / 2; grid-row: 2; }
             .productQty { grid-column: 2 / 3; grid-row: 2; }
-            .product-row-2 { grid-column: 1 / 3; grid-row: 3; flex-wrap: wrap; }
+            .size-pills { grid-column: 1 / 3; grid-row: 3; }
             
             .collection-header { flex-wrap: wrap; }
             .header-left { width: 100%; flex: none; }
@@ -307,7 +291,7 @@
 <div class="container">
     <div class="panel">
         <div class="main-header">
-            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v3.4</span></h2>
+            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v3.5</span></h2>
             <button class="btn-clear-all-sizes" onclick="clearAllPills()">↺ ล้างไซส์ทั้งหมด</button>
         </div>
         
@@ -550,7 +534,6 @@
         const newItem = document.createElement('div');
         newItem.className = 'product-item';
         
-        // ลบไซส์ FS ออกตามที่สั่งครับ
         const defaultSizes = ['-', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'];
         const allSizes = [...new Set([...defaultSizes, ...selectedSizes])]; 
 
@@ -561,21 +544,18 @@
             pillsHtml += `<div class="pill ${isActive}" onclick="togglePill(this)" data-size="${s}">${displayTxt}</div>`;
         });
 
-        // จัดโครงสร้าง HTML ใหม่ให้เป็น 2 บรรทัด (Input อยู่บน / ไซส์และปุ่มอยู่ล่าง)
+        // โครงสร้าง HTML ย้ายปุ่ม Action ขึ้นไปไว้แถวเดียวกับ Input
         newItem.innerHTML = `
             <input type="text" class="productName" placeholder="ชื่อสินค้า" value="${name}">
             <input type="number" class="productPrice" placeholder="ราคา" value="${price}">
             <input type="number" class="productQty" placeholder="จำนวน" title="จำนวนชิ้น (ต่อ 1 ไซส์)" value="${qty || 1}" min="1">
-            
-            <div class="product-row-2">
-                <div class="size-pills">
-                    ${pillsHtml}
-                    <div class="pill pill-custom" onclick="addCustomPill(this)">+ พิมพ์เอง</div>
-                </div>
-                <div class="product-actions">
-                    <button class="btn btn-icon btn-clone" title="คัดลอกสินค้านี้เพื่อตั้งราคา/จำนวนใหม่" onclick="cloneProduct(this)">📄</button>
-                    <button class="btn btn-icon btn-remove" title="ลบรายการ" onclick="removeProduct(this)">-</button>
-                </div>
+            <div class="product-actions">
+                <button class="btn btn-icon btn-clone" title="คัดลอกสินค้านี้" onclick="cloneProduct(this)">📄</button>
+                <button class="btn btn-icon btn-remove" title="ลบรายการ" onclick="removeProduct(this)">-</button>
+            </div>
+            <div class="size-pills">
+                ${pillsHtml}
+                <div class="pill pill-custom" onclick="addCustomPill(this)">+ พิมพ์เอง</div>
             </div>
         `;
         return newItem;
