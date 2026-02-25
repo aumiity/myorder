@@ -157,6 +157,19 @@
             border-radius: 6px;
         }
         .btn-remove-col:hover { background-color: #FEF2F2; color: #DC2626; }
+
+        /* ดีไซน์ปุ่มเคลียร์ไซส์ */
+        .btn-clear-sizes {
+            background-color: #6B7280;
+            color: white;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-clear-sizes:hover { background-color: #4B5563; }
         
         .radio-group {
             display: flex;
@@ -180,7 +193,7 @@
             margin-top: 2px;
         }
         textarea {
-            height: 280px; /* ลดความสูงลงให้พอดีจอเวลาโชว์ 2 กล่อง */
+            height: 280px;
             resize: vertical;
             background-color: #F9FAFB;
             line-height: 1.5;
@@ -197,6 +210,13 @@
             .product-inputs { flex-wrap: wrap; }
             .productName { flex: 1 1 100% !important; }
             .productPrice { flex: 1 1 auto !important; }
+            
+            /* จัดเรียงบรรทัดปุ่มเคลียร์ไซส์ในมือถือ */
+            .product-list-header {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 0.5rem;
+            }
         }
     </style>
 </head>
@@ -339,7 +359,12 @@
             <div class="form-group">
                 <input type="text" class="collectionName" placeholder="ชื่อคอลเลคชั่น เช่น Summer 2026" value="${colName}">
             </div>
-            <label style="margin-bottom: 0.75rem;">รายการสินค้า <small style="color: #6B7280; font-weight: normal;">(จิ้มเลือกไซส์ที่ลูกค้าสั่งได้เลย)</small></label>
+            
+            <div class="product-list-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <label style="margin: 0;">รายการสินค้า <small style="color: #6B7280; font-weight: normal;">(จิ้มเลือกไซส์ที่สั่ง)</small></label>
+                <button class="btn-clear-sizes" onclick="clearPillsInCollection(this)">↺ ล้างตัวเลือกไซส์</button>
+            </div>
+            
             <div class="productList"></div>
             
             <button class="btn" style="margin-top: 0.5rem; width: 100%; background-color: #10B981;" onclick="handleAddProductClick(this)">+ เพิ่มสินค้า</button>
@@ -362,6 +387,17 @@
             saveData();
             generateText();
         }
+    }
+
+    // ฟังก์ชันใหม่: ล้างการจิ้มไซส์ออกทั้งหมดในคอลเลคชั่นนั้น (เตรียมออเดอร์ใหม่)
+    function clearPillsInCollection(btn) {
+        const block = btn.closest('.collection-block');
+        const activePills = block.querySelectorAll('.pill.active');
+        activePills.forEach(pill => {
+            pill.classList.remove('active');
+        });
+        saveData();
+        generateText();
     }
 
     function handleAddProductClick(btn) {
@@ -439,7 +475,7 @@
     }
 
     function clearData() {
-        if(confirm('คุณแน่ใจหรือไม่ว่าต้องการล้างข้อมูลทั้งหมดเพื่อเริ่มออเดอร์ใหม่?')) {
+        if(confirm('คุณแน่ใจหรือไม่ว่าต้องการล้างข้อมูลทั้งหมด (รวมถึงลบรายการสินค้า) เพื่อเริ่มใหม่? \n*ถ้าอยากเคลียร์แค่ไซส์ ให้กด "ล้างตัวเลือกไซส์" แทนครับ*')) {
             localStorage.clear();
 
             document.getElementById('shippingCost').value = '0';
@@ -462,7 +498,7 @@
         const shippingValue = parseFloat(shipping) || 0;
         
         let finalProductsText = '';
-        let labelLines = []; // ตัวแปรเก็บข้อความสำหรับใบปะหน้า
+        let labelLines = []; 
         let validPrices = [];
         let hasMissingPrice = false;
         let productsSum = 0;
@@ -473,7 +509,7 @@
             const productItems = block.querySelectorAll('.product-item');
             
             let colText = '';
-            let colLabelProducts = []; // เก็บสินค้าในคอลเลคชั่นนี้ (สำหรับใบปะหน้า)
+            let colLabelProducts = []; 
             
             productItems.forEach(item => {
                 const nameVal = item.querySelector('.productName').value.trim();
@@ -485,13 +521,9 @@
                         const sizeVal = pill.getAttribute('data-size');
                         const sizeText = (sizeVal === '-' || sizeVal === '') ? '' : ` (${sizeVal})`;
                         
-                        // สร้างข้อความบิลปกติ
                         colText += `- ${nameVal}${sizeText}\n`;
-                        
-                        // สร้างข้อความใบปะหน้า (เก็บไว้เชื่อมด้วย / ทีหลัง)
                         colLabelProducts.push(`${nameVal}${sizeText}`);
                         
-                        // เช็คและคำนวณราคา
                         if (rawPrice === '') {
                             validPrices.push('***');
                             hasMissingPrice = true;
@@ -506,7 +538,6 @@
                 }
             });
 
-            // ประกอบข้อความบิลโอนเงิน
             if (colText !== '') {
                 if (colName !== '') {
                     finalProductsText += `${colName}\n${colText}\n`;
@@ -515,7 +546,6 @@
                 }
             }
 
-            // ประกอบข้อความใบปะหน้า
             if (colLabelProducts.length > 0) {
                 if (colName !== '') {
                     labelLines.push(`${colName} = ${colLabelProducts.join(' / ')}`);
@@ -565,7 +595,6 @@
             }
         }
 
-        // นำข้อความไปใส่ในกล่องสรุปยอดโอน
         const finalOutput = `${finalProductsText}ค่าจัดส่ง: ${shipping} บาท
 ยอดรวม: ${priceString} บาท
 
@@ -575,12 +604,9 @@ ${bankText}
 
 โอนเงินแล้วกรุณาส่งสลิป และที่อยู่ให้ด้วยนะคะ`;
         document.getElementById('outputText').value = finalOutput;
-
-        // นำข้อความไปใส่ในกล่องใบปะหน้า
         document.getElementById('outputLabelText').value = labelLines.join('\n');
     }
 
-    // ฟังก์ชันคัดลอกแบบใหม่ รับค่า id ของกล่องที่ต้องการก๊อปปี้
     function copyText(elementId) {
         const outputArea = document.getElementById(elementId);
         if(outputArea.value.trim() === '') return;
