@@ -60,7 +60,6 @@
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
         }
         
-        /* ดีไซน์กล่องคอลเลคชั่น */
         .collection-block {
             background-color: #F8FAFC;
             border: 2px dashed #CBD5E1;
@@ -75,7 +74,6 @@
             margin-bottom: 0.75rem;
         }
         
-        /* ดีไซน์บรรทัดสินค้าแบบใหม่ */
         .product-item {
             background: #FFFFFF;
             padding: 1rem;
@@ -90,7 +88,6 @@
             margin-bottom: 0.75rem;
         }
         
-        /* ดีไซน์ปุ่มไซส์ (Size Pills) */
         .size-pills {
             display: flex;
             flex-wrap: wrap;
@@ -146,8 +143,12 @@
             align-items: center;
             justify-content: center;
         }
+        /* สีปุ่มคัดลอกและลบ */
+        .btn-clone { background-color: #3B82F6; }
+        .btn-clone:hover, .btn-clone:active { background-color: #2563EB; }
         .btn-remove { background-color: #EF4444; }
         .btn-remove:hover, .btn-remove:active { background-color: #DC2626; }
+        
         .btn-remove-col {
             background-color: transparent;
             color: #EF4444;
@@ -256,9 +257,7 @@
         
         document.getElementById('shippingCost').addEventListener('input', updateData);
         document.querySelectorAll('input[name="bank"]').forEach(radio => radio.addEventListener('change', updateData));
-        
         document.getElementById('collectionsContainer').addEventListener('input', updateData);
-        // ไม่ต้องดัก change แล้ว เพราะเราจัดการคลิกที่ปุ่มไซส์เอง
         
         generateText(); 
     };
@@ -285,7 +284,7 @@
             });
             collections.push({ colName, products });
         });
-        localStorage.setItem('orderDataV2', JSON.stringify(collections)); // ใช้ Key ใหม่กันข้อมูลเก่าพัง
+        localStorage.setItem('orderDataV2', JSON.stringify(collections));
     }
 
     function loadData() {
@@ -301,37 +300,24 @@
         container.innerHTML = ''; 
 
         const savedDataV2 = JSON.parse(localStorage.getItem('orderDataV2'));
-        const savedDataOld = JSON.parse(localStorage.getItem('orderData')); // ดึงข้อมูลเวอร์ชันเก่ามาแปลงร่าง
 
         if (savedDataV2 && savedDataV2.length > 0) {
-            // โหลดข้อมูลแบบใหม่
             savedDataV2.forEach(col => {
                 const block = addCollectionBlock(col.colName);
                 if(col.products.length > 0) {
-                    col.products.forEach(p => addProductToBlock(block, p.name, p.price, p.selectedSizes));
-                } else {
-                    addProductToBlock(block); 
-                }
-            });
-        } else if (savedDataOld && savedDataOld.length > 0) {
-            // แปลงข้อมูลแบบเก่า (หลายบรรทัด) ให้ยุบรวมเป็นบรรทัดเดียว (ประหยัดที่)
-            savedDataOld.forEach(col => {
-                const block = addCollectionBlock(col.colName);
-                if(col.products && col.products.length > 0) {
-                    const grouped = {};
                     col.products.forEach(p => {
-                        const key = p.name + '|' + p.price;
-                        if (!grouped[key]) grouped[key] = { name: p.name, price: p.price, sizes: [] };
-                        if (p.isChecked && p.size) grouped[key].sizes.push(p.size);
+                        const productList = block.querySelector('.productList');
+                        productList.appendChild(createProductItemElement(p.name, p.price, p.selectedSizes));
                     });
-                    Object.values(grouped).forEach(gp => addProductToBlock(block, gp.name, gp.price, gp.sizes));
                 } else {
-                    addProductToBlock(block); 
+                    const productList = block.querySelector('.productList');
+                    productList.appendChild(createProductItemElement('', '', [])); 
                 }
             });
         } else {
             const block = addCollectionBlock('');
-            addProductToBlock(block);
+            const productList = block.querySelector('.productList');
+            productList.appendChild(createProductItemElement('', '', []));
         }
     }
 
@@ -356,7 +342,8 @@
         container.appendChild(block);
         
         if(colName === '' && arguments.length === 0) {
-            addProductToBlock(block);
+            const productList = block.querySelector('.productList');
+            productList.appendChild(createProductItemElement('', '', []));
             saveData();
             generateText();
         }
@@ -374,19 +361,19 @@
 
     function handleAddProductClick(btn) {
         const block = btn.closest('.collection-block');
-        addProductToBlock(block);
+        const productList = block.querySelector('.productList');
+        productList.appendChild(createProductItemElement('', '', []));
         saveData();
         generateText();
     }
 
-    // ฟังก์ชันสร้างหน้าตาสินค้าแบบใหม่ (ปุ่มไซส์)
-    function addProductToBlock(block, name = '', price = '', selectedSizes = []) {
-        const productList = block.querySelector('.productList');
+    // ฟังก์ชันสร้างชิ้นส่วนรายการสินค้า (ใช้ซ้ำได้ทั้งตอนเพิ่มใหม่ และตอนคัดลอก)
+    function createProductItemElement(name = '', price = '', selectedSizes = []) {
         const newItem = document.createElement('div');
         newItem.className = 'product-item';
         
         const defaultSizes = ['-', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', 'FS'];
-        const allSizes = [...new Set([...defaultSizes, ...selectedSizes])]; // ดึงไซส์แปลกๆ ที่เคยพิมพ์ไว้มาโชว์ด้วย
+        const allSizes = [...new Set([...defaultSizes, ...selectedSizes])]; 
 
         let pillsHtml = '';
         allSizes.forEach(s => {
@@ -399,24 +386,38 @@
             <div class="product-inputs">
                 <input type="text" class="productName" placeholder="ชื่อสินค้า" style="flex: 2;" value="${name}">
                 <input type="number" class="productPrice" placeholder="ราคา" style="flex: 1;" value="${price}">
-                <button class="btn btn-icon btn-remove" onclick="removeProduct(this)">-</button>
+                <button class="btn btn-icon btn-clone" title="คัดลอกสินค้านี้เพื่อตั้งราคาใหม่" onclick="cloneProduct(this)">📄</button>
+                <button class="btn btn-icon btn-remove" title="ลบรายการ" onclick="removeProduct(this)">-</button>
             </div>
             <div class="size-pills">
                 ${pillsHtml}
                 <div class="pill pill-custom" onclick="addCustomPill(this)">+ พิมพ์เอง</div>
             </div>
         `;
-        productList.appendChild(newItem);
+        return newItem;
     }
 
-    // จิ้มปุ่มเพื่อเปิด/ปิดไซส์
+    // ฟังก์ชันโคลนรายการสินค้า (สำหรับไซส์ที่ราคาไม่เท่ากัน)
+    function cloneProduct(btn) {
+        const currentItem = btn.closest('.product-item');
+        const name = currentItem.querySelector('.productName').value;
+        
+        // สร้างรายการใหม่โดยเอาแค่ชื่อมา ราคาและไซส์เว้นว่างไว้ให้กรอกใหม่
+        const newItem = createProductItemElement(name, '', []);
+        
+        // แทรกรายการใหม่เข้าไปต่อท้ายรายการเดิมทันที
+        currentItem.parentNode.insertBefore(newItem, currentItem.nextSibling);
+        
+        saveData();
+        generateText();
+    }
+
     function togglePill(pill) {
         pill.classList.toggle('active');
         saveData();
         generateText();
     }
 
-    // กดเพื่อพิมพ์ไซส์แปลกๆ เอง (เช่น 40, 42)
     function addCustomPill(btn) {
         const newSize = prompt('กรอกไซส์ที่ต้องการ (เช่น 40, 42):');
         if (newSize && newSize.trim() !== '') {
@@ -427,7 +428,6 @@
             newPill.innerText = sizeVal;
             newPill.onclick = function() { togglePill(this); };
 
-            // แทรกปุ่มใหม่ไว้หน้าปุ่ม "+ พิมพ์เอง"
             btn.parentNode.insertBefore(newPill, btn);
             saveData();
             generateText();
@@ -452,8 +452,7 @@
             container.innerHTML = ''; 
             
             const block = addCollectionBlock('');
-            addProductToBlock(block);
-
+            
             saveData();
             generateText();
         }
@@ -478,7 +477,7 @@
             productItems.forEach(item => {
                 const nameVal = item.querySelector('.productName').value.trim();
                 const rawPrice = item.querySelector('.productPrice').value.trim();
-                const activePills = item.querySelectorAll('.pill.active'); // ดึงเฉพาะปุ่มที่เป็นสีฟ้า
+                const activePills = item.querySelectorAll('.pill.active');
 
                 if (nameVal !== '' && activePills.length > 0) {
                     activePills.forEach(pill => {
@@ -486,7 +485,6 @@
                         const sizeText = (sizeVal === '-' || sizeVal === '') ? '' : ` (${sizeVal})`;
                         colText += `- ${nameVal}${sizeText}\n`;
                         
-                        // คิดเงินแยกตามจำนวนปุ่มไซส์ที่กด
                         if (rawPrice === '') {
                             validPrices.push('***');
                             hasMissingPrice = true;
