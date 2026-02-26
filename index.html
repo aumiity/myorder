@@ -26,7 +26,7 @@
         }
         .container {
             display: grid;
-            grid-template-columns: 1.5fr 1fr; /* ขยายฝั่งซ้ายเพิ่มอีกนิดรองรับช่องใหม่ */
+            grid-template-columns: 1.4fr 1fr;
             gap: 2.5rem; 
             width: 98%; 
             max-width: 1800px; 
@@ -68,9 +68,7 @@
             appearance: none;
             transition: all 0.2s;
         }
-        input::placeholder, textarea::placeholder {
-            color: #9CA3AF;
-        }
+        input::placeholder, textarea::placeholder { color: #9CA3AF; }
         input:focus, textarea:focus {
             outline: none;
             border-color: var(--primary);
@@ -96,70 +94,58 @@
             padding-bottom: 1rem;
             border-bottom: 1px dashed var(--border);
         }
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            flex: 1;
-        }
-        .header-actions {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
+        .header-left { display: flex; align-items: center; gap: 0.75rem; flex: 1; }
+        .header-actions { display: flex; gap: 0.5rem; align-items: center; }
         .btn-toggle-col {
             background: var(--surface-alt);
             color: var(--text);
             border: none;
-            width: 44px;
-            height: 44px;
+            width: 44px; height: 44px;
             border-radius: 8px;
             font-size: 1.2rem;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             flex-shrink: 0;
             transition: all 0.2s ease;
         }
         .btn-toggle-col:hover { background: var(--border); }
         
-        .collection-block.collapsed .collection-header {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-        .collection-block.collapsed .collection-body {
-            display: none;
-        }
+        .collection-block.collapsed .collection-header { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .collection-block.collapsed .collection-body { display: none; }
         
-        /* --- เพิ่มคอลัมน์ใหม่ใน Grid --- */
         .product-item {
             background: var(--surface);
             padding: 1rem;
             border-radius: 10px;
             border: 1px solid var(--border);
             margin-bottom: 0.75rem;
-            
+        }
+        
+        .product-header-row {
             display: grid;
-            /* แทรกช่อง Variant เข้ามา: ชื่อ(ยืด) | สีลาย(ยืด) | ราคา(คงที่) | จำนวน(คงที่) | ปุ่ม */
-            grid-template-columns: 1.2fr 1.2fr 90px 80px auto; 
+            grid-template-columns: 1fr 100px 90px auto; 
             gap: 0.75rem; 
             align-items: center;
+            margin-bottom: 0.75rem;
         }
-        .productName { grid-column: 1 / 2; width: 100%; font-weight: bold; }
-        .productVariant { grid-column: 2 / 3; width: 100%; border-style: dashed !important; } /* ทำให้ช่องสีดูต่างจากชื่อ */
-        .productPrice { grid-column: 3 / 4; width: 100%; }
-        .productQty { grid-column: 4 / 5; width: 100%; text-align: center; }
-        .product-actions { grid-column: 5 / 6; display: flex; gap: 0.4rem; }
+        .productName { width: 100%; font-weight: bold; }
+        .productPrice { width: 100%; }
+        .productQty { width: 100%; text-align: center; }
+        .product-actions { display: flex; gap: 0.4rem; }
+        
+        .option-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding-left: 0.5rem;
+            border-left: 2px solid var(--border);
+        }
         
         .size-pills {
-            grid-column: 1 / 6; 
             display: flex;
             flex-wrap: wrap;
             gap: 0.4rem;
             align-items: center;
-            margin-top: 0.25rem;
         }
         
         .pill {
@@ -185,10 +171,14 @@
         .pill-custom {
             border-style: dashed;
             background: transparent;
-            color: var(--primary);
-            border-color: var(--primary);
+            color: var(--text-muted);
+            border-color: var(--text-muted);
         }
-        .pill-custom:hover { background: rgba(99, 102, 241, 0.1); }
+        .pill-custom:hover { background: rgba(255, 255, 255, 0.05); color: var(--text); border-color: var(--text); }
+        .pill-danger {
+            border-color: #F87171; color: #F87171;
+        }
+        .pill-danger:hover { background: rgba(248, 113, 113, 0.1); color: #FCA5A5; border-color: #FCA5A5; }
 
         .btn {
             background-color: var(--primary);
@@ -205,15 +195,10 @@
         
         .btn-icon {
             padding: 0;
-            width: 38px; 
-            height: 38px;
-            flex-shrink: 0;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            color: white; 
+            width: 38px; height: 38px;
+            flex-shrink: 0; font-size: 1.1rem;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 8px; color: white; 
         }
         .btn-move { background-color: #6B7280; }
         .btn-move:hover, .btn-move:active { background-color: #4B5563; }
@@ -224,74 +209,44 @@
         
         .btn-remove-col {
             background-color: transparent;
-            color: #F87171; 
-            border: 1px solid #F87171;
-            padding: 0.4rem 0.85rem;
-            font-size: 0.95rem;
-            border-radius: 6px;
-            cursor: pointer;
+            color: #F87171; border: 1px solid #F87171;
+            padding: 0.4rem 0.85rem; font-size: 0.95rem;
+            border-radius: 6px; cursor: pointer;
         }
-        .btn-remove-col:hover { background-color: rgba(248, 113, 113, 0.1); }
+        .btn-remove-col:hover { background: rgba(248, 113, 113, 0.1); }
 
         .btn-clear-all-sizes {
             background-color: var(--surface-alt);
             color: var(--text);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-weight: 600;
+            padding: 0.5rem 1rem; border-radius: 8px;
+            font-size: 0.95rem; font-weight: 600;
             border: 1px solid var(--border);
-            cursor: pointer;
-            transition: all 0.2s;
+            cursor: pointer; transition: all 0.2s;
         }
         .btn-clear-all-sizes:hover { background-color: var(--border); }
         
-        .radio-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
+        .btn-add-row {
+            background: transparent; color: var(--primary);
+            border: none; cursor: pointer; font-size: 0.9rem; font-weight: 600;
+            padding: 0.5rem; margin-top: 0.25rem; display: inline-block;
         }
+        .btn-add-row:hover { text-decoration: underline; }
+
+        .radio-group { display: flex; flex-direction: column; gap: 0.75rem; }
         .radio-group label {
-            display: flex;
-            align-items: flex-start;
-            font-weight: normal;
-            gap: 0.75rem;
-            cursor: pointer;
-            padding: 0.85rem;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: var(--surface-alt);
-            font-size: 1rem;
+            display: flex; align-items: flex-start; font-weight: normal; gap: 0.75rem;
+            cursor: pointer; padding: 0.85rem; border: 1px solid var(--border);
+            border-radius: 8px; background: var(--surface-alt); font-size: 1rem;
             transition: border-color 0.2s;
         }
-        .radio-group label:hover {
-            border-color: var(--primary);
-        }
-        input[type="radio"] {
-            width: 20px;
-            height: 20px;
-            margin-top: 2px;
-            cursor: pointer;
-            accent-color: var(--primary);
-        }
-        textarea {
-            height: 350px; 
-            resize: vertical;
-            background-color: var(--bg); 
-            line-height: 1.6;
-        }
-        .action-buttons-group {
-            display: flex; gap: 1rem; margin-top: 1rem;
-        }
+        .radio-group label:hover { border-color: var(--primary); }
+        input[type="radio"] { width: 20px; height: 20px; margin-top: 2px; cursor: pointer; accent-color: var(--primary); }
+        textarea { height: 350px; resize: vertical; background-color: var(--bg); line-height: 1.6; }
+        .action-buttons-group { display: flex; gap: 1rem; margin-top: 1rem; }
 
-        /* รองรับมือถือ */
         @media (max-width: 800px) {
             body { padding: 1rem 0.5rem; } 
-            .container { 
-                grid-template-columns: 1fr; 
-                gap: 1.5rem; 
-                width: 100%;
-            }
+            .container { grid-template-columns: 1fr; gap: 1.5rem; width: 100%; }
             .panel { padding: 1.25rem; }
             .main-header { flex-direction: column; align-items: stretch; gap: 1rem; }
             .btn-clear-all-sizes { width: 100%; padding: 0.75rem; }
@@ -299,17 +254,15 @@
             .header-left { width: 100%; flex: none; }
             .header-actions { width: 100%; justify-content: flex-end; }
             
-            .product-item { 
+            .product-header-row { 
                 grid-template-columns: 1fr 1fr auto; 
-                grid-template-rows: auto auto auto auto;
+                grid-template-rows: auto auto;
                 gap: 0.6rem;
             }
             .productName { grid-column: 1 / 4; grid-row: 1; }
-            .productVariant { grid-column: 1 / 4; grid-row: 2; }
-            .productPrice { grid-column: 1 / 2; grid-row: 3; }
-            .productQty { grid-column: 2 / 3; grid-row: 3; }
-            .product-actions { grid-column: 3 / 4; grid-row: 3; justify-content: flex-end; }
-            .size-pills { grid-column: 1 / 4; grid-row: 4; margin-top: 0; }
+            .productPrice { grid-column: 1 / 2; grid-row: 2; }
+            .productQty { grid-column: 2 / 3; grid-row: 2; }
+            .product-actions { grid-column: 3 / 4; grid-row: 2; justify-content: flex-end; }
             
             .action-buttons-group { flex-direction: column; gap: 0.5rem; }
             textarea { height: 250px; } 
@@ -321,8 +274,8 @@
 <div class="container">
     <div class="panel">
         <div class="main-header">
-            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v4.4 (Super-Variant)</span></h2>
-            <button class="btn-clear-all-sizes" onclick="clearAllPills()">↺ ล้างไซส์ทั้งหมด</button>
+            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v5.0 (Multi-Rows)</span></h2>
+            <button class="btn-clear-all-sizes" onclick="clearAllPills()">↺ ล้างตัวเลือกทั้งหมด</button>
         </div>
         
         <div id="collectionsContainer"></div>
@@ -391,24 +344,29 @@
             
             block.querySelectorAll('.product-item').forEach(item => {
                 const name = item.querySelector('.productName').value;
-                const variant = item.querySelector('.productVariant').value; // บันทึกช่อง สี/ลาย
                 const price = item.querySelector('.productPrice').value;
                 const qty = item.querySelector('.productQty').value;
-                const selectedSizes = [];
-                const availableSizes = [];
                 
-                item.querySelectorAll('.pill[data-size]').forEach(pill => {
-                    availableSizes.push(pill.getAttribute('data-size'));
-                    if (pill.classList.contains('active')) {
-                        selectedSizes.push(pill.getAttribute('data-size'));
-                    }
+                // ดึงข้อมูลการตั้งค่าหลายบรรทัด
+                const optionRows = [];
+                item.querySelectorAll('.option-row').forEach(rowEl => {
+                    const availableSizes = [];
+                    const selectedSizes = [];
+                    rowEl.querySelectorAll('.pill[data-size]').forEach(pill => {
+                        const size = pill.getAttribute('data-size');
+                        availableSizes.push(size);
+                        if (pill.classList.contains('active')) {
+                            selectedSizes.push(size);
+                        }
+                    });
+                    optionRows.push({ availableSizes, selectedSizes });
                 });
                 
-                products.push({ name, variant, price, qty, selectedSizes, availableSizes });
+                products.push({ name, price, qty, optionRows });
             });
             collections.push({ colName, isCollapsed, products });
         });
-        localStorage.setItem('orderDataV2', JSON.stringify(collections));
+        localStorage.setItem('orderDataV3', JSON.stringify(collections));
     }
 
     function loadData() {
@@ -422,32 +380,54 @@
         const container = document.getElementById('collectionsContainer');
         container.innerHTML = ''; 
 
-        const savedDataV2 = JSON.parse(localStorage.getItem('orderDataV2'));
+        // รองรับการโหลดข้อมูลจากเวอร์ชันเก่า (V2 -> V3) แบบไร้รอยต่อ
+        let savedData = JSON.parse(localStorage.getItem('orderDataV3'));
+        
+        if (!savedData) {
+            const oldData = JSON.parse(localStorage.getItem('orderDataV2'));
+            if (oldData) {
+                savedData = oldData.map(col => ({
+                    colName: col.colName,
+                    isCollapsed: col.isCollapsed,
+                    products: col.products.map(p => {
+                        const optRows = [];
+                        const avail = p.availableSizes && p.availableSizes.length > 0 ? p.availableSizes : ['S', 'M', 'L', 'XL', '2XL'];
+                        optRows.push({ availableSizes: avail, selectedSizes: p.selectedSizes || [] });
+                        
+                        // ถ้าเคยมีระบุสี/ลาย ในเวอร์ชัน 4.4 เอามาทำเป็นบรรทัดที่ 2 ให้อัตโนมัติ
+                        if (p.variant && p.variant.trim() !== '') {
+                            optRows.push({ availableSizes: [p.variant], selectedSizes: [p.variant] });
+                        }
+                        return { name: p.name, price: p.price, qty: p.qty, optionRows: optRows };
+                    })
+                }));
+            }
+        }
 
-        if (savedDataV2 && savedDataV2.length > 0) {
-            savedDataV2.forEach(col => {
+        if (savedData && savedData.length > 0) {
+            savedData.forEach(col => {
                 const block = addCollectionBlock(col.colName, col.isCollapsed);
                 if(col.products.length > 0) {
                     col.products.forEach(p => {
                         const productList = block.querySelector('.productList');
-                        productList.appendChild(createProductItemElement(p.name, p.variant || '', p.price, p.selectedSizes, p.qty, p.availableSizes));
+                        productList.appendChild(createProductItemElement(p.name, p.price, p.qty, p.optionRows));
                     });
                 } else {
                     const productList = block.querySelector('.productList');
-                    productList.appendChild(createProductItemElement('', '', '', [], 1, null)); 
+                    productList.appendChild(createProductItemElement()); 
                 }
             });
         } else {
             const block = addCollectionBlock('');
             const productList = block.querySelector('.productList');
-            productList.appendChild(createProductItemElement('', '', '', [], 1, null));
+            productList.appendChild(createProductItemElement());
         }
     }
 
     function exportData() {
         saveData();
-        const data = localStorage.getItem('orderDataV2');
-        if (!data || data === '[]') { alert('ยังไม่มีข้อมูลสินค้าให้ส่งออกครับ'); return; }
+        const data = localStorage.getItem('orderDataV3');
+        if (!data || data === '[]') { alert('ยังไม่มีข้อมูลให้ส่งออกครับ'); return; }
         const encodedData = btoa(encodeURIComponent(data));
         navigator.clipboard.writeText(encodedData).then(() => {
             alert('📋 คัดลอก "โค้ดข้อมูลร้าน" เรียบร้อยแล้ว!');
@@ -463,7 +443,7 @@
             const decodedData = decodeURIComponent(atob(code));
             JSON.parse(decodedData); 
             if(confirm('🚨 การนำเข้า จะ "เขียนทับ" รายการสินค้าที่มีอยู่บนหน้าจอตอนนี้ทั้งหมด\nคุณแน่ใจหรือไม่?')) {
-                localStorage.setItem('orderDataV2', decodedData);
+                localStorage.setItem('orderDataV3', decodedData);
                 loadData();
                 generateText();
                 alert('✅ นำเข้าข้อมูลเรียบร้อย!');
@@ -511,7 +491,6 @@
                 </div>
             </div>
             <div class="collection-body">
-                <label style="margin-bottom: 0.75rem; color: var(--text-muted);">รายการสินค้า <small style="font-weight: normal;">(สร้าง 1 อันเป็นแม่แบบ แล้วใช้วิธีก๊อปปี้เอา)</small></label>
                 <div class="productList"></div>
                 <button class="btn" style="margin-top: 0.5rem; width: 100%; background-color: #10B981; padding: 0.6rem; font-size: 1rem;" onclick="handleAddProductClick(this)">+ เพิ่มสินค้าบรรทัดใหม่</button>
             </div>
@@ -520,7 +499,7 @@
         
         if(colName === '' && arguments.length === 0) {
             const productList = block.querySelector('.productList');
-            productList.appendChild(createProductItemElement('', '', '', [], 1, null));
+            productList.appendChild(createProductItemElement());
             saveData(); generateText();
         }
         return block;
@@ -533,14 +512,13 @@
     function clearAllPills() {
         document.querySelectorAll('.pill.active').forEach(pill => pill.classList.remove('active'));
         document.querySelectorAll('.productQty').forEach(qty => qty.value = 1);
-        document.querySelectorAll('.productVariant').forEach(v => v.value = ''); // ล้างช่องสีให้กลับเป็นแม่แบบว่างๆ ด้วย
         saveData(); generateText();
     }
 
     function handleAddProductClick(btn) {
         const block = btn.closest('.collection-block');
         const productList = block.querySelector('.productList');
-        productList.appendChild(createProductItemElement('', '', '', [], 1, null));
+        productList.appendChild(createProductItemElement());
         saveData(); generateText();
     }
 
@@ -556,54 +534,96 @@
         if (next) { item.parentNode.insertBefore(next, item); saveData(); generateText(); }
     }
 
-    // อัปเดตฟังก์ชันสร้างแถว ให้รับค่า variant เข้ามาด้วย
-    function createProductItemElement(name = '', variant = '', price = '', selectedSizes = [], qty = 1, availableSizes = null) {
+    // สร้าง HTML สำหรับปุ่ม 1 บรรทัด
+    function createOptionRowHtml(availableSizes, selectedSizes, isFirstRow) {
+        let pillsHtml = '';
+        availableSizes.forEach(s => {
+            const isActive = selectedSizes.includes(s) ? 'active' : '';
+            pillsHtml += `<div class="pill ${isActive}" onclick="togglePill(this)" data-size="${s}">${s}</div>`;
+        });
+        
+        let actionsHtml = `<div class="pill pill-custom" onclick="editPillsList(this)" title="กำหนดปุ่มเอง">⚙️ จัดการปุ่ม</div>`;
+        if (!isFirstRow) {
+            actionsHtml += `<div class="pill pill-custom pill-danger" onclick="removeOptionRow(this)" title="ลบตัวเลือกนี้ทิ้ง">❌ ลบแถว</div>`;
+        }
+
+        return `
+            <div class="option-row">
+                <div class="size-pills">
+                    ${pillsHtml}
+                    ${actionsHtml}
+                </div>
+            </div>
+        `;
+    }
+
+    function createProductItemElement(name = '', price = '', qty = 1, optionRowsArray = null) {
         const newItem = document.createElement('div');
         newItem.className = 'product-item';
         
-        const defaultSizes = ['-', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'];
-        const baseSizes = availableSizes ? availableSizes : defaultSizes;
-        const allSizes = [...new Set([...baseSizes, ...selectedSizes])]; 
+        // ถ้าเป็นสินค้าใหม่กริ๊บ ให้ใช้ไซส์ตั้งต้นนี้
+        const defaultRows = [ { availableSizes: ['S', 'M', 'L', 'XL', '2XL'], selectedSizes: [] } ];
+        const rows = (optionRowsArray && optionRowsArray.length > 0) ? optionRowsArray : defaultRows;
 
-        let pillsHtml = '';
-        allSizes.forEach(s => {
-            const isActive = selectedSizes.includes(s) ? 'active' : '';
-            const displayTxt = s === '-' ? 'ไม่มีไซส์' : s;
-            pillsHtml += `<div class="pill ${isActive}" onclick="togglePill(this)" data-size="${s}">${displayTxt}</div>`;
+        let rowsHtml = '';
+        rows.forEach((r, idx) => {
+            rowsHtml += createOptionRowHtml(r.availableSizes, r.selectedSizes, idx === 0);
         });
 
-        // เพิ่ม <input class="productVariant"> แทรกระหว่างชื่อกับราคา
         newItem.innerHTML = `
-            <input type="text" class="productName" placeholder="ชื่อสินค้า" value="${name}">
-            <input type="text" class="productVariant" placeholder="ระบุ สี/ลาย (ถ้ามี)" value="${variant}">
-            <input type="number" class="productPrice" placeholder="ราคา" value="${price}">
-            <input type="number" class="productQty" placeholder="จำนวน" title="จำนวนชิ้น (ต่อ 1 ไซส์)" value="${qty || 1}" min="1">
-            <div class="product-actions">
-                <button class="btn btn-icon btn-move" onclick="moveProductUp(this)">▲</button>
-                <button class="btn btn-icon btn-move" onclick="moveProductDown(this)">▼</button>
-                <button class="btn btn-icon btn-clone" onclick="cloneProduct(this)">📄</button>
-                <button class="btn btn-icon btn-remove" onclick="removeProduct(this)">-</button>
+            <div class="product-header-row">
+                <input type="text" class="productName" placeholder="ชื่อสินค้า" value="${name}">
+                <input type="number" class="productPrice" placeholder="ราคา" value="${price}">
+                <input type="number" class="productQty" placeholder="จำนวน" title="จำนวนชิ้น (ต่อ 1 การเลือก)" value="${qty || 1}" min="1">
+                <div class="product-actions">
+                    <button class="btn btn-icon btn-move" onclick="moveProductUp(this)">▲</button>
+                    <button class="btn btn-icon btn-move" onclick="moveProductDown(this)">▼</button>
+                    <button class="btn btn-icon btn-clone" title="คัดลอกสินค้านี้" onclick="cloneProduct(this)">📄</button>
+                    <button class="btn btn-icon btn-remove" title="ลบรายการ" onclick="removeProduct(this)">-</button>
+                </div>
             </div>
-            <div class="size-pills">
-                ${pillsHtml}
-                <div class="pill pill-custom" onclick="addCustomPill(this)">+ พิมพ์เพิ่ม</div>
-                <div class="pill pill-custom" style="border-color: #9CA3AF; color: #9CA3AF;" onclick="editPillsList(this)">⚙️ จัดการปุ่ม</div>
+            <div class="product-options-container">
+                ${rowsHtml}
             </div>
+            <button class="btn-add-row" onclick="addOptionRow(this)">+ เพิ่มตัวเลือกบรรทัดถัดไป</button>
         `;
         return newItem;
+    }
+
+    function addOptionRow(btn) {
+        const newSizesStr = prompt('📦 สร้างตัวเลือกใหม่\nกรอกตัวเลือกที่ต้องการ (เช่น ส้ม,ม่วง,กรม หรือ หญิง,ชาย) คั่นด้วยลูกน้ำ:');
+        if (newSizesStr && newSizesStr.trim() !== '') {
+            let newSizes = newSizesStr.split(',').map(s => s.trim()).filter(s => s !== '');
+            if (newSizes.length > 0) {
+                const container = btn.previousElementSibling; // product-options-container
+                const newRowHtml = createOptionRowHtml(newSizes, [], false);
+                container.insertAdjacentHTML('beforeend', newRowHtml);
+                saveData(); generateText();
+            }
+        }
+    }
+
+    function removeOptionRow(btn) {
+        if(confirm('แน่ใจหรือไม่ที่จะลบตัวเลือกแถวนี้ทิ้ง?')) {
+            btn.closest('.option-row').remove();
+            saveData(); generateText();
+        }
     }
 
     function cloneProduct(btn) {
         const currentItem = btn.closest('.product-item');
         const name = currentItem.querySelector('.productName').value;
-        const variant = currentItem.querySelector('.productVariant').value;
         const price = currentItem.querySelector('.productPrice').value;
         
-        const availableSizes = [];
-        currentItem.querySelectorAll('.pill[data-size]').forEach(p => availableSizes.push(p.getAttribute('data-size')));
+        // คัดลอกโครงสร้างปุ่มทั้งหมดไป แต่ไม่เอาสถานะการกด (selectedSizes = [])
+        const optionRows = [];
+        currentItem.querySelectorAll('.option-row').forEach(rowEl => {
+            const availableSizes = [];
+            rowEl.querySelectorAll('.pill[data-size]').forEach(p => availableSizes.push(p.getAttribute('data-size')));
+            optionRows.push({ availableSizes: availableSizes, selectedSizes: [] });
+        });
 
-        // โคลนมาทั้งชื่อ สี และราคา แต่ล้างปุ่มกดไซส์ออกให้พร้อมจิ้มใหม่
-        const newItem = createProductItemElement(name, variant, price, [], 1, availableSizes);
+        const newItem = createProductItemElement(name, price, 1, optionRows);
         currentItem.parentNode.insertBefore(newItem, currentItem.nextSibling);
         saveData(); generateText();
     }
@@ -613,47 +633,30 @@
         saveData(); generateText();
     }
 
-    function addCustomPill(btn) {
-        const newSize = prompt('กรอกไซส์ที่ต้องการ (เช่น 40, 42):');
-        if (newSize && newSize.trim() !== '') {
-            const sizeVal = newSize.trim();
-            const newPill = document.createElement('div');
-            newPill.className = 'pill active';
-            newPill.setAttribute('data-size', sizeVal);
-            newPill.innerText = sizeVal;
-            newPill.onclick = function() { togglePill(this); };
-            btn.parentNode.insertBefore(newPill, btn);
-            saveData(); generateText();
-        }
-    }
-
     function editPillsList(btn) {
         const container = btn.closest('.size-pills');
+        const isFirstRow = !container.querySelector('.pill-danger'); // เช็คว่ามีปุ่มลบแถวไหม (ถ้าไม่มีคือแถวแรก)
         const pills = container.querySelectorAll('.pill[data-size]');
         const currentSizes = Array.from(pills).map(p => p.getAttribute('data-size'));
 
-        const newSizesStr = prompt('⚙️ ตั้งค่า "ชุดปุ่มไซส์" ประจำแถวนี้\nตัวอย่าง: S,M', currentSizes.join(','));
+        const newSizesStr = prompt('⚙️ ตั้งค่า "ชุดปุ่ม" ประจำแถวนี้\n(พิมพ์เฉพาะสิ่งที่ต้องการให้เหลืออยู่ คั่นด้วยลูกน้ำ ,)\n\nตัวอย่าง: S,M,L', currentSizes.join(','));
 
         if (newSizesStr !== null) {
             let newSizes = newSizesStr.split(',').map(s => s.trim()).filter(s => s !== '');
             if (newSizes.length === 0) newSizes = ['-']; 
 
-            const item = container.closest('.product-item');
-            const activePills = item.querySelectorAll('.pill.active');
+            // เก็บสถานะการกดปุ่มเดิมไว้
+            const activePills = container.querySelectorAll('.pill.active');
             const selectedSizes = [];
             activePills.forEach(p => selectedSizes.push(p.getAttribute('data-size')));
 
-            let pillsHtml = '';
-            newSizes.forEach(s => {
-                const isActive = selectedSizes.includes(s) ? 'active' : '';
-                const displayTxt = s === '-' ? 'ไม่มีไซส์' : s;
-                pillsHtml += `<div class="pill ${isActive}" onclick="togglePill(this)" data-size="${s}">${displayTxt}</div>`;
-            });
+            // เปลี่ยน HTML แค่แถวเดียว
+            const newRowHtml = createOptionRowHtml(newSizes, selectedSizes, isFirstRow);
+            
+            // ใช้ outerHTML ของ option-row เพื่ออัปเดตแบบไร้รอยต่อ
+            const row = container.closest('.option-row');
+            row.outerHTML = newRowHtml;
 
-            pillsHtml += `<div class="pill pill-custom" onclick="addCustomPill(this)">+ พิมพ์เพิ่ม</div>`;
-            pillsHtml += `<div class="pill pill-custom" style="border-color: #9CA3AF; color: #9CA3AF;" onclick="editPillsList(this)">⚙️ จัดการปุ่ม</div>`;
-
-            container.innerHTML = pillsHtml;
             saveData(); generateText();
         }
     }
@@ -693,55 +696,66 @@
             
             productItems.forEach(item => {
                 const nameVal = item.querySelector('.productName').value.trim();
-                const variantVal = item.querySelector('.productVariant').value.trim();
                 const rawPrice = item.querySelector('.productPrice').value.trim();
                 const rawQty = item.querySelector('.productQty').value.trim();
-                
-                // ถ้าระบุสีลาย ให้เอาชื่อกับสีมาต่อกันเป็นชื่อเต็มๆ ก่อนจัดกลุ่ม
-                const fullName = variantVal ? `${nameVal} ${variantVal}` : nameVal;
                 const qtyVal = parseInt(rawQty) || 1; 
 
-                const activePills = item.querySelectorAll('.pill.active');
+                const rowEls = item.querySelectorAll('.option-row');
+                let textParts = [];
+                let activeCounts = [];
+                let totalActive = 0;
 
-                if (fullName !== '' && activePills.length > 0) {
-                    if (!mergedProductsMap[fullName]) {
-                        mergedProductsMap[fullName] = [];
-                        mergedProductsOrder.push(fullName);
+                // ตรวจสอบทุกบรรทัดตัวเลือกในสินค้านั้นๆ
+                rowEls.forEach(rowEl => {
+                    const activePills = rowEl.querySelectorAll('.pill.active');
+                    activeCounts.push(activePills.length);
+                    totalActive += activePills.length;
+                    
+                    if (activePills.length > 0) {
+                        const sizes = Array.from(activePills).map(p => p.getAttribute('data-size'));
+                        textParts.push(`(${sizes.join(',')})`); // รวบรวมคำที่กดไว้ เช่น (S,M) หรือ (แดง)
+                    }
+                });
+
+                if (nameVal !== '' && totalActive > 0) {
+                    // หากมีการจิ้มปุ่มใดๆ อย่างน้อย 1 ปุ่ม
+                    if (!mergedProductsMap[nameVal]) {
+                        mergedProductsMap[nameVal] = [];
+                        mergedProductsOrder.push(nameVal);
                     }
 
-                    activePills.forEach(pill => {
-                        const sizeVal = pill.getAttribute('data-size');
-                        const sizeText = (sizeVal === '-' || sizeVal === '') ? '' : `(${sizeVal})`;
-                        
-                        let token = '';
-                        if (sizeText !== '') token = sizeText + (qtyVal > 1 ? `x${qtyVal}` : '');
-                        else if (qtyVal > 1) token = `x${qtyVal}`;
-                        
-                        if (token !== '') mergedProductsMap[fullName].push(token);
+                    const variantStr = textParts.join(''); // ได้เป็น (S,M)(แดง)
+                    let token = variantStr;
+                    if (qtyVal > 1) token += `x${qtyVal}`; // เติมจำนวนถ้ามากกว่า 1
+                    
+                    mergedProductsMap[nameVal].push(token);
 
-                        if (rawPrice === '') {
-                            validPrices.push('***');
-                            hasMissingPrice = true;
-                        } else {
-                            const priceVal = parseFloat(rawPrice);
-                            if (priceVal > 0) {
+                    // คำนวณราคา โดยนับ "จำนวนการกดที่เยอะที่สุดในบรรทัดใดบรรทัดหนึ่ง" มาเป็นตัวคูณชิ้นสินค้า
+                    let itemMultiplier = Math.max(...activeCounts);
+                    if (itemMultiplier < 1) itemMultiplier = 1;
+
+                    if (rawPrice === '') {
+                        for(let i=0; i<itemMultiplier; i++) validPrices.push('***');
+                        hasMissingPrice = true;
+                    } else {
+                        const priceVal = parseFloat(rawPrice);
+                        if (priceVal > 0) {
+                            for(let i=0; i<itemMultiplier; i++) {
                                 if (qtyVal > 1) validPrices.push(`${priceVal}x${qtyVal}`);
                                 else validPrices.push(priceVal);
                                 productsSum += (priceVal * qtyVal);
                             }
                         }
-                    });
+                    }
                 }
             });
 
-            mergedProductsOrder.forEach(fullName => {
-                const sizesArr = mergedProductsMap[fullName];
+            // จัดกลุ่มข้อความพิมพ์ออกหน้าจอ
+            mergedProductsOrder.forEach(name => {
+                const sizesArr = mergedProductsMap[name];
                 if (sizesArr.length > 0) {
-                    colText += `- ${fullName} ${sizesArr.join(',')}\n`;
-                    colLabelProducts.push(`${fullName} ${sizesArr.join(',')}`);
-                } else {
-                    colText += `- ${fullName}\n`;
-                    colLabelProducts.push(`${fullName}`);
+                    colText += `- ${name} ${sizesArr.join(', ')}\n`;
+                    colLabelProducts.push(`${name} ${sizesArr.join(', ')}`);
                 }
             });
 
