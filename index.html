@@ -202,7 +202,7 @@
         
         .btn-icon {
             padding: 0;
-            width: 38px; /* ปรับขนาดเล็กลงนิดนึงเพื่อให้พอดี 4 ปุ่ม */
+            width: 38px; 
             height: 38px;
             flex-shrink: 0;
             font-size: 1.1rem;
@@ -316,7 +316,7 @@
 <div class="container">
     <div class="panel">
         <div class="main-header">
-            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v4.2</span></h2>
+            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v4.3</span></h2>
             <button class="btn-clear-all-sizes" onclick="clearAllPills()">↺ ล้างไซส์ทั้งหมด</button>
         </div>
         
@@ -346,6 +346,10 @@
                 <label>
                     <input type="radio" name="bank" value="KBANK"> 
                     <span>ธ.กสิกร KBANK<br>026-1-56003-8<br>กุลจิรา ตู้จินดา</span>
+                </label>
+                <label>
+                    <input type="radio" name="bank" value="GSB"> 
+                    <span>ธ.ออมสิน GSB<br>020478034752<br>กุลจิรา ล้อพงศ์ไพบูลย์</span>
                 </label>
             </div>
         </div>
@@ -497,7 +501,6 @@
         saveData();
     }
 
-    // ฟังก์ชันเลื่อนคอลเลคชั่นขึ้น
     function moveCollectionUp(btn) {
         const block = btn.closest('.collection-block');
         const prev = block.previousElementSibling;
@@ -508,7 +511,6 @@
         }
     }
 
-    // ฟังก์ชันเลื่อนคอลเลคชั่นลง
     function moveCollectionDown(btn) {
         const block = btn.closest('.collection-block');
         const next = block.nextElementSibling;
@@ -585,7 +587,6 @@
         generateText();
     }
 
-    // ฟังก์ชันเลื่อนสินค้าขึ้น
     function moveProductUp(btn) {
         const item = btn.closest('.product-item');
         const prev = item.previousElementSibling;
@@ -596,7 +597,6 @@
         }
     }
 
-    // ฟังก์ชันเลื่อนสินค้าลง
     function moveProductDown(btn) {
         const item = btn.closest('.product-item');
         const next = item.nextElementSibling;
@@ -623,7 +623,6 @@
             pillsHtml += `<div class="pill ${isActive}" onclick="togglePill(this)" data-size="${s}">${displayTxt}</div>`;
         });
 
-        // เพิ่มปุ่มเลื่อนขึ้น/ลง ในกลุ่มปุ่ม Action
         newItem.innerHTML = `
             <input type="text" class="productName" placeholder="ชื่อสินค้า" value="${name}">
             <input type="number" class="productPrice" placeholder="ราคา" value="${price}">
@@ -870,6 +869,7 @@
                 if (radio.value === 'TTB') bankText = "ธ.ไทยธนชาต TTB\n622-2-84950-4\nกุลจิรา ล้อพงศ์ไพบูลย์";
                 else if (radio.value === 'SCB') bankText = "ธ.ไทยพาณิชย์ SCB\n407-811653-8\nกุลจิรา ตู้จินดา";
                 else if (radio.value === 'KBANK') bankText = "ธ.กสิกร KBANK\n026-1-56003-8\nกุลจิรา ตู้จินดา";
+                else if (radio.value === 'GSB') bankText = "ธ.ออมสิน GSB\n020478034752\nกุลจิรา ล้อพงศ์ไพบูลย์";
             }
         }
 
