@@ -76,16 +76,12 @@
             background-color: #4B5563; 
         }
 
-        /* --- ซ่อนลูกศรเพิ่ม/ลด ในช่องตัวเลข --- */
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none;
             margin: 0;
         }
-        input[type="number"] {
-            -moz-appearance: textfield;
-        }
-        /* ---------------------------------- */
+        input[type="number"] { -moz-appearance: textfield; }
         
         .collection-block {
             background-color: var(--bg);
@@ -132,7 +128,6 @@
             margin-bottom: 0.75rem;
         }
         
-        /* ปรับกริดให้ช่องราคา/จำนวนเล็กลง คืนพื้นที่ให้ชื่อสินค้า */
         .product-header-row {
             display: grid;
             grid-template-columns: 1fr 80px 60px auto; 
@@ -140,13 +135,7 @@
             align-items: center;
             margin-bottom: 0.75rem;
         }
-        
-        /* ปรับ Padding ภายในช่องกรอกให้กะทัดรัดขึ้น */
-        .product-header-row input {
-            padding: 0.5rem 0.6rem;
-            font-size: 0.95rem;
-        }
-
+        .product-header-row input { padding: 0.5rem 0.6rem; font-size: 0.95rem; }
         .productName { width: 100%; font-weight: bold; }
         .productPrice { width: 100%; text-align: center; }
         .productQty { width: 100%; text-align: center; }
@@ -194,9 +183,7 @@
             border-color: var(--text-muted);
         }
         .pill-custom:hover { background: rgba(255, 255, 255, 0.05); color: var(--text); border-color: var(--text); }
-        .pill-danger {
-            border-color: #F87171; color: #F87171;
-        }
+        .pill-danger { border-color: #F87171; color: #F87171; }
         .pill-danger:hover { background: rgba(248, 113, 113, 0.1); color: #FCA5A5; border-color: #FCA5A5; }
 
         .btn {
@@ -212,7 +199,6 @@
         }
         .btn:hover, .btn:active { background-color: var(--primary-hover); }
         
-        /* ย่อขนาดปุ่มในแถวสินค้าให้เล็กลง (เหลือ 32px) */
         .btn-icon {
             padding: 0;
             width: 32px; height: 32px;
@@ -294,7 +280,7 @@
 <div class="container">
     <div class="panel">
         <div class="main-header">
-            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v5.1 (Compact UI)</span></h2>
+            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v5.2 (Clean Brackets)</span></h2>
             <button class="btn-clear-all-sizes" onclick="clearAllPills()">↺ ล้างตัวเลือกทั้งหมด</button>
         </div>
         
@@ -401,26 +387,6 @@
 
         let savedData = JSON.parse(localStorage.getItem('orderDataV3'));
         
-        if (!savedData) {
-            const oldData = JSON.parse(localStorage.getItem('orderDataV2'));
-            if (oldData) {
-                savedData = oldData.map(col => ({
-                    colName: col.colName,
-                    isCollapsed: col.isCollapsed,
-                    products: col.products.map(p => {
-                        const optRows = [];
-                        const avail = p.availableSizes && p.availableSizes.length > 0 ? p.availableSizes : ['S', 'M', 'L', 'XL', '2XL'];
-                        optRows.push({ availableSizes: avail, selectedSizes: p.selectedSizes || [] });
-                        
-                        if (p.variant && p.variant.trim() !== '') {
-                            optRows.push({ availableSizes: [p.variant], selectedSizes: [p.variant] });
-                        }
-                        return { name: p.name, price: p.price, qty: p.qty, optionRows: optRows };
-                    })
-                }));
-            }
-        }
-
         if (savedData && savedData.length > 0) {
             savedData.forEach(col => {
                 const block = addCollectionBlock(col.colName, col.isCollapsed);
@@ -684,6 +650,7 @@
         }
     }
 
+    // --- ส่วนประมวลผลข้อความ ---
     function generateText() {
         const shipping = document.getElementById('shippingCost').value || '0';
         const shippingValue = parseFloat(shipping) || 0;
@@ -712,7 +679,7 @@
                 const qtyVal = parseInt(rawQty) || 1; 
 
                 const rowEls = item.querySelectorAll('.option-row');
-                let textParts = [];
+                let textParts = []; // ไว้เก็บข้อความที่เลือกจากแต่ละบรรทัด (เช่น ชมพู, XL, สั้น)
                 let activeCounts = [];
                 let totalActive = 0;
 
@@ -722,8 +689,9 @@
                     totalActive += activePills.length;
                     
                     if (activePills.length > 0) {
+                        // ดึงข้อความของปุ่มที่ถูกกดในบรรทัดนั้นๆ มาเชื่อมกันด้วยลูกน้ำ (เผื่อกดหลายปุ่มในบรรทัดเดียว)
                         const sizes = Array.from(activePills).map(p => p.getAttribute('data-size'));
-                        textParts.push(`(${sizes.join(',')})`); 
+                        textParts.push(sizes.join(',')); 
                     }
                 });
 
@@ -733,7 +701,10 @@
                         mergedProductsOrder.push(nameVal);
                     }
 
-                    const variantStr = textParts.join(''); 
+                    // เอาข้อความทั้งหมดมาเชื่อมกันด้วยเว้นวรรค แล้วค่อยใส่วงเล็บครอบทีเดียว
+                    // เช่น textParts = ["ชมพู", "XL", "สั้น"] จะกลายเป็น "(ชมพู XL สั้น)"
+                    const variantStr = textParts.length > 0 ? `(${textParts.join(' ')})` : '';
+                    
                     let token = variantStr;
                     if (qtyVal > 1) token += `x${qtyVal}`; 
                     
