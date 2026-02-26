@@ -75,6 +75,17 @@
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
             background-color: #4B5563; 
         }
+
+        /* --- ซ่อนลูกศรเพิ่ม/ลด ในช่องตัวเลข --- */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        /* ---------------------------------- */
         
         .collection-block {
             background-color: var(--bg);
@@ -115,23 +126,31 @@
         
         .product-item {
             background: var(--surface);
-            padding: 1rem;
+            padding: 0.85rem;
             border-radius: 10px;
             border: 1px solid var(--border);
             margin-bottom: 0.75rem;
         }
         
+        /* ปรับกริดให้ช่องราคา/จำนวนเล็กลง คืนพื้นที่ให้ชื่อสินค้า */
         .product-header-row {
             display: grid;
-            grid-template-columns: 1fr 100px 90px auto; 
-            gap: 0.75rem; 
+            grid-template-columns: 1fr 80px 60px auto; 
+            gap: 0.5rem; 
             align-items: center;
             margin-bottom: 0.75rem;
         }
+        
+        /* ปรับ Padding ภายในช่องกรอกให้กะทัดรัดขึ้น */
+        .product-header-row input {
+            padding: 0.5rem 0.6rem;
+            font-size: 0.95rem;
+        }
+
         .productName { width: 100%; font-weight: bold; }
-        .productPrice { width: 100%; }
+        .productPrice { width: 100%; text-align: center; }
         .productQty { width: 100%; text-align: center; }
-        .product-actions { display: flex; gap: 0.4rem; }
+        .product-actions { display: flex; gap: 0.3rem; }
         
         .option-row {
             display: flex;
@@ -149,12 +168,12 @@
         }
         
         .pill {
-            padding: 0.4rem 0.85rem;
+            padding: 0.35rem 0.75rem;
             border: 1px solid var(--border);
             border-radius: 20px;
             background: var(--surface-alt);
             color: var(--text-muted);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 500;
             cursor: pointer;
             user-select: none;
@@ -193,12 +212,13 @@
         }
         .btn:hover, .btn:active { background-color: var(--primary-hover); }
         
+        /* ย่อขนาดปุ่มในแถวสินค้าให้เล็กลง (เหลือ 32px) */
         .btn-icon {
             padding: 0;
-            width: 38px; height: 38px;
-            flex-shrink: 0; font-size: 1.1rem;
+            width: 32px; height: 32px;
+            flex-shrink: 0; font-size: 1rem;
             display: flex; align-items: center; justify-content: center;
-            border-radius: 8px; color: white; 
+            border-radius: 6px; color: white; 
         }
         .btn-move { background-color: #6B7280; }
         .btn-move:hover, .btn-move:active { background-color: #4B5563; }
@@ -274,7 +294,7 @@
 <div class="container">
     <div class="panel">
         <div class="main-header">
-            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v5.0 (Multi-Rows)</span></h2>
+            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v5.1 (Compact UI)</span></h2>
             <button class="btn-clear-all-sizes" onclick="clearAllPills()">↺ ล้างตัวเลือกทั้งหมด</button>
         </div>
         
@@ -347,7 +367,6 @@
                 const price = item.querySelector('.productPrice').value;
                 const qty = item.querySelector('.productQty').value;
                 
-                // ดึงข้อมูลการตั้งค่าหลายบรรทัด
                 const optionRows = [];
                 item.querySelectorAll('.option-row').forEach(rowEl => {
                     const availableSizes = [];
@@ -380,7 +399,6 @@
         const container = document.getElementById('collectionsContainer');
         container.innerHTML = ''; 
 
-        // รองรับการโหลดข้อมูลจากเวอร์ชันเก่า (V2 -> V3) แบบไร้รอยต่อ
         let savedData = JSON.parse(localStorage.getItem('orderDataV3'));
         
         if (!savedData) {
@@ -394,7 +412,6 @@
                         const avail = p.availableSizes && p.availableSizes.length > 0 ? p.availableSizes : ['S', 'M', 'L', 'XL', '2XL'];
                         optRows.push({ availableSizes: avail, selectedSizes: p.selectedSizes || [] });
                         
-                        // ถ้าเคยมีระบุสี/ลาย ในเวอร์ชัน 4.4 เอามาทำเป็นบรรทัดที่ 2 ให้อัตโนมัติ
                         if (p.variant && p.variant.trim() !== '') {
                             optRows.push({ availableSizes: [p.variant], selectedSizes: [p.variant] });
                         }
@@ -534,7 +551,6 @@
         if (next) { item.parentNode.insertBefore(next, item); saveData(); generateText(); }
     }
 
-    // สร้าง HTML สำหรับปุ่ม 1 บรรทัด
     function createOptionRowHtml(availableSizes, selectedSizes, isFirstRow) {
         let pillsHtml = '';
         availableSizes.forEach(s => {
@@ -561,7 +577,6 @@
         const newItem = document.createElement('div');
         newItem.className = 'product-item';
         
-        // ถ้าเป็นสินค้าใหม่กริ๊บ ให้ใช้ไซส์ตั้งต้นนี้
         const defaultRows = [ { availableSizes: ['S', 'M', 'L', 'XL', '2XL'], selectedSizes: [] } ];
         const rows = (optionRowsArray && optionRowsArray.length > 0) ? optionRowsArray : defaultRows;
 
@@ -595,7 +610,7 @@
         if (newSizesStr && newSizesStr.trim() !== '') {
             let newSizes = newSizesStr.split(',').map(s => s.trim()).filter(s => s !== '');
             if (newSizes.length > 0) {
-                const container = btn.previousElementSibling; // product-options-container
+                const container = btn.previousElementSibling; 
                 const newRowHtml = createOptionRowHtml(newSizes, [], false);
                 container.insertAdjacentHTML('beforeend', newRowHtml);
                 saveData(); generateText();
@@ -615,7 +630,6 @@
         const name = currentItem.querySelector('.productName').value;
         const price = currentItem.querySelector('.productPrice').value;
         
-        // คัดลอกโครงสร้างปุ่มทั้งหมดไป แต่ไม่เอาสถานะการกด (selectedSizes = [])
         const optionRows = [];
         currentItem.querySelectorAll('.option-row').forEach(rowEl => {
             const availableSizes = [];
@@ -635,7 +649,7 @@
 
     function editPillsList(btn) {
         const container = btn.closest('.size-pills');
-        const isFirstRow = !container.querySelector('.pill-danger'); // เช็คว่ามีปุ่มลบแถวไหม (ถ้าไม่มีคือแถวแรก)
+        const isFirstRow = !container.querySelector('.pill-danger'); 
         const pills = container.querySelectorAll('.pill[data-size]');
         const currentSizes = Array.from(pills).map(p => p.getAttribute('data-size'));
 
@@ -645,15 +659,12 @@
             let newSizes = newSizesStr.split(',').map(s => s.trim()).filter(s => s !== '');
             if (newSizes.length === 0) newSizes = ['-']; 
 
-            // เก็บสถานะการกดปุ่มเดิมไว้
             const activePills = container.querySelectorAll('.pill.active');
             const selectedSizes = [];
             activePills.forEach(p => selectedSizes.push(p.getAttribute('data-size')));
 
-            // เปลี่ยน HTML แค่แถวเดียว
             const newRowHtml = createOptionRowHtml(newSizes, selectedSizes, isFirstRow);
             
-            // ใช้ outerHTML ของ option-row เพื่ออัปเดตแบบไร้รอยต่อ
             const row = container.closest('.option-row');
             row.outerHTML = newRowHtml;
 
@@ -705,7 +716,6 @@
                 let activeCounts = [];
                 let totalActive = 0;
 
-                // ตรวจสอบทุกบรรทัดตัวเลือกในสินค้านั้นๆ
                 rowEls.forEach(rowEl => {
                     const activePills = rowEl.querySelectorAll('.pill.active');
                     activeCounts.push(activePills.length);
@@ -713,24 +723,22 @@
                     
                     if (activePills.length > 0) {
                         const sizes = Array.from(activePills).map(p => p.getAttribute('data-size'));
-                        textParts.push(`(${sizes.join(',')})`); // รวบรวมคำที่กดไว้ เช่น (S,M) หรือ (แดง)
+                        textParts.push(`(${sizes.join(',')})`); 
                     }
                 });
 
                 if (nameVal !== '' && totalActive > 0) {
-                    // หากมีการจิ้มปุ่มใดๆ อย่างน้อย 1 ปุ่ม
                     if (!mergedProductsMap[nameVal]) {
                         mergedProductsMap[nameVal] = [];
                         mergedProductsOrder.push(nameVal);
                     }
 
-                    const variantStr = textParts.join(''); // ได้เป็น (S,M)(แดง)
+                    const variantStr = textParts.join(''); 
                     let token = variantStr;
-                    if (qtyVal > 1) token += `x${qtyVal}`; // เติมจำนวนถ้ามากกว่า 1
+                    if (qtyVal > 1) token += `x${qtyVal}`; 
                     
                     mergedProductsMap[nameVal].push(token);
 
-                    // คำนวณราคา โดยนับ "จำนวนการกดที่เยอะที่สุดในบรรทัดใดบรรทัดหนึ่ง" มาเป็นตัวคูณชิ้นสินค้า
                     let itemMultiplier = Math.max(...activeCounts);
                     if (itemMultiplier < 1) itemMultiplier = 1;
 
@@ -750,7 +758,6 @@
                 }
             });
 
-            // จัดกลุ่มข้อความพิมพ์ออกหน้าจอ
             mergedProductsOrder.forEach(name => {
                 const sizesArr = mergedProductsMap[name];
                 if (sizesArr.length > 0) {
