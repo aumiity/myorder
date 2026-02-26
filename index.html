@@ -20,7 +20,7 @@
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
-            padding: 2rem 3rem; /* ค่าเริ่มต้นของ PC */
+            padding: 2rem 3rem; 
             display: flex;
             justify-content: center;
         }
@@ -28,7 +28,7 @@
             display: grid;
             grid-template-columns: 1.4fr 1fr;
             gap: 2.5rem; 
-            width: 98%; /* ปรับให้ขยายเต็มจอบน MacBook/PC */
+            width: 98%; 
             max-width: 1800px; 
         }
         .panel {
@@ -63,7 +63,7 @@
             border-radius: 8px;
             box-sizing: border-box;
             font-family: inherit;
-            font-size: 16px; /* บังคับ 16px เพื่อไม่ให้ iPhone ซูมหน้าจออัตโนมัติ */
+            font-size: 16px; 
             -webkit-appearance: none;
             appearance: none;
             transition: all 0.2s;
@@ -102,6 +102,11 @@
             gap: 0.75rem;
             flex: 1;
         }
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
         .btn-toggle-col {
             background: var(--surface-alt);
             color: var(--text);
@@ -128,7 +133,6 @@
             display: none;
         }
         
-        /* --- ดีไซน์แถวสินค้าแบบ Default (PC/Mac) --- */
         .product-item {
             background: var(--surface);
             padding: 1rem;
@@ -144,7 +148,7 @@
         .productName { grid-column: 1 / 2; width: 100%; }
         .productPrice { grid-column: 2 / 3; width: 100%; }
         .productQty { grid-column: 3 / 4; width: 100%; text-align: center; }
-        .product-actions { grid-column: 4 / 5; display: flex; gap: 0.5rem; }
+        .product-actions { grid-column: 4 / 5; display: flex; gap: 0.4rem; }
         
         .size-pills {
             grid-column: 1 / 5; 
@@ -155,7 +159,6 @@
             margin-top: 0.25rem;
         }
         
-        /* ปุ่มไซส์ */
         .pill {
             padding: 0.4rem 0.85rem;
             border: 1px solid var(--border);
@@ -184,7 +187,6 @@
         }
         .pill-custom:hover { background: rgba(99, 102, 241, 0.1); }
 
-        /* ปุ่มกดทั่วไป */
         .btn {
             background-color: var(--primary);
             color: white;
@@ -200,16 +202,18 @@
         
         .btn-icon {
             padding: 0;
-            width: 42px;
-            height: 42px;
+            width: 38px; /* ปรับขนาดเล็กลงนิดนึงเพื่อให้พอดี 4 ปุ่ม */
+            height: 38px;
             flex-shrink: 0;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 8px;
             color: white; 
         }
+        .btn-move { background-color: #6B7280; }
+        .btn-move:hover, .btn-move:active { background-color: #4B5563; }
         .btn-clone { background-color: #3B82F6; }
         .btn-clone:hover, .btn-clone:active { background-color: #2563EB; }
         .btn-remove { background-color: #EF4444; }
@@ -277,13 +281,10 @@
             display: flex; gap: 1rem; margin-top: 1rem;
         }
 
-        /* ========================================= */
-        /* --- ระบบปรับจออัตโนมัติ สำหรับ iPhone --- */
-        /* ========================================= */
         @media (max-width: 800px) {
-            body { padding: 1rem 0.5rem; } /* ลดขอบให้เต็มจอมือถือ */
+            body { padding: 1rem 0.5rem; } 
             .container { 
-                grid-template-columns: 1fr; /* ยุบเหลือ 1 คอลัมน์ */
+                grid-template-columns: 1fr; 
                 gap: 1.5rem; 
                 width: 100%;
             }
@@ -292,8 +293,8 @@
             .btn-clear-all-sizes { width: 100%; padding: 0.75rem; }
             .collection-header { flex-wrap: wrap; }
             .header-left { width: 100%; flex: none; }
+            .header-actions { width: 100%; justify-content: flex-end; }
             
-            /* จัดเรียงแถวสินค้าใหม่สำหรับจอมือถือ */
             .product-item { 
                 grid-template-columns: 1fr 1fr auto; 
                 grid-template-rows: auto auto auto;
@@ -306,7 +307,7 @@
             .size-pills { grid-column: 1 / 4; grid-row: 3; margin-top: 0; }
             
             .action-buttons-group { flex-direction: column; gap: 0.5rem; }
-            textarea { height: 250px; } /* กล่องข้อความเตี้ยลงในมือถือ */
+            textarea { height: 250px; } 
         }
     </style>
 </head>
@@ -315,7 +316,7 @@
 <div class="container">
     <div class="panel">
         <div class="main-header">
-            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v4.0 (Auto-Responsive)</span></h2>
+            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v4.2</span></h2>
             <button class="btn-clear-all-sizes" onclick="clearAllPills()">↺ ล้างไซส์ทั้งหมด</button>
         </div>
         
@@ -400,12 +401,16 @@
                 const price = item.querySelector('.productPrice').value;
                 const qty = item.querySelector('.productQty').value;
                 const selectedSizes = [];
+                const availableSizes = [];
                 
-                item.querySelectorAll('.pill.active').forEach(pill => {
-                    selectedSizes.push(pill.getAttribute('data-size'));
+                item.querySelectorAll('.pill[data-size]').forEach(pill => {
+                    availableSizes.push(pill.getAttribute('data-size'));
+                    if (pill.classList.contains('active')) {
+                        selectedSizes.push(pill.getAttribute('data-size'));
+                    }
                 });
                 
-                products.push({ name, price, qty, selectedSizes });
+                products.push({ name, price, qty, selectedSizes, availableSizes });
             });
             collections.push({ colName, isCollapsed, products });
         });
@@ -432,17 +437,17 @@
                 if(col.products.length > 0) {
                     col.products.forEach(p => {
                         const productList = block.querySelector('.productList');
-                        productList.appendChild(createProductItemElement(p.name, p.price, p.selectedSizes, p.qty));
+                        productList.appendChild(createProductItemElement(p.name, p.price, p.selectedSizes, p.qty, p.availableSizes));
                     });
                 } else {
                     const productList = block.querySelector('.productList');
-                    productList.appendChild(createProductItemElement('', '', [], 1)); 
+                    productList.appendChild(createProductItemElement('', '', [], 1, null)); 
                 }
             });
         } else {
             const block = addCollectionBlock('');
             const productList = block.querySelector('.productList');
-            productList.appendChild(createProductItemElement('', '', [], 1));
+            productList.appendChild(createProductItemElement('', '', [], 1, null));
         }
     }
 
@@ -492,6 +497,28 @@
         saveData();
     }
 
+    // ฟังก์ชันเลื่อนคอลเลคชั่นขึ้น
+    function moveCollectionUp(btn) {
+        const block = btn.closest('.collection-block');
+        const prev = block.previousElementSibling;
+        if (prev) {
+            block.parentNode.insertBefore(block, prev);
+            saveData();
+            generateText();
+        }
+    }
+
+    // ฟังก์ชันเลื่อนคอลเลคชั่นลง
+    function moveCollectionDown(btn) {
+        const block = btn.closest('.collection-block');
+        const next = block.nextElementSibling;
+        if (next) {
+            block.parentNode.insertBefore(next, block);
+            saveData();
+            generateText();
+        }
+    }
+
     function addCollectionBlock(colName = '', isCollapsed = false) {
         const container = document.getElementById('collectionsContainer');
         const block = document.createElement('div');
@@ -506,7 +533,11 @@
                     <button class="btn-toggle-col" onclick="toggleCollection(this)" title="คลิกเพื่อยุบ/ขยาย">${icon}</button>
                     <input type="text" class="collectionName" placeholder="ชื่อคอลเลคชั่น เช่น Summer 2026" value="${colName}" style="margin: 0; padding: 0.6rem 1rem;">
                 </div>
-                <button class="btn btn-remove-col" onclick="removeCollectionBlock(this)">ลบชุดนี้</button>
+                <div class="header-actions">
+                    <button class="btn btn-icon btn-move" onclick="moveCollectionUp(this)" title="เลื่อนคอลเลคชั่นขึ้น">▲</button>
+                    <button class="btn btn-icon btn-move" onclick="moveCollectionDown(this)" title="เลื่อนคอลเลคชั่นลง">▼</button>
+                    <button class="btn btn-remove-col" onclick="removeCollectionBlock(this)">ลบชุดนี้</button>
+                </div>
             </div>
             
             <div class="collection-body">
@@ -519,7 +550,7 @@
         
         if(colName === '' && arguments.length === 0) {
             const productList = block.querySelector('.productList');
-            productList.appendChild(createProductItemElement('', '', [], 1));
+            productList.appendChild(createProductItemElement('', '', [], 1, null));
             saveData();
             generateText();
         }
@@ -549,17 +580,41 @@
     function handleAddProductClick(btn) {
         const block = btn.closest('.collection-block');
         const productList = block.querySelector('.productList');
-        productList.appendChild(createProductItemElement('', '', [], 1));
+        productList.appendChild(createProductItemElement('', '', [], 1, null));
         saveData();
         generateText();
     }
 
-    function createProductItemElement(name = '', price = '', selectedSizes = [], qty = 1) {
+    // ฟังก์ชันเลื่อนสินค้าขึ้น
+    function moveProductUp(btn) {
+        const item = btn.closest('.product-item');
+        const prev = item.previousElementSibling;
+        if (prev) {
+            item.parentNode.insertBefore(item, prev);
+            saveData();
+            generateText();
+        }
+    }
+
+    // ฟังก์ชันเลื่อนสินค้าลง
+    function moveProductDown(btn) {
+        const item = btn.closest('.product-item');
+        const next = item.nextElementSibling;
+        if (next) {
+            item.parentNode.insertBefore(next, item);
+            saveData();
+            generateText();
+        }
+    }
+
+    function createProductItemElement(name = '', price = '', selectedSizes = [], qty = 1, availableSizes = null) {
         const newItem = document.createElement('div');
         newItem.className = 'product-item';
         
         const defaultSizes = ['-', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'];
-        const allSizes = [...new Set([...defaultSizes, ...selectedSizes])]; 
+        const baseSizes = availableSizes ? availableSizes : defaultSizes;
+        
+        const allSizes = [...new Set([...baseSizes, ...selectedSizes])]; 
 
         let pillsHtml = '';
         allSizes.forEach(s => {
@@ -568,17 +623,21 @@
             pillsHtml += `<div class="pill ${isActive}" onclick="togglePill(this)" data-size="${s}">${displayTxt}</div>`;
         });
 
+        // เพิ่มปุ่มเลื่อนขึ้น/ลง ในกลุ่มปุ่ม Action
         newItem.innerHTML = `
             <input type="text" class="productName" placeholder="ชื่อสินค้า" value="${name}">
             <input type="number" class="productPrice" placeholder="ราคา" value="${price}">
             <input type="number" class="productQty" placeholder="จำนวน" title="จำนวนชิ้น (ต่อ 1 ไซส์)" value="${qty || 1}" min="1">
             <div class="product-actions">
+                <button class="btn btn-icon btn-move" title="เลื่อนขึ้น" onclick="moveProductUp(this)">▲</button>
+                <button class="btn btn-icon btn-move" title="เลื่อนลง" onclick="moveProductDown(this)">▼</button>
                 <button class="btn btn-icon btn-clone" title="คัดลอกสินค้านี้" onclick="cloneProduct(this)">📄</button>
                 <button class="btn btn-icon btn-remove" title="ลบรายการ" onclick="removeProduct(this)">-</button>
             </div>
             <div class="size-pills">
                 ${pillsHtml}
-                <div class="pill pill-custom" onclick="addCustomPill(this)">+ พิมพ์เอง</div>
+                <div class="pill pill-custom" onclick="addCustomPill(this)" title="พิมพ์เพิ่มทีละ 1 ไซส์">+ พิมพ์เพิ่ม</div>
+                <div class="pill pill-custom" style="border-color: #9CA3AF; color: #9CA3AF;" onclick="editPillsList(this)" title="ลบไซส์ที่ไม่ใช้ออก หรือจัดการชุดไซส์">⚙️ จัดการปุ่ม</div>
             </div>
         `;
         return newItem;
@@ -588,7 +647,11 @@
         const currentItem = btn.closest('.product-item');
         const name = currentItem.querySelector('.productName').value;
         const price = currentItem.querySelector('.productPrice').value;
-        const newItem = createProductItemElement(name, price, [], 1);
+        
+        const availableSizes = [];
+        currentItem.querySelectorAll('.pill[data-size]').forEach(p => availableSizes.push(p.getAttribute('data-size')));
+
+        const newItem = createProductItemElement(name, price, [], 1, availableSizes);
         currentItem.parentNode.insertBefore(newItem, currentItem.nextSibling);
         saveData();
         generateText();
@@ -611,6 +674,39 @@
             newPill.onclick = function() { togglePill(this); };
 
             btn.parentNode.insertBefore(newPill, btn);
+            saveData();
+            generateText();
+        }
+    }
+
+    function editPillsList(btn) {
+        const container = btn.closest('.size-pills');
+        const pills = container.querySelectorAll('.pill[data-size]');
+        
+        const currentSizes = Array.from(pills).map(p => p.getAttribute('data-size'));
+
+        const newSizesStr = prompt('⚙️ ตั้งค่า "ชุดปุ่มไซส์" ประจำแถวนี้\n(พิมพ์เฉพาะไซส์ที่ต้องการ คั่นด้วยลูกน้ำ , หรือลบอันที่ราคาไม่เท่ากันออกไปได้เลยครับ)\n\nตัวอย่าง: S,M', currentSizes.join(','));
+
+        if (newSizesStr !== null) {
+            let newSizes = newSizesStr.split(',').map(s => s.trim()).filter(s => s !== '');
+            if (newSizes.length === 0) newSizes = ['-']; 
+
+            const item = container.closest('.product-item');
+            const activePills = item.querySelectorAll('.pill.active');
+            const selectedSizes = [];
+            activePills.forEach(p => selectedSizes.push(p.getAttribute('data-size')));
+
+            let pillsHtml = '';
+            newSizes.forEach(s => {
+                const isActive = selectedSizes.includes(s) ? 'active' : '';
+                const displayTxt = s === '-' ? 'ไม่มีไซส์' : s;
+                pillsHtml += `<div class="pill ${isActive}" onclick="togglePill(this)" data-size="${s}">${displayTxt}</div>`;
+            });
+
+            pillsHtml += `<div class="pill pill-custom" onclick="addCustomPill(this)" title="พิมพ์เพิ่มทีละ 1 ไซส์">+ พิมพ์เพิ่ม</div>`;
+            pillsHtml += `<div class="pill pill-custom" style="border-color: #9CA3AF; color: #9CA3AF;" onclick="editPillsList(this)" title="ลบไซส์ที่ไม่ใช้ออก หรือจัดการชุดไซส์">⚙️ จัดการปุ่ม</div>`;
+
+            container.innerHTML = pillsHtml;
             saveData();
             generateText();
         }
