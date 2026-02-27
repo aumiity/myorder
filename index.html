@@ -125,27 +125,36 @@
         .ios-item-title { font-size: 1.05rem; font-weight: 500; color: var(--theme-text); white-space: pre-wrap; }
         .ios-item-price { font-size: 0.9rem; color: var(--theme-text-muted); font-weight: normal; }
 
-        /* สวิตช์เปิด-ปิด สไตล์ iOS ทรงรีแนวนอนเป๊ะๆ (51x31) */
-        .ios-switch { position: relative; display: inline-block; width: 51px; height: 31px; flex-shrink: 0; cursor: pointer; }
+        /* ========================================= */
+        /* --- สวิตช์เปิด-ปิด สไตล์ iOS 26 (วงรีแคบ) --- */
+        /* ========================================= */
+        .ios-switch { position: relative; display: inline-block; width: 56px; height: 28px; flex-shrink: 0; cursor: pointer; }
         .ios-switch input { opacity: 0; width: 0; height: 0; }
         .slider {
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: var(--theme-border); /* สีเทาตอนปิด */
+            background-color: var(--theme-border); /* สีเทาเข้มตอนปิด */
             transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border-radius: 31px;
+            border-radius: 28px; /* โค้งมนแบบแคปซูล */
         }
+        /* นี่คือส่วนที่เป็นทรงรีแนวนอน (Pill shape) แบบที่คุณส่งรูปมาครับ */
         .slider:before {
-            position: absolute; content: ""; height: 27px; width: 27px; left: 2px; bottom: 2px;
-            background-color: white; transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 50%;
+            position: absolute; content: ""; 
+            height: 22px; width: 30px; /* วงรีแนวนอน กว้างกว่าสูง */
+            left: 3px; bottom: 3px;
+            background-color: white; 
+            transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            border-radius: 22px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        /* เปิดสวิตช์เป็นสีเขียวเสมอตามสไตล์ Apple */
+        /* เปิดสวิตช์เป็นสีเขียว iOS เสมอ */
         input:checked + .slider { background-color: var(--theme-success); border-color: var(--theme-success); }
+        /* ระยะเลื่อนซ้ายขวาพอดีกับความกว้าง */
         input:checked + .slider:before { transform: translateX(20px); }
+
+        /* ========================================= */
 
         .ios-list-item.clickable:hover { background-color: var(--theme-surface-alt); cursor: pointer; }
         
-        /* ปุ่มแก้ไข/ลบ ใน List เปลี่ยนเป็นสีเทาทั้งหมด เพื่อความคลีน */
         .bank-action-btn {
             background-color: var(--theme-surface-hover); 
             color: var(--theme-text); 
@@ -205,7 +214,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                ออเดอร์ <span class="version-badge">v8.6</span>
+                ออเดอร์ <span class="version-badge">v8.7 (iOS 26)</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.55rem 1rem; font-size: 0.95rem;" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -235,7 +244,7 @@
                         </div>
                     </div>
                     <div class="ios-list-right">
-                        <button class="bank-action-btn edit" onclick="editFee('shipping', 'ค่าจัดส่ง')" title="แก้ไขราคา">
+                        <button class="bank-action-btn" onclick="editFee('shipping', 'ค่าจัดส่ง')" title="แก้ไขราคา">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                         </button>
                         <label class="ios-switch">
@@ -256,7 +265,7 @@
                         </div>
                     </div>
                     <div class="ios-list-right">
-                        <button class="bank-action-btn edit" onclick="editFee('special', 'พื้นที่พิเศษ')" title="แก้ไขราคา">
+                        <button class="bank-action-btn" onclick="editFee('special', 'พื้นที่พิเศษ')" title="แก้ไขราคา">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                         </button>
                         <label class="ios-switch">
@@ -277,7 +286,7 @@
                         </div>
                     </div>
                     <div class="ios-list-right">
-                        <button class="bank-action-btn edit" onclick="editFee('deposit', 'หักมัดจำ')" title="แก้ไขราคา">
+                        <button class="bank-action-btn" onclick="editFee('deposit', 'หักมัดจำ')" title="แก้ไขราคา">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                         </button>
                         <label class="ios-switch">
@@ -567,7 +576,7 @@
         saveData();
         
         const exportObj = {
-            version: "v8.6",
+            version: "v8.7",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || [],
             selectedBank: localStorage.getItem('bank') || '',
