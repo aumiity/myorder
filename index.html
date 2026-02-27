@@ -9,7 +9,7 @@
         /* --- 1. ระบบจัดการ THEME (สีหลักของเว็บ) --- */
         /* ========================================= */
         
-        /* 🍏 ธีมที่ 1: iOS Dark (ค่าเริ่มต้น) */
+        /* ธีมที่ 1: iOS Dark (ค่าเริ่มต้น) */
         :root {
             --theme-bg: #000000;
             --theme-surface: #1C1C1E;
@@ -29,7 +29,7 @@
             --theme-border: #38383A;
         }
 
-        /* 🐙 ธีมที่ 2: GitHub Dark Default */
+        /* ธีมที่ 2: GitHub Dark Default */
         [data-theme="github"] {
             --theme-bg: #0d1117;
             --theme-surface: #161b22;
@@ -58,7 +58,8 @@
             margin: 0;
             padding: 2rem 3rem; 
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
         .container {
@@ -96,28 +97,6 @@
         }
         .version-badge { font-size: 0.85rem; color: var(--theme-text-muted); font-weight: normal; }
         
-        .header-controls {
-            display: flex;
-            gap: 0.75rem;
-            align-items: center;
-        }
-
-        /* สไตล์ตัวเลือก Theme */
-        #themeSelector {
-            padding: 0.55rem 1rem;
-            border-radius: 12px;
-            background-color: var(--theme-surface-alt);
-            color: var(--theme-text);
-            border: 1px solid var(--theme-border);
-            font-family: inherit;
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            outline: none;
-            transition: all 0.2s;
-        }
-        #themeSelector:hover { border-color: var(--theme-primary); }
-
         .form-group { margin-bottom: 1.5rem; }
         label {
             display: block;
@@ -264,9 +243,6 @@
             border: 1px dashed var(--theme-border);
         }
         .pill-action:hover { background: var(--theme-primary-alpha); border-color: var(--theme-primary); }
-        
-        .pill-danger { color: var(--theme-danger); }
-        .pill-danger:hover { background: var(--theme-danger-alpha); border-color: var(--theme-danger); color: var(--theme-danger-hover); }
 
         .btn {
             background-color: var(--theme-surface-alt);
@@ -286,8 +262,15 @@
         .btn-primary:hover, .btn-primary:active { background-color: var(--theme-primary-hover); }
         
         .btn-success { background-color: var(--theme-success); color: white; border: none; }
-        .btn-danger-outline { background-color: transparent; color: var(--theme-danger); border: 1px solid var(--theme-border); }
-        .btn-danger-outline:hover { border-color: var(--theme-danger); background-color: var(--theme-danger-alpha); }
+        
+        .btn-danger-outline { 
+            background-color: transparent; 
+            color: var(--theme-danger); 
+            border: 1px solid var(--theme-danger); 
+        }
+        .btn-danger-outline:hover { 
+            background-color: var(--theme-danger-alpha); 
+        }
         
         .btn-icon {
             padding: 0;
@@ -326,15 +309,38 @@
         textarea { height: 350px; resize: vertical; line-height: 1.6; }
         .action-buttons-group { display: flex; gap: 1rem; margin-top: 1rem; }
 
+        /* Footer สำหรับ Theme Selector */
+        .app-footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: var(--theme-text-muted);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+        }
+        #themeSelector {
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            background-color: var(--theme-surface-alt);
+            color: var(--theme-text);
+            border: 1px solid var(--theme-border);
+            font-family: inherit;
+            font-size: 0.95rem;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s;
+        }
+        #themeSelector:hover { border-color: var(--theme-primary); }
+
         @media (max-width: 800px) {
             body { padding: 1rem 0.5rem; } 
             .container { grid-template-columns: 1fr; gap: 1.5rem; }
             .panel { padding: 1.25rem; border-radius: 16px; }
             .main-header { flex-direction: column; align-items: stretch; gap: 1rem; }
             
-            .header-controls { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
-            #themeSelector { width: 100%; text-align: center; }
-
             .collection-header { flex-wrap: wrap; }
             .header-left { width: 100%; flex: none; }
             .header-actions { width: 100%; justify-content: flex-end; }
@@ -361,19 +367,12 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                ออเดอร์ <span class="version-badge">v6.1</span>
+                ออเดอร์ <span class="version-badge">v6.2</span>
             </h2>
-            <div class="header-controls">
-                <select id="themeSelector" onchange="changeTheme()">
-                    <option value="ios">🍏 iOS Dark</option>
-                    <option value="github">🐙 GitHub Dark</option>
-                </select>
-                
-                <button class="btn" style="padding: 0.55rem 1rem; font-size: 0.95rem; color: var(--theme-danger); border-color: var(--theme-danger);" onclick="clearAllPills()">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
-                    ล้างตัวเลือก
-                </button>
-            </div>
+            <button class="btn btn-danger-outline" style="padding: 0.55rem 1rem; font-size: 0.95rem;" onclick="clearAllPills()">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+                ล้างตัวเลือก
+            </button>
         </div>
         
         <div id="collectionsContainer"></div>
@@ -435,8 +434,15 @@
     </div>
 </div>
 
+<div class="app-footer">
+    <label for="themeSelector">🎨 เลือกธีม:</label>
+    <select id="themeSelector" onchange="changeTheme()">
+        <option value="ios">iOS Dark</option>
+        <option value="github">GitHub Dark</option>
+    </select>
+</div>
+
 <script>
-    // --- ไอคอน SVG (ถอดแบบจาก SF Symbols) ---
     const ICON_CHEV_RIGHT = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
     const ICON_CHEV_DOWN = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
     const ICON_UP = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>`;
@@ -446,10 +452,8 @@
     const ICON_MINUS = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
     const ICON_GEAR = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`;
     const ICON_PLUS = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
-    const ICON_CLOSE = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
 
     window.onload = function() {
-        // โหลดธีมจากเครื่อง
         const savedTheme = localStorage.getItem('appTheme') || 'ios';
         document.getElementById('themeSelector').value = savedTheme;
         document.documentElement.setAttribute('data-theme', savedTheme);
@@ -624,10 +628,10 @@
         if (item.nextElementSibling) { item.parentNode.insertBefore(item.nextElementSibling, item); saveData(); generateText(); }
     }
 
-    function createOptionRowHtml(availableSizes, selectedSizes, isFirstRow) {
+    // เอาปุ่มกากบาทลบแถวออก แล้วส่งดีไซน์แถวใหม่กลับไป
+    function createOptionRowHtml(availableSizes, selectedSizes) {
         let pillsHtml = availableSizes.map(s => `<div class="pill ${selectedSizes.includes(s) ? 'active' : ''}" onclick="togglePill(this)" data-size="${s}">${s}</div>`).join('');
-        let actionsHtml = `<div class="pill pill-custom pill-action" onclick="editPillsList(this)" title="ตั้งค่าตัวเลือก">${ICON_GEAR}</div>`;
-        if (!isFirstRow) actionsHtml += `<div class="pill pill-custom pill-action pill-danger" onclick="removeOptionRow(this)" title="ลบตัวเลือกแถวนี้">${ICON_CLOSE}</div>`;
+        let actionsHtml = `<div class="pill pill-custom pill-action" onclick="editPillsList(this)" title="ตั้งค่าตัวเลือก/ลบแถว">${ICON_GEAR}</div>`;
 
         return `<div class="option-row"><div class="size-pills">${pillsHtml}${actionsHtml}</div></div>`;
     }
@@ -637,7 +641,7 @@
         newItem.className = 'product-item';
         
         const rows = (optionRowsArray && optionRowsArray.length > 0) ? optionRowsArray : [ { availableSizes: ['S', 'M', 'L', 'XL', '2XL'], selectedSizes: [] } ];
-        let rowsHtml = rows.map((r, idx) => createOptionRowHtml(r.availableSizes, r.selectedSizes, idx === 0)).join('');
+        let rowsHtml = rows.map((r) => createOptionRowHtml(r.availableSizes, r.selectedSizes)).join('');
 
         newItem.innerHTML = `
             <div class="product-header-row">
@@ -662,14 +666,10 @@
         if (newSizesStr && newSizesStr.trim() !== '') {
             let newSizes = newSizesStr.split(',').map(s => s.trim()).filter(s => s !== '');
             if (newSizes.length > 0) {
-                btn.previousElementSibling.insertAdjacentHTML('beforeend', createOptionRowHtml(newSizes, [], false));
+                btn.previousElementSibling.insertAdjacentHTML('beforeend', createOptionRowHtml(newSizes, []));
                 saveData(); generateText();
             }
         }
-    }
-
-    function removeOptionRow(btn) {
-        btn.closest('.option-row').remove(); saveData(); generateText();
     }
 
     function cloneProduct(btn) {
@@ -686,15 +686,24 @@
 
     function editPillsList(btn) {
         const container = btn.closest('.size-pills');
+        const row = container.closest('.option-row');
         const currentSizes = Array.from(container.querySelectorAll('.pill[data-size]')).map(p => p.getAttribute('data-size'));
-        const newSizesStr = prompt('ตั้งค่าปุ่ม (คั่นด้วยลูกน้ำ ,):', currentSizes.join(','));
+        
+        // แจ้งผู้ใช้ว่าลบข้อความออกหมด = ลบแถว
+        const newSizesStr = prompt('ตั้งค่าปุ่ม (คั่นด้วยลูกน้ำ ,)\n* หากต้องการลบแถวนี้ออก ให้ลบข้อความออกให้หมดแล้วกด OK:', currentSizes.join(','));
 
         if (newSizesStr !== null) {
             let newSizes = newSizesStr.split(',').map(s => s.trim()).filter(s => s !== '');
-            if (newSizes.length === 0) newSizes = ['-']; 
+            
+            // Auto-Remove Logic: ถ้าลบข้อความหมด ให้ลบแถวนี้ทิ้งไปเลย
+            if (newSizes.length === 0) {
+                row.remove();
+                saveData(); generateText();
+                return;
+            }
             
             const selectedSizes = Array.from(container.querySelectorAll('.pill.active')).map(p => p.getAttribute('data-size'));
-            container.closest('.option-row').outerHTML = createOptionRowHtml(newSizes, selectedSizes, !container.querySelector('.pill-danger'));
+            row.outerHTML = createOptionRowHtml(newSizes, selectedSizes);
             saveData(); generateText();
         }
     }
@@ -715,14 +724,19 @@
                 const rawPrice = item.querySelector('.productPrice').value.trim();
                 const qtyVal = parseInt(item.querySelector('.productQty').value.trim()) || 1; 
 
+                const rowEls = item.querySelectorAll('.option-row');
                 let textParts = [], activeCounts = [0];
-                item.querySelectorAll('.option-row').forEach(rowEl => {
+                
+                rowEls.forEach(rowEl => {
                     const actives = rowEl.querySelectorAll('.pill.active');
                     activeCounts.push(actives.length);
                     if (actives.length > 0) textParts.push(Array.from(actives).map(p => p.getAttribute('data-size')).join(',')); 
                 });
 
-                const totalActive = Math.max(...activeCounts);
+                let totalActive = Math.max(...activeCounts);
+                
+                // ถ้าระบบไม่มีแถวตัวเลือกเลย (ผู้ใช้ลบออกหมด) ให้บังคับว่าสินค้านี้มีชิ้นเดียว เพื่อให้พิมพ์บิลได้
+                if (rowEls.length === 0) totalActive = 1; 
                 
                 if (nameVal !== '' && totalActive > 0) {
                     if (!mergedMap[nameVal]) { mergedMap[nameVal] = []; orderArr.push(nameVal); }
