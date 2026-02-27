@@ -82,7 +82,7 @@
         .btn-add-row:hover { opacity: 0.7; text-decoration: underline; }
 
         /* ========================================= */
-        /* --- ระบบ iOS 26 INSET GROUPED LIST --- */
+        /* --- ระบบ iOS INSET GROUPED LIST --- */
         /* ========================================= */
         .ios-list-group {
             background-color: var(--theme-bg);
@@ -125,36 +125,35 @@
         .ios-item-title { font-size: 1.05rem; font-weight: 500; color: var(--theme-text); white-space: pre-wrap; }
         .ios-item-price { font-size: 0.9rem; color: var(--theme-text-muted); font-weight: normal; }
 
-        /* สวิตช์เปิด-ปิด สไตล์ iOS 26 (ทรงรี + เขียวเสมอ) */
-        .ios-switch { position: relative; display: inline-block; width: 50px; height: 30px; flex-shrink: 0; cursor: pointer; }
+        /* สวิตช์เปิด-ปิด สไตล์ iOS ทรงรีแนวนอนเป๊ะๆ (51x31) */
+        .ios-switch { position: relative; display: inline-block; width: 51px; height: 31px; flex-shrink: 0; cursor: pointer; }
         .ios-switch input { opacity: 0; width: 0; height: 0; }
         .slider {
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: var(--theme-border); /* สีเทาเข้มตอนปิด */
+            background-color: var(--theme-border); /* สีเทาตอนปิด */
             transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border-radius: 30px;
+            border-radius: 31px;
         }
         .slider:before {
-            position: absolute; content: ""; height: 26px; width: 26px; left: 2px; bottom: 2px;
+            position: absolute; content: ""; height: 27px; width: 27px; left: 2px; bottom: 2px;
             background-color: white; transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 50%;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        /* เปิดสวิตช์เป็นสีเขียว iOS เสมอ */
+        /* เปิดสวิตช์เป็นสีเขียวเสมอตามสไตล์ Apple */
         input:checked + .slider { background-color: var(--theme-success); border-color: var(--theme-success); }
         input:checked + .slider:before { transform: translateX(20px); }
 
         .ios-list-item.clickable:hover { background-color: var(--theme-surface-alt); cursor: pointer; }
         
-        /* ปุ่มแก้ไข/ลบ ใน List (กล่องทึบ) */
+        /* ปุ่มแก้ไข/ลบ ใน List เปลี่ยนเป็นสีเทาทั้งหมด เพื่อความคลีน */
         .bank-action-btn {
-            background: var(--theme-surface-hover); color: var(--theme-text); border: none;
+            background-color: var(--theme-surface-hover); 
+            color: var(--theme-text); 
+            border: none;
             width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
             cursor: pointer; transition: all 0.2s; padding: 0; flex-shrink: 0;
         }
-        .bank-action-btn.edit { background-color: var(--theme-primary); color: white; }
-        .bank-action-btn.edit:hover { background-color: var(--theme-primary-hover); }
-        .bank-action-btn.delete { background-color: var(--theme-danger); color: white; }
-        .bank-action-btn.delete:hover { background-color: var(--theme-danger-hover); }
+        .bank-action-btn:hover { opacity: 0.8; }
         
         .check-indicator { width: 20px; display: flex; justify-content: center; }
 
@@ -206,7 +205,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                ออเดอร์ <span class="version-badge">v8.5 (iOS 26)</span>
+                ออเดอร์ <span class="version-badge">v8.6</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.55rem 1rem; font-size: 0.95rem;" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -430,10 +429,10 @@
                         <span class="ios-item-title">${b.text}</span>
                     </div>
                     <div class="ios-list-right">
-                        <button class="bank-action-btn edit" onclick="event.stopPropagation(); editBank('${b.id}')" title="แก้ไข">
+                        <button class="bank-action-btn" onclick="event.stopPropagation(); editBank('${b.id}')" title="แก้ไข">
                             ${ICON_GEAR}
                         </button>
-                        <button class="bank-action-btn delete" onclick="event.stopPropagation(); deleteBank('${b.id}')" title="ลบ">
+                        <button class="bank-action-btn" onclick="event.stopPropagation(); deleteBank('${b.id}')" title="ลบ">
                             ${ICON_TRASH}
                         </button>
                         <div class="check-indicator">${checkIcon}</div>
@@ -568,7 +567,7 @@
         saveData();
         
         const exportObj = {
-            version: "v8.5",
+            version: "v8.6",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || [],
             selectedBank: localStorage.getItem('bank') || '',
