@@ -14,7 +14,7 @@
             --theme-bg: #000000; --theme-surface: #1C1C1E; --theme-surface-alt: #2C2C2E; --theme-surface-hover: #3A3A3C;
             --theme-primary: #0A84FF; --theme-primary-hover: #007AFF; --theme-primary-alpha: rgba(10, 132, 255, 0.15); --theme-primary-alpha-strong: rgba(10, 132, 255, 0.25);
             --theme-accent-text: #64D2FF; --theme-danger: #FF453A; --theme-danger-hover: #FF3B30; --theme-danger-alpha: rgba(255, 69, 58, 0.15);
-            --theme-success: #32D74B; --theme-text: #FFFFFF; --theme-text-muted: #8E8E93; --theme-border: #38383A;
+            --theme-success: #32D74B; --theme-warning: #FFD60A; --theme-text: #FFFFFF; --theme-text-muted: #8E8E93; --theme-border: #38383A;
         }
 
         /* ธีมที่ 2: GitHub Dark Default */
@@ -22,7 +22,7 @@
             --theme-bg: #0d1117; --theme-surface: #161b22; --theme-surface-alt: #21262d; --theme-surface-hover: #30363d;
             --theme-primary: #2f81f7; --theme-primary-hover: #388bfd; --theme-primary-alpha: rgba(47, 129, 247, 0.15); --theme-primary-alpha-strong: rgba(47, 129, 247, 0.25);
             --theme-accent-text: #79c0ff; --theme-danger: #f85149; --theme-danger-hover: #ff7b72; --theme-danger-alpha: rgba(248, 81, 73, 0.15);
-            --theme-success: #238636; --theme-text: #c9d1d9; --theme-text-muted: #8b949e; --theme-border: #30363d;
+            --theme-success: #238636; --theme-warning: #d29922; --theme-text: #c9d1d9; --theme-text-muted: #8b949e; --theme-border: #30363d;
         }
 
         /* ========================================= */
@@ -82,6 +82,7 @@
         .btn-add-row { background: transparent; color: var(--theme-primary); border: none; cursor: pointer; font-size: 0.9rem; font-weight: 500; padding: 0.5rem 0; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.3rem; }
         .btn-add-row:hover { opacity: 0.7; text-decoration: underline; }
 
+        /* --- ระบบกล่องบัญชีธนาคาร --- */
         .radio-group { display: flex; flex-direction: column; gap: 0.6rem; }
         .bank-item-wrapper { display: flex; align-items: center; justify-content: space-between; gap: 1rem; width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--theme-border); border-radius: 12px; background: var(--theme-bg); transition: all 0.2s; box-sizing: border-box; }
         .bank-item-wrapper:hover, .bank-item-wrapper:focus-within { border-color: var(--theme-primary); }
@@ -91,7 +92,28 @@
         .btn-bank-action:hover { background: var(--theme-primary-alpha); border-color: var(--theme-primary); }
         .btn-bank-action.delete { color: var(--theme-danger); }
         .btn-bank-action.delete:hover { background: var(--theme-danger-alpha); border-color: var(--theme-danger); }
-        input[type="radio"] { width: 22px; height: 22px; margin-top: 2px; cursor: pointer; accent-color: var(--theme-primary); flex-shrink: 0; }
+        input[type="radio"], input[type="checkbox"] { width: 22px; height: 22px; margin-top: 2px; cursor: pointer; flex-shrink: 0; }
+        input[type="radio"] { accent-color: var(--theme-primary); }
+
+        /* --- ระบบกล่องค่าใช้จ่าย (Pro UI Toggles) --- */
+        .fee-group-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 0.5rem; }
+        .fee-item-wrapper { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.85rem 1rem; border: 1px solid var(--theme-border); border-radius: 12px; background: var(--theme-bg); transition: all 0.2s; box-sizing: border-box; }
+        .fee-label { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; width: 100%; margin: 0; flex: 1; }
+        .fee-text { display: flex; flex-direction: column; line-height: 1.3; }
+        .fee-title { font-weight: 500; font-size: 1rem; color: var(--theme-text); transition: color 0.2s; }
+        .fee-val { font-size: 0.85rem; color: var(--theme-text-muted); }
+        
+        /* ตั้งค่าสีตามประเภท */
+        .fee-item-wrapper.shipping { --active-color: var(--theme-success); }
+        .fee-item-wrapper.special { --active-color: var(--theme-warning); }
+        .fee-item-wrapper.deposit { --active-color: var(--theme-danger); }
+
+        /* เมื่อถูกเปิดใช้งาน (Active) */
+        .fee-item-wrapper.active { border-color: var(--active-color); background-color: var(--theme-surface-alt); }
+        .fee-item-wrapper.active .fee-title { color: var(--active-color); font-weight: 600; }
+        .fee-item-wrapper.shipping input[type="checkbox"] { accent-color: var(--theme-success); }
+        .fee-item-wrapper.special input[type="checkbox"] { accent-color: var(--theme-warning); }
+        .fee-item-wrapper.deposit input[type="checkbox"] { accent-color: var(--theme-danger); }
 
         textarea { height: 350px; resize: vertical; line-height: 1.6; }
         .action-buttons-group { display: flex; gap: 1rem; margin-top: 1rem; }
@@ -119,16 +141,13 @@
             .header-left { width: 100%; flex: none; }
             .header-actions { width: 100%; justify-content: flex-end; }
             
-            .product-header-row { 
-                grid-template-columns: 85px 1fr 85px; 
-                grid-template-rows: auto auto; 
-                gap: 0.6rem; 
-            }
+            .product-header-row { grid-template-columns: 85px 1fr 85px; grid-template-rows: auto auto; gap: 0.6rem; }
             .productName { grid-column: 1 / 3; grid-row: 1; } 
             .productPrice { grid-column: 3 / 4; grid-row: 1; } 
             .productQty { grid-column: 1 / 2; grid-row: 2; } 
             .product-actions { grid-column: 2 / 4; grid-row: 2; justify-content: flex-end; } 
 
+            .fee-group-container { grid-template-columns: 1fr; gap: 0.75rem; }
             .action-buttons-group { flex-direction: column; gap: 0.5rem; }
             textarea { height: 250px; } 
             .help-toggle { padding: 1rem; font-size: 1rem; }
@@ -145,7 +164,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                ออเดอร์ <span class="version-badge">v7.8</span>
+                ออเดอร์ <span class="version-badge">v7.9 (Pro UI)</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.55rem 1rem; font-size: 0.95rem;" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -161,22 +180,46 @@
         </button>
         
         <div class="form-group" style="margin-bottom: 1.5rem;">
-            <label>ค่าใช้จ่ายเพิ่มเติม (แตะปุ่มเพื่อใช้งาน / กด ⚙️ เพื่อเปลี่ยนตัวเลข)</label>
-            <div style="display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.5rem;">
+            <label style="margin-bottom: 0.8rem;">สรุปค่าใช้จ่ายเพิ่มเติม</label>
+            <div class="fee-group-container">
                 
-                <div style="display: flex; align-items: center; gap: 0.2rem;">
-                    <div class="pill active" id="pill_shipping" onclick="togglePill(this)" style="font-size: 0.95rem;">🚚 ค่าจัดส่ง: <span id="val_shipping">50</span>.-</div>
-                    <button class="pill-action" onclick="editFee('shipping', 'ค่าจัดส่ง')" title="ตั้งราคา">⚙️</button>
+                <div class="fee-item-wrapper shipping active" id="wrapper_shipping">
+                    <label class="fee-label">
+                        <input type="checkbox" id="check_shipping" onchange="toggleFee('shipping')" checked>
+                        <div class="fee-text">
+                            <span class="fee-title">ค่าจัดส่ง</span>
+                            <span class="fee-val"><span id="val_shipping">50</span> บาท</span>
+                        </div>
+                    </label>
+                    <button class="btn-bank-action" onclick="editFee('shipping', 'ค่าจัดส่ง')" title="ตั้งราคา">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    </button>
                 </div>
 
-                <div style="display: flex; align-items: center; gap: 0.2rem;">
-                    <div class="pill" id="pill_special" onclick="togglePill(this)" style="font-size: 0.95rem;">🏝️ พื้นที่พิเศษ: <span id="val_special">50</span>.-</div>
-                    <button class="pill-action" onclick="editFee('special', 'พื้นที่พิเศษ')" title="ตั้งราคา">⚙️</button>
+                <div class="fee-item-wrapper special" id="wrapper_special">
+                    <label class="fee-label">
+                        <input type="checkbox" id="check_special" onchange="toggleFee('special')">
+                        <div class="fee-text">
+                            <span class="fee-title">พื้นที่พิเศษ</span>
+                            <span class="fee-val"><span id="val_special">50</span> บาท</span>
+                        </div>
+                    </label>
+                    <button class="btn-bank-action" onclick="editFee('special', 'พื้นที่พิเศษ')" title="ตั้งราคา">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    </button>
                 </div>
 
-                <div style="display: flex; align-items: center; gap: 0.2rem;">
-                    <div class="pill" id="pill_deposit" onclick="togglePill(this)" style="font-size: 0.95rem;">💳 หักมัดจำ: <span id="val_deposit">100</span>.-</div>
-                    <button class="pill-action" onclick="editFee('deposit', 'หักมัดจำ')" title="ตั้งราคา">⚙️</button>
+                <div class="fee-item-wrapper deposit" id="wrapper_deposit">
+                    <label class="fee-label">
+                        <input type="checkbox" id="check_deposit" onchange="toggleFee('deposit')">
+                        <div class="fee-text">
+                            <span class="fee-title">หักมัดจำ</span>
+                            <span class="fee-val"><span id="val_deposit">100</span> บาท</span>
+                        </div>
+                    </label>
+                    <button class="btn-bank-action" onclick="editFee('deposit', 'หักมัดจำ')" title="ตั้งราคา">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    </button>
                 </div>
 
             </div>
@@ -288,7 +331,18 @@
         localStorage.setItem('appTheme', theme);
     }
 
-    // --- ระบบฟีเจอร์ค่าธรรมเนียมแบบเปิด/ปิดได้ ---
+    // --- ระบบฟีเจอร์ค่าใช้จ่าย ---
+    function toggleFee(id) {
+        const checkbox = document.getElementById('check_' + id);
+        const wrapper = document.getElementById('wrapper_' + id);
+        if (checkbox.checked) {
+            wrapper.classList.add('active');
+        } else {
+            wrapper.classList.remove('active');
+        }
+        updateData();
+    }
+
     function editFee(id, name) {
         const span = document.getElementById('val_' + id);
         const currentVal = span.innerText;
@@ -366,15 +420,15 @@
     }
 
     function saveData() {
-        // เซฟค่าตัวเลขของปุ่ม
+        // เซฟค่าตัวเลขของกล่อง
         localStorage.setItem('val_shipping', document.getElementById('val_shipping').innerText);
         localStorage.setItem('val_special', document.getElementById('val_special').innerText);
         localStorage.setItem('val_deposit', document.getElementById('val_deposit').innerText);
         
-        // เซฟสถานะการเปิด/ปิด (สีทึบ/สีเทา)
-        localStorage.setItem('pill_shipping', document.getElementById('pill_shipping').classList.contains('active'));
-        localStorage.setItem('pill_special', document.getElementById('pill_special').classList.contains('active'));
-        localStorage.setItem('pill_deposit', document.getElementById('pill_deposit').classList.contains('active'));
+        // เซฟสถานะการเปิด/ปิด
+        localStorage.setItem('check_shipping', document.getElementById('check_shipping').checked);
+        localStorage.setItem('check_special', document.getElementById('check_special').checked);
+        localStorage.setItem('check_deposit', document.getElementById('check_deposit').checked);
 
         const selectedBankNode = document.querySelector('input[name="bank"]:checked');
         if(selectedBankNode) localStorage.setItem('bank', selectedBankNode.value);
@@ -409,15 +463,34 @@
     }
 
     function loadData() {
-        // โหลดค่าตัวเลขมาใส่ปุ่ม
+        // โหลดค่าตัวเลขมาใส่
         if (localStorage.getItem('val_shipping')) document.getElementById('val_shipping').innerText = localStorage.getItem('val_shipping');
         if (localStorage.getItem('val_special')) document.getElementById('val_special').innerText = localStorage.getItem('val_special');
         if (localStorage.getItem('val_deposit')) document.getElementById('val_deposit').innerText = localStorage.getItem('val_deposit');
 
-        // โหลดสถานะเปิดปิด
-        if (localStorage.getItem('pill_shipping') === 'false') document.getElementById('pill_shipping').classList.remove('active');
-        if (localStorage.getItem('pill_special') === 'true') document.getElementById('pill_special').classList.add('active');
-        if (localStorage.getItem('pill_deposit') === 'true') document.getElementById('pill_deposit').classList.add('active');
+        // โหลดสถานะเปิดปิดกล่อง
+        ['shipping', 'special', 'deposit'].forEach(id => {
+            let savedState = localStorage.getItem('check_' + id);
+            let checkbox = document.getElementById('check_' + id);
+            let wrapper = document.getElementById('wrapper_' + id);
+            
+            if (savedState === 'false') {
+                checkbox.checked = false;
+                wrapper.classList.remove('active');
+            } else if (savedState === 'true') {
+                checkbox.checked = true;
+                wrapper.classList.add('active');
+            } else {
+                // ค่าเริ่มต้น: เปิดจัดส่งไว้ / ปิดพิเศษและมัดจำ
+                if(id === 'shipping') {
+                    checkbox.checked = true;
+                    wrapper.classList.add('active');
+                } else {
+                    checkbox.checked = false;
+                    wrapper.classList.remove('active');
+                }
+            }
+        });
 
         const container = document.getElementById('collectionsContainer');
         container.innerHTML = ''; 
@@ -513,14 +586,14 @@
     }
 
     function clearAllPills() {
-        // เอาสีทึบของตัวเลือกสินค้าออก
-        document.querySelectorAll('.product-options-container .pill.active').forEach(pill => pill.classList.remove('active'));
+        document.querySelectorAll('.pill.active').forEach(pill => pill.classList.remove('active'));
         document.querySelectorAll('.productQty').forEach(qty => qty.value = 1);
         
-        // เอาสีทึบของ พื้นที่พิเศษ และ มัดจำ ออกอัตโนมัติ (พร้อมรับลูกค้าใหม่)
-        document.getElementById('pill_special').classList.remove('active');
-        document.getElementById('pill_deposit').classList.remove('active');
-        // ค่าจัดส่งปกติให้คงสถานะเดิมไว้
+        // ปิดกล่องพื้นที่พิเศษและมัดจำให้กลับเป็นสีเทาโดยอัตโนมัติ (รับออเดอร์ใหม่)
+        ['special', 'deposit'].forEach(id => {
+            document.getElementById('check_' + id).checked = false;
+            document.getElementById('wrapper_' + id).classList.remove('active');
+        });
         
         saveData(); generateText();
     }
@@ -636,10 +709,9 @@
     }
 
     function generateText() {
-        // เช็คว่าปุ่มเป็นสีทึบมั้ย ถ้าทึบดึงตัวเลขมา ถ้าไม่ทึบให้เป็น 0
-        const shippingValue = document.getElementById('pill_shipping').classList.contains('active') ? parseFloat(document.getElementById('val_shipping').innerText) : 0;
-        const specialShippingValue = document.getElementById('pill_special').classList.contains('active') ? parseFloat(document.getElementById('val_special').innerText) : 0;
-        const depositValue = document.getElementById('pill_deposit').classList.contains('active') ? parseFloat(document.getElementById('val_deposit').innerText) : 0;
+        const shippingValue = document.getElementById('check_shipping').checked ? parseFloat(document.getElementById('val_shipping').innerText) : 0;
+        const specialShippingValue = document.getElementById('check_special').checked ? parseFloat(document.getElementById('val_special').innerText) : 0;
+        const depositValue = document.getElementById('check_deposit').checked ? parseFloat(document.getElementById('val_deposit').innerText) : 0;
 
         let finalProductsText = '', labelLines = [], validPrices = [], hasMissingPrice = false, productsSum = 0;
         
