@@ -216,8 +216,10 @@
         .btn-remove-col {
             background-color: transparent;
             color: #F87171; border: 1px solid #F87171;
-            padding: 0.4rem 0.85rem; font-size: 0.95rem;
-            border-radius: 6px; cursor: pointer;
+            width: 38px; height: 38px; /* ปรับให้เป็นไอคอนสี่เหลี่ยม */
+            font-size: 1.1rem;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 8px; cursor: pointer; padding: 0;
         }
         .btn-remove-col:hover { background: rgba(248, 113, 113, 0.1); }
 
@@ -280,7 +282,7 @@
 <div class="container">
     <div class="panel">
         <div class="main-header">
-            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v5.2 (Clean Brackets)</span></h2>
+            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v5.3 (Emoji UI)</span></h2>
             <button class="btn-clear-all-sizes" onclick="clearAllPills()">↺ ล้างตัวเลือกทั้งหมด</button>
         </div>
         
@@ -468,9 +470,9 @@
                     <input type="text" class="collectionName" placeholder="ชื่อคอลเลคชั่น เช่น Summer 2026" value="${colName}" style="margin: 0; padding: 0.6rem 1rem;">
                 </div>
                 <div class="header-actions">
-                    <button class="btn btn-icon btn-move" onclick="moveCollectionUp(this)">▲</button>
-                    <button class="btn btn-icon btn-move" onclick="moveCollectionDown(this)">▼</button>
-                    <button class="btn btn-remove-col" onclick="removeCollectionBlock(this)">ลบชุดนี้</button>
+                    <button class="btn btn-icon btn-move" onclick="moveCollectionUp(this)" title="เลื่อนคอลเลคชั่นขึ้น">▲</button>
+                    <button class="btn btn-icon btn-move" onclick="moveCollectionDown(this)" title="เลื่อนคอลเลคชั่นลง">▼</button>
+                    <button class="btn-remove-col" onclick="removeCollectionBlock(this)" title="ลบชุดนี้ทิ้ง">🗑️</button>
                 </div>
             </div>
             <div class="collection-body">
@@ -524,9 +526,10 @@
             pillsHtml += `<div class="pill ${isActive}" onclick="togglePill(this)" data-size="${s}">${s}</div>`;
         });
         
-        let actionsHtml = `<div class="pill pill-custom" onclick="editPillsList(this)" title="กำหนดปุ่มเอง">⚙️ จัดการปุ่ม</div>`;
+        // ปรับเป็นปุ่ม Emoji ทรงกลม/เหลี่ยม เล็กๆ ประหยัดพื้นที่
+        let actionsHtml = `<div class="pill pill-custom" style="padding: 0.35rem 0.6rem;" onclick="editPillsList(this)" title="จัดการปุ่มตัวเลือก">⚙️</div>`;
         if (!isFirstRow) {
-            actionsHtml += `<div class="pill pill-custom pill-danger" onclick="removeOptionRow(this)" title="ลบตัวเลือกนี้ทิ้ง">❌ ลบแถว</div>`;
+            actionsHtml += `<div class="pill pill-custom pill-danger" style="padding: 0.35rem 0.6rem;" onclick="removeOptionRow(this)" title="ลบตัวเลือกแถวนี้">❌</div>`;
         }
 
         return `
@@ -650,7 +653,6 @@
         }
     }
 
-    // --- ส่วนประมวลผลข้อความ ---
     function generateText() {
         const shipping = document.getElementById('shippingCost').value || '0';
         const shippingValue = parseFloat(shipping) || 0;
@@ -679,7 +681,7 @@
                 const qtyVal = parseInt(rawQty) || 1; 
 
                 const rowEls = item.querySelectorAll('.option-row');
-                let textParts = []; // ไว้เก็บข้อความที่เลือกจากแต่ละบรรทัด (เช่น ชมพู, XL, สั้น)
+                let textParts = []; 
                 let activeCounts = [];
                 let totalActive = 0;
 
@@ -689,7 +691,6 @@
                     totalActive += activePills.length;
                     
                     if (activePills.length > 0) {
-                        // ดึงข้อความของปุ่มที่ถูกกดในบรรทัดนั้นๆ มาเชื่อมกันด้วยลูกน้ำ (เผื่อกดหลายปุ่มในบรรทัดเดียว)
                         const sizes = Array.from(activePills).map(p => p.getAttribute('data-size'));
                         textParts.push(sizes.join(',')); 
                     }
@@ -701,8 +702,6 @@
                         mergedProductsOrder.push(nameVal);
                     }
 
-                    // เอาข้อความทั้งหมดมาเชื่อมกันด้วยเว้นวรรค แล้วค่อยใส่วงเล็บครอบทีเดียว
-                    // เช่น textParts = ["ชมพู", "XL", "สั้น"] จะกลายเป็น "(ชมพู XL สั้น)"
                     const variantStr = textParts.length > 0 ? `(${textParts.join(' ')})` : '';
                     
                     let token = variantStr;
