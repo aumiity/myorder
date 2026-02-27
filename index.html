@@ -89,13 +89,15 @@
         /* สไตล์เมื่อธนาคารถูกเลือก (ซ่อน Radio แล้วใช้กล่องแทน) */
         .bank-item-wrapper input[type="radio"] { display: none; }
         
-        /* v8.1: ไฮไลท์แค่เส้นขอบสีฟ้า ไม่เปลี่ยนพื้นหลังและตัวอักษร */
+        /* v8.1.1: ไฮไลท์แค่เส้นขอบสีฟ้า ไม่เปลี่ยนพื้นหลังและตัวอักษร */
         .bank-item-wrapper.active { border-color: var(--theme-primary); }
         
         .bank-item-wrapper label { display: flex; align-items: flex-start; font-weight: normal; gap: 0.75rem; cursor: pointer; font-size: 1rem; width: 100%; margin: 0; flex: 1; }
-        .bank-actions { display: flex; flex-direction: row; gap: 0.5rem; justify(center; }
         
-        /* ปุ่มจัดการแบบสีทึบ (Solid) */
+        /* แก้ไขบั๊กตรงนี้ครับ เปลี่ยนจาก justify(center; เป็น justify-content: center; */
+        .bank-actions { display: flex; flex-direction: row; gap: 0.5rem; justify-content: center; }
+        
+        /* ปุ่มจัดการแบบสีทึบ (Solid) เฟืองสีฟ้า ถังขยะสีแดง */
         .btn-bank-action { border: none; padding: 0.55rem; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; height: auto; }
         .btn-bank-action.edit { background-color: var(--theme-primary); color: white; }
         .btn-bank-action.edit:hover { background-color: var(--theme-primary-hover); }
@@ -119,7 +121,7 @@
         .fee-item-wrapper.special { --active-border-color: var(--theme-warning); }
         .fee-item-wrapper.deposit { --active-border-color: var(--theme-danger); }
 
-        /* v8.1: เมื่อถูกเปิดใช้งาน (Active) ไฮไลท์แค่เส้นขอบ ไม่เปลี่ยนพื้นหลังหรือตัวอักษร */
+        /* เมื่อถูกเปิดใช้งาน (Active) ไฮไลท์แค่เส้นขอบ ไม่เปลี่ยนพื้นหลังหรือตัวอักษร */
         .fee-item-wrapper.active { border-color: var(--active-border-color); }
 
         textarea { height: 350px; resize: vertical; line-height: 1.6; }
@@ -171,7 +173,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                ออเดอร์ <span class="version-badge">v8.1 (Border Highight)</span>
+                ออเดอร์ <span class="version-badge">v8.1.1 (Fixed)</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.55rem 1rem; font-size: 0.95rem;" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -348,7 +350,6 @@
         localStorage.setItem('appTheme', theme);
     }
 
-    // --- ระบบฟีเจอร์ค่าใช้จ่าย ---
     function toggleFee(id) {
         const checkbox = document.getElementById('check_' + id);
         const wrapper = document.getElementById('wrapper_' + id);
