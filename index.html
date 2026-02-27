@@ -10,17 +10,20 @@
         /* ========================================= */
         
         :root {
-            --theme-bg: #000000; /* ดำสนิท สำหรับพื้นหลังสุด */
-            --theme-surface: #1C1C1E; /* เทาเข้ม สำหรับกล่อง/การ์ด */
-            --theme-surface-alt: #2C2C2E; /* เทาอ่อนลง สำหรับปุ่ม/สินค้าข้างใน */
-            --theme-surface-hover: #3A3A3C; /* เทาสว่าง สำหรับ Hover/สวิตช์ปิด */
+            --theme-bg: #000000;
+            --theme-surface: #1C1C1E;
+            --theme-surface-alt: #2C2C2E;
+            --theme-surface-hover: #3A3A3C;
             --theme-primary: #0A84FF; --theme-primary-hover: #007AFF; --theme-primary-alpha: rgba(10, 132, 255, 0.15); 
             --theme-accent-text: #64D2FF; --theme-danger: #FF453A; --theme-danger-hover: #FF3B30; 
             --theme-success: #32D74B; --theme-warning: #FFD60A; --theme-text: #FFFFFF; --theme-text-muted: #8E8E93; --theme-border: #38383A;
         }
 
         [data-theme="github"] {
-            --theme-bg: #0d1117; --theme-surface: #161b22; --theme-surface-alt: #21262d; --theme-surface-hover: #30363d;
+            --theme-bg: #0d1117;
+            --theme-surface: #161b22;
+            --theme-surface-alt: #21262d;
+            --theme-surface-hover: #30363d;
             --theme-primary: #2f81f7; --theme-primary-hover: #388bfd; --theme-primary-alpha: rgba(47, 129, 247, 0.15); 
             --theme-accent-text: #79c0ff; --theme-danger: #f85149; --theme-danger-hover: #ff7b72; 
             --theme-success: #238636; --theme-warning: #d29922; --theme-text: #c9d1d9; --theme-text-muted: #8b949e; --theme-border: #30363d;
@@ -31,7 +34,6 @@
         body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--theme-bg); color: var(--theme-text); margin: 0; padding: 2rem 3rem; display: flex; flex-direction: column; align-items: center; transition: background-color 0.3s ease, color 0.3s ease; }
         .container { display: grid; grid-template-columns: 1.4fr 1fr; gap: 2rem; width: 100%; max-width: 1800px; }
         
-        /* v8.7: เอาพื้นหลังของ Panel ออก เพื่อให้กลืนไปกับพื้นหลังสีดำ แล้วให้กล่องต่างๆ ลอยขึ้นมาเป็นสีเทาเอง */
         .panel { background: transparent; padding: 1rem 0; border-radius: 0; border: none; box-shadow: none; transition: background-color 0.3s ease; }
         
         .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--theme-border); }
@@ -40,25 +42,50 @@
         .form-group { margin-bottom: 1.5rem; }
         label.section-label { display: block; margin-bottom: 0.8rem; font-weight: 600; font-size: 1.05rem; color: var(--theme-text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-left: 0.5rem; }
         
-        /* ช่องกรอกข้อความ เป็นสีเทาเข้ม */
         input[type="text"], input[type="number"], textarea { width: 100%; padding: 0.85rem 1rem; background-color: var(--theme-surface); color: var(--theme-text); border: none; border-radius: 12px; box-sizing: border-box; font-family: inherit; font-size: 16px; -webkit-appearance: none; appearance: none; transition: all 0.2s ease; }
         input::placeholder, textarea::placeholder { color: var(--theme-text-muted); }
         input:focus, textarea:focus { outline: none; box-shadow: 0 0 0 2px var(--theme-primary); }
         input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; }
         
-        /* กล่องคอลเลคชั่น เป็นสีเทาเข้ม */
+        /* ========================================= */
+        /* --- คอลเลคชั่น (ดีไซน์ Mac Finder) --- */
+        /* ========================================= */
         .collection-block { background-color: var(--theme-surface); border-radius: 16px; padding: 1.25rem; margin-bottom: 1.5rem; border: none; transition: all 0.3s ease; }
-        .collection-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem; }
-        .header-left { display: flex; align-items: center; gap: 0.75rem; flex: 1; }
-        .header-left input { background-color: var(--theme-surface-alt); } /* ช่องกรอกชื่อลอยขึ้นมาจากกล่องอีกที */
-        .header-actions { display: flex; gap: 0.4rem; align-items: center; }
-        .btn-toggle-col { background: transparent; color: var(--theme-primary); border: none; width: 36px; height: 36px; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: opacity 0.2s; }
-        .btn-toggle-col:hover { opacity: 0.7; }
+        
+        .collection-header { 
+            display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; 
+        }
+        
+        .collection-top-controls { 
+            display: flex; gap: 0.4rem; 
+        }
+        .collection-top-controls .btn-icon { 
+            width: 30px; height: 30px; border-radius: 8px; /* ปุ่มทรงเหลี่ยมมน */
+        }
+        
+        /* ช่องใส่ชื่อคอลเลคชั่นแบบมีปุ่มย่อขยายด้านใน */
+        .collection-name-box { 
+            position: relative; width: 100%; 
+        }
+        .collection-name-box input { 
+            background-color: var(--theme-surface-alt); 
+            padding-right: 3rem; /* เว้นที่ให้ปุ่มลูกศร */
+            font-size: 1.1rem; font-weight: 600;
+        }
+        .btn-toggle-col { 
+            position: absolute; right: 0.4rem; top: 50%; transform: translateY(-50%); 
+            width: 32px; height: 32px; background: transparent; color: var(--theme-text-muted); 
+            border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; 
+            border-radius: 8px; transition: all 0.2s; 
+        }
+        .btn-toggle-col:hover { background-color: var(--theme-surface-hover); color: var(--theme-text); }
+        
         .collection-block.collapsed .collection-header { margin-bottom: 0; }
         .collection-block.collapsed .collection-body { display: none; }
         
-        /* กล่องสินค้า เป็นสีเทาอ่อนลงมาอีกนิด เพื่อให้เห็นมิติ */
+        /* ========================================= */
+        
         .product-item { background: var(--theme-surface-alt); padding: 1rem; border-radius: 12px; margin-bottom: 0.75rem; border: none; }
         .product-header-row { display: grid; grid-template-columns: 1fr 85px 65px auto; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem; }
         .product-header-row input { padding: 0.6rem; font-size: 0.95rem; background-color: var(--theme-surface); }
@@ -72,8 +99,22 @@
         .pill { padding: 0.4rem 0.9rem; border-radius: 20px; background: var(--theme-surface); color: var(--theme-text); font-size: 0.9rem; font-weight: 500; cursor: pointer; user-select: none; transition: all 0.2s ease; border: none; }
         .pill:hover { background: var(--theme-surface-hover); }
         .pill.active { background: var(--theme-primary); color: white; }
-        .pill-action { appearance: none; -webkit-appearance: none; background: transparent; border: none; padding: 0; cursor: pointer; color: inherit; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 0.3rem; padding: 0.4rem 0.85rem; border-radius: 20px; color: var(--theme-primary); border: 1px solid transparent; transition: all 0.2s ease; }
-        .pill-action:hover { background: var(--theme-primary-alpha); }
+        
+        /* v8.8 ปุ่มเฟืองตั้งค่าตัวเลือก เปลี่ยนเป็นสีเทา+มีเส้นขอบ */
+        .pill-action { 
+            appearance: none; -webkit-appearance: none; 
+            background: var(--theme-surface); 
+            border: 1px solid var(--theme-border); 
+            color: var(--theme-text-muted); 
+            padding: 0.4rem 0.85rem; border-radius: 20px; 
+            cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 0.3rem; 
+            transition: all 0.2s ease; 
+        }
+        .pill-action:hover { 
+            background: var(--theme-surface-hover); 
+            color: var(--theme-text); 
+            border-color: var(--theme-text-muted);
+        }
 
         .btn { background-color: var(--theme-surface); color: var(--theme-text); border: none; padding: 1rem 1.5rem; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 1.05rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; }
         .btn:hover, .btn:active { background-color: var(--theme-surface-hover); }
@@ -83,7 +124,6 @@
         .btn-danger-outline { background-color: transparent; color: var(--theme-danger); border: 1px solid var(--theme-danger); }
         .btn-danger-outline:hover { background-color: var(--theme-danger-alpha); }
         
-        /* ปุ่มเลื่อน ก๊อป ลบ (สีเทา) */
         .btn-icon { padding: 0; width: 34px; height: 34px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: var(--theme-text); border: none; cursor: pointer; transition: all 0.2s; background-color: var(--theme-surface-hover); }
         .btn-icon:hover { opacity: 0.8; }
         .btn-clone { color: var(--theme-primary); }
@@ -92,40 +132,14 @@
         .btn-add-row:hover { opacity: 0.7; text-decoration: underline; }
 
         /* ========================================= */
-        /* --- ระบบ iOS INSET GROUPED LIST (แก้สีเทา-ดำ) --- */
+        /* --- ระบบ iOS INSET GROUPED LIST --- */
         /* ========================================= */
-        .ios-list-group {
-            background-color: var(--theme-surface); /* พื้นกล่องเป็นสีเทาเข้ม */
-            border-radius: 14px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            border: none; /* เอาขอบออก แบบ iOS แท้ */
-        }
-
-        .ios-list-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.85rem 1rem;
-            background-color: transparent;
-            transition: background-color 0.2s;
-            position: relative;
-        }
-        
-        .ios-list-item:not(:last-child)::after {
-            content: ''; position: absolute; bottom: 0; left: 3.5rem; right: 0;
-            height: 1px; background-color: var(--theme-border);
-        }
-
+        .ios-list-group { background-color: var(--theme-surface); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; border: none; }
+        .ios-list-item { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1rem; background-color: transparent; transition: background-color 0.2s; position: relative; }
+        .ios-list-item:not(:last-child)::after { content: ''; position: absolute; bottom: 0; left: 3.5rem; right: 0; height: 1px; background-color: var(--theme-border); }
         .ios-list-left { display: flex; align-items: center; gap: 1rem; flex: 1; min-width: 0; }
         .ios-list-right { display: flex; align-items: center; gap: 0.8rem; flex-shrink: 0; }
-
-        .ios-icon-box {
-            width: 32px; height: 32px; border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            color: white; flex-shrink: 0;
-        }
+        .ios-icon-box { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; }
         .bg-shipping { background-color: var(--theme-primary); } 
         .bg-special { background-color: var(--theme-warning); }
         .bg-deposit { background-color: var(--theme-danger); }
@@ -135,39 +149,20 @@
         .ios-item-title { font-size: 1.05rem; font-weight: 500; color: var(--theme-text); white-space: pre-wrap; }
         .ios-item-price { font-size: 0.9rem; color: var(--theme-text-muted); font-weight: normal; }
 
-        /* สวิตช์เปิด-ปิด สไตล์ iOS 26 (ทรงรี + เขียวเสมอ + สีเทาที่ถูกต้อง) */
         .ios-switch { position: relative; display: inline-block; width: 51px; height: 31px; flex-shrink: 0; cursor: pointer; }
         .ios-switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #39393D; /* สีเทาเข้มแบบสวิตช์ iOS ตอนปิด */
-            transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border-radius: 31px; border: none;
-        }
-        .slider:before {
-            position: absolute; content: ""; height: 27px; width: 27px; left: 2px; bottom: 2px;
-            background-color: white; transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 50%;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.15), 0 1px 1px rgba(0,0,0,0.16), 0 3px 1px rgba(0,0,0,0.1);
-        }
+        .slider { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #39393D; transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 31px; border: none; }
+        .slider:before { position: absolute; content: ""; height: 27px; width: 27px; left: 2px; bottom: 2px; background-color: white; transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 50%; box-shadow: 0 3px 8px rgba(0,0,0,0.15), 0 1px 1px rgba(0,0,0,0.16), 0 3px 1px rgba(0,0,0,0.1); }
         input:checked + .slider { background-color: var(--theme-success); }
         input:checked + .slider:before { transform: translateX(20px); }
 
         .ios-list-item.clickable:hover { background-color: var(--theme-surface-alt); cursor: pointer; }
         
-        /* ปุ่มแก้ไข/ลบ ใน List เปลี่ยนเป็นสีเทา */
-        .bank-action-btn {
-            background-color: var(--theme-surface-hover); 
-            color: var(--theme-text); 
-            border: none;
-            width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.2s; padding: 0; flex-shrink: 0;
-        }
+        .bank-action-btn { background-color: var(--theme-surface-hover); color: var(--theme-text); border: none; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; padding: 0; flex-shrink: 0; }
         .bank-action-btn:hover { background-color: var(--theme-primary-alpha); color: var(--theme-primary); }
         .bank-action-btn.delete:hover { background-color: var(--theme-danger-alpha); color: var(--theme-danger); }
         
         .check-indicator { width: 20px; display: flex; justify-content: center; }
-
-        /* ========================================= */
 
         textarea { height: 350px; resize: vertical; line-height: 1.6; }
         .action-buttons-group { display: flex; gap: 1rem; margin-top: 1rem; }
@@ -214,7 +209,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                ออเดอร์ <span class="version-badge">v8.7 (True iOS)</span>
+                ออเดอร์ <span class="version-badge">v8.8 (Mac UI)</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.55rem 1rem; font-size: 0.95rem; background: var(--theme-surface);" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -576,7 +571,7 @@
         saveData();
         
         const exportObj = {
-            version: "v8.7",
+            version: "v8.8",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || [],
             selectedBank: localStorage.getItem('bank') || '',
@@ -658,6 +653,7 @@
         if (block.nextElementSibling) { block.parentNode.insertBefore(block.nextElementSibling, block); saveData(); generateText(); }
     }
 
+    /* v8.8 สร้างกล่องคอลเลคชั่นใหม่ ให้เหมือน Mac Finder */
     function addCollectionBlock(colName = '', isCollapsed = false) {
         const container = document.getElementById('collectionsContainer');
         const block = document.createElement('div');
@@ -666,14 +662,16 @@
         
         block.innerHTML = `
             <div class="collection-header">
-                <div class="header-left">
-                    <button class="btn-toggle-col" onclick="toggleCollection(this)">${isCollapsed ? ICON_CHEV_RIGHT : ICON_CHEV_DOWN}</button>
-                    <input type="text" class="collectionName" placeholder="ชื่อคอลเลคชั่น (ไม่ระบุก็ได้)" value="${colName}" style="margin: 0;">
-                </div>
-                <div class="header-actions">
+                <div class="collection-top-controls">
+                    <button class="btn-icon btn-remove" onclick="removeCollectionBlock(this)" title="ลบคอลเลคชั่น">${ICON_TRASH}</button>
                     <button class="btn-icon btn-move" onclick="moveCollectionUp(this)" title="เลื่อนขึ้น">${ICON_UP}</button>
                     <button class="btn-icon btn-move" onclick="moveCollectionDown(this)" title="เลื่อนลง">${ICON_DOWN}</button>
-                    <button class="btn-icon btn-remove" onclick="removeCollectionBlock(this)" title="ลบคอลเลคชั่น">${ICON_TRASH}</button>
+                </div>
+                <div class="collection-name-box">
+                    <input type="text" class="collectionName" placeholder="ชื่อคอลเลคชั่น (ไม่ระบุก็ได้)" value="${colName}">
+                    <button class="btn-toggle-col" onclick="toggleCollection(this)" title="ซ่อน/ขยาย">
+                        ${isCollapsed ? ICON_CHEV_RIGHT : ICON_CHEV_DOWN}
+                    </button>
                 </div>
             </div>
             <div class="collection-body">
