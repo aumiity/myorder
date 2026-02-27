@@ -5,20 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>myorder</title>
     <style>
+        /* --- iOS Dark Theme Color Palette --- */
         :root {
-            --primary: #6366F1; 
-            --primary-hover: #818CF8;
-            --bg: #111827; 
-            --surface: #1F2937; 
-            --surface-alt: #374151; 
-            --text: #F9FAFB; 
-            --text-muted: #9CA3AF; 
-            --border: #4B5563; 
+            --ios-bg: #000000;
+            --ios-surface: #1C1C1E;
+            --ios-surface-alt: #2C2C2E;
+            --ios-surface-hover: #3A3A3C;
+            --ios-primary: #0A84FF;
+            --ios-primary-hover: #007AFF;
+            --ios-danger: #FF453A;
+            --ios-danger-hover: #FF3B30;
+            --ios-success: #32D74B;
+            --ios-warning: #FF9F0A;
+            --ios-text: #FFFFFF;
+            --ios-text-muted: #8E8E93;
+            --ios-border: #38383A;
+            
+            --focus-ring: rgba(10, 132, 255, 0.4);
         }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--ios-bg);
+            color: var(--ios-text);
             margin: 0;
             padding: 2rem 3rem; 
             display: flex;
@@ -27,69 +36,75 @@
         .container {
             display: grid;
             grid-template-columns: 1.4fr 1fr;
-            gap: 2.5rem; 
-            width: 98%; 
+            gap: 2rem; 
+            width: 100%; 
             max-width: 1800px; 
         }
         .panel {
-            background: var(--surface);
+            background: var(--ios-surface);
             padding: 2rem; 
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); 
+            border-radius: 20px; /* ขอบโค้งมนแบบ iOS */
         }
+        
         .main-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--ios-border);
         }
-        h2 { margin: 0; color: var(--primary); font-size: 1.8rem; display: flex; align-items: baseline; gap: 0.5rem; }
-        .version-badge { font-size: 0.9rem; color: var(--text-muted); font-weight: normal; }
+        h2 { 
+            margin: 0; 
+            color: var(--ios-text); 
+            font-size: 1.6rem; 
+            font-weight: 700; 
+            display: flex; 
+            align-items: center; 
+            gap: 0.75rem; 
+        }
+        .version-badge { font-size: 0.85rem; color: var(--ios-text-muted); font-weight: normal; }
         
         .form-group { margin-bottom: 1.5rem; }
         label {
             display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            font-size: 1.05rem; 
+            margin-bottom: 0.6rem;
+            font-weight: 500;
+            font-size: 1rem; 
+            color: var(--ios-text-muted);
         }
         
         input[type="text"], input[type="number"], textarea {
             width: 100%;
-            padding: 0.75rem 1rem;
-            background-color: var(--surface-alt);
-            color: var(--text);
-            border: 1px solid var(--border);
-            border-radius: 8px;
+            padding: 0.85rem 1rem;
+            background-color: var(--ios-surface-alt);
+            color: var(--ios-text);
+            border: 2px solid transparent;
+            border-radius: 12px;
             box-sizing: border-box;
             font-family: inherit;
             font-size: 16px; 
             -webkit-appearance: none;
             appearance: none;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
         }
-        input::placeholder, textarea::placeholder { color: #9CA3AF; }
+        input::placeholder, textarea::placeholder { color: var(--ios-text-muted); }
         input:focus, textarea:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
-            background-color: #4B5563; 
+            border-color: var(--ios-primary);
+            background-color: var(--ios-surface-hover); 
         }
 
         input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
+        input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; }
         
         .collection-block {
-            background-color: var(--bg);
-            border: 2px dashed var(--border);
-            border-radius: 12px;
+            background-color: var(--ios-bg);
+            border-radius: 16px;
             padding: 1.25rem;
             margin-bottom: 1.5rem;
-            transition: all 0.3s ease;
+            border: 1px solid var(--ios-border);
         }
         
         .collection-header {
@@ -98,88 +113,80 @@
             align-items: center;
             gap: 1rem;
             margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px dashed var(--border);
         }
         .header-left { display: flex; align-items: center; gap: 0.75rem; flex: 1; }
-        .header-actions { display: flex; gap: 0.5rem; align-items: center; }
+        .header-actions { display: flex; gap: 0.4rem; align-items: center; }
+        
         .btn-toggle-col {
-            background: var(--surface-alt);
-            color: var(--text);
+            background: transparent;
+            color: var(--ios-primary);
             border: none;
-            width: 44px; height: 44px;
-            border-radius: 8px;
-            font-size: 1.2rem;
+            width: 36px; height: 36px;
+            font-size: 1rem;
             cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0;
-            transition: all 0.2s ease;
+            transition: opacity 0.2s;
         }
-        .btn-toggle-col:hover { background: var(--border); }
+        .btn-toggle-col:hover { opacity: 0.7; }
         
-        .collection-block.collapsed .collection-header { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .collection-block.collapsed .collection-header { margin-bottom: 0; }
         .collection-block.collapsed .collection-body { display: none; }
         
         .product-item {
-            background: var(--surface);
-            padding: 0.85rem;
-            border-radius: 10px;
-            border: 1px solid var(--border);
+            background: var(--ios-surface);
+            padding: 1rem;
+            border-radius: 12px;
             margin-bottom: 0.75rem;
         }
         
         .product-header-row {
             display: grid;
-            grid-template-columns: 1fr 80px 60px auto; 
+            grid-template-columns: 1fr 85px 65px auto; 
             gap: 0.5rem; 
             align-items: center;
             margin-bottom: 0.75rem;
         }
-        .product-header-row input { padding: 0.5rem 0.6rem; font-size: 0.95rem; }
-        .productName { width: 100%; font-weight: bold; }
+        .product-header-row input { padding: 0.6rem; font-size: 0.95rem; }
+        .productName { width: 100%; font-weight: 500; }
         .productPrice { width: 100%; text-align: center; }
         .productQty { width: 100%; text-align: center; }
         .product-actions { display: flex; gap: 0.3rem; }
 
+        /* Highlight ราคาและจำนวนให้เด่นขึ้นในสไตล์ iOS */
         .product-header-row .productPrice, 
         .product-header-row .productQty {
-            background-color: rgba(99, 102, 241, 0.12);
-            border: 1px solid rgba(99, 102, 241, 0.4);
-            color: #E0E7FF; 
+            background-color: rgba(10, 132, 255, 0.1);
+            color: #64D2FF; 
             font-weight: 600;
         }
         .product-header-row .productPrice:focus, 
         .product-header-row .productQty:focus {
-            background-color: rgba(99, 102, 241, 0.25);
-            border-color: var(--primary);
-        }
-        .product-header-row .productPrice::placeholder, 
-        .product-header-row .productQty::placeholder {
-            color: rgba(165, 180, 252, 0.6);
-            font-weight: normal;
+            background-color: rgba(10, 132, 255, 0.2);
+            border-color: var(--ios-primary);
         }
         
         .option-row {
             display: flex;
             align-items: center;
             margin-bottom: 0.5rem;
-            padding-left: 0.5rem;
-            border-left: 2px solid var(--border);
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--ios-border);
         }
         
         .size-pills {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.4rem;
+            gap: 0.5rem;
             align-items: center;
+            width: 100%;
         }
         
         .pill {
-            padding: 0.35rem 0.75rem;
-            border: 1px solid var(--border);
+            padding: 0.4rem 0.9rem;
             border-radius: 20px;
-            background: var(--surface-alt);
-            color: var(--text-muted);
+            background: var(--ios-surface-alt);
+            color: var(--ios-text);
             font-size: 0.9rem;
             font-weight: 500;
             cursor: pointer;
@@ -187,95 +194,87 @@
             transition: all 0.2s ease;
             white-space: nowrap;
         }
-        .pill:hover { border-color: var(--text); color: var(--text); }
+        .pill:hover { background: var(--ios-surface-hover); }
         .pill.active {
-            background: var(--primary);
+            background: var(--ios-primary);
             color: white;
-            border-color: var(--primary);
-            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
         }
-        .pill-custom {
-            border-style: dashed;
+        
+        .pill-action {
             background: transparent;
-            color: var(--text-muted);
-            border-color: var(--text-muted);
+            color: var(--ios-primary);
+            display: flex; align-items: center; gap: 0.3rem;
         }
-        .pill-custom:hover { background: rgba(255, 255, 255, 0.05); color: var(--text); border-color: var(--text); }
-        .pill-danger { border-color: #F87171; color: #F87171; }
-        .pill-danger:hover { background: rgba(248, 113, 113, 0.1); color: #FCA5A5; border-color: #FCA5A5; }
+        .pill-action:hover { background: rgba(10, 132, 255, 0.1); }
+        
+        .pill-danger { color: var(--ios-danger); }
+        .pill-danger:hover { background: rgba(255, 69, 58, 0.1); }
 
+        /* ปุ่มกดแบบ iOS Filled Button */
         .btn {
-            background-color: var(--primary);
-            color: white;
+            background-color: var(--ios-surface-alt);
+            color: var(--ios-primary);
             border: none;
-            padding: 0.85rem 1.5rem;
-            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 1.1rem;
-            transition: background-color 0.2s;
+            font-size: 1.05rem;
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+            transition: all 0.2s;
         }
-        .btn:hover, .btn:active { background-color: var(--primary-hover); }
+        .btn:hover, .btn:active { background-color: var(--ios-surface-hover); }
         
+        .btn-primary { background-color: var(--ios-primary); color: white; }
+        .btn-primary:hover, .btn-primary:active { background-color: var(--ios-primary-hover); }
+        
+        .btn-success { background-color: var(--ios-success); color: white; }
+        .btn-danger-outline { background-color: transparent; color: var(--ios-danger); border: 1px solid var(--ios-border); }
+        .btn-danger-outline:hover { border-color: var(--ios-danger); background-color: rgba(255, 69, 58, 0.1); }
+        
+        /* ปุ่มไอคอนสี่เหลี่ยมเล็กๆ */
         .btn-icon {
             padding: 0;
-            width: 32px; height: 32px;
-            flex-shrink: 0; font-size: 1rem;
+            width: 34px; height: 34px;
+            flex-shrink: 0; 
             display: flex; align-items: center; justify-content: center;
-            border-radius: 6px; color: white; 
+            border-radius: 8px; color: white; border: none; cursor: pointer;
+            transition: opacity 0.2s;
         }
-        .btn-move { background-color: #6B7280; }
-        .btn-move:hover, .btn-move:active { background-color: #4B5563; }
-        .btn-clone { background-color: #3B82F6; }
-        .btn-clone:hover, .btn-clone:active { background-color: #2563EB; }
-        .btn-remove { background-color: #EF4444; }
-        .btn-remove:hover, .btn-remove:active { background-color: #DC2626; }
-        
-        .btn-remove-col {
-            background-color: transparent;
-            color: #F87171; border: 1px solid #F87171;
-            width: 38px; height: 38px; 
-            font-size: 1.1rem;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 8px; cursor: pointer; padding: 0;
-        }
-        .btn-remove-col:hover { background: rgba(248, 113, 113, 0.1); }
+        .btn-icon:hover { opacity: 0.8; }
+        .btn-move { background-color: var(--ios-surface-hover); color: var(--ios-text); }
+        .btn-clone { background-color: var(--ios-primary); }
+        .btn-remove { background-color: var(--ios-danger); }
 
-        .btn-clear-all-sizes {
-            background-color: var(--surface-alt);
-            color: var(--text);
-            padding: 0.5rem 1rem; border-radius: 8px;
-            font-size: 0.95rem; font-weight: 600;
-            border: 1px solid var(--border);
-            cursor: pointer; transition: all 0.2s;
-        }
-        .btn-clear-all-sizes:hover { background-color: var(--border); }
-        
         .btn-add-row {
-            background: transparent; color: var(--primary);
-            border: none; cursor: pointer; font-size: 0.9rem; font-weight: 600;
-            padding: 0.5rem; margin-top: 0.25rem; display: inline-block;
+            background: transparent; color: var(--ios-primary);
+            border: none; cursor: pointer; font-size: 0.9rem; font-weight: 500;
+            padding: 0.5rem 0; margin-top: 0.25rem; 
+            display: flex; align-items: center; gap: 0.3rem;
         }
-        .btn-add-row:hover { text-decoration: underline; }
+        .btn-add-row:hover { opacity: 0.7; }
 
-        .radio-group { display: flex; flex-direction: column; gap: 0.75rem; }
+        .radio-group { display: flex; flex-direction: column; gap: 0.6rem; }
         .radio-group label {
             display: flex; align-items: flex-start; font-weight: normal; gap: 0.75rem;
-            cursor: pointer; padding: 0.85rem; border: 1px solid var(--border);
-            border-radius: 8px; background: var(--surface-alt); font-size: 1rem;
-            transition: border-color 0.2s;
+            cursor: pointer; padding: 1rem; border: 1px solid var(--ios-border);
+            border-radius: 12px; background: var(--ios-bg); font-size: 1rem;
+            transition: all 0.2s;
         }
-        .radio-group label:hover { border-color: var(--primary); }
-        input[type="radio"] { width: 20px; height: 20px; margin-top: 2px; cursor: pointer; accent-color: var(--primary); }
-        textarea { height: 350px; resize: vertical; background-color: var(--bg); line-height: 1.6; }
+        .radio-group label:hover { border-color: var(--ios-primary); }
+        input[type="radio"] { 
+            width: 22px; height: 22px; margin-top: 2px; cursor: pointer; 
+            accent-color: var(--ios-primary); 
+        }
+        
+        textarea { height: 350px; resize: vertical; line-height: 1.6; }
         .action-buttons-group { display: flex; gap: 1rem; margin-top: 1rem; }
 
         @media (max-width: 800px) {
             body { padding: 1rem 0.5rem; } 
-            .container { grid-template-columns: 1fr; gap: 1.5rem; width: 100%; }
-            .panel { padding: 1.25rem; }
+            .container { grid-template-columns: 1fr; gap: 1.5rem; }
+            .panel { padding: 1.25rem; border-radius: 16px; }
             .main-header { flex-direction: column; align-items: stretch; gap: 1rem; }
-            .btn-clear-all-sizes { width: 100%; padding: 0.75rem; }
             .collection-header { flex-wrap: wrap; }
             .header-left { width: 100%; flex: none; }
             .header-actions { width: 100%; justify-content: flex-end; }
@@ -300,18 +299,25 @@
 <div class="container">
     <div class="panel">
         <div class="main-header">
-            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v5.5 (Cross Icon)</span></h2>
-            <button class="btn-clear-all-sizes" onclick="clearAllPills()">↺ ล้างตัวเลือกทั้งหมด</button>
+            <h2>
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                ออเดอร์ <span class="version-badge">v6.0</span>
+            </h2>
+            <button class="btn" style="padding: 0.6rem 1rem; font-size: 0.95rem;" onclick="clearAllPills()">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+                ล้างตัวเลือก
+            </button>
         </div>
         
         <div id="collectionsContainer"></div>
 
-        <button class="btn" style="width: 100%; background-color: #F59E0B; color: white; margin-bottom: 2rem;" onclick="addCollectionBlock()">+ เพิ่มคอลเลคชั่นใหม่</button>
+        <button class="btn btn-primary" style="width: 100%; margin-bottom: 2rem;" onclick="addCollectionBlock()">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            เพิ่มคอลเลคชั่น
+        </button>
         
-        <hr style="border: 0; border-top: 1px solid var(--border); margin-bottom: 2rem;">
-
         <div class="form-group">
-            <label>ค่าส่ง (บาท)</label>
+            <label>ค่าจัดส่ง (บาท)</label>
             <input type="number" id="shippingCost" placeholder="เช่น 50" value="0">
         </div>
 
@@ -325,30 +331,55 @@
             </div>
         </div>
 
-        <button class="btn" style="width: 100%; background-color: #EF4444; margin-top: 1.5rem;" onclick="clearData()">🗑️ ล้างข้อมูลทั้งหมด (ลบรายการสินค้าทิ้ง)</button>
+        <button class="btn btn-danger-outline" style="width: 100%; margin-top: 1.5rem;" onclick="clearData()">
+            ล้างข้อมูลสินค้าทั้งหมด
+        </button>
         
         <div class="action-buttons-group">
-            <button class="btn" style="flex: 1; background-color: #8B5CF6;" onclick="exportData()">📤 ส่งออกข้อมูล</button>
-            <button class="btn" style="flex: 1; background-color: #14B8A6;" onclick="importData()">📥 นำเข้าข้อมูล</button>
+            <button class="btn" style="flex: 1;" onclick="exportData()">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                ส่งออก
+            </button>
+            <button class="btn" style="flex: 1;" onclick="importData()">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                นำเข้า
+            </button>
         </div>
     </div>
 
     <div class="panel">
-        <h2 style="margin-bottom: 1.5rem;">📋 ข้อความสรุปยอดโอน</h2>
+        <h2 style="margin-bottom: 1.5rem; font-size: 1.3rem;">สรุปยอดโอน</h2>
         <div class="form-group">
             <textarea id="outputText" readonly placeholder="ข้อความสรุปยอดจะแสดงตรงนี้..."></textarea>
         </div>
-        <button class="btn" style="width: 100%; background-color: #3B82F6; margin-bottom: 3rem;" onclick="copyText('outputText')">📄 คัดลอกสรุปยอด</button>
+        <button class="btn btn-primary" style="width: 100%; margin-bottom: 3rem;" onclick="copyText('outputText')">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            คัดลอกสรุปยอด
+        </button>
 
-        <h2 style="margin-bottom: 1.5rem;">📦 ข้อความใบปะหน้า</h2>
+        <h2 style="margin-bottom: 1.5rem; font-size: 1.3rem;">ใบปะหน้า</h2>
         <div class="form-group">
             <textarea id="outputLabelText" readonly placeholder="ข้อความสำหรับใบปะหน้าจะแสดงตรงนี้..."></textarea>
         </div>
-        <button class="btn" style="width: 100%; background-color: #10B981;" onclick="copyText('outputLabelText')">📄 คัดลอกใบปะหน้า</button>
+        <button class="btn btn-success" style="width: 100%;" onclick="copyText('outputLabelText')">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            คัดลอกใบปะหน้า
+        </button>
     </div>
 </div>
 
 <script>
+    // --- ไอคอน SVG สไตล์ SF Symbols ---
+    const ICON_CHEV_RIGHT = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
+    const ICON_CHEV_DOWN = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+    const ICON_UP = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>`;
+    const ICON_DOWN = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+    const ICON_TRASH = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
+    const ICON_COPY = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+    const ICON_MINUS = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
+    const ICON_GEAR = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`;
+    const ICON_PLUS = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
+
     window.onload = function() {
         loadData();
         const updateData = () => { saveData(); generateText(); };
@@ -380,9 +411,7 @@
                     rowEl.querySelectorAll('.pill[data-size]').forEach(pill => {
                         const size = pill.getAttribute('data-size');
                         availableSizes.push(size);
-                        if (pill.classList.contains('active')) {
-                            selectedSizes.push(size);
-                        }
+                        if (pill.classList.contains('active')) selectedSizes.push(size);
                     });
                     optionRows.push({ availableSizes, selectedSizes });
                 });
@@ -397,8 +426,7 @@
     function loadData() {
         if (localStorage.getItem('shippingCost')) document.getElementById('shippingCost').value = localStorage.getItem('shippingCost');
         if (localStorage.getItem('bank')) {
-            const bankVal = localStorage.getItem('bank');
-            const bankInput = document.querySelector(`input[name="bank"][value="${bankVal}"]`);
+            const bankInput = document.querySelector(`input[name="bank"][value="${localStorage.getItem('bank')}"]`);
             if(bankInput) bankInput.checked = true;
         }
 
@@ -412,65 +440,50 @@
                 const block = addCollectionBlock(col.colName, col.isCollapsed);
                 if(col.products.length > 0) {
                     col.products.forEach(p => {
-                        const productList = block.querySelector('.productList');
-                        productList.appendChild(createProductItemElement(p.name, p.price, p.qty, p.optionRows));
+                        block.querySelector('.productList').appendChild(createProductItemElement(p.name, p.price, p.qty, p.optionRows));
                     });
                 } else {
-                    const productList = block.querySelector('.productList');
-                    productList.appendChild(createProductItemElement()); 
+                    block.querySelector('.productList').appendChild(createProductItemElement()); 
                 }
             });
         } else {
             const block = addCollectionBlock('');
-            const productList = block.querySelector('.productList');
-            productList.appendChild(createProductItemElement());
+            block.querySelector('.productList').appendChild(createProductItemElement());
         }
     }
 
     function exportData() {
         saveData();
         const data = localStorage.getItem('orderDataV3');
-        if (!data || data === '[]') { alert('ยังไม่มีข้อมูลให้ส่งออกครับ'); return; }
+        if (!data || data === '[]') { alert('ไม่มีข้อมูล'); return; }
         const encodedData = btoa(encodeURIComponent(data));
-        navigator.clipboard.writeText(encodedData).then(() => {
-            alert('📋 คัดลอก "โค้ดข้อมูลร้าน" เรียบร้อยแล้ว!');
-        }).catch(err => {
-            prompt('คัดลอกโค้ดด้านล่างนี้ ไปวางในเครื่องอื่น:', encodedData);
-        });
+        navigator.clipboard.writeText(encodedData).then(() => alert('📋 คัดลอกโค้ดสำเร็จ!')).catch(() => prompt('คัดลอกโค้ดนี้:', encodedData));
     }
 
     function importData() {
-        const code = prompt('📥 วาง "โค้ดข้อมูลร้าน" ที่คัดลอกมา ลงในช่องนี้:');
+        const code = prompt('📥 วางโค้ดที่คัดลอกมา:');
         if (!code) return;
         try {
-            const decodedData = decodeURIComponent(atob(code));
-            JSON.parse(decodedData); 
-            if(confirm('🚨 การนำเข้า จะ "เขียนทับ" รายการสินค้าที่มีอยู่บนหน้าจอตอนนี้ทั้งหมด\nคุณแน่ใจหรือไม่?')) {
-                localStorage.setItem('orderDataV3', decodedData);
-                loadData();
-                generateText();
-                alert('✅ นำเข้าข้อมูลเรียบร้อย!');
-            }
-        } catch(e) { alert('❌ โค้ดไม่ถูกต้อง กรุณาก๊อปปี้มาใหม่'); }
+            localStorage.setItem('orderDataV3', decodeURIComponent(atob(code)));
+            loadData(); generateText(); alert('✅ นำเข้าสำเร็จ!');
+        } catch(e) { alert('❌ โค้ดไม่ถูกต้อง'); }
     }
 
     function toggleCollection(btn) {
         const block = btn.closest('.collection-block');
         block.classList.toggle('collapsed');
-        btn.innerHTML = block.classList.contains('collapsed') ? '▶' : '▼';
+        btn.innerHTML = block.classList.contains('collapsed') ? ICON_CHEV_RIGHT : ICON_CHEV_DOWN;
         saveData();
     }
 
     function moveCollectionUp(btn) {
         const block = btn.closest('.collection-block');
-        const prev = block.previousElementSibling;
-        if (prev) { block.parentNode.insertBefore(block, prev); saveData(); generateText(); }
+        if (block.previousElementSibling) { block.parentNode.insertBefore(block, block.previousElementSibling); saveData(); generateText(); }
     }
 
     function moveCollectionDown(btn) {
         const block = btn.closest('.collection-block');
-        const next = block.nextElementSibling;
-        if (next) { block.parentNode.insertBefore(next, block); saveData(); generateText(); }
+        if (block.nextElementSibling) { block.parentNode.insertBefore(block.nextElementSibling, block); saveData(); generateText(); }
     }
 
     function addCollectionBlock(colName = '', isCollapsed = false) {
@@ -479,38 +492,36 @@
         block.className = 'collection-block';
         if(isCollapsed) block.classList.add('collapsed');
         
-        const icon = isCollapsed ? '▶' : '▼';
-        
-        // เปลี่ยน 🗑️ เป็น ❌
         block.innerHTML = `
             <div class="collection-header">
                 <div class="header-left">
-                    <button class="btn-toggle-col" onclick="toggleCollection(this)" title="คลิกเพื่อยุบ/ขยาย">${icon}</button>
-                    <input type="text" class="collectionName" placeholder="ชื่อคอลเลคชั่น เช่น Summer 2026" value="${colName}" style="margin: 0; padding: 0.6rem 1rem;">
+                    <button class="btn-toggle-col" onclick="toggleCollection(this)">${isCollapsed ? ICON_CHEV_RIGHT : ICON_CHEV_DOWN}</button>
+                    <input type="text" class="collectionName" placeholder="ชื่อคอลเลคชั่น (ไม่ระบุก็ได้)" value="${colName}" style="margin: 0;">
                 </div>
                 <div class="header-actions">
-                    <button class="btn btn-icon btn-move" onclick="moveCollectionUp(this)" title="เลื่อนคอลเลคชั่นขึ้น">▲</button>
-                    <button class="btn btn-icon btn-move" onclick="moveCollectionDown(this)" title="เลื่อนคอลเลคชั่นลง">▼</button>
-                    <button class="btn-remove-col" onclick="removeCollectionBlock(this)" title="ลบชุดนี้ทิ้ง">❌</button>
+                    <button class="btn-icon btn-move" onclick="moveCollectionUp(this)">${ICON_UP}</button>
+                    <button class="btn-icon btn-move" onclick="moveCollectionDown(this)">${ICON_DOWN}</button>
+                    <button class="btn-icon btn-remove" onclick="removeCollectionBlock(this)">${ICON_TRASH}</button>
                 </div>
             </div>
             <div class="collection-body">
                 <div class="productList"></div>
-                <button class="btn" style="margin-top: 0.5rem; width: 100%; background-color: #10B981; padding: 0.6rem; font-size: 1rem;" onclick="handleAddProductClick(this)">+ เพิ่มสินค้าบรรทัดใหม่</button>
+                <button class="btn-add-row" style="margin-top: 1rem; width: 100%; justify-content: center; background: var(--ios-surface-alt);" onclick="handleAddProductClick(this)">
+                    ${ICON_PLUS} เพิ่มสินค้า
+                </button>
             </div>
         `;
         container.appendChild(block);
         
         if(colName === '' && arguments.length === 0) {
-            const productList = block.querySelector('.productList');
-            productList.appendChild(createProductItemElement());
+            block.querySelector('.productList').appendChild(createProductItemElement());
             saveData(); generateText();
         }
         return block;
     }
 
     function removeCollectionBlock(btn) {
-        if(confirm('ต้องการลบคอลเลคชั่นนี้ทิ้งใช่ไหม?')) { btn.closest('.collection-block').remove(); saveData(); generateText(); }
+        if(confirm('ลบคอลเลคชั่นนี้ทิ้ง?')) { btn.closest('.collection-block').remove(); saveData(); generateText(); }
     }
 
     function clearAllPills() {
@@ -520,272 +531,154 @@
     }
 
     function handleAddProductClick(btn) {
-        const block = btn.closest('.collection-block');
-        const productList = block.querySelector('.productList');
-        productList.appendChild(createProductItemElement());
+        btn.previousElementSibling.appendChild(createProductItemElement());
         saveData(); generateText();
     }
 
     function moveProductUp(btn) {
         const item = btn.closest('.product-item');
-        const prev = item.previousElementSibling;
-        if (prev) { item.parentNode.insertBefore(item, prev); saveData(); generateText(); }
+        if (item.previousElementSibling) { item.parentNode.insertBefore(item, item.previousElementSibling); saveData(); generateText(); }
     }
 
     function moveProductDown(btn) {
         const item = btn.closest('.product-item');
-        const next = item.nextElementSibling;
-        if (next) { item.parentNode.insertBefore(next, item); saveData(); generateText(); }
+        if (item.nextElementSibling) { item.parentNode.insertBefore(item.nextElementSibling, item); saveData(); generateText(); }
     }
 
     function createOptionRowHtml(availableSizes, selectedSizes, isFirstRow) {
-        let pillsHtml = '';
-        availableSizes.forEach(s => {
-            const isActive = selectedSizes.includes(s) ? 'active' : '';
-            pillsHtml += `<div class="pill ${isActive}" onclick="togglePill(this)" data-size="${s}">${s}</div>`;
-        });
-        
-        let actionsHtml = `<div class="pill pill-custom" style="padding: 0.35rem 0.6rem;" onclick="editPillsList(this)" title="จัดการปุ่มตัวเลือก">⚙️</div>`;
-        if (!isFirstRow) {
-            actionsHtml += `<div class="pill pill-custom pill-danger" style="padding: 0.35rem 0.6rem;" onclick="removeOptionRow(this)" title="ลบตัวเลือกแถวนี้">❌</div>`;
-        }
+        let pillsHtml = availableSizes.map(s => `<div class="pill ${selectedSizes.includes(s) ? 'active' : ''}" onclick="togglePill(this)" data-size="${s}">${s}</div>`).join('');
+        let actionsHtml = `<div class="pill pill-custom pill-action" onclick="editPillsList(this)">${ICON_GEAR}</div>`;
+        if (!isFirstRow) actionsHtml += `<div class="pill pill-custom pill-action pill-danger" onclick="removeOptionRow(this)">${ICON_MINUS}</div>`;
 
-        return `
-            <div class="option-row">
-                <div class="size-pills">
-                    ${pillsHtml}
-                    ${actionsHtml}
-                </div>
-            </div>
-        `;
+        return `<div class="option-row"><div class="size-pills">${pillsHtml}${actionsHtml}</div></div>`;
     }
 
     function createProductItemElement(name = '', price = '', qty = 1, optionRowsArray = null) {
         const newItem = document.createElement('div');
         newItem.className = 'product-item';
         
-        const defaultRows = [ { availableSizes: ['S', 'M', 'L', 'XL', '2XL'], selectedSizes: [] } ];
-        const rows = (optionRowsArray && optionRowsArray.length > 0) ? optionRowsArray : defaultRows;
-
-        let rowsHtml = '';
-        rows.forEach((r, idx) => {
-            rowsHtml += createOptionRowHtml(r.availableSizes, r.selectedSizes, idx === 0);
-        });
+        const rows = (optionRowsArray && optionRowsArray.length > 0) ? optionRowsArray : [ { availableSizes: ['S', 'M', 'L', 'XL', '2XL'], selectedSizes: [] } ];
+        let rowsHtml = rows.map((r, idx) => createOptionRowHtml(r.availableSizes, r.selectedSizes, idx === 0)).join('');
 
         newItem.innerHTML = `
             <div class="product-header-row">
                 <input type="text" class="productName" placeholder="ชื่อสินค้า" value="${name}">
                 <input type="number" class="productPrice" placeholder="ราคา" value="${price}">
-                <input type="number" class="productQty" placeholder="จำนวน" title="จำนวนชิ้น (ต่อ 1 การเลือก)" value="${qty || 1}" min="1">
+                <input type="number" class="productQty" placeholder="ชิ้น" value="${qty || 1}" min="1">
                 <div class="product-actions">
-                    <button class="btn btn-icon btn-move" onclick="moveProductUp(this)">▲</button>
-                    <button class="btn btn-icon btn-move" onclick="moveProductDown(this)">▼</button>
-                    <button class="btn btn-icon btn-clone" title="คัดลอกสินค้านี้" onclick="cloneProduct(this)">📄</button>
-                    <button class="btn btn-icon btn-remove" title="ลบรายการ" onclick="removeProduct(this)">-</button>
+                    <button class="btn-icon btn-move" onclick="moveProductUp(this)">${ICON_UP}</button>
+                    <button class="btn-icon btn-move" onclick="moveProductDown(this)">${ICON_DOWN}</button>
+                    <button class="btn-icon btn-clone" onclick="cloneProduct(this)">${ICON_COPY}</button>
+                    <button class="btn-icon btn-remove" onclick="removeProduct(this)">${ICON_MINUS}</button>
                 </div>
             </div>
-            <div class="product-options-container">
-                ${rowsHtml}
-            </div>
-            <button class="btn-add-row" onclick="addOptionRow(this)">+ เพิ่มตัวเลือกบรรทัดถัดไป</button>
+            <div class="product-options-container">${rowsHtml}</div>
+            <button class="btn-add-row" onclick="addOptionRow(this)">${ICON_PLUS} เพิ่มตัวเลือกบรรทัดถัดไป</button>
         `;
         return newItem;
     }
 
     function addOptionRow(btn) {
-        const newSizesStr = prompt('📦 สร้างตัวเลือกใหม่\nกรอกตัวเลือกที่ต้องการ (เช่น ส้ม,ม่วง,กรม หรือ หญิง,ชาย) คั่นด้วยลูกน้ำ:');
+        const newSizesStr = prompt('ตั้งค่าตัวเลือก (คั่นด้วยลูกน้ำ ,):');
         if (newSizesStr && newSizesStr.trim() !== '') {
             let newSizes = newSizesStr.split(',').map(s => s.trim()).filter(s => s !== '');
             if (newSizes.length > 0) {
-                const container = btn.previousElementSibling; 
-                const newRowHtml = createOptionRowHtml(newSizes, [], false);
-                container.insertAdjacentHTML('beforeend', newRowHtml);
+                btn.previousElementSibling.insertAdjacentHTML('beforeend', createOptionRowHtml(newSizes, [], false));
                 saveData(); generateText();
             }
         }
     }
 
     function removeOptionRow(btn) {
-        if(confirm('แน่ใจหรือไม่ที่จะลบตัวเลือกแถวนี้ทิ้ง?')) {
-            btn.closest('.option-row').remove();
-            saveData(); generateText();
-        }
+        btn.closest('.option-row').remove(); saveData(); generateText();
     }
 
     function cloneProduct(btn) {
-        const currentItem = btn.closest('.product-item');
-        const name = currentItem.querySelector('.productName').value;
-        const price = currentItem.querySelector('.productPrice').value;
-        
-        const optionRows = [];
-        currentItem.querySelectorAll('.option-row').forEach(rowEl => {
-            const availableSizes = [];
-            rowEl.querySelectorAll('.pill[data-size]').forEach(p => availableSizes.push(p.getAttribute('data-size')));
-            optionRows.push({ availableSizes: availableSizes, selectedSizes: [] });
-        });
-
-        const newItem = createProductItemElement(name, price, 1, optionRows);
-        currentItem.parentNode.insertBefore(newItem, currentItem.nextSibling);
+        const item = btn.closest('.product-item');
+        const rows = Array.from(item.querySelectorAll('.option-row')).map(rowEl => ({
+            availableSizes: Array.from(rowEl.querySelectorAll('.pill[data-size]')).map(p => p.getAttribute('data-size')),
+            selectedSizes: []
+        }));
+        item.parentNode.insertBefore(createProductItemElement(item.querySelector('.productName').value, item.querySelector('.productPrice').value, 1, rows), item.nextSibling);
         saveData(); generateText();
     }
 
-    function togglePill(pill) {
-        pill.classList.toggle('active');
-        saveData(); generateText();
-    }
+    function togglePill(pill) { pill.classList.toggle('active'); saveData(); generateText(); }
 
     function editPillsList(btn) {
         const container = btn.closest('.size-pills');
-        const isFirstRow = !container.querySelector('.pill-danger'); 
-        const pills = container.querySelectorAll('.pill[data-size]');
-        const currentSizes = Array.from(pills).map(p => p.getAttribute('data-size'));
-
-        const newSizesStr = prompt('⚙️ ตั้งค่า "ชุดปุ่ม" ประจำแถวนี้\n(พิมพ์เฉพาะสิ่งที่ต้องการให้เหลืออยู่ คั่นด้วยลูกน้ำ ,)\n\nตัวอย่าง: S,M,L', currentSizes.join(','));
+        const currentSizes = Array.from(container.querySelectorAll('.pill[data-size]')).map(p => p.getAttribute('data-size'));
+        const newSizesStr = prompt('ตั้งค่าปุ่ม (คั่นด้วยลูกน้ำ ,):', currentSizes.join(','));
 
         if (newSizesStr !== null) {
             let newSizes = newSizesStr.split(',').map(s => s.trim()).filter(s => s !== '');
             if (newSizes.length === 0) newSizes = ['-']; 
-
-            const activePills = container.querySelectorAll('.pill.active');
-            const selectedSizes = [];
-            activePills.forEach(p => selectedSizes.push(p.getAttribute('data-size')));
-
-            const newRowHtml = createOptionRowHtml(newSizes, selectedSizes, isFirstRow);
             
-            const row = container.closest('.option-row');
-            row.outerHTML = newRowHtml;
-
+            const selectedSizes = Array.from(container.querySelectorAll('.pill.active')).map(p => p.getAttribute('data-size'));
+            container.closest('.option-row').outerHTML = createOptionRowHtml(newSizes, selectedSizes, !container.querySelector('.pill-danger'));
             saveData(); generateText();
         }
     }
 
-    function removeProduct(btn) {
-        btn.closest('.product-item').remove();
-        saveData(); generateText(); 
-    }
-
-    function clearData() {
-        if(confirm('ล้างข้อมูลทั้งหมด?')) {
-            localStorage.clear();
-            location.reload();
-        }
-    }
+    function removeProduct(btn) { btn.closest('.product-item').remove(); saveData(); generateText(); }
+    function clearData() { if(confirm('ล้างข้อมูลทั้งหมด?')) { localStorage.clear(); location.reload(); } }
 
     function generateText() {
-        const shipping = document.getElementById('shippingCost').value || '0';
-        const shippingValue = parseFloat(shipping) || 0;
+        const shippingValue = parseFloat(document.getElementById('shippingCost').value) || 0;
+        let finalProductsText = '', labelLines = [], validPrices = [], hasMissingPrice = false, productsSum = 0;
         
-        let finalProductsText = '';
-        let labelLines = []; 
-        let validPrices = [];
-        let hasMissingPrice = false;
-        let productsSum = 0;
-        
-        const blocks = document.querySelectorAll('.collection-block');
-        blocks.forEach(block => {
+        document.querySelectorAll('.collection-block').forEach(block => {
             const colName = block.querySelector('.collectionName').value.trim();
-            const productItems = block.querySelectorAll('.product-item');
+            let colText = '', colLabelProducts = [], mergedMap = {}, orderArr = [];
             
-            let colText = '';
-            let colLabelProducts = []; 
-            
-            let mergedProductsMap = {};
-            let mergedProductsOrder = [];
-            
-            productItems.forEach(item => {
+            block.querySelectorAll('.product-item').forEach(item => {
                 const nameVal = item.querySelector('.productName').value.trim();
                 const rawPrice = item.querySelector('.productPrice').value.trim();
-                const rawQty = item.querySelector('.productQty').value.trim();
-                const qtyVal = parseInt(rawQty) || 1; 
+                const qtyVal = parseInt(item.querySelector('.productQty').value.trim()) || 1; 
 
-                const rowEls = item.querySelectorAll('.option-row');
-                let textParts = []; 
-                let activeCounts = [];
-                let totalActive = 0;
-
-                rowEls.forEach(rowEl => {
-                    const activePills = rowEl.querySelectorAll('.pill.active');
-                    activeCounts.push(activePills.length);
-                    totalActive += activePills.length;
-                    
-                    if (activePills.length > 0) {
-                        const sizes = Array.from(activePills).map(p => p.getAttribute('data-size'));
-                        textParts.push(sizes.join(',')); 
-                    }
+                let textParts = [], activeCounts = [0];
+                item.querySelectorAll('.option-row').forEach(rowEl => {
+                    const actives = rowEl.querySelectorAll('.pill.active');
+                    activeCounts.push(actives.length);
+                    if (actives.length > 0) textParts.push(Array.from(actives).map(p => p.getAttribute('data-size')).join(',')); 
                 });
 
+                const totalActive = Math.max(...activeCounts);
+                
                 if (nameVal !== '' && totalActive > 0) {
-                    if (!mergedProductsMap[nameVal]) {
-                        mergedProductsMap[nameVal] = [];
-                        mergedProductsOrder.push(nameVal);
-                    }
+                    if (!mergedMap[nameVal]) { mergedMap[nameVal] = []; orderArr.push(nameVal); }
 
-                    const variantStr = textParts.length > 0 ? `(${textParts.join(' ')})` : '';
-                    
-                    let token = variantStr;
+                    let token = textParts.length > 0 ? `(${textParts.join(' ')})` : '';
                     if (qtyVal > 1) token += `x${qtyVal}`; 
-                    
-                    mergedProductsMap[nameVal].push(token);
-
-                    let itemMultiplier = Math.max(...activeCounts);
-                    if (itemMultiplier < 1) itemMultiplier = 1;
+                    mergedMap[nameVal].push(token);
 
                     if (rawPrice === '') {
-                        for(let i=0; i<itemMultiplier; i++) validPrices.push('***');
+                        for(let i=0; i<totalActive; i++) validPrices.push('***');
                         hasMissingPrice = true;
                     } else {
-                        const priceVal = parseFloat(rawPrice);
-                        if (priceVal > 0) {
-                            for(let i=0; i<itemMultiplier; i++) {
-                                if (qtyVal > 1) validPrices.push(`${priceVal}x${qtyVal}`);
-                                else validPrices.push(priceVal);
-                                productsSum += (priceVal * qtyVal);
-                            }
+                        const pVal = parseFloat(rawPrice);
+                        for(let i=0; i<totalActive; i++) {
+                            validPrices.push(qtyVal > 1 ? `${pVal}x${qtyVal}` : pVal);
+                            productsSum += (pVal * qtyVal);
                         }
                     }
                 }
             });
 
-            mergedProductsOrder.forEach(name => {
-                const sizesArr = mergedProductsMap[name];
-                if (sizesArr.length > 0) {
-                    colText += `- ${name} ${sizesArr.join(', ')}\n`;
-                    colLabelProducts.push(`${name} ${sizesArr.join(', ')}`);
-                }
+            orderArr.forEach(name => {
+                const str = `- ${name} ${mergedMap[name].join(', ')}\n`;
+                colText += str; colLabelProducts.push(`${name} ${mergedMap[name].join(', ')}`);
             });
 
-            if (colText !== '') {
-                if (colName !== '') finalProductsText += `${colName}\n${colText}\n`;
-                else finalProductsText += `${colText}\n`;
-            }
-
-            if (colLabelProducts.length > 0) {
-                if (colName !== '') labelLines.push(`${colName} = ${colLabelProducts.join(' / ')}`);
-                else labelLines.push(colLabelProducts.join(' / '));
-            }
+            if (colText !== '') finalProductsText += (colName !== '' ? `${colName}\n` : '') + colText + '\n';
+            if (colLabelProducts.length > 0) labelLines.push(colName !== '' ? `${colName} = ${colLabelProducts.join(' / ')}` : colLabelProducts.join(' / '));
         });
         
-        if (finalProductsText === '') finalProductsText = '- ไม่มีรายการสินค้า -\n\n';
+        let pStr = hasMissingPrice ? '***' : (validPrices.length > 0 ? validPrices.join(' + ') + (shippingValue > 0 ? ` + ${shippingValue} = ${productsSum + shippingValue}` : ` = ${productsSum}`) : (shippingValue > 0 ? `${shippingValue} = ${shippingValue}` : '0 = 0'));
+        if (hasMissingPrice && shippingValue > 0) pStr = `*** + ${shippingValue} = ***`;
 
-        let priceString = '';
-        if (validPrices.length > 0) {
-            const totalSum = hasMissingPrice ? '***' : (productsSum + shippingValue); 
-            if (shippingValue > 0) priceString = `${validPrices.join(' + ')} + ${shippingValue} = ${totalSum}`;
-            else priceString = `${validPrices.join(' + ')} = ${totalSum}`;
-        } else {
-            if (hasMissingPrice) {
-                 const totalSum = '***';
-                 if (shippingValue > 0) priceString = `*** + ${shippingValue} = ${totalSum}`;
-                 else priceString = `*** = ***`;
-            } else {
-                if (shippingValue > 0) priceString = `${shippingValue} = ${shippingValue}`;
-                else priceString = '0 = 0';
-            }
-        }
-
-        const bankRadios = document.getElementsByName('bank');
         let bankText = '';
-        for (const radio of bankRadios) {
+        for (const radio of document.getElementsByName('bank')) {
             if (radio.checked) {
                 if (radio.value === 'TTB') bankText = "ธ.ไทยธนชาต TTB\n622-2-84950-4\nกุลจิรา ล้อพงศ์ไพบูลย์";
                 else if (radio.value === 'SCB') bankText = "ธ.ไทยพาณิชย์ SCB\n407-811653-8\nกุลจิรา ตู้จินดา";
@@ -794,24 +687,14 @@
             }
         }
 
-        const finalOutput = `${finalProductsText}ค่าจัดส่ง: ${shipping} บาท
-ยอดรวม: ${priceString} บาท
-
---------------------------
-ชำระเงินได้ที่:
-${bankText}
-
-โอนเงินแล้วกรุณาส่งสลิป และที่อยู่ให้ด้วยนะคะ`;
-        document.getElementById('outputText').value = finalOutput;
+        document.getElementById('outputText').value = finalProductsText === '' ? '- ไม่มีรายการสินค้า -\n\n' : `${finalProductsText}ค่าจัดส่ง: ${shippingValue || 0} บาท\nยอดรวม: ${pStr} บาท\n\n--------------------------\nชำระเงินได้ที่:\n${bankText}\n\nโอนเงินแล้วกรุณาส่งสลิป และที่อยู่ให้ด้วยนะคะ`;
         document.getElementById('outputLabelText').value = labelLines.join('\n');
     }
 
-    function copyText(elementId) {
-        const outputArea = document.getElementById(elementId);
-        if(outputArea.value.trim() === '') return;
-        outputArea.select();
-        document.execCommand('copy');
-        window.getSelection().removeAllRanges();
+    function copyText(id) {
+        const el = document.getElementById(id);
+        if(el.value.trim() === '') return;
+        el.select(); document.execCommand('copy'); window.getSelection().removeAllRanges();
     }
 </script>
 
