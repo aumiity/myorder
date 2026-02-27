@@ -4,7 +4,135 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>myorder</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ========================================= */
+        /* --- 1. ระบบจัดการ THEME (สีหลักของเว็บ) --- */
+        /* ========================================= */
+        
+        /* ธีมที่ 1: iOS Dark (ค่าเริ่มต้น) */
+        :root {
+            --theme-bg: #000000; --theme-surface: #1C1C1E; --theme-surface-alt: #2C2C2E; --theme-surface-hover: #3A3A3C;
+            --theme-primary: #0A84FF; --theme-primary-hover: #007AFF; --theme-primary-alpha: rgba(10, 132, 255, 0.15); --theme-primary-alpha-strong: rgba(10, 132, 255, 0.25);
+            --theme-accent-text: #64D2FF; --theme-danger: #FF453A; --theme-danger-hover: #FF3B30; --theme-danger-alpha: rgba(255, 69, 58, 0.15);
+            --theme-success: #32D74B; --theme-text: #FFFFFF; --theme-text-muted: #8E8E93; --theme-border: #38383A;
+        }
+
+        /* ธีมที่ 2: GitHub Dark Default */
+        [data-theme="github"] {
+            --theme-bg: #0d1117; --theme-surface: #161b22; --theme-surface-alt: #21262d; --theme-surface-hover: #30363d;
+            --theme-primary: #2f81f7; --theme-primary-hover: #388bfd; --theme-primary-alpha: rgba(47, 129, 247, 0.15); --theme-primary-alpha-strong: rgba(47, 129, 247, 0.25);
+            --theme-accent-text: #79c0ff; --theme-danger: #f85149; --theme-danger-hover: #ff7b72; --theme-danger-alpha: rgba(248, 81, 73, 0.15);
+            --theme-success: #238636; --theme-text: #c9d1d9; --theme-text-muted: #8b949e; --theme-border: #30363d;
+        }
+
+        /* ========================================= */
+
+        body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--theme-bg); color: var(--theme-text); margin: 0; padding: 2rem 3rem; display: flex; flex-direction: column; align-items: center; transition: background-color 0.3s ease, color 0.3s ease; }
+        .container { display: grid; grid-template-columns: 1.4fr 1fr; gap: 2rem; width: 100%; max-width: 1800px; }
+        .panel { background: var(--theme-surface); padding: 2rem; border-radius: 20px; border: 1px solid var(--theme-border); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); transition: background-color 0.3s ease, border-color 0.3s ease; }
+        .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--theme-border); }
+        h2 { margin: 0; color: var(--theme-text); font-size: 1.6rem; font-weight: 700; display: flex; align-items: center; gap: 0.75rem; }
+        .version-badge { font-size: 0.85rem; color: var(--theme-text-muted); font-weight: normal; }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.6rem; font-weight: 500; font-size: 1rem; color: var(--theme-text-muted); }
+        input[type="text"], input[type="number"], textarea { width: 100%; padding: 0.85rem 1rem; background-color: var(--theme-surface-alt); color: var(--theme-text); border: 2px solid transparent; border-radius: 12px; box-sizing: border-box; font-family: inherit; font-size: 16px; -webkit-appearance: none; appearance: none; transition: all 0.2s ease; }
+        input::placeholder, textarea::placeholder { color: var(--theme-text-muted); }
+        input:focus, textarea:focus { outline: none; border-color: var(--theme-primary); background-color: var(--theme-surface-hover); }
+        input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type="number"] { -moz-appearance: textfield; }
+        
+        .collection-block { background-color: var(--theme-bg); border-radius: 16px; padding: 1.25rem; margin-bottom: 1.5rem; border: 1px solid var(--theme-border); transition: all 0.3s ease; }
+        .collection-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .header-left { display: flex; align-items: center; gap: 0.75rem; flex: 1; }
+        .header-actions { display: flex; gap: 0.4rem; align-items: center; }
+        .btn-toggle-col { background: transparent; color: var(--theme-primary); border: none; width: 36px; height: 36px; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: opacity 0.2s; }
+        .btn-toggle-col:hover { opacity: 0.7; }
+        .collection-block.collapsed .collection-header { margin-bottom: 0; }
+        .collection-block.collapsed .collection-body { display: none; }
+        
+        .product-item { background: var(--theme-surface); padding: 1rem; border-radius: 12px; margin-bottom: 0.75rem; border: 1px solid var(--theme-border); }
+        .product-header-row { display: grid; grid-template-columns: 1fr 85px 65px auto; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem; }
+        .product-header-row input { padding: 0.6rem; font-size: 0.95rem; }
+        .productName { width: 100%; font-weight: 500; }
+        .productPrice, .productQty { width: 100%; text-align: center; background-color: var(--theme-primary-alpha); color: var(--theme-accent-text); font-weight: 600; border: 1px solid var(--theme-primary-alpha-strong); }
+        .productPrice:focus, .productQty:focus { background-color: var(--theme-primary-alpha-strong); border-color: var(--theme-primary); }
+        .product-actions { display: flex; gap: 0.3rem; }
+        
+        .option-row { display: flex; align-items: center; margin-bottom: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--theme-border); }
+        .size-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; width: 100%; }
+        .pill { padding: 0.4rem 0.9rem; border-radius: 20px; background: var(--theme-surface-alt); color: var(--theme-text); font-size: 0.9rem; font-weight: 500; cursor: pointer; user-select: none; transition: all 0.2s ease; border: 1px solid transparent; }
+        .pill:hover { background: var(--theme-surface-hover); }
+        .pill.active { background: var(--theme-primary); color: white; border-color: var(--theme-primary-hover); }
+        .pill-action { appearance: none; -webkit-appearance: none; background: transparent; border: none; padding: 0; cursor: pointer; color: inherit; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 0.3rem; padding: 0.4rem 0.85rem; border-radius: 20px; color: var(--theme-primary); border: 1px solid transparent; transition: all 0.2s ease; }
+        .pill-action:hover { background: var(--theme-primary-alpha); }
+
+        .btn { background-color: var(--theme-surface-alt); color: var(--theme-text); border: 1px solid var(--theme-border); padding: 1rem 1.5rem; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 1.05rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; }
+        .btn:hover, .btn:active { background-color: var(--theme-surface-hover); }
+        .btn-primary { background-color: var(--theme-primary); color: white; border: none; }
+        .btn-primary:hover, .btn-primary:active { background-color: var(--theme-primary-hover); }
+        .btn-success { background-color: var(--theme-success); color: white; border: none; }
+        .btn-danger-outline { background-color: transparent; color: var(--theme-danger); border: 1px solid var(--theme-danger); }
+        .btn-danger-outline:hover { background-color: var(--theme-danger-alpha); }
+        
+        .btn-icon { padding: 0; width: 34px; height: 34px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: white; border: none; cursor: pointer; transition: opacity 0.2s; }
+        .btn-icon:hover { opacity: 0.8; }
+        .btn-move { background-color: var(--theme-surface-hover); color: var(--theme-text); }
+        .btn-clone { background-color: var(--theme-primary); }
+        .btn-remove { background-color: var(--theme-danger); }
+        .btn-add-row { background: transparent; color: var(--theme-primary); border: none; cursor: pointer; font-size: 0.9rem; font-weight: 500; padding: 0.5rem 0; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.3rem; }
+        .btn-add-row:hover { opacity: 0.7; text-decoration: underline; }
+
+        /* --- ระบบบัญชีธนาคาร --- */
+        .radio-group { display: flex; flex-direction: column; gap: 0.6rem; }
+        .bank-item-wrapper { display: flex; align-items: stretch; gap: 0.5rem; width: 100%; }
+        .bank-item-wrapper label { display: flex; align-items: flex-start; font-weight: normal; gap: 0.75rem; cursor: pointer; padding: 1rem; border: 1px solid var(--theme-border); border-radius: 12px; background: var(--theme-bg); font-size: 1rem; transition: all 0.2s; width: 100%; margin: 0; box-sizing: border-box; }
+        .bank-item-wrapper label:hover { border-color: var(--theme-primary); }
+        .bank-actions { display: flex; flex-direction: column; gap: 0.3rem; justify-content: center; }
+        .btn-bank-action { background: transparent; color: var(--theme-primary); border: 1px dashed var(--theme-border); padding: 0.5rem; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; height: 100%; }
+        .btn-bank-action:hover { background: var(--theme-primary-alpha); border-color: var(--theme-primary); }
+        .btn-bank-action.delete { color: var(--theme-danger); }
+        .btn-bank-action.delete:hover { background: var(--theme-danger-alpha); border-color: var(--theme-danger); }
+        input[type="radio"] { width: 22px; height: 22px; margin-top: 2px; cursor: pointer; accent-color: var(--theme-primary); }
+
+        textarea { height: 350px; resize: vertical; line-height: 1.6; }
+        .action-buttons-group { display: flex; gap: 1rem; margin-top: 1rem; }
+
+        /* --- คู่มือการใช้งาน --- */
+        .help-section { width: 100%; max-width: 1800px; margin: 2rem auto 0 auto; background: var(--theme-surface); border: 1px solid var(--theme-border); border-radius: 16px; overflow: hidden; transition: all 0.3s ease; }
+        .help-toggle { width: 100%; background: transparent; color: var(--theme-text); border: none; padding: 1.25rem 2rem; font-size: 1.1rem; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background-color 0.2s; }
+        .help-toggle:hover { background-color: var(--theme-surface-hover); }
+        .help-content { max-height: 0; padding: 0 2rem; opacity: 0; transition: all 0.3s ease; }
+        .help-content.open { max-height: 2500px; padding: 0 2rem 2rem 2rem; opacity: 1; border-top: 1px solid var(--theme-border); }
+        .help-content h3 { color: var(--theme-primary); margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1.1rem; }
+        .help-content ul { margin: 0; padding-left: 1.5rem; color: var(--theme-text-muted); line-height: 1.6; }
+        .help-content li { margin-bottom: 0.5rem; }
+        .help-content code { background: var(--theme-bg); padding: 0.15rem 0.5rem; border-radius: 6px; color: var(--theme-accent-text); border: 1px solid var(--theme-border); }
+        
+        .app-footer { margin-top: 2rem; text-align: center; color: var(--theme-text-muted); font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem; width: 100%; }
+        #themeSelector { padding: 0.4rem 0.8rem; border-radius: 8px; background-color: var(--theme-surface-alt); color: var(--theme-text); border: 1px solid var(--theme-border); font-family: inherit; font-size: 0.95rem; cursor: pointer; outline: none; transition: all 0.2s; }
+        #themeSelector:hover { border-color: var(--theme-primary); }
+
+        @media (max-width: 800px) {
+            body { padding: 1rem 0.5rem; } 
+            .container { grid-template-columns: 1fr; gap: 1.5rem; }
+            .panel { padding: 1.25rem; border-radius: 16px; }
+            .main-header { flex-direction: column; align-items: stretch; gap: 1rem; }
+            .collection-header { flex-wrap: wrap; }
+            .header-left { width: 100%; flex: none; }
+            .header-actions { width: 100%; justify-content: flex-end; }
+            .product-header-row { grid-template-columns: 1fr 1fr auto; grid-template-rows: auto auto; gap: 0.6rem; }
+            .productName { grid-column: 1 / 4; grid-row: 1; }
+            .productPrice { grid-column: 1 / 2; grid-row: 2; }
+            .productQty { grid-column: 2 / 3; grid-row: 2; }
+            .product-actions { grid-column: 3 / 4; grid-row: 2; justify-content: flex-end; }
+            .action-buttons-group { flex-direction: column; gap: 0.5rem; }
+            textarea { height: 250px; } 
+            .help-toggle { padding: 1rem; font-size: 1rem; }
+            .help-content.open { padding: 0 1rem 1.5rem 1rem; }
+            .bank-item-wrapper { flex-direction: column; }
+            .bank-actions { flex-direction: row; height: auto; }
+        }
+    </style>
 </head>
 <body>
 
@@ -13,7 +141,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                ออเดอร์ <span class="version-badge">v6.9 (Dynamic Bank)</span>
+                ออเดอร์ <span class="version-badge">v7.0 (All-in-One)</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.55rem 1rem; font-size: 0.95rem;" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -88,10 +216,42 @@
         <span id="help-icon" style="transition: transform 0.3s;">▼</span>
     </button>
     <div class="help-content" id="helpContent">
-        <div id="helpLoading" style="display: none; text-align: center; padding: 2rem; color: var(--theme-text-muted);">
-            ⏳ กำลังโหลดข้อมูล...
+        <h3>📦 1. การจัดการสินค้าและหมวดหมู่ (คอลเลคชั่น)</h3>
+        <ul>
+            <li><strong style="color: var(--theme-text);">เพิ่มหมวดหมู่:</strong> กดปุ่ม <code>+ เพิ่มคอลเลคชั่นใหม่</code> เพื่อแยกกลุ่มสินค้า (เช่น "รอบส่งวันพุธ") <br><small>*ทริค: กดปุ่มลูกศรเพื่อยุบ/ขยายซ่อนรายการได้ ช่วยให้หน้าจอไม่รก</small></li>
+            <li><strong style="color: var(--theme-text);">เพิ่มสินค้า:</strong> พิมพ์ชื่อ ราคา และจำนวน (ค่าเริ่มต้นคือ 1 ชิ้น)</li>
+            <li><strong style="color: var(--theme-text);">ปุ่มจัดการหลังชื่อสินค้า:</strong> <b>▲/▼</b> (เลื่อนขึ้น-ลง), <b>ไอคอนกระดาษ</b> (คัดลอกสินค้านี้ลงมาอีกบรรทัด), <b>➖</b> (ลบสินค้าทิ้ง)</li>
+        </ul>
+
+        <h3>🎨 2. การจัดการตัวเลือก (ไซส์ / สี / ลาย)</h3>
+        <ul>
+            <li><strong style="color: var(--theme-text);">วิธีคิดเงิน:</strong> คุณ <b>"ต้องกดให้ปุ่มตัวเลือกเป็นสีทึบ"</b> ระบบถึงจะเอาไปคิดเงิน (ไม่กด = ไม่คิดเงิน)</li>
+            <li><strong style="color: var(--theme-text);">แก้ไขปุ่ม ⚙️:</strong> กดที่ไอคอนเฟือง พิมพ์ตัวเลือกที่ต้องการคั่นด้วยลูกน้ำ เช่น <code>ส้ม,ชมพู,ฟ้า</code> แล้วกด OK</li>
+            <li><strong style="color: var(--theme-text);">เพิ่มชั้นตัวเลือก:</strong> กด <code>+ เพิ่มตัวเลือกบรรทัดถัดไป</code> (เช่น บรรทัดบนเลือกไซส์ บรรทัดล่างเลือกสี) ระบบจะพิมพ์รวมกันให้อัตโนมัติ เช่น <code>(ชมพู XL)</code></li>
+            <li><strong style="color: var(--theme-text);">วิธีลบแถวตัวเลือก:</strong> กด ⚙️ แล้ว <b>"ลบข้อความออกให้หมดเกลี้ยง"</b> แถวนั้นจะหายไปทันที</li>
+            <li><strong style="color: var(--theme-text);">สินค้าไม่มีตัวเลือก:</strong> ให้ตั้งค่าปุ่มเป็นเครื่องหมาย <code>-</code> แล้วกดจิ้มให้ทึบ บิลจะโชว์แค่ชื่อสินค้าเพียวๆ ไร้วงเล็บ</li>
+        </ul>
+
+        <h3>🏦 3. การจัดการบัญชีธนาคาร</h3>
+        <ul>
+            <li><strong style="color: var(--theme-text);">เพิ่มบัญชี:</strong> กดปุ่ม <code>+ เพิ่มบัญชี</code> หากต้องการให้ข้อความขึ้นบรรทัดใหม่ในบิล ให้พิมพ์ <code>//</code> คั่นไว้ เช่น <code>กสิกรไทย // 123-456 // สมชาย</code></li>
+            <li><strong style="color: var(--theme-text);">แก้ไข/ลบ:</strong> กดปุ่ม ⚙️ หรือ ➖ ด้านหลังธนาคารนั้นๆ ได้เลย</li>
+        </ul>
+
+        <h3>💰 4. การตั้งค่าบิลและการจัดส่ง</h3>
+        <ul>
+            <li><strong style="color: var(--theme-text);">เช็คบิลพร้อมส่ง:</strong> มองไปที่กล่องฝั่งขวา ระบบจะคำนวณเงิน รวมยอด และพิมพ์บิลให้ <b>"อัตโนมัติตลอดเวลา"</b></li>
+            <li>แค่กดปุ่ม <b>"คัดลอกสรุปยอด"</b> ก็เอาไปแปะแชทส่งให้ลูกค้าได้เลย!</li>
+        </ul>
+
+        <h3>💾 5. ฟีเจอร์พิเศษ (ห้ามพลาด!)</h3>
+        <ul>
+            <li><strong style="color: var(--theme-text);">ล้างตัวเลือกทั้งหมด:</strong> กดปุ่มมุมซ้ายบนสุด เพื่อเคลียร์ "สีทึบ" ที่จิ้มไว้ทั้งหมด พร้อมรับออเดอร์คนต่อไปทันที</li>
+            <li><strong style="color: var(--theme-text);">ย้ายเครื่อง/สำรองข้อมูล:</strong> กดปุ่ม <b>"ส่งออก"</b> เอารหัสไปไว้เครื่องอื่น แล้วกด <b>"นำเข้า"</b> สินค้าจะตามมาครบเป๊ะ!</li>
+        </ul>
+        <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px dashed var(--theme-border);">
+            <strong style="color: var(--theme-primary);">💡 สรุปสเต็ปทำงานเวลาลูกค้าสั่ง:</strong><br>พิมพ์ชื่อสินค้า ➔ ตั้งค่าปุ่ม ⚙️ ➔ <b>จิ้มตัวเลือกให้เป็นสีทึบ</b> ➔ กด "คัดลอกสรุปยอด" ➔ ส่งให้ลูกค้า!
         </div>
-        <div id="helpInner"></div>
     </div>
 </div>
 
@@ -103,6 +263,457 @@
     </select>
 </div>
 
-<script src="script.js"></script>
+<script>
+    const ICON_CHEV_RIGHT = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
+    const ICON_CHEV_DOWN = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+    const ICON_UP = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>`;
+    const ICON_DOWN = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+    const ICON_TRASH = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
+    const ICON_COPY = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+    const ICON_MINUS = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
+    const ICON_GEAR = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`;
+    const ICON_PLUS = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
+
+    let defaultBanks = [
+        { id: 'b1', text: 'ธ.ไทยธนชาต TTB\n622-2-84950-4\nกุลจิรา ล้อพงศ์ไพบูลย์' },
+        { id: 'b2', text: 'ธ.ไทยพาณิชย์ SCB\n407-811653-8\nกุลจิรา ตู้จินดา' },
+        { id: 'b3', text: 'ธ.กสิกร KBANK\n026-1-56003-8\nกุลจิรา ตู้จินดา' },
+        { id: 'b4', text: 'ธ.ออมสิน GSB\n020478034752\nกุลจิรา ล้อพงศ์ไพบูลย์' }
+    ];
+
+    window.onload = function() {
+        const savedTheme = localStorage.getItem('appTheme') || 'ios';
+        document.getElementById('themeSelector').value = savedTheme;
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        renderBanks(); 
+        loadData();
+
+        document.getElementById('shippingCost').addEventListener('input', updateData);
+        document.getElementById('bankContainer').addEventListener('change', updateData);
+        document.getElementById('collectionsContainer').addEventListener('input', updateData);
+        generateText(); 
+    };
+
+    function updateData() {
+        saveData();
+        generateText();
+    }
+
+    function changeTheme() {
+        const theme = document.getElementById('themeSelector').value;
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('appTheme', theme);
+    }
+
+    function renderBanks() {
+        let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
+        const container = document.getElementById('bankContainer');
+        const savedBankId = localStorage.getItem('bank');
+        
+        let selectedId = savedBankId;
+        if (!banks.find(b => b.id === selectedId) && banks.length > 0) {
+            selectedId = banks[0].id;
+        }
+
+        container.innerHTML = '';
+        banks.forEach(b => {
+            const isChecked = b.id === selectedId ? 'checked' : '';
+            const html = `
+                <div class="bank-item-wrapper">
+                    <label>
+                        <input type="radio" name="bank" value="${b.id}" ${isChecked}>
+                        <span style="white-space: pre-wrap; line-height: 1.4;">${b.text}</span>
+                    </label>
+                    <div class="bank-actions">
+                        <button class="btn-bank-action" onclick="editBank('${b.id}')" title="แก้ไขธนาคาร">${ICON_GEAR}</button>
+                        <button class="btn-bank-action delete" onclick="deleteBank('${b.id}')" title="ลบธนาคาร">${ICON_MINUS}</button>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
+    function addBank() {
+        const input = prompt("🏦 เพิ่มข้อมูลบัญชีใหม่\n(พิมพ์ // เพื่อบังคับขึ้นบรรทัดใหม่ เช่น ธ.กสิกร // 12345 // สมชาย):");
+        if (input && input.trim() !== '') {
+            let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
+            banks.push({ id: 'b' + Date.now(), text: input.replace(/\/\//g, '\n') });
+            localStorage.setItem('bankData', JSON.stringify(banks));
+            renderBanks();
+            updateData();
+        }
+    }
+
+    function editBank(id) {
+        let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
+        const bank = banks.find(b => b.id === id);
+        if (bank) {
+            const currentText = bank.text.replace(/\n/g, ' // ');
+            const input = prompt("✏️ แก้ไขข้อมูลบัญชี\n(พิมพ์ // เพื่อบังคับขึ้นบรรทัดใหม่):", currentText);
+            if (input !== null && input.trim() !== '') {
+                bank.text = input.replace(/\/\//g, '\n');
+                localStorage.setItem('bankData', JSON.stringify(banks));
+                renderBanks();
+                updateData();
+            }
+        }
+    }
+
+    function deleteBank(id) {
+        if(confirm("❌ แน่ใจหรือไม่ว่าต้องการลบบัญชีนี้ทิ้ง?")) {
+            let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
+            banks = banks.filter(b => b.id !== id);
+            localStorage.setItem('bankData', JSON.stringify(banks));
+            renderBanks();
+            updateData();
+        }
+    }
+
+    function saveData() {
+        localStorage.setItem('shippingCost', document.getElementById('shippingCost').value);
+        
+        const selectedBankNode = document.querySelector('input[name="bank"]:checked');
+        if(selectedBankNode) localStorage.setItem('bank', selectedBankNode.value);
+
+        const collections = [];
+        document.querySelectorAll('.collection-block').forEach(block => {
+            const colName = block.querySelector('.collectionName').value;
+            const isCollapsed = block.classList.contains('collapsed');
+            const products = [];
+            
+            block.querySelectorAll('.product-item').forEach(item => {
+                const name = item.querySelector('.productName').value;
+                const price = item.querySelector('.productPrice').value;
+                const qty = item.querySelector('.productQty').value;
+                const optionRows = [];
+                
+                item.querySelectorAll('.option-row').forEach(rowEl => {
+                    const availableSizes = [];
+                    const selectedSizes = [];
+                    rowEl.querySelectorAll('.pill[data-size]').forEach(pill => {
+                        const size = pill.getAttribute('data-size');
+                        availableSizes.push(size);
+                        if (pill.classList.contains('active')) selectedSizes.push(size);
+                    });
+                    optionRows.push({ availableSizes, selectedSizes });
+                });
+                products.push({ name, price, qty, optionRows });
+            });
+            collections.push({ colName, isCollapsed, products });
+        });
+        localStorage.setItem('orderDataV3', JSON.stringify(collections));
+    }
+
+    function loadData() {
+        if (localStorage.getItem('shippingCost')) document.getElementById('shippingCost').value = localStorage.getItem('shippingCost');
+
+        const container = document.getElementById('collectionsContainer');
+        container.innerHTML = ''; 
+        let savedData = JSON.parse(localStorage.getItem('orderDataV3'));
+        
+        if (savedData && savedData.length > 0) {
+            savedData.forEach(col => {
+                const block = addCollectionBlock(col.colName, col.isCollapsed);
+                if(col.products.length > 0) {
+                    col.products.forEach(p => {
+                        block.querySelector('.productList').appendChild(createProductItemElement(p.name, p.price, p.qty, p.optionRows));
+                    });
+                } else {
+                    block.querySelector('.productList').appendChild(createProductItemElement()); 
+                }
+            });
+        } else {
+            const block = addCollectionBlock('');
+            block.querySelector('.productList').appendChild(createProductItemElement());
+        }
+    }
+
+    function exportData() {
+        saveData();
+        const data = localStorage.getItem('orderDataV3');
+        if (!data || data === '[]') { alert('ไม่มีข้อมูล'); return; }
+        const encodedData = btoa(encodeURIComponent(data));
+        navigator.clipboard.writeText(encodedData).then(() => alert('📋 คัดลอกโค้ดสำเร็จ!')).catch(() => prompt('คัดลอกโค้ดนี้:', encodedData));
+    }
+
+    function importData() {
+        const code = prompt('📥 วางโค้ดที่คัดลอกมา:');
+        if (!code) return;
+        try {
+            localStorage.setItem('orderDataV3', decodeURIComponent(atob(code)));
+            loadData(); generateText(); alert('✅ นำเข้าสำเร็จ!');
+        } catch(e) { alert('❌ โค้ดไม่ถูกต้อง'); }
+    }
+
+    function toggleCollection(btn) {
+        const block = btn.closest('.collection-block');
+        block.classList.toggle('collapsed');
+        btn.innerHTML = block.classList.contains('collapsed') ? ICON_CHEV_RIGHT : ICON_CHEV_DOWN;
+        saveData();
+    }
+
+    function moveCollectionUp(btn) {
+        const block = btn.closest('.collection-block');
+        if (block.previousElementSibling) { block.parentNode.insertBefore(block, block.previousElementSibling); saveData(); generateText(); }
+    }
+
+    function moveCollectionDown(btn) {
+        const block = btn.closest('.collection-block');
+        if (block.nextElementSibling) { block.parentNode.insertBefore(block.nextElementSibling, block); saveData(); generateText(); }
+    }
+
+    function addCollectionBlock(colName = '', isCollapsed = false) {
+        const container = document.getElementById('collectionsContainer');
+        const block = document.createElement('div');
+        block.className = 'collection-block';
+        if(isCollapsed) block.classList.add('collapsed');
+        
+        block.innerHTML = `
+            <div class="collection-header">
+                <div class="header-left">
+                    <button class="btn-toggle-col" onclick="toggleCollection(this)">${isCollapsed ? ICON_CHEV_RIGHT : ICON_CHEV_DOWN}</button>
+                    <input type="text" class="collectionName" placeholder="ชื่อคอลเลคชั่น (ไม่ระบุก็ได้)" value="${colName}" style="margin: 0;">
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon btn-move" onclick="moveCollectionUp(this)" title="เลื่อนขึ้น">${ICON_UP}</button>
+                    <button class="btn-icon btn-move" onclick="moveCollectionDown(this)" title="เลื่อนลง">${ICON_DOWN}</button>
+                    <button class="btn-icon btn-remove" onclick="removeCollectionBlock(this)" title="ลบชุดนี้">${ICON_TRASH}</button>
+                </div>
+            </div>
+            <div class="collection-body">
+                <div class="productList"></div>
+                <button class="btn-add-row" style="margin-top: 1rem; width: 100%; justify-content: center; background: var(--theme-surface-alt);" onclick="handleAddProductClick(this)">
+                    ${ICON_PLUS} เพิ่มสินค้า
+                </button>
+            </div>
+        `;
+        container.appendChild(block);
+        if(colName === '' && arguments.length === 0) {
+            block.querySelector('.productList').appendChild(createProductItemElement());
+            saveData(); generateText();
+        }
+        return block;
+    }
+
+    function removeCollectionBlock(btn) {
+        if(confirm('ลบคอลเลคชั่นนี้ทิ้ง?')) { btn.closest('.collection-block').remove(); saveData(); generateText(); }
+    }
+
+    function clearAllPills() {
+        document.querySelectorAll('.pill.active').forEach(pill => pill.classList.remove('active'));
+        document.querySelectorAll('.productQty').forEach(qty => qty.value = 1);
+        saveData(); generateText();
+    }
+
+    function handleAddProductClick(btn) {
+        btn.previousElementSibling.appendChild(createProductItemElement());
+        saveData(); generateText();
+    }
+
+    function moveProductUp(btn) {
+        const item = btn.closest('.product-item');
+        if (item.previousElementSibling) { item.parentNode.insertBefore(item, item.previousElementSibling); saveData(); generateText(); }
+    }
+
+    function moveProductDown(btn) {
+        const item = btn.closest('.product-item');
+        if (item.nextElementSibling) { item.parentNode.insertBefore(item.nextElementSibling, item); saveData(); generateText(); }
+    }
+
+    function createOptionRowHtml(availableSizes, selectedSizes) {
+        let pillsHtml = availableSizes.map(s => `<div class="pill ${selectedSizes.includes(s) ? 'active' : ''}" onclick="togglePill(this)" data-size="${s}">${s}</div>`).join('');
+        let actionsHtml = `<button class="pill-action" onclick="editPillsList(this)" title="ตั้งค่าตัวเลือก/ลบแถว">${ICON_GEAR}</button>`;
+        return `<div class="option-row"><div class="size-pills">${pillsHtml}${actionsHtml}</div></div>`;
+    }
+
+    function createProductItemElement(name = '', price = '', qty = 1, optionRowsArray = null) {
+        const newItem = document.createElement('div');
+        newItem.className = 'product-item';
+        let rows = [];
+        if (optionRowsArray !== null) {
+            if (optionRowsArray.length === 0) rows = [ { availableSizes: ['-'], selectedSizes: [] } ];
+            else rows = optionRowsArray;
+        } else {
+            rows = [ { availableSizes: ['S', 'M', 'L', 'XL', '2XL'], selectedSizes: [] } ];
+        }
+        let rowsHtml = rows.map((r) => createOptionRowHtml(r.availableSizes, r.selectedSizes)).join('');
+        newItem.innerHTML = `
+            <div class="product-header-row">
+                <input type="text" class="productName" placeholder="ชื่อสินค้า" value="${name}">
+                <input type="number" class="productPrice" placeholder="ราคา" value="${price}">
+                <input type="number" class="productQty" placeholder="ชิ้น" title="จำนวนชิ้น" value="${qty || 1}" min="1">
+                <div class="product-actions">
+                    <button class="btn-icon btn-move" onclick="moveProductUp(this)" title="เลื่อนขึ้น">${ICON_UP}</button>
+                    <button class="btn-icon btn-move" onclick="moveProductDown(this)" title="เลื่อนลง">${ICON_DOWN}</button>
+                    <button class="btn-icon btn-clone" onclick="cloneProduct(this)" title="คัดลอก">${ICON_COPY}</button>
+                    <button class="btn-icon btn-remove" onclick="removeProduct(this)" title="ลบ">${ICON_MINUS}</button>
+                </div>
+            </div>
+            <div class="product-options-container">${rowsHtml}</div>
+            <button class="btn-add-row" onclick="addOptionRow(this)">${ICON_PLUS} เพิ่มตัวเลือกบรรทัดถัดไป</button>
+        `;
+        return newItem;
+    }
+
+    function addOptionRow(btn) {
+        const newSizesStr = prompt('ตั้งค่าตัวเลือก (คั่นด้วยลูกน้ำ ,):');
+        if (newSizesStr && newSizesStr.trim() !== '') {
+            let newSizes = newSizesStr.split(',').map(s => s.trim()).filter(s => s !== '');
+            if (newSizes.length > 0) {
+                btn.previousElementSibling.insertAdjacentHTML('beforeend', createOptionRowHtml(newSizes, []));
+                saveData(); generateText();
+            }
+        }
+    }
+
+    function cloneProduct(btn) {
+        const item = btn.closest('.product-item');
+        const rows = Array.from(item.querySelectorAll('.option-row')).map(rowEl => ({
+            availableSizes: Array.from(rowEl.querySelectorAll('.pill[data-size]')).map(p => p.getAttribute('data-size')),
+            selectedSizes: []
+        }));
+        item.parentNode.insertBefore(createProductItemElement(item.querySelector('.productName').value, item.querySelector('.productPrice').value, 1, rows), item.nextSibling);
+        saveData(); generateText();
+    }
+
+    function togglePill(pill) { pill.classList.toggle('active'); saveData(); generateText(); }
+
+    function editPillsList(btn) {
+        const container = btn.closest('.size-pills');
+        const row = container.closest('.option-row');
+        const item = row.closest('.product-item');
+        const currentSizes = Array.from(container.querySelectorAll('.pill[data-size]')).map(p => p.getAttribute('data-size'));
+        
+        const newSizesStr = prompt('ตั้งค่าปุ่ม (คั่นด้วยลูกน้ำ ,)\n* หากต้องการลบแถวนี้ออก ให้ลบข้อความออกให้หมดแล้วกด OK:', currentSizes.join(','));
+
+        if (newSizesStr !== null) {
+            let newSizes = newSizesStr.split(',').map(s => s.trim()).filter(s => s !== '');
+            if (newSizes.length === 0) {
+                const allRows = item.querySelectorAll('.option-row');
+                if (allRows.length <= 1) newSizes = ['-'];
+                else { row.remove(); saveData(); generateText(); return; }
+            }
+            const selectedSizes = Array.from(container.querySelectorAll('.pill.active')).map(p => p.getAttribute('data-size'));
+            row.outerHTML = createOptionRowHtml(newSizes, selectedSizes);
+            saveData(); generateText();
+        }
+    }
+
+    function removeProduct(btn) { btn.closest('.product-item').remove(); saveData(); generateText(); }
+    function clearData() { if(confirm('ล้างข้อมูลทั้งหมด?')) { localStorage.clear(); location.reload(); } }
+
+    function generateText() {
+        const shippingValue = parseFloat(document.getElementById('shippingCost').value) || 0;
+        let finalProductsText = '', labelLines = [], validPrices = [], hasMissingPrice = false, productsSum = 0;
+        
+        document.querySelectorAll('.collection-block').forEach(block => {
+            const colName = block.querySelector('.collectionName').value.trim();
+            let colText = '', colLabelProducts = [], mergedMap = {}, orderArr = [];
+            
+            block.querySelectorAll('.product-item').forEach(item => {
+                const nameVal = item.querySelector('.productName').value.trim();
+                const rawPrice = item.querySelector('.productPrice').value.trim();
+                const qtyVal = parseInt(item.querySelector('.productQty').value.trim()) || 1; 
+                const rowEls = item.querySelectorAll('.option-row');
+                
+                if (rowEls.length === 0 || (rowEls.length === 1 && rowEls[0].querySelector('.pill.active[data-size="-"]'))) {
+                    if (nameVal !== '') {
+                        const hasOtherActive = item.querySelector('.pill.active:not([data-size="-"])');
+                        if (!hasOtherActive) {
+                            if (!mergedMap[nameVal]) { mergedMap[nameVal] = []; orderArr.push(nameVal); }
+                            let token = qtyVal > 1 ? `x${qtyVal}` : '';
+                            mergedMap[nameVal].push(token);
+                            if (rawPrice === '') {
+                                validPrices.push('***'); hasMissingPrice = true;
+                            } else {
+                                const pVal = parseFloat(rawPrice);
+                                validPrices.push(qtyVal > 1 ? `${pVal}x${qtyVal}` : pVal);
+                                productsSum += (pVal * qtyVal);
+                            }
+                        }
+                    }
+                } 
+                else {
+                    let textParts = [], activeCounts = [0];
+                    rowEls.forEach(rowEl => {
+                        const actives = rowEl.querySelectorAll('.pill.active');
+                        activeCounts.push(actives.length);
+                        if (actives.length > 0) {
+                            const validSizes = Array.from(actives).map(p => p.getAttribute('data-size')).filter(s => s !== '-');
+                            if (validSizes.length > 0) textParts.push(validSizes.join(',')); 
+                        }
+                    });
+
+                    let totalActive = Math.max(...activeCounts);
+
+                    if (nameVal !== '' && totalActive > 0) {
+                        if (!mergedMap[nameVal]) { mergedMap[nameVal] = []; orderArr.push(nameVal); }
+                        let token = textParts.length > 0 ? `(${textParts.join(' ')})` : '';
+                        if (qtyVal > 1) token += (token !== '' ? ` x${qtyVal}` : `x${qtyVal}`); 
+                        
+                        if (token !== '') mergedMap[nameVal].push(token);
+                        else mergedMap[nameVal].push('');
+
+                        if (rawPrice === '') {
+                            for(let i=0; i<totalActive; i++) validPrices.push('***');
+                            hasMissingPrice = true;
+                        } else {
+                            const pVal = parseFloat(rawPrice);
+                            for(let i=0; i<totalActive; i++) {
+                                validPrices.push(qtyVal > 1 ? `${pVal}x${qtyVal}` : pVal);
+                                productsSum += (pVal * qtyVal);
+                            }
+                        }
+                    }
+                }
+            });
+
+            orderArr.forEach(name => {
+                const sizes = mergedMap[name].filter(s => s !== '').join(', ');
+                const str = sizes ? `- ${name} ${sizes}\n` : `- ${name}\n`;
+                colText += str; colLabelProducts.push(sizes ? `${name} ${sizes}` : `${name}`);
+            });
+
+            if (colText !== '') finalProductsText += (colName !== '' ? `${colName}\n` : '') + colText + '\n';
+            if (colLabelProducts.length > 0) labelLines.push(colName !== '' ? `${colName} = ${colLabelProducts.join(' / ')}` : colLabelProducts.join(' / '));
+        });
+        
+        let pStr = hasMissingPrice ? '***' : (validPrices.length > 0 ? validPrices.join(' + ') + (shippingValue > 0 ? ` + ${shippingValue} = ${productsSum + shippingValue}` : ` = ${productsSum}`) : (shippingValue > 0 ? `${shippingValue} = ${shippingValue}` : '0 = 0'));
+        if (hasMissingPrice && shippingValue > 0) pStr = `*** + ${shippingValue} = ***`;
+
+        let bankText = '';
+        const selectedBankId = document.querySelector('input[name="bank"]:checked')?.value;
+        if (selectedBankId) {
+            let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
+            const selectedBank = banks.find(b => b.id === selectedBankId);
+            if (selectedBank) bankText = selectedBank.text;
+        }
+        if (bankText === '') bankText = "(กรุณาเลือกหรือเพิ่มบัญชีธนาคาร)";
+
+        document.getElementById('outputText').value = finalProductsText === '' ? '- ไม่มีรายการสินค้า -\n\n' : `${finalProductsText}ค่าจัดส่ง: ${shippingValue || 0} บาท\nยอดรวม: ${pStr} บาท\n\n--------------------------\nชำระเงินได้ที่:\n${bankText}\n\nโอนเงินแล้วกรุณาส่งสลิป และที่อยู่ให้ด้วยนะคะ`;
+        document.getElementById('outputLabelText').value = labelLines.join('\n');
+    }
+
+    function copyText(id) {
+        const el = document.getElementById(id);
+        if(el.value.trim() === '') return;
+        el.select(); document.execCommand('copy'); window.getSelection().removeAllRanges();
+    }
+
+    // ฟังก์ชันเปิด/ปิดคู่มือ (ไม่มีการ Fetch ไปไฟล์อื่นแล้ว)
+    function toggleHelp() {
+        const content = document.getElementById('helpContent');
+        const icon = document.getElementById('help-icon');
+        if (content.classList.contains('open')) {
+            content.classList.remove('open');
+            icon.style.transform = 'rotate(0deg)';
+        } else {
+            content.classList.add('open');
+            icon.style.transform = 'rotate(180deg)';
+        }
+    }
+</script>
 </body>
 </html>
