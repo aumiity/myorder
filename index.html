@@ -371,7 +371,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                ออเดอร์ <span class="version-badge">v6.5 (Smart Options)</span>
+                ออเดอร์ <span class="version-badge">v6.6</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.55rem 1rem; font-size: 0.95rem;" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -645,7 +645,6 @@
         
         let rows = [];
         if (optionRowsArray !== null) {
-            // ระบบกู้คืน: ถ้ามีคนเคยลบแถวทิ้งหมดในเวอร์ชันเก่า ให้บังคับสร้างปุ่ม '-' มาให้ 1 แถวเพื่อความปลอดภัย
             if (optionRowsArray.length === 0) {
                 rows = [ { availableSizes: ['-'], selectedSizes: [] } ];
             } else {
@@ -709,13 +708,10 @@
         if (newSizesStr !== null) {
             let newSizes = newSizesStr.split(',').map(s => s.trim()).filter(s => s !== '');
             
-            // ถ้ายืนยันลบข้อความหมด
             if (newSizes.length === 0) {
                 const allRows = item.querySelectorAll('.option-row');
-                // ตรวจสอบว่านี่คือแถวสุดท้ายหรือเปล่า ถ้าใช่ บังคับให้เป็นปุ่ม '-'
                 if (allRows.length <= 1) {
                     newSizes = ['-'];
-                    alert('⚠️ ต้องมีตัวเลือกอย่างน้อย 1 แถว\nระบบได้เปลี่ยนเป็นปุ่ม "-" ให้แทนครับ\n(หากไม่กดเลือกปุ่มใดเลย สินค้านั้นจะไม่แสดงในบิล)');
                 } else {
                     row.remove();
                     saveData(); generateText();
@@ -746,47 +742,55 @@
                 const qtyVal = parseInt(item.querySelector('.productQty').value.trim()) || 1; 
 
                 const rowEls = item.querySelectorAll('.option-row');
-                let textParts = [], activeCounts = [0];
                 
-                rowEls.forEach(rowEl => {
-                    const actives = rowEl.querySelectorAll('.pill.active');
-                    activeCounts.push(actives.length);
-                    if (actives.length > 0) {
-                        // กรองเครื่องหมาย '-' ออกจากการแสดงผลเป็นตัวอักษร
-                        const validSizes = Array.from(actives).map(p => p.getAttribute('data-size')).filter(s => s !== '-');
-                        if (validSizes.length > 0) {
-                            textParts.push(validSizes.join(',')); 
+                if (rowEls.length === 0 || (rowEls.length === 1 && rowEls[0].querySelector('.pill.active[data-size="-"]'))) {
+                    if (nameVal !== '') {
+                        const hasOtherActive = item.querySelector('.pill.active:not([data-size="-"])');
+                        if (!hasOtherActive) {
+                            if (!mergedMap[nameVal]) { mergedMap[nameVal] = []; orderArr.push(nameVal); }
+                            
+                            let token = qtyVal > 1 ? `x${qtyVal}` : '';
+                            mergedMap[nameVal].push(token);
+
+                            if (rawPrice === '') {
+                                validPrices.push('***');
+                                hasMissingPrice = true;
+                            } else {
+                                const pVal = parseFloat(rawPrice);
+                                validPrices.push(qtyVal > 1 ? `${pVal}x${qtyVal}` : pVal);
+                                productsSum += (pVal * qtyVal);
+                            }
                         }
                     }
-                });
+                } 
+                else {
+                    let textParts = [], activeCounts = [0];
+                    rowEls.forEach(rowEl => {
+                        const actives = rowEl.querySelectorAll('.pill.active');
+                        activeCounts.push(actives.length);
+                        if (actives.length > 0) {
+                            textParts.push(Array.from(actives).map(p => p.getAttribute('data-size')).join(',')); 
+                        }
+                    });
 
-                let totalActive = Math.max(...activeCounts);
-                
-                // ถ้าระบบมีตัวเลือกให้กด แต่ไม่กดเลย (totalActive === 0) จะข้ามสินค้านี้ไปเลย!
-                if (nameVal !== '' && totalActive > 0) {
-                    if (!mergedMap[nameVal]) { mergedMap[nameVal] = []; orderArr.push(nameVal); }
+                    let totalActive = Math.max(...activeCounts);
 
-                    // ถ้าระบุว่า '-' ข้อความ textParts จะว่างเปล่า วงเล็บจะไม่ถูกสร้างขึ้นมา
-                    let token = textParts.length > 0 ? `(${textParts.join(' ')})` : '';
-                    if (qtyVal > 1) {
-                        token += (token !== '' ? ` x${qtyVal}` : `x${qtyVal}`); 
-                    }
-                    
-                    // เพื่อให้ระบบนับชิ้นสินค้าถูก แม้ token จะว่างเปล่า (เช่น กดปุ่ม '-' ชิ้นเดียว) ก็ยังต้อง push ค่าว่างเข้าไปให้ array มี length
-                    if (token !== '') {
+                    if (nameVal !== '' && totalActive > 0) {
+                        if (!mergedMap[nameVal]) { mergedMap[nameVal] = []; orderArr.push(nameVal); }
+
+                        let token = textParts.length > 0 ? `(${textParts.join(' ')})` : '';
+                        if (qtyVal > 1) token += `x${qtyVal}`; 
                         mergedMap[nameVal].push(token);
-                    } else {
-                        mergedMap[nameVal].push('');
-                    }
 
-                    if (rawPrice === '') {
-                        for(let i=0; i<totalActive; i++) validPrices.push('***');
-                        hasMissingPrice = true;
-                    } else {
-                        const pVal = parseFloat(rawPrice);
-                        for(let i=0; i<totalActive; i++) {
-                            validPrices.push(qtyVal > 1 ? `${pVal}x${qtyVal}` : pVal);
-                            productsSum += (pVal * qtyVal);
+                        if (rawPrice === '') {
+                            for(let i=0; i<totalActive; i++) validPrices.push('***');
+                            hasMissingPrice = true;
+                        } else {
+                            const pVal = parseFloat(rawPrice);
+                            for(let i=0; i<totalActive; i++) {
+                                validPrices.push(qtyVal > 1 ? `${pVal}x${qtyVal}` : pVal);
+                                productsSum += (pVal * qtyVal);
+                            }
                         }
                     }
                 }
