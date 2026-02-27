@@ -13,7 +13,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                ออเดอร์ <span class="version-badge">v6.8 (Modular)</span>
+                ออเดอร์ <span class="version-badge">v6.9 (Dynamic Bank)</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.55rem 1rem; font-size: 0.95rem;" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -34,13 +34,15 @@
         </div>
 
         <div class="form-group">
-            <label>บัญชีธนาคาร</label>
-            <div class="radio-group">
-                <label><input type="radio" name="bank" value="TTB" checked> <span>ธ.ไทยธนชาต TTB<br>622-2-84950-4<br>กุลจิรา ล้อพงศ์ไพบูลย์</span></label>
-                <label><input type="radio" name="bank" value="SCB"> <span>ธ.ไทยพาณิชย์ SCB<br>407-811653-8<br>กุลจิรา ตู้จินดา</span></label>
-                <label><input type="radio" name="bank" value="KBANK"> <span>ธ.กสิกร KBANK<br>026-1-56003-8<br>กุลจิรา ตู้จินดา</span></label>
-                <label><input type="radio" name="bank" value="GSB"> <span>ธ.ออมสิน GSB<br>020478034752<br>กุลจิรา ล้อพงศ์ไพบูลย์</span></label>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+                <label style="margin: 0;">บัญชีธนาคาร</label>
+                <button class="btn-add-row" onclick="addBank()" style="margin: 0; font-size: 0.9rem;">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    เพิ่มบัญชี
+                </button>
             </div>
+            <div class="radio-group" id="bankContainer">
+                </div>
         </div>
 
         <button class="btn btn-danger-outline" style="width: 100%; margin-top: 1.5rem;" onclick="clearData()">
@@ -102,6 +104,5 @@
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
