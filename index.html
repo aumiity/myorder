@@ -82,33 +82,15 @@
         .btn-add-row { background: transparent; color: var(--theme-primary); border: none; cursor: pointer; font-size: 0.9rem; font-weight: 500; padding: 0.5rem 0; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.3rem; }
         .btn-add-row:hover { opacity: 0.7; text-decoration: underline; }
 
-        /* --- อัปเดต CSS บัญชีธนาคาร (ปุ่มในกล่อง) --- */
         .radio-group { display: flex; flex-direction: column; gap: 0.6rem; }
-        
-        /* เปลี่ยน Wrapper ให้กลายเป็นกล่องกรอบดำแทน */
-        .bank-item-wrapper { 
-            display: flex; align-items: center; justify-content: space-between; gap: 1rem; width: 100%; 
-            padding: 0.85rem 1rem; border: 1px solid var(--theme-border); border-radius: 12px; background: var(--theme-bg); 
-            transition: all 0.2s; box-sizing: border-box; 
-        }
+        .bank-item-wrapper { display: flex; align-items: center; justify-content: space-between; gap: 1rem; width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--theme-border); border-radius: 12px; background: var(--theme-bg); transition: all 0.2s; box-sizing: border-box; }
         .bank-item-wrapper:hover, .bank-item-wrapper:focus-within { border-color: var(--theme-primary); }
-        
-        /* เอาขอบพื้นหลังของ Label ออก เพราะไปอยู่ที่ Wrapper แล้ว */
-        .bank-item-wrapper label { 
-            display: flex; align-items: flex-start; font-weight: normal; gap: 0.75rem; 
-            cursor: pointer; font-size: 1rem; width: 100%; margin: 0; flex: 1; 
-        }
-        
+        .bank-item-wrapper label { display: flex; align-items: flex-start; font-weight: normal; gap: 0.75rem; cursor: pointer; font-size: 1rem; width: 100%; margin: 0; flex: 1; }
         .bank-actions { display: flex; flex-direction: row; gap: 0.4rem; justify-content: center; }
-        .btn-bank-action { 
-            background: var(--theme-surface-alt); color: var(--theme-primary); border: 1px solid transparent; 
-            padding: 0.5rem; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; 
-            transition: all 0.2s; height: auto; 
-        }
+        .btn-bank-action { background: var(--theme-surface-alt); color: var(--theme-primary); border: 1px solid transparent; padding: 0.5rem; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; height: auto; }
         .btn-bank-action:hover { background: var(--theme-primary-alpha); border-color: var(--theme-primary); }
         .btn-bank-action.delete { color: var(--theme-danger); }
         .btn-bank-action.delete:hover { background: var(--theme-danger-alpha); border-color: var(--theme-danger); }
-        
         input[type="radio"] { width: 22px; height: 22px; margin-top: 2px; cursor: pointer; accent-color: var(--theme-primary); flex-shrink: 0; }
 
         textarea { height: 350px; resize: vertical; line-height: 1.6; }
@@ -128,7 +110,6 @@
         #themeSelector { padding: 0.4rem 0.8rem; border-radius: 8px; background-color: var(--theme-surface-alt); color: var(--theme-text); border: 1px solid var(--theme-border); font-family: inherit; font-size: 0.95rem; cursor: pointer; outline: none; transition: all 0.2s; }
         #themeSelector:hover { border-color: var(--theme-primary); }
 
-        /* การจัดหน้าจอช่องค่าส่ง 2 คอลัมน์ */
         .shipping-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
 
         @media (max-width: 800px) {
@@ -148,8 +129,6 @@
             textarea { height: 250px; } 
             .help-toggle { padding: 1rem; font-size: 1rem; }
             .help-content.open { padding: 0 1rem 1.5rem 1rem; }
-            
-            /* อัปเดตธนาคารในมือถือให้ปุ่มตกลงมาเรียงสวยๆ */
             .bank-item-wrapper { flex-direction: column; align-items: stretch; gap: 0.75rem; }
             .bank-actions { flex-direction: row; justify-content: flex-end; border-top: 1px dashed var(--theme-border); padding-top: 0.75rem; }
         }
@@ -162,7 +141,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                ออเดอร์ <span class="version-badge">v7.3</span>
+                ออเดอร์ <span class="version-badge">v7.4</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.55rem 1rem; font-size: 0.95rem;" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -263,10 +242,8 @@
     const ICON_CHEV_DOWN = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
     const ICON_UP = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>`;
     const ICON_DOWN = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
-    /* เปลี่ยนจากไอคอน MINUS เป็นไอคอน TRASH ถังขยะ */
-    const ICON_TRASH = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
+    const ICON_TRASH = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
     const ICON_COPY = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
-    const ICON_MINUS = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
     const ICON_GEAR = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`;
     const ICON_PLUS = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
 
@@ -316,7 +293,6 @@
         container.innerHTML = '';
         banks.forEach(b => {
             const isChecked = b.id === selectedId ? 'checked' : '';
-            // ปุ่มแก้ไขและลบ ถูกนำมาไว้ใน .bank-item-wrapper ที่เป็นกล่องครอบแทน
             const html = `
                 <div class="bank-item-wrapper">
                     <label>
@@ -337,7 +313,9 @@
         const input = prompt("🏦 เพิ่มข้อมูลบัญชีใหม่\n(พิมพ์ // เพื่อบังคับขึ้นบรรทัดใหม่ เช่น ธ.กสิกร // 12345 // สมชาย):");
         if (input && input.trim() !== '') {
             let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
-            banks.push({ id: 'b' + Date.now(), text: input.replace(/\/\//g, '\n') });
+            // แก้บั๊กเว้นวรรคสะสม: หั่นด้วย // แล้วสั่งตัดช่องว่างหน้าหลังทิ้งก่อนเชื่อมกลับด้วย \n
+            const formattedText = input.split('//').map(s => s.trim()).join('\n');
+            banks.push({ id: 'b' + Date.now(), text: formattedText });
             localStorage.setItem('bankData', JSON.stringify(banks));
             renderBanks();
             updateData();
@@ -348,10 +326,12 @@
         let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
         const bank = banks.find(b => b.id === id);
         if (bank) {
-            const currentText = bank.text.replace(/\n/g, ' // ');
+            // ดึงข้อความมาโชว์โดยเว้นวรรคให้สวยๆ เพื่อให้ผู้ใช้แก้ได้ง่าย
+            const currentText = bank.text.split('\n').join(' // ');
             const input = prompt("✏️ แก้ไขข้อมูลบัญชี\n(พิมพ์ // เพื่อบังคับขึ้นบรรทัดใหม่):", currentText);
             if (input !== null && input.trim() !== '') {
-                bank.text = input.replace(/\/\//g, '\n');
+                // แก้บั๊กเว้นวรรคสะสม: หั่นและ Trim ก่อนเชื่อมเสมอ
+                bank.text = input.split('//').map(s => s.trim()).join('\n');
                 localStorage.setItem('bankData', JSON.stringify(banks));
                 renderBanks();
                 updateData();
@@ -360,6 +340,7 @@
     }
 
     function deleteBank(id) {
+        // แจ้งเตือนก่อนลบ
         if(confirm("❌ แน่ใจหรือไม่ว่าต้องการลบบัญชีนี้ทิ้ง?")) {
             let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
             banks = banks.filter(b => b.id !== id);
@@ -479,7 +460,7 @@
                 <div class="header-actions">
                     <button class="btn-icon btn-move" onclick="moveCollectionUp(this)" title="เลื่อนขึ้น">${ICON_UP}</button>
                     <button class="btn-icon btn-move" onclick="moveCollectionDown(this)" title="เลื่อนลง">${ICON_DOWN}</button>
-                    <button class="btn-icon btn-remove" onclick="removeCollectionBlock(this)" title="ลบชุดนี้">${ICON_TRASH}</button>
+                    <button class="btn-icon btn-remove" onclick="removeCollectionBlock(this)" title="ลบคอลเลคชั่น">${ICON_TRASH}</button>
                 </div>
             </div>
             <div class="collection-body">
@@ -498,7 +479,12 @@
     }
 
     function removeCollectionBlock(btn) {
-        if(confirm('ลบคอลเลคชั่นนี้ทิ้ง?')) { btn.closest('.collection-block').remove(); saveData(); generateText(); }
+        // แจ้งเตือนก่อนลบ
+        if(confirm('❌ ต้องการลบคอลเลคชั่นนี้พร้อมรายการสินค้าข้างในทิ้งทั้งหมด ใช่หรือไม่?')) { 
+            btn.closest('.collection-block').remove(); 
+            saveData(); 
+            generateText(); 
+        }
     }
 
     function clearAllPills() {
@@ -539,6 +525,8 @@
             rows = [ { availableSizes: ['S', 'M', 'L', 'XL', '2XL'], selectedSizes: [] } ];
         }
         let rowsHtml = rows.map((r) => createOptionRowHtml(r.availableSizes, r.selectedSizes)).join('');
+        
+        // อัปเดตไอคอนลบสินค้าเป็น ถังขยะ (ICON_TRASH)
         newItem.innerHTML = `
             <div class="product-header-row">
                 <input type="text" class="productName" placeholder="ชื่อสินค้า" value="${name}">
@@ -548,7 +536,7 @@
                     <button class="btn-icon btn-move" onclick="moveProductUp(this)" title="เลื่อนขึ้น">${ICON_UP}</button>
                     <button class="btn-icon btn-move" onclick="moveProductDown(this)" title="เลื่อนลง">${ICON_DOWN}</button>
                     <button class="btn-icon btn-clone" onclick="cloneProduct(this)" title="คัดลอก">${ICON_COPY}</button>
-                    <button class="btn-icon btn-remove" onclick="removeProduct(this)" title="ลบ">${ICON_MINUS}</button>
+                    <button class="btn-icon btn-remove" onclick="removeProduct(this)" title="ลบสินค้านี้">${ICON_TRASH}</button>
                 </div>
             </div>
             <div class="product-options-container">${rowsHtml}</div>
@@ -601,8 +589,21 @@
         }
     }
 
-    function removeProduct(btn) { btn.closest('.product-item').remove(); saveData(); generateText(); }
-    function clearData() { if(confirm('ล้างข้อมูลทั้งหมด?')) { localStorage.clear(); location.reload(); } }
+    function removeProduct(btn) { 
+        // แจ้งเตือนก่อนลบ
+        if(confirm('❌ ต้องการลบสินค้านี้ใช่หรือไม่?')) {
+            btn.closest('.product-item').remove(); 
+            saveData(); 
+            generateText(); 
+        }
+    }
+    
+    function clearData() { 
+        if(confirm('🚨 ล้างข้อมูลรายการสินค้าหน้าจอทั้งหมด?\n(ข้อมูลบัญชีธนาคารจะไม่หาย)')) { 
+            localStorage.removeItem('orderDataV3'); 
+            location.reload(); 
+        } 
+    }
 
     function generateText() {
         const shippingValue = parseFloat(document.getElementById('shippingCost').value) || 0;
