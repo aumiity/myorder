@@ -112,9 +112,6 @@
 
         .shipping-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
 
-        /* ================================================== */
-        /* RESPONSIVE สำหรับมือถือ (iPhone/จอแคบ) */
-        /* ================================================== */
         @media (max-width: 800px) {
             body { padding: 1rem 0.5rem; } 
             .container { grid-template-columns: 1fr; gap: 1.5rem; }
@@ -124,17 +121,15 @@
             .header-left { width: 100%; flex: none; }
             .header-actions { width: 100%; justify-content: flex-end; }
             
-            /* อัปเดต Grid สินค้าให้ ชื่อ และ ราคา อยู่บรรทัดบนสุดคู่กัน */
             .product-header-row { 
-                grid-template-columns: 85px 1fr 85px; /* แบ่งคอลัมน์ใหม่ */
+                grid-template-columns: 85px 1fr 85px; 
                 grid-template-rows: auto auto; 
                 gap: 0.6rem; 
             }
-            .productName { grid-column: 1 / 3; grid-row: 1; } /* ชื่อกินพื้นที่ฝั่งซ้ายและกลาง */
-            .productPrice { grid-column: 3 / 4; grid-row: 1; } /* ราคาอยู่ขวาสุดบรรทัดแรก */
-            
-            .productQty { grid-column: 1 / 2; grid-row: 2; } /* จำนวนอยู่ซ้ายสุดบรรทัดสอง */
-            .product-actions { grid-column: 2 / 4; grid-row: 2; justify-content: flex-end; } /* ปุ่มเลื่อนก๊อปลบ อยู่ขวาสุดบรรทัดสอง */
+            .productName { grid-column: 1 / 3; grid-row: 1; } 
+            .productPrice { grid-column: 3 / 4; grid-row: 1; } 
+            .productQty { grid-column: 1 / 2; grid-row: 2; } 
+            .product-actions { grid-column: 2 / 4; grid-row: 2; justify-content: flex-end; } 
 
             .action-buttons-group { flex-direction: column; gap: 0.5rem; }
             textarea { height: 250px; } 
@@ -152,7 +147,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                ออเดอร์ <span class="version-badge">v7.5 (Mobile Grid)</span>
+                ออเดอร์ <span class="version-badge">v7.6 (Clean Slate)</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.55rem 1rem; font-size: 0.95rem;" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -255,16 +250,11 @@
     const ICON_DOWN = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
     const ICON_TRASH = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
     const ICON_COPY = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
-    const ICON_MINUS = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
     const ICON_GEAR = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`;
     const ICON_PLUS = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
 
-    let defaultBanks = [
-        { id: 'b1', text: 'ธ.ไทยธนชาต TTB\n622-2-84950-4\nกุลจิรา ล้อพงศ์ไพบูลย์' },
-        { id: 'b2', text: 'ธ.ไทยพาณิชย์ SCB\n407-811653-8\nกุลจิรา ตู้จินดา' },
-        { id: 'b3', text: 'ธ.กสิกร KBANK\n026-1-56003-8\nกุลจิรา ตู้จินดา' },
-        { id: 'b4', text: 'ธ.ออมสิน GSB\n020478034752\nกุลจิรา ล้อพงศ์ไพบูลย์' }
-    ];
+    // ลบข้อมูลธนาคารตั้งต้นทิ้งเป็นค่าว่าง เพื่อความปลอดภัยและความเป็นส่วนตัว
+    let defaultBanks = [];
 
     window.onload = function() {
         const savedTheme = localStorage.getItem('appTheme') || 'ios';
@@ -402,6 +392,7 @@
         container.innerHTML = ''; 
         let savedData = JSON.parse(localStorage.getItem('orderDataV3'));
         
+        // ถ้ามีข้อมูลที่เคยเซฟไว้ ให้ดึงมาแสดงตามปกติ
         if (savedData && savedData.length > 0) {
             savedData.forEach(col => {
                 const block = addCollectionBlock(col.colName, col.isCollapsed);
@@ -413,10 +404,8 @@
                     block.querySelector('.productList').appendChild(createProductItemElement()); 
                 }
             });
-        } else {
-            const block = addCollectionBlock('');
-            block.querySelector('.productList').appendChild(createProductItemElement());
-        }
+        } 
+        // ถ้าไม่มีข้อมูลเลย ปล่อยหน้าจอว่างๆ ไว้ ให้ผู้ใช้กดเพิ่มคอลเลคชั่นเอาเอง (Clean Slate)
     }
 
     function exportData() {
