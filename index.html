@@ -140,6 +140,24 @@
         .productPrice { width: 100%; text-align: center; }
         .productQty { width: 100%; text-align: center; }
         .product-actions { display: flex; gap: 0.3rem; }
+
+        .product-header-row .productPrice, 
+        .product-header-row .productQty {
+            background-color: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            color: #E0E7FF; 
+            font-weight: 600;
+        }
+        .product-header-row .productPrice:focus, 
+        .product-header-row .productQty:focus {
+            background-color: rgba(99, 102, 241, 0.25);
+            border-color: var(--primary);
+        }
+        .product-header-row .productPrice::placeholder, 
+        .product-header-row .productQty::placeholder {
+            color: rgba(165, 180, 252, 0.6);
+            font-weight: normal;
+        }
         
         .option-row {
             display: flex;
@@ -216,7 +234,7 @@
         .btn-remove-col {
             background-color: transparent;
             color: #F87171; border: 1px solid #F87171;
-            width: 38px; height: 38px; /* ปรับให้เป็นไอคอนสี่เหลี่ยม */
+            width: 38px; height: 38px; 
             font-size: 1.1rem;
             display: flex; align-items: center; justify-content: center;
             border-radius: 8px; cursor: pointer; padding: 0;
@@ -282,7 +300,7 @@
 <div class="container">
     <div class="panel">
         <div class="main-header">
-            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v5.3 (Emoji UI)</span></h2>
+            <h2>📝 ข้อมูลออเดอร์ <span class="version-badge">v5.5 (Cross Icon)</span></h2>
             <button class="btn-clear-all-sizes" onclick="clearAllPills()">↺ ล้างตัวเลือกทั้งหมด</button>
         </div>
         
@@ -463,6 +481,7 @@
         
         const icon = isCollapsed ? '▶' : '▼';
         
+        // เปลี่ยน 🗑️ เป็น ❌
         block.innerHTML = `
             <div class="collection-header">
                 <div class="header-left">
@@ -472,7 +491,7 @@
                 <div class="header-actions">
                     <button class="btn btn-icon btn-move" onclick="moveCollectionUp(this)" title="เลื่อนคอลเลคชั่นขึ้น">▲</button>
                     <button class="btn btn-icon btn-move" onclick="moveCollectionDown(this)" title="เลื่อนคอลเลคชั่นลง">▼</button>
-                    <button class="btn-remove-col" onclick="removeCollectionBlock(this)" title="ลบชุดนี้ทิ้ง">🗑️</button>
+                    <button class="btn-remove-col" onclick="removeCollectionBlock(this)" title="ลบชุดนี้ทิ้ง">❌</button>
                 </div>
             </div>
             <div class="collection-body">
@@ -526,7 +545,6 @@
             pillsHtml += `<div class="pill ${isActive}" onclick="togglePill(this)" data-size="${s}">${s}</div>`;
         });
         
-        // ปรับเป็นปุ่ม Emoji ทรงกลม/เหลี่ยม เล็กๆ ประหยัดพื้นที่
         let actionsHtml = `<div class="pill pill-custom" style="padding: 0.35rem 0.6rem;" onclick="editPillsList(this)" title="จัดการปุ่มตัวเลือก">⚙️</div>`;
         if (!isFirstRow) {
             actionsHtml += `<div class="pill pill-custom pill-danger" style="padding: 0.35rem 0.6rem;" onclick="removeOptionRow(this)" title="ลบตัวเลือกแถวนี้">❌</div>`;
