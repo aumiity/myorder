@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>myorder</title>
     <style>
-        /* ========================================= */
-        /* --- 1. ระบบจัดการ THEME (สีหลักของเว็บ) --- */
-        /* ========================================= */
-        
-        /* ธีมที่ 1: iOS Dark (ค่าเริ่มต้น) */
         :root {
             --theme-bg: #000000;
             --theme-surface: #1C1C1E;
@@ -28,8 +23,6 @@
             --theme-text-muted: #8E8E93;
             --theme-border: #38383A;
         }
-
-        /* ธีมที่ 2: GitHub Dark Default */
         [data-theme="github"] {
             --theme-bg: #0d1117;
             --theme-surface: #161b22;
@@ -49,294 +42,107 @@
             --theme-border: #30363d;
         }
 
-        /* ========================================= */
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--theme-bg);
-            color: var(--theme-text);
-            margin: 0;
-            padding: 2rem 3rem; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background-color: var(--theme-bg); color: var(--theme-text);
+            margin: 0; padding: 2rem 3rem; 
+            display: flex; flex-direction: column; align-items: center;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
-        .container {
-            display: grid;
-            grid-template-columns: 1.4fr 1fr;
-            gap: 2rem; 
-            width: 100%; 
-            max-width: 1800px; 
-        }
+        .container { display: grid; grid-template-columns: 1.4fr 1fr; gap: 2rem; width: 100%; max-width: 1800px; }
         .panel {
-            background: var(--theme-surface);
-            padding: 2rem; 
-            border-radius: 20px; 
-            border: 1px solid var(--theme-border);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
+            background: var(--theme-surface); padding: 2rem; border-radius: 20px; 
+            border: 1px solid var(--theme-border); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
             transition: background-color 0.3s ease, border-color 0.3s ease;
         }
         
-        .main-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--theme-border);
-        }
-        h2 { 
-            margin: 0; 
-            color: var(--theme-text); 
-            font-size: 1.6rem; 
-            font-weight: 700; 
-            display: flex; 
-            align-items: center; 
-            gap: 0.75rem; 
-        }
+        .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--theme-border); }
+        h2 { margin: 0; color: var(--theme-text); font-size: 1.6rem; font-weight: 700; display: flex; align-items: center; gap: 0.75rem; }
         .version-badge { font-size: 0.85rem; color: var(--theme-text-muted); font-weight: normal; }
         
         .form-group { margin-bottom: 1.5rem; }
-        label {
-            display: block;
-            margin-bottom: 0.6rem;
-            font-weight: 500;
-            font-size: 1rem; 
-            color: var(--theme-text-muted);
-        }
+        label { display: block; margin-bottom: 0.6rem; font-weight: 500; font-size: 1rem; color: var(--theme-text-muted); }
         
         input[type="text"], input[type="number"], textarea {
-            width: 100%;
-            padding: 0.85rem 1rem;
-            background-color: var(--theme-surface-alt);
-            color: var(--theme-text);
-            border: 2px solid transparent;
-            border-radius: 12px;
-            box-sizing: border-box;
-            font-family: inherit;
-            font-size: 16px; 
-            -webkit-appearance: none;
-            appearance: none;
-            transition: all 0.2s ease;
+            width: 100%; padding: 0.85rem 1rem; background-color: var(--theme-surface-alt);
+            color: var(--theme-text); border: 2px solid transparent; border-radius: 12px;
+            box-sizing: border-box; font-family: inherit; font-size: 16px; 
+            -webkit-appearance: none; appearance: none; transition: all 0.2s ease;
         }
         input::placeholder, textarea::placeholder { color: var(--theme-text-muted); }
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--theme-primary);
-            background-color: var(--theme-surface-hover); 
-        }
+        input:focus, textarea:focus { outline: none; border-color: var(--theme-primary); background-color: var(--theme-surface-hover); }
 
-        input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; }
         
-        .collection-block {
-            background-color: var(--theme-bg);
-            border-radius: 16px;
-            padding: 1.25rem;
-            margin-bottom: 1.5rem;
-            border: 1px solid var(--theme-border);
-            transition: all 0.3s ease;
-        }
-        
-        .collection-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
+        .collection-block { background-color: var(--theme-bg); border-radius: 16px; padding: 1.25rem; margin-bottom: 1.5rem; border: 1px solid var(--theme-border); transition: all 0.3s ease; }
+        .collection-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem; }
         .header-left { display: flex; align-items: center; gap: 0.75rem; flex: 1; }
         .header-actions { display: flex; gap: 0.4rem; align-items: center; }
         
-        .btn-toggle-col {
-            background: transparent;
-            color: var(--theme-primary);
-            border: none;
-            width: 36px; height: 36px;
-            font-size: 1rem;
-            cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-            transition: opacity 0.2s;
-        }
+        .btn-toggle-col { background: transparent; color: var(--theme-primary); border: none; width: 36px; height: 36px; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: opacity 0.2s; }
         .btn-toggle-col:hover { opacity: 0.7; }
         
         .collection-block.collapsed .collection-header { margin-bottom: 0; }
         .collection-block.collapsed .collection-body { display: none; }
         
-        .product-item {
-            background: var(--theme-surface);
-            padding: 1rem;
-            border-radius: 12px;
-            margin-bottom: 0.75rem;
-            border: 1px solid var(--theme-border);
-        }
+        .product-item { background: var(--theme-surface); padding: 1rem; border-radius: 12px; margin-bottom: 0.75rem; border: 1px solid var(--theme-border); }
         
-        .product-header-row {
-            display: grid;
-            grid-template-columns: 1fr 85px 65px auto; 
-            gap: 0.5rem; 
-            align-items: center;
-            margin-bottom: 0.75rem;
-        }
+        .product-header-row { display: grid; grid-template-columns: 1fr 85px 65px auto; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem; }
         .product-header-row input { padding: 0.6rem; font-size: 0.95rem; }
         .productName { width: 100%; font-weight: 500; }
-        .productPrice { width: 100%; text-align: center; }
-        .productQty { width: 100%; text-align: center; }
+        .productPrice, .productQty { width: 100%; text-align: center; background-color: var(--theme-primary-alpha); color: var(--theme-accent-text); font-weight: 600; border: 1px solid var(--theme-primary-alpha-strong); }
+        .productPrice:focus, .productQty:focus { background-color: var(--theme-primary-alpha-strong); border-color: var(--theme-primary); }
         .product-actions { display: flex; gap: 0.3rem; }
-
-        .product-header-row .productPrice, 
-        .product-header-row .productQty {
-            background-color: var(--theme-primary-alpha);
-            color: var(--theme-accent-text); 
-            font-weight: 600;
-            border: 1px solid var(--theme-primary-alpha-strong);
-        }
-        .product-header-row .productPrice:focus, 
-        .product-header-row .productQty:focus {
-            background-color: var(--theme-primary-alpha-strong);
-            border-color: var(--theme-primary);
-        }
         
-        .option-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 0.5rem;
-            padding-top: 0.5rem;
-            border-top: 1px solid var(--theme-border);
-        }
+        .option-row { display: flex; align-items: center; margin-bottom: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--theme-border); }
+        .size-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; width: 100%; }
         
-        .size-pills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            align-items: center;
-            width: 100%;
-        }
-        
-        .pill {
-            padding: 0.4rem 0.9rem;
-            border-radius: 20px;
-            background: var(--theme-surface-alt);
-            color: var(--theme-text);
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            user-select: none;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-            border: 1px solid transparent;
-        }
+        .pill { padding: 0.4rem 0.9rem; border-radius: 20px; background: var(--theme-surface-alt); color: var(--theme-text); font-size: 0.9rem; font-weight: 500; cursor: pointer; user-select: none; transition: all 0.2s ease; border: 1px solid transparent; }
         .pill:hover { background: var(--theme-surface-hover); }
-        .pill.active {
-            background: var(--theme-primary);
-            color: white;
-            border-color: var(--theme-primary-hover);
-        }
+        .pill.active { background: var(--theme-primary); color: white; border-color: var(--theme-primary-hover); }
         
-        .pill-action {
-            appearance: none; -webkit-appearance: none; background: transparent; border: none; padding: 0; cursor: pointer; color: inherit; font-family: inherit;
-            display: flex; align-items: center; justify-content: center;
-            gap: 0.3rem;
-            padding: 0.4rem 0.85rem; 
-            border-radius: 20px; 
-            color: var(--theme-primary);
-            background: transparent;
-            border: 1px solid transparent; 
-            transition: all 0.2s ease;
-        }
+        .pill-action { appearance: none; -webkit-appearance: none; background: transparent; border: none; padding: 0; cursor: pointer; color: inherit; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 0.3rem; padding: 0.4rem 0.85rem; border-radius: 20px; color: var(--theme-primary); border: 1px solid transparent; transition: all 0.2s ease; }
         .pill-action:hover { background: var(--theme-primary-alpha); }
 
-        .btn {
-            background-color: var(--theme-surface-alt);
-            color: var(--theme-text);
-            border: 1px solid var(--theme-border);
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1.05rem;
-            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-            transition: all 0.2s;
-        }
+        .btn { background-color: var(--theme-surface-alt); color: var(--theme-text); border: 1px solid var(--theme-border); padding: 1rem 1.5rem; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 1.05rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; }
         .btn:hover, .btn:active { background-color: var(--theme-surface-hover); }
-        
         .btn-primary { background-color: var(--theme-primary); color: white; border: none; }
         .btn-primary:hover, .btn-primary:active { background-color: var(--theme-primary-hover); }
-        
         .btn-success { background-color: var(--theme-success); color: white; border: none; }
+        .btn-danger-outline { background-color: transparent; color: var(--theme-danger); border: 1px solid var(--theme-danger); }
+        .btn-danger-outline:hover { background-color: var(--theme-danger-alpha); }
         
-        .btn-danger-outline { 
-            background-color: transparent; 
-            color: var(--theme-danger); 
-            border: 1px solid var(--theme-danger); 
-        }
-        .btn-danger-outline:hover { 
-            background-color: var(--theme-danger-alpha); 
-        }
-        
-        .btn-icon {
-            padding: 0;
-            width: 34px; height: 34px;
-            flex-shrink: 0; 
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 8px; color: white; border: none; cursor: pointer;
-            transition: opacity 0.2s;
-        }
+        .btn-icon { padding: 0; width: 34px; height: 34px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: white; border: none; cursor: pointer; transition: opacity 0.2s; }
         .btn-icon:hover { opacity: 0.8; }
         .btn-move { background-color: var(--theme-surface-hover); color: var(--theme-text); }
         .btn-clone { background-color: var(--theme-primary); }
         .btn-remove { background-color: var(--theme-danger); }
 
-        .btn-add-row {
-            background: transparent; color: var(--theme-primary);
-            border: none; cursor: pointer; font-size: 0.9rem; font-weight: 500;
-            padding: 0.5rem 0; margin-top: 0.25rem; 
-            display: flex; align-items: center; gap: 0.3rem;
-        }
+        .btn-add-row { background: transparent; color: var(--theme-primary); border: none; cursor: pointer; font-size: 0.9rem; font-weight: 500; padding: 0.5rem 0; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.3rem; }
         .btn-add-row:hover { opacity: 0.7; text-decoration: underline; }
 
         .radio-group { display: flex; flex-direction: column; gap: 0.6rem; }
-        .radio-group label {
-            display: flex; align-items: flex-start; font-weight: normal; gap: 0.75rem;
-            cursor: pointer; padding: 1rem; border: 1px solid var(--theme-border);
-            border-radius: 12px; background: var(--theme-bg); font-size: 1rem;
-            transition: all 0.2s;
-        }
+        .radio-group label { display: flex; align-items: flex-start; font-weight: normal; gap: 0.75rem; cursor: pointer; padding: 1rem; border: 1px solid var(--theme-border); border-radius: 12px; background: var(--theme-bg); font-size: 1rem; transition: all 0.2s; }
         .radio-group label:hover { border-color: var(--theme-primary); }
-        input[type="radio"] { 
-            width: 22px; height: 22px; margin-top: 2px; cursor: pointer; 
-            accent-color: var(--theme-primary); 
-        }
+        input[type="radio"] { width: 22px; height: 22px; margin-top: 2px; cursor: pointer; accent-color: var(--theme-primary); }
         
         textarea { height: 350px; resize: vertical; line-height: 1.6; }
         .action-buttons-group { display: flex; gap: 1rem; margin-top: 1rem; }
 
-        .app-footer {
-            margin-top: 3rem;
-            text-align: center;
-            color: var(--theme-text-muted);
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            width: 100%;
-        }
-        #themeSelector {
-            padding: 0.4rem 0.8rem;
-            border-radius: 8px;
-            background-color: var(--theme-surface-alt);
-            color: var(--theme-text);
-            border: 1px solid var(--theme-border);
-            font-family: inherit;
-            font-size: 0.95rem;
-            cursor: pointer;
-            outline: none;
-            transition: all 0.2s;
-        }
+        /* --- Help Section & Footer --- */
+        .help-section { width: 100%; max-width: 1800px; margin: 2rem auto 0 auto; background: var(--theme-surface); border: 1px solid var(--theme-border); border-radius: 16px; overflow: hidden; transition: all 0.3s ease; }
+        .help-toggle { width: 100%; background: transparent; color: var(--theme-text); border: none; padding: 1.25rem 2rem; font-size: 1.1rem; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background-color 0.2s; }
+        .help-toggle:hover { background-color: var(--theme-surface-hover); }
+        .help-content { max-height: 0; padding: 0 2rem; opacity: 0; transition: all 0.3s ease; }
+        .help-content.open { max-height: 2500px; padding: 0 2rem 2rem 2rem; opacity: 1; border-top: 1px solid var(--theme-border); }
+        .help-content h3 { color: var(--theme-primary); margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1.1rem; }
+        .help-content ul { margin: 0; padding-left: 1.5rem; color: var(--theme-text-muted); line-height: 1.6; }
+        .help-content li { margin-bottom: 0.5rem; }
+        .help-content code { background: var(--theme-bg); padding: 0.15rem 0.5rem; border-radius: 6px; color: var(--theme-accent-text); border: 1px solid var(--theme-border); }
+
+        .app-footer { margin-top: 2rem; text-align: center; color: var(--theme-text-muted); font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem; width: 100%; }
+        #themeSelector { padding: 0.4rem 0.8rem; border-radius: 8px; background-color: var(--theme-surface-alt); color: var(--theme-text); border: 1px solid var(--theme-border); font-family: inherit; font-size: 0.95rem; cursor: pointer; outline: none; transition: all 0.2s; }
         #themeSelector:hover { border-color: var(--theme-primary); }
 
         @media (max-width: 800px) {
@@ -344,23 +150,18 @@
             .container { grid-template-columns: 1fr; gap: 1.5rem; }
             .panel { padding: 1.25rem; border-radius: 16px; }
             .main-header { flex-direction: column; align-items: stretch; gap: 1rem; }
-            
             .collection-header { flex-wrap: wrap; }
             .header-left { width: 100%; flex: none; }
             .header-actions { width: 100%; justify-content: flex-end; }
-            
-            .product-header-row { 
-                grid-template-columns: 1fr 1fr auto; 
-                grid-template-rows: auto auto;
-                gap: 0.6rem;
-            }
+            .product-header-row { grid-template-columns: 1fr 1fr auto; grid-template-rows: auto auto; gap: 0.6rem; }
             .productName { grid-column: 1 / 4; grid-row: 1; }
             .productPrice { grid-column: 1 / 2; grid-row: 2; }
             .productQty { grid-column: 2 / 3; grid-row: 2; }
             .product-actions { grid-column: 3 / 4; grid-row: 2; justify-content: flex-end; }
-            
             .action-buttons-group { flex-direction: column; gap: 0.5rem; }
             textarea { height: 250px; } 
+            .help-toggle { padding: 1rem; font-size: 1rem; }
+            .help-content.open { padding: 0 1rem 1.5rem 1rem; }
         }
     </style>
 </head>
@@ -371,7 +172,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                ออเดอร์ <span class="version-badge">v6.6</span>
+                ออเดอร์ <span class="version-badge">v6.8</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.55rem 1rem; font-size: 0.95rem;" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -435,6 +236,19 @@
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
             คัดลอกใบปะหน้า
         </button>
+    </div>
+</div>
+
+<div class="help-section">
+    <button class="help-toggle" onclick="toggleHelp()">
+        <span>📖 คู่มือการใช้งานระบบ (คลิกเพื่อเปิดอ่าน)</span>
+        <span id="help-icon" style="transition: transform 0.3s;">▼</span>
+    </button>
+    <div class="help-content" id="helpContent">
+        <div id="helpLoading" style="display: none; text-align: center; padding: 2rem; color: var(--theme-text-muted);">
+            ⏳ กำลังโหลดข้อมูล...
+        </div>
+        <div id="helpInner"></div>
     </div>
 </div>
 
@@ -769,7 +583,10 @@
                         const actives = rowEl.querySelectorAll('.pill.active');
                         activeCounts.push(actives.length);
                         if (actives.length > 0) {
-                            textParts.push(Array.from(actives).map(p => p.getAttribute('data-size')).join(',')); 
+                            const validSizes = Array.from(actives).map(p => p.getAttribute('data-size')).filter(s => s !== '-');
+                            if (validSizes.length > 0) {
+                                textParts.push(validSizes.join(',')); 
+                            }
                         }
                     });
 
@@ -779,8 +596,15 @@
                         if (!mergedMap[nameVal]) { mergedMap[nameVal] = []; orderArr.push(nameVal); }
 
                         let token = textParts.length > 0 ? `(${textParts.join(' ')})` : '';
-                        if (qtyVal > 1) token += `x${qtyVal}`; 
-                        mergedMap[nameVal].push(token);
+                        if (qtyVal > 1) {
+                            token += (token !== '' ? ` x${qtyVal}` : `x${qtyVal}`); 
+                        }
+                        
+                        if (token !== '') {
+                            mergedMap[nameVal].push(token);
+                        } else {
+                            mergedMap[nameVal].push('');
+                        }
 
                         if (rawPrice === '') {
                             for(let i=0; i<totalActive; i++) validPrices.push('***');
@@ -828,6 +652,43 @@
         const el = document.getElementById(id);
         if(el.value.trim() === '') return;
         el.select(); document.execCommand('copy'); window.getSelection().removeAllRanges();
+    }
+
+    // --- ระบบ Javascript สำหรับเรียกคู่มือจากไฟล์ help.html ---
+    let helpLoaded = false;
+    async function toggleHelp() {
+        const content = document.getElementById('helpContent');
+        const icon = document.getElementById('help-icon');
+        const inner = document.getElementById('helpInner');
+        const loading = document.getElementById('helpLoading');
+
+        if (content.classList.contains('open')) {
+            content.classList.remove('open');
+            icon.style.transform = 'rotate(0deg)';
+        } else {
+            content.classList.add('open');
+            icon.style.transform = 'rotate(180deg)';
+            
+            // โหลดข้อมูลแค่ครั้งแรกครั้งเดียว
+            if (!helpLoaded) {
+                loading.style.display = 'block';
+                try {
+                    // เรียกดึงไฟล์ help.html ที่อยู่ในโฟลเดอร์เดียวกัน
+                    const response = await fetch('help.html');
+                    if (response.ok) {
+                        const html = await response.text();
+                        inner.innerHTML = html;
+                        helpLoaded = true;
+                    } else {
+                        inner.innerHTML = '<p style="color: var(--theme-danger); text-align: center; margin-top: 2rem;">ไม่สามารถโหลดคู่มือได้ (อย่าลืมสร้างไฟล์ help.html ในโปรเจกต์นะครับ)</p>';
+                    }
+                } catch (error) {
+                    inner.innerHTML = '<p style="color: var(--theme-danger); text-align: center; margin-top: 2rem;">เกิดข้อผิดพลาดในการโหลดไฟล์คู่มือ</p>';
+                } finally {
+                    loading.style.display = 'none';
+                }
+            }
+        }
     }
 </script>
 
