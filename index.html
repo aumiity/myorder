@@ -61,16 +61,15 @@
             display: flex; gap: 0.4rem; 
         }
         .collection-top-controls .btn-icon { 
-            width: 30px; height: 30px; border-radius: 8px; /* ปุ่มทรงเหลี่ยมมน */
+            width: 30px; height: 30px; border-radius: 8px;
         }
         
-        /* ช่องใส่ชื่อคอลเลคชั่นแบบมีปุ่มย่อขยายด้านใน */
         .collection-name-box { 
             position: relative; width: 100%; 
         }
         .collection-name-box input { 
             background-color: var(--theme-surface-alt); 
-            padding-right: 3rem; /* เว้นที่ให้ปุ่มลูกศร */
+            padding-right: 3rem; 
             font-size: 1.1rem; font-weight: 600;
         }
         .btn-toggle-col { 
@@ -100,20 +99,18 @@
         .pill:hover { background: var(--theme-surface-hover); }
         .pill.active { background: var(--theme-primary); color: white; }
         
-        /* v8.8 ปุ่มเฟืองตั้งค่าตัวเลือก เปลี่ยนเป็นสีเทา+มีเส้นขอบ */
+        /* v8.9 ปรับปุ่มเฟืองตัวเลือก ให้เป็นสีเทา ไม่มีขอบ แต่ทรงมนเหมือนเดิม */
         .pill-action { 
             appearance: none; -webkit-appearance: none; 
-            background: var(--theme-surface); 
-            border: 1px solid var(--theme-border); 
-            color: var(--theme-text-muted); 
+            background-color: var(--theme-surface-hover); 
+            color: var(--theme-text); 
+            border: none; 
             padding: 0.4rem 0.85rem; border-radius: 20px; 
             cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 0.3rem; 
             transition: all 0.2s ease; 
         }
         .pill-action:hover { 
-            background: var(--theme-surface-hover); 
-            color: var(--theme-text); 
-            border-color: var(--theme-text-muted);
+            opacity: 0.8;
         }
 
         .btn { background-color: var(--theme-surface); color: var(--theme-text); border: none; padding: 1rem 1.5rem; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 1.05rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; }
@@ -124,6 +121,7 @@
         .btn-danger-outline { background-color: transparent; color: var(--theme-danger); border: 1px solid var(--theme-danger); }
         .btn-danger-outline:hover { background-color: var(--theme-danger-alpha); }
         
+        /* ปุ่มเลื่อน ก๊อป ลบ (สีเทา) */
         .btn-icon { padding: 0; width: 34px; height: 34px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: var(--theme-text); border: none; cursor: pointer; transition: all 0.2s; background-color: var(--theme-surface-hover); }
         .btn-icon:hover { opacity: 0.8; }
         .btn-clone { color: var(--theme-primary); }
@@ -159,8 +157,7 @@
         .ios-list-item.clickable:hover { background-color: var(--theme-surface-alt); cursor: pointer; }
         
         .bank-action-btn { background-color: var(--theme-surface-hover); color: var(--theme-text); border: none; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; padding: 0; flex-shrink: 0; }
-        .bank-action-btn:hover { background-color: var(--theme-primary-alpha); color: var(--theme-primary); }
-        .bank-action-btn.delete:hover { background-color: var(--theme-danger-alpha); color: var(--theme-danger); }
+        .bank-action-btn:hover { opacity: 0.8; }
         
         .check-indicator { width: 20px; display: flex; justify-content: center; }
 
@@ -209,7 +206,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                ออเดอร์ <span class="version-badge">v8.8 (Mac UI)</span>
+                ออเดอร์ <span class="version-badge">v8.9</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.55rem 1rem; font-size: 0.95rem; background: var(--theme-surface);" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -571,7 +568,7 @@
         saveData();
         
         const exportObj = {
-            version: "v8.8",
+            version: "v8.9",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || [],
             selectedBank: localStorage.getItem('bank') || '',
@@ -653,7 +650,6 @@
         if (block.nextElementSibling) { block.parentNode.insertBefore(block.nextElementSibling, block); saveData(); generateText(); }
     }
 
-    /* v8.8 สร้างกล่องคอลเลคชั่นใหม่ ให้เหมือน Mac Finder */
     function addCollectionBlock(colName = '', isCollapsed = false) {
         const container = document.getElementById('collectionsContainer');
         const block = document.createElement('div');
