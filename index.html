@@ -5,33 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>myorder</title>
     <style>
-        /* --- iOS Dark Theme Color Palette --- */
-        :root {
-            --ios-bg: #000000;
-            --ios-surface: #1C1C1E;
-            --ios-surface-alt: #2C2C2E;
-            --ios-surface-hover: #3A3A3C;
-            --ios-primary: #0A84FF;
-            --ios-primary-hover: #007AFF;
-            --ios-danger: #FF453A;
-            --ios-danger-hover: #FF3B30;
-            --ios-success: #32D74B;
-            --ios-warning: #FF9F0A;
-            --ios-text: #FFFFFF;
-            --ios-text-muted: #8E8E93;
-            --ios-border: #38383A;
-            
-            --focus-ring: rgba(10, 132, 255, 0.4);
-        }
+        /* ========================================= */
+        /* --- 1. ระบบจัดการ THEME (สีหลักของเว็บ) --- */
+        /* ========================================= */
         
+        /* 🍏 ธีมที่ 1: iOS Dark (ค่าเริ่มต้น) */
+        :root {
+            --theme-bg: #000000;
+            --theme-surface: #1C1C1E;
+            --theme-surface-alt: #2C2C2E;
+            --theme-surface-hover: #3A3A3C;
+            --theme-primary: #0A84FF;
+            --theme-primary-hover: #007AFF;
+            --theme-primary-alpha: rgba(10, 132, 255, 0.15);
+            --theme-primary-alpha-strong: rgba(10, 132, 255, 0.25);
+            --theme-accent-text: #64D2FF;
+            --theme-danger: #FF453A;
+            --theme-danger-hover: #FF3B30;
+            --theme-danger-alpha: rgba(255, 69, 58, 0.15);
+            --theme-success: #32D74B;
+            --theme-text: #FFFFFF;
+            --theme-text-muted: #8E8E93;
+            --theme-border: #38383A;
+        }
+
+        /* 🐙 ธีมที่ 2: GitHub Dark Default */
+        [data-theme="github"] {
+            --theme-bg: #0d1117;
+            --theme-surface: #161b22;
+            --theme-surface-alt: #21262d;
+            --theme-surface-hover: #30363d;
+            --theme-primary: #2f81f7;
+            --theme-primary-hover: #388bfd;
+            --theme-primary-alpha: rgba(47, 129, 247, 0.15);
+            --theme-primary-alpha-strong: rgba(47, 129, 247, 0.25);
+            --theme-accent-text: #79c0ff;
+            --theme-danger: #f85149;
+            --theme-danger-hover: #ff7b72;
+            --theme-danger-alpha: rgba(248, 81, 73, 0.15);
+            --theme-success: #238636;
+            --theme-text: #c9d1d9;
+            --theme-text-muted: #8b949e;
+            --theme-border: #30363d;
+        }
+
+        /* ========================================= */
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--ios-bg);
-            color: var(--ios-text);
+            background-color: var(--theme-bg);
+            color: var(--theme-text);
             margin: 0;
             padding: 2rem 3rem; 
             display: flex;
             justify-content: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         .container {
             display: grid;
@@ -41,9 +69,12 @@
             max-width: 1800px; 
         }
         .panel {
-            background: var(--ios-surface);
+            background: var(--theme-surface);
             padding: 2rem; 
-            border-radius: 20px; /* ขอบโค้งมนแบบ iOS */
+            border-radius: 20px; 
+            border: 1px solid var(--theme-border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
         
         .main-header {
@@ -52,33 +83,55 @@
             align-items: center;
             margin-bottom: 2rem;
             padding-bottom: 1rem;
-            border-bottom: 1px solid var(--ios-border);
+            border-bottom: 1px solid var(--theme-border);
         }
         h2 { 
             margin: 0; 
-            color: var(--ios-text); 
+            color: var(--theme-text); 
             font-size: 1.6rem; 
             font-weight: 700; 
             display: flex; 
             align-items: center; 
             gap: 0.75rem; 
         }
-        .version-badge { font-size: 0.85rem; color: var(--ios-text-muted); font-weight: normal; }
+        .version-badge { font-size: 0.85rem; color: var(--theme-text-muted); font-weight: normal; }
         
+        .header-controls {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        /* สไตล์ตัวเลือก Theme */
+        #themeSelector {
+            padding: 0.55rem 1rem;
+            border-radius: 12px;
+            background-color: var(--theme-surface-alt);
+            color: var(--theme-text);
+            border: 1px solid var(--theme-border);
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s;
+        }
+        #themeSelector:hover { border-color: var(--theme-primary); }
+
         .form-group { margin-bottom: 1.5rem; }
         label {
             display: block;
             margin-bottom: 0.6rem;
             font-weight: 500;
             font-size: 1rem; 
-            color: var(--ios-text-muted);
+            color: var(--theme-text-muted);
         }
         
         input[type="text"], input[type="number"], textarea {
             width: 100%;
             padding: 0.85rem 1rem;
-            background-color: var(--ios-surface-alt);
-            color: var(--ios-text);
+            background-color: var(--theme-surface-alt);
+            color: var(--theme-text);
             border: 2px solid transparent;
             border-radius: 12px;
             box-sizing: border-box;
@@ -88,11 +141,11 @@
             appearance: none;
             transition: all 0.2s ease;
         }
-        input::placeholder, textarea::placeholder { color: var(--ios-text-muted); }
+        input::placeholder, textarea::placeholder { color: var(--theme-text-muted); }
         input:focus, textarea:focus {
             outline: none;
-            border-color: var(--ios-primary);
-            background-color: var(--ios-surface-hover); 
+            border-color: var(--theme-primary);
+            background-color: var(--theme-surface-hover); 
         }
 
         input[type="number"]::-webkit-outer-spin-button,
@@ -100,11 +153,12 @@
         input[type="number"] { -moz-appearance: textfield; }
         
         .collection-block {
-            background-color: var(--ios-bg);
+            background-color: var(--theme-bg);
             border-radius: 16px;
             padding: 1.25rem;
             margin-bottom: 1.5rem;
-            border: 1px solid var(--ios-border);
+            border: 1px solid var(--theme-border);
+            transition: all 0.3s ease;
         }
         
         .collection-header {
@@ -119,7 +173,7 @@
         
         .btn-toggle-col {
             background: transparent;
-            color: var(--ios-primary);
+            color: var(--theme-primary);
             border: none;
             width: 36px; height: 36px;
             font-size: 1rem;
@@ -134,10 +188,11 @@
         .collection-block.collapsed .collection-body { display: none; }
         
         .product-item {
-            background: var(--ios-surface);
+            background: var(--theme-surface);
             padding: 1rem;
             border-radius: 12px;
             margin-bottom: 0.75rem;
+            border: 1px solid var(--theme-border);
         }
         
         .product-header-row {
@@ -153,17 +208,17 @@
         .productQty { width: 100%; text-align: center; }
         .product-actions { display: flex; gap: 0.3rem; }
 
-        /* Highlight ราคาและจำนวนให้เด่นขึ้นในสไตล์ iOS */
         .product-header-row .productPrice, 
         .product-header-row .productQty {
-            background-color: rgba(10, 132, 255, 0.1);
-            color: #64D2FF; 
+            background-color: var(--theme-primary-alpha);
+            color: var(--theme-accent-text); 
             font-weight: 600;
+            border: 1px solid var(--theme-primary-alpha-strong);
         }
         .product-header-row .productPrice:focus, 
         .product-header-row .productQty:focus {
-            background-color: rgba(10, 132, 255, 0.2);
-            border-color: var(--ios-primary);
+            background-color: var(--theme-primary-alpha-strong);
+            border-color: var(--theme-primary);
         }
         
         .option-row {
@@ -171,7 +226,7 @@
             align-items: center;
             margin-bottom: 0.5rem;
             padding-top: 0.5rem;
-            border-top: 1px solid var(--ios-border);
+            border-top: 1px solid var(--theme-border);
         }
         
         .size-pills {
@@ -185,36 +240,38 @@
         .pill {
             padding: 0.4rem 0.9rem;
             border-radius: 20px;
-            background: var(--ios-surface-alt);
-            color: var(--ios-text);
+            background: var(--theme-surface-alt);
+            color: var(--theme-text);
             font-size: 0.9rem;
             font-weight: 500;
             cursor: pointer;
             user-select: none;
             transition: all 0.2s ease;
             white-space: nowrap;
+            border: 1px solid transparent;
         }
-        .pill:hover { background: var(--ios-surface-hover); }
+        .pill:hover { background: var(--theme-surface-hover); }
         .pill.active {
-            background: var(--ios-primary);
+            background: var(--theme-primary);
             color: white;
+            border-color: var(--theme-primary-hover);
         }
         
         .pill-action {
             background: transparent;
-            color: var(--ios-primary);
+            color: var(--theme-primary);
             display: flex; align-items: center; gap: 0.3rem;
+            border: 1px dashed var(--theme-border);
         }
-        .pill-action:hover { background: rgba(10, 132, 255, 0.1); }
+        .pill-action:hover { background: var(--theme-primary-alpha); border-color: var(--theme-primary); }
         
-        .pill-danger { color: var(--ios-danger); }
-        .pill-danger:hover { background: rgba(255, 69, 58, 0.1); }
+        .pill-danger { color: var(--theme-danger); }
+        .pill-danger:hover { background: var(--theme-danger-alpha); border-color: var(--theme-danger); color: var(--theme-danger-hover); }
 
-        /* ปุ่มกดแบบ iOS Filled Button */
         .btn {
-            background-color: var(--ios-surface-alt);
-            color: var(--ios-primary);
-            border: none;
+            background-color: var(--theme-surface-alt);
+            color: var(--theme-text);
+            border: 1px solid var(--theme-border);
             padding: 1rem 1.5rem;
             border-radius: 12px;
             cursor: pointer;
@@ -223,16 +280,15 @@
             display: flex; align-items: center; justify-content: center; gap: 0.5rem;
             transition: all 0.2s;
         }
-        .btn:hover, .btn:active { background-color: var(--ios-surface-hover); }
+        .btn:hover, .btn:active { background-color: var(--theme-surface-hover); }
         
-        .btn-primary { background-color: var(--ios-primary); color: white; }
-        .btn-primary:hover, .btn-primary:active { background-color: var(--ios-primary-hover); }
+        .btn-primary { background-color: var(--theme-primary); color: white; border: none; }
+        .btn-primary:hover, .btn-primary:active { background-color: var(--theme-primary-hover); }
         
-        .btn-success { background-color: var(--ios-success); color: white; }
-        .btn-danger-outline { background-color: transparent; color: var(--ios-danger); border: 1px solid var(--ios-border); }
-        .btn-danger-outline:hover { border-color: var(--ios-danger); background-color: rgba(255, 69, 58, 0.1); }
+        .btn-success { background-color: var(--theme-success); color: white; border: none; }
+        .btn-danger-outline { background-color: transparent; color: var(--theme-danger); border: 1px solid var(--theme-border); }
+        .btn-danger-outline:hover { border-color: var(--theme-danger); background-color: var(--theme-danger-alpha); }
         
-        /* ปุ่มไอคอนสี่เหลี่ยมเล็กๆ */
         .btn-icon {
             padding: 0;
             width: 34px; height: 34px;
@@ -242,29 +298,29 @@
             transition: opacity 0.2s;
         }
         .btn-icon:hover { opacity: 0.8; }
-        .btn-move { background-color: var(--ios-surface-hover); color: var(--ios-text); }
-        .btn-clone { background-color: var(--ios-primary); }
-        .btn-remove { background-color: var(--ios-danger); }
+        .btn-move { background-color: var(--theme-surface-hover); color: var(--theme-text); }
+        .btn-clone { background-color: var(--theme-primary); }
+        .btn-remove { background-color: var(--theme-danger); }
 
         .btn-add-row {
-            background: transparent; color: var(--ios-primary);
+            background: transparent; color: var(--theme-primary);
             border: none; cursor: pointer; font-size: 0.9rem; font-weight: 500;
             padding: 0.5rem 0; margin-top: 0.25rem; 
             display: flex; align-items: center; gap: 0.3rem;
         }
-        .btn-add-row:hover { opacity: 0.7; }
+        .btn-add-row:hover { opacity: 0.7; text-decoration: underline; }
 
         .radio-group { display: flex; flex-direction: column; gap: 0.6rem; }
         .radio-group label {
             display: flex; align-items: flex-start; font-weight: normal; gap: 0.75rem;
-            cursor: pointer; padding: 1rem; border: 1px solid var(--ios-border);
-            border-radius: 12px; background: var(--ios-bg); font-size: 1rem;
+            cursor: pointer; padding: 1rem; border: 1px solid var(--theme-border);
+            border-radius: 12px; background: var(--theme-bg); font-size: 1rem;
             transition: all 0.2s;
         }
-        .radio-group label:hover { border-color: var(--ios-primary); }
+        .radio-group label:hover { border-color: var(--theme-primary); }
         input[type="radio"] { 
             width: 22px; height: 22px; margin-top: 2px; cursor: pointer; 
-            accent-color: var(--ios-primary); 
+            accent-color: var(--theme-primary); 
         }
         
         textarea { height: 350px; resize: vertical; line-height: 1.6; }
@@ -275,6 +331,10 @@
             .container { grid-template-columns: 1fr; gap: 1.5rem; }
             .panel { padding: 1.25rem; border-radius: 16px; }
             .main-header { flex-direction: column; align-items: stretch; gap: 1rem; }
+            
+            .header-controls { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
+            #themeSelector { width: 100%; text-align: center; }
+
             .collection-header { flex-wrap: wrap; }
             .header-left { width: 100%; flex: none; }
             .header-actions { width: 100%; justify-content: flex-end; }
@@ -300,20 +360,27 @@
     <div class="panel">
         <div class="main-header">
             <h2>
-                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                ออเดอร์ <span class="version-badge">v6.0</span>
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                ออเดอร์ <span class="version-badge">v6.1</span>
             </h2>
-            <button class="btn" style="padding: 0.6rem 1rem; font-size: 0.95rem;" onclick="clearAllPills()">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
-                ล้างตัวเลือก
-            </button>
+            <div class="header-controls">
+                <select id="themeSelector" onchange="changeTheme()">
+                    <option value="ios">🍏 iOS Dark</option>
+                    <option value="github">🐙 GitHub Dark</option>
+                </select>
+                
+                <button class="btn" style="padding: 0.55rem 1rem; font-size: 0.95rem; color: var(--theme-danger); border-color: var(--theme-danger);" onclick="clearAllPills()">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+                    ล้างตัวเลือก
+                </button>
+            </div>
         </div>
         
         <div id="collectionsContainer"></div>
 
         <button class="btn btn-primary" style="width: 100%; margin-bottom: 2rem;" onclick="addCollectionBlock()">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            เพิ่มคอลเลคชั่น
+            เพิ่มคอลเลคชั่นใหม่
         </button>
         
         <div class="form-group">
@@ -369,7 +436,7 @@
 </div>
 
 <script>
-    // --- ไอคอน SVG สไตล์ SF Symbols ---
+    // --- ไอคอน SVG (ถอดแบบจาก SF Symbols) ---
     const ICON_CHEV_RIGHT = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
     const ICON_CHEV_DOWN = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
     const ICON_UP = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>`;
@@ -379,8 +446,14 @@
     const ICON_MINUS = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
     const ICON_GEAR = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`;
     const ICON_PLUS = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
+    const ICON_CLOSE = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
 
     window.onload = function() {
+        // โหลดธีมจากเครื่อง
+        const savedTheme = localStorage.getItem('appTheme') || 'ios';
+        document.getElementById('themeSelector').value = savedTheme;
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
         loadData();
         const updateData = () => { saveData(); generateText(); };
         document.getElementById('shippingCost').addEventListener('input', updateData);
@@ -388,6 +461,12 @@
         document.getElementById('collectionsContainer').addEventListener('input', updateData);
         generateText(); 
     };
+
+    function changeTheme() {
+        const theme = document.getElementById('themeSelector').value;
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('appTheme', theme);
+    }
 
     function saveData() {
         localStorage.setItem('shippingCost', document.getElementById('shippingCost').value);
@@ -499,14 +578,14 @@
                     <input type="text" class="collectionName" placeholder="ชื่อคอลเลคชั่น (ไม่ระบุก็ได้)" value="${colName}" style="margin: 0;">
                 </div>
                 <div class="header-actions">
-                    <button class="btn-icon btn-move" onclick="moveCollectionUp(this)">${ICON_UP}</button>
-                    <button class="btn-icon btn-move" onclick="moveCollectionDown(this)">${ICON_DOWN}</button>
-                    <button class="btn-icon btn-remove" onclick="removeCollectionBlock(this)">${ICON_TRASH}</button>
+                    <button class="btn-icon btn-move" onclick="moveCollectionUp(this)" title="เลื่อนขึ้น">${ICON_UP}</button>
+                    <button class="btn-icon btn-move" onclick="moveCollectionDown(this)" title="เลื่อนลง">${ICON_DOWN}</button>
+                    <button class="btn-icon btn-remove" onclick="removeCollectionBlock(this)" title="ลบชุดนี้">${ICON_TRASH}</button>
                 </div>
             </div>
             <div class="collection-body">
                 <div class="productList"></div>
-                <button class="btn-add-row" style="margin-top: 1rem; width: 100%; justify-content: center; background: var(--ios-surface-alt);" onclick="handleAddProductClick(this)">
+                <button class="btn-add-row" style="margin-top: 1rem; width: 100%; justify-content: center; background: var(--theme-surface-alt);" onclick="handleAddProductClick(this)">
                     ${ICON_PLUS} เพิ่มสินค้า
                 </button>
             </div>
@@ -547,8 +626,8 @@
 
     function createOptionRowHtml(availableSizes, selectedSizes, isFirstRow) {
         let pillsHtml = availableSizes.map(s => `<div class="pill ${selectedSizes.includes(s) ? 'active' : ''}" onclick="togglePill(this)" data-size="${s}">${s}</div>`).join('');
-        let actionsHtml = `<div class="pill pill-custom pill-action" onclick="editPillsList(this)">${ICON_GEAR}</div>`;
-        if (!isFirstRow) actionsHtml += `<div class="pill pill-custom pill-action pill-danger" onclick="removeOptionRow(this)">${ICON_MINUS}</div>`;
+        let actionsHtml = `<div class="pill pill-custom pill-action" onclick="editPillsList(this)" title="ตั้งค่าตัวเลือก">${ICON_GEAR}</div>`;
+        if (!isFirstRow) actionsHtml += `<div class="pill pill-custom pill-action pill-danger" onclick="removeOptionRow(this)" title="ลบตัวเลือกแถวนี้">${ICON_CLOSE}</div>`;
 
         return `<div class="option-row"><div class="size-pills">${pillsHtml}${actionsHtml}</div></div>`;
     }
@@ -564,12 +643,12 @@
             <div class="product-header-row">
                 <input type="text" class="productName" placeholder="ชื่อสินค้า" value="${name}">
                 <input type="number" class="productPrice" placeholder="ราคา" value="${price}">
-                <input type="number" class="productQty" placeholder="ชิ้น" value="${qty || 1}" min="1">
+                <input type="number" class="productQty" placeholder="ชิ้น" title="จำนวนชิ้น" value="${qty || 1}" min="1">
                 <div class="product-actions">
-                    <button class="btn-icon btn-move" onclick="moveProductUp(this)">${ICON_UP}</button>
-                    <button class="btn-icon btn-move" onclick="moveProductDown(this)">${ICON_DOWN}</button>
-                    <button class="btn-icon btn-clone" onclick="cloneProduct(this)">${ICON_COPY}</button>
-                    <button class="btn-icon btn-remove" onclick="removeProduct(this)">${ICON_MINUS}</button>
+                    <button class="btn-icon btn-move" onclick="moveProductUp(this)" title="เลื่อนขึ้น">${ICON_UP}</button>
+                    <button class="btn-icon btn-move" onclick="moveProductDown(this)" title="เลื่อนลง">${ICON_DOWN}</button>
+                    <button class="btn-icon btn-clone" onclick="cloneProduct(this)" title="คัดลอก">${ICON_COPY}</button>
+                    <button class="btn-icon btn-remove" onclick="removeProduct(this)" title="ลบ">${ICON_MINUS}</button>
                 </div>
             </div>
             <div class="product-options-container">${rowsHtml}</div>
