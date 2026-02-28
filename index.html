@@ -49,20 +49,51 @@
         input[type="number"] { -moz-appearance: textfield; }
         
         /* ========================================= */
-        /* --- คอลเลคชั่น --- */
+        /* --- คอลเลคชั่น (ดีไซน์ Mac Finder) --- */
         /* ========================================= */
-        .collection-block { background-color: var(--theme-surface); border-radius: 16px; padding: 1.25rem; margin-bottom: 1.5rem; border: none; transition: all 0.3s ease; }
+        .collection-block { background-color: var(--theme-surface); border-radius: 16px; padding: 1rem; margin-bottom: 1.5rem; border: none; transition: all 0.3s ease; }
         
-        .collection-header { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
-        .collection-top-controls { display: flex; gap: 0.4rem; }
-        .collection-top-controls .btn-icon { width: 30px; height: 30px; border-radius: 8px; }
+        .collection-header { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
         
+        /* ปุ่มควบคุมแบบ macOS Finder */
+        .mac-controls { display: flex; gap: 8px; padding: 0.25rem 0.25rem; }
+        .mac-btn {
+            width: 14px; height: 14px; border-radius: 50%; border: none; padding: 0;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            position: relative; transition: filter 0.2s;
+        }
+        .mac-btn svg { opacity: 0; width: 10px; height: 10px; color: rgba(0,0,0,0.6); transition: opacity 0.2s; }
+        .mac-controls:hover .mac-btn svg { opacity: 1; }
+        .mac-btn:active { filter: brightness(0.8); }
+        .mac-close { background-color: #FF5F56; }
+        .mac-min { background-color: #FFBD2E; }
+        .mac-max { background-color: #27C93F; }
+        
+        /* ช่องใส่ชื่อคอลเลคชั่นสไตล์ Finder Navigation */
         .collection-name-box { position: relative; width: 100%; }
-        .collection-name-box input { background-color: var(--theme-surface-alt); padding-right: 3rem; font-size: 1.1rem; font-weight: 600; }
-        .btn-toggle-col { position: absolute; right: 0.4rem; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; background: transparent; color: var(--theme-text-muted); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: all 0.2s; }
-        .btn-toggle-col:hover { background-color: var(--theme-surface-hover); color: var(--theme-text); }
+        .collection-name-box input { 
+            background-color: transparent; /* เริ่มต้นเป็นสีใส */
+            padding: 0.6rem 2.8rem 0.6rem 0.75rem; 
+            font-size: 1.1rem; font-weight: 600; border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        /* ไฮไลท์เมื่อคอลเลคชั่นกางอยู่ (Active) */
+        .collection-block:not(.collapsed) .collection-name-box input {
+            background-color: var(--theme-primary); color: white;
+        }
+        .collection-block.collapsed .collection-name-box input { color: var(--theme-text); }
+        .collection-block:not(.collapsed) .collection-name-box input:focus { box-shadow: none; }
         
-        .collection-block.collapsed .collection-header { margin-bottom: 0; }
+        .btn-toggle-col { 
+            position: absolute; right: 0.4rem; top: 50%; transform: translateY(-50%); 
+            width: 28px; height: 28px; background: transparent; 
+            border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; 
+            border-radius: 6px; transition: all 0.2s; 
+        }
+        .collection-block:not(.collapsed) .btn-toggle-col { color: white; }
+        .collection-block.collapsed .btn-toggle-col { color: var(--theme-text-muted); }
+        .collection-block.collapsed .btn-toggle-col:hover { background-color: var(--theme-surface-hover); color: var(--theme-text); }
+        
         .collection-block.collapsed .collection-body { display: none; }
         
         /* ========================================= */
@@ -108,11 +139,9 @@
         .ios-list-left { display: flex; align-items: center; gap: 1rem; flex: 1; min-width: 0; }
         .ios-list-right { display: flex; align-items: center; gap: 0.8rem; flex-shrink: 0; }
         
-        .ios-icon-box { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; transition: transform 0.1s ease, background-color 0.3s ease; }
-        .ios-icon-box:active { transform: scale(0.9); } /* กดแล้วมีแอคชันบุ๋มลงไป */
-        .bg-shipping { background-color: var(--theme-primary); } 
-        .bg-special { background-color: var(--theme-warning); }
-        .bg-deposit { background-color: var(--theme-danger); }
+        /* v9.4 ไอคอนกล่องทุกกล่องจิ้มได้ */
+        .ios-icon-box { position: relative; overflow: hidden; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; transition: transform 0.1s ease, background-color 0.3s ease; cursor: pointer; }
+        .ios-icon-box:active { transform: scale(0.9); }
 
         .fee-text-group { display: flex; flex-direction: column; line-height: 1.3; gap: 0.2rem; }
         .ios-item-title { font-size: 1.05rem; font-weight: 500; color: var(--theme-text); white-space: pre-wrap; }
@@ -124,7 +153,6 @@
         .ios-switch { position: relative; display: inline-block; width: 56px; height: 32px; flex-shrink: 0; cursor: pointer; }
         .ios-switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; inset: 0; background-color: #39393D; transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 32px; }
-        /* Thumb ทรงรีแนวนอน (Horizontal Oval) กว้าง 34px สูง 26px */
         .slider:before { 
             position: absolute; content: ""; height: 26px; width: 34px; 
             left: 3px; bottom: 3px; background-color: white; 
@@ -132,38 +160,56 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.2), 0 1px 1px rgba(0,0,0,0.1); 
         }
         input:checked + .slider { background-color: var(--theme-success); }
-        input:checked + .slider:before { transform: translateX(16px); } /* 56(ปุ่ม) - 6(ขอบ) - 34(Thumb) = 16px */
+        input:checked + .slider:before { transform: translateX(16px); }
 
         .ios-list-item.clickable:hover { background-color: var(--theme-surface-alt); cursor: pointer; }
         
-        .bank-action-btn { background-color: var(--theme-surface-hover); color: var(--theme-text); border: none; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; padding: 0; flex-shrink: 0; }
+        .bank-action-btn { background-color: var(--theme-surface-hover); color: var(--theme-text); border: none; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; padding: 0; flex-shrink: 0; position: relative; }
         .bank-action-btn:hover { opacity: 0.8; }
         
         .check-indicator { width: 20px; display: flex; justify-content: center; }
 
         /* ========================================= */
-        /* --- Modal เลือกสีธนาคาร (จิ้มจากไอคอน) --- */
+        /* --- Popover เลือกสี (รองรับ Custom Color) --- */
         /* ========================================= */
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
-            z-index: 1000; display: flex; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.2s;
+        .color-popover {
+            position: absolute; z-index: 1000;
+            background: var(--theme-surface-alt);
+            border: 1px solid var(--theme-border);
+            border-radius: 12px; padding: 0.85rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.6rem;
+            opacity: 0; visibility: hidden;
+            transform: translateY(10px) scale(0.95);
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-origin: top left;
         }
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .modal-box {
-            background: var(--theme-surface-alt); border: 1px solid var(--theme-border);
-            border-radius: 20px; padding: 1.5rem; width: 90%; max-width: 320px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform: scale(0.95); transition: transform 0.2s;
-            display: flex; flex-direction: column; align-items: center;
+        .color-popover.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        .color-popover::before {
+            content: ''; position: absolute;
+            top: -6px; left: 16px; width: 12px; height: 12px;
+            background: var(--theme-surface-alt);
+            border-left: 1px solid var(--theme-border);
+            border-top: 1px solid var(--theme-border);
+            transform: rotate(45deg);
         }
-        .modal-overlay.active .modal-box { transform: scale(1); }
-        .modal-title { margin: 0 0 1.25rem 0; color: var(--theme-text); font-size: 1.1rem; font-weight: 600; text-align: center; }
-        .color-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; margin-bottom: 1.5rem; width: 100%; }
         .color-swatch {
-            width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer; margin: 0 auto;
+            width: 30px; height: 30px; border-radius: 50%; border: none; cursor: pointer;
             box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15); transition: transform 0.1s;
         }
         .color-swatch:active { transform: scale(0.85); }
+        
+        /* ปุ่ม Custom Color สีรุ้ง */
+        .color-swatch.custom-color {
+            background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+            display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;
+        }
+        .color-swatch.custom-color input[type="color"] {
+            position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; cursor: pointer;
+        }
+        .color-swatch.custom-color svg {
+            width: 14px; height: 14px; color: white; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8)); pointer-events: none;
+        }
 
         /* ========================================= */
 
@@ -212,7 +258,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                ออเดอร์ <span class="version-badge">v9.2</span>
+                ออเดอร์ <span class="version-badge">v9.4 (Mac UI)</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.55rem 1rem; font-size: 0.95rem; background: var(--theme-surface);" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -233,7 +279,7 @@
                 
                 <div class="ios-list-item">
                     <div class="ios-list-left">
-                        <div class="ios-icon-box bg-shipping">
+                        <div class="ios-icon-box" id="icon_shipping" title="แตะเพื่อเปลี่ยนสีไอคอน" onclick="openColorPopover(event, 'shipping', 'fee')">
                             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
                         </div>
                         <div class="fee-text-group">
@@ -254,7 +300,7 @@
 
                 <div class="ios-list-item">
                     <div class="ios-list-left">
-                        <div class="ios-icon-box bg-special">
+                        <div class="ios-icon-box" id="icon_special" title="แตะเพื่อเปลี่ยนสีไอคอน" onclick="openColorPopover(event, 'special', 'fee')">
                             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                         </div>
                         <div class="fee-text-group">
@@ -275,7 +321,7 @@
 
                 <div class="ios-list-item">
                     <div class="ios-list-left">
-                        <div class="ios-icon-box bg-deposit">
+                        <div class="ios-icon-box" id="icon_deposit" title="แตะเพื่อเปลี่ยนสีไอคอน" onclick="openColorPopover(event, 'deposit', 'fee')">
                             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
                         </div>
                         <div class="fee-text-group">
@@ -367,14 +413,7 @@
     </select>
 </div>
 
-<div id="colorModal" class="modal-overlay">
-    <div class="modal-box">
-        <h3 class="modal-title">เลือกสีประจำธนาคาร</h3>
-        <div class="color-grid" id="colorGrid">
-            </div>
-        <button class="btn btn-danger-outline" style="width: 100%; padding: 0.8rem;" onclick="closeColorModal()">ยกเลิก</button>
-    </div>
-</div>
+<div id="colorPopover" class="color-popover"></div>
 
 <script>
     const ICON_CHEV_RIGHT = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
@@ -386,9 +425,13 @@
     const ICON_GEAR = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`;
     const ICON_PLUS = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
 
+    // ไอคอนสำหรับปุ่ม Mac Finder
+    const MAC_CLOSE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>`;
+    const MAC_MIN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>`;
+    const MAC_MAX = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>`;
+
     let defaultBanks = [];
     
-    // พาเลตต์สีสำหรับธนาคารในไทย
     const thaiBankColors = [
         { name: 'กสิกรไทย', hex: '#138F2D' },
         { name: 'ไทยพาณิชย์', hex: '#4E2A81' },
@@ -397,17 +440,18 @@
         { name: 'กรุงศรี', hex: '#FEC400' },
         { name: 'ทีทีบี / ธอส.', hex: '#FF9F0A' },
         { name: 'ออมสิน', hex: '#EB008B' },
-        { name: 'ทั่วไป (สีฟ้า)', hex: '#0A84FF' }
+        { name: 'ทั่วไป', hex: '#0A84FF' },
+        { name: 'ดำ', hex: '#333333' }
     ];
 
-    let currentEditingBankId = null;
+    let currentEditingColorId = null;
+    let currentEditingColorType = null;
 
     window.onload = function() {
         const savedTheme = localStorage.getItem('appTheme') || 'ios';
         document.getElementById('themeSelector').value = savedTheme;
         document.documentElement.setAttribute('data-theme', savedTheme);
 
-        initColorModal();
         renderBanks(); 
         loadData();
         generateText(); 
@@ -416,6 +460,84 @@
     function updateData() {
         saveData();
         generateText();
+    }
+
+    // --- ระบบ Popover เลือกสี (รองรับ Custom Color) ---
+    function openColorPopover(event, id, type) {
+        event.stopPropagation();
+        currentEditingColorId = id;
+        currentEditingColorType = type; // 'bank' หรือ 'fee'
+        
+        const popover = document.getElementById('colorPopover');
+        const rect = event.currentTarget.getBoundingClientRect();
+        
+        popover.innerHTML = '';
+        
+        // วาดสีมาตรฐาน
+        thaiBankColors.forEach(color => {
+            const btn = document.createElement('button');
+            btn.className = 'color-swatch';
+            btn.style.backgroundColor = color.hex;
+            btn.title = color.name;
+            btn.onclick = (e) => {
+                e.stopPropagation();
+                selectColor(color.hex);
+            };
+            popover.appendChild(btn);
+        });
+
+        // ดึงสีปัจจุบันเพื่อไปใส่เป็นค่าเริ่มต้นใน Custom Color
+        let currentColor = '#0A84FF';
+        if (type === 'bank') {
+            let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
+            let b = banks.find(x => x.id === id);
+            if(b) currentColor = b.color || '#0A84FF';
+        } else {
+            currentColor = localStorage.getItem('iconColor_' + id) || '#0A84FF';
+        }
+
+        // เพิ่มปุ่ม Custom Color สีรุ้ง (เปิด Color Picker ของเครื่อง)
+        const customBtn = document.createElement('label');
+        customBtn.className = 'color-swatch custom-color';
+        customBtn.title = 'เลือกสีตามต้องการ';
+        customBtn.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <input type="color" value="${currentColor}" onchange="selectColor(this.value)" onclick="event.stopPropagation()">
+        `;
+        popover.appendChild(customBtn);
+
+        popover.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+        popover.style.left = (rect.left + window.scrollX - 5) + 'px';
+        popover.classList.add('active');
+    }
+
+    document.addEventListener('click', function(event) {
+        const popover = document.getElementById('colorPopover');
+        if (popover && popover.classList.contains('active') && !event.target.closest('.ios-icon-box') && !event.target.closest('.color-popover')) {
+            popover.classList.remove('active');
+            currentEditingColorId = null;
+            currentEditingColorType = null;
+        }
+    });
+
+    function selectColor(hex) {
+        if (currentEditingColorType === 'bank' && currentEditingColorId) {
+            let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
+            const index = banks.findIndex(b => b.id === currentEditingColorId);
+            if (index !== -1) {
+                banks[index].color = hex;
+                localStorage.setItem('bankData', JSON.stringify(banks));
+                renderBanks();
+            }
+        } else if (currentEditingColorType === 'fee' && currentEditingColorId) {
+            localStorage.setItem('iconColor_' + currentEditingColorId, hex);
+            document.getElementById('icon_' + currentEditingColorId).style.backgroundColor = hex;
+        }
+        
+        updateData();
+        document.getElementById('colorPopover').classList.remove('active');
+        currentEditingColorId = null;
+        currentEditingColorType = null;
     }
 
     function changeTheme() {
@@ -433,43 +555,6 @@
             span.innerText = parseFloat(newVal);
             updateData();
         }
-    }
-
-    // --- ระบบเลืออกสีธนาคาร ---
-    function initColorModal() {
-        const grid = document.getElementById('colorGrid');
-        thaiBankColors.forEach(color => {
-            const btn = document.createElement('button');
-            btn.className = 'color-swatch';
-            btn.style.backgroundColor = color.hex;
-            btn.title = color.name;
-            btn.onclick = () => selectColor(color.hex);
-            grid.appendChild(btn);
-        });
-    }
-
-    function openColorModal(bankId) {
-        currentEditingBankId = bankId;
-        document.getElementById('colorModal').classList.add('active');
-    }
-
-    function closeColorModal() {
-        document.getElementById('colorModal').classList.remove('active');
-        currentEditingBankId = null;
-    }
-
-    function selectColor(hex) {
-        if (currentEditingBankId) {
-            let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
-            const index = banks.findIndex(b => b.id === currentEditingBankId);
-            if (index !== -1) {
-                banks[index].color = hex;
-                localStorage.setItem('bankData', JSON.stringify(banks));
-                renderBanks();
-                updateData();
-            }
-        }
-        closeColorModal();
     }
 
     function renderBanks() {
@@ -492,7 +577,7 @@
             const html = `
                 <div class="ios-list-item clickable" onclick="selectBank('${b.id}')">
                     <div class="ios-list-left">
-                        <div class="ios-icon-box" style="background-color: ${iconColor}; cursor: pointer;" title="แตะเพื่อเปลี่ยนสีไอคอน" onclick="event.stopPropagation(); openColorModal('${b.id}')">
+                        <div class="ios-icon-box" style="background-color: ${iconColor};" title="แตะเพื่อเปลี่ยนสีไอคอน" onclick="openColorPopover(event, '${b.id}', 'bank')">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
                         </div>
                         <span class="ios-item-title">${b.text}</span>
@@ -598,15 +683,17 @@
         if (localStorage.getItem('val_special')) document.getElementById('val_special').innerText = localStorage.getItem('val_special');
         if (localStorage.getItem('val_deposit')) document.getElementById('val_deposit').innerText = localStorage.getItem('val_deposit');
 
+        // โหลดสีไอคอนค่าใช้จ่าย (ถ้าไม่มีให้ใช้สี Default)
+        document.getElementById('icon_shipping').style.backgroundColor = localStorage.getItem('iconColor_shipping') || '#0A84FF';
+        document.getElementById('icon_special').style.backgroundColor = localStorage.getItem('iconColor_special') || '#FF9F0A';
+        document.getElementById('icon_deposit').style.backgroundColor = localStorage.getItem('iconColor_deposit') || '#FF453A';
+
         ['shipping', 'special', 'deposit'].forEach(id => {
             let savedState = localStorage.getItem('check_' + id);
             let checkbox = document.getElementById('check_' + id);
-            
-            if (savedState === 'false') {
-                checkbox.checked = false;
-            } else if (savedState === 'true') {
-                checkbox.checked = true;
-            } else {
+            if (savedState === 'false') checkbox.checked = false;
+            else if (savedState === 'true') checkbox.checked = true;
+            else {
                 if(id === 'shipping') checkbox.checked = true;
                 else checkbox.checked = false;
             }
@@ -632,9 +719,8 @@
 
     function exportData() {
         saveData();
-        
         const exportObj = {
-            version: "v9.2",
+            version: "v9.4",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || [],
             selectedBank: localStorage.getItem('bank') || '',
@@ -645,13 +731,15 @@
                 check_shipping: localStorage.getItem('check_shipping') === 'true',
                 check_special: localStorage.getItem('check_special') === 'true',
                 check_deposit: localStorage.getItem('check_deposit') === 'true',
-                appTheme: localStorage.getItem('appTheme') || 'ios'
+                appTheme: localStorage.getItem('appTheme') || 'ios',
+                color_shipping: localStorage.getItem('iconColor_shipping') || '#0A84FF',
+                color_special: localStorage.getItem('iconColor_special') || '#FF9F0A',
+                color_deposit: localStorage.getItem('iconColor_deposit') || '#FF453A'
             }
         };
 
         const dataStr = JSON.stringify(exportObj);
         const encodedData = btoa(encodeURIComponent(dataStr));
-        
         navigator.clipboard.writeText(encodedData).then(() => {
             alert('📋 คัดลอกโค้ดสำเร็จ! (รวมข้อมูลสินค้า ธนาคาร สีไอคอน และการตั้งค่าแล้ว)');
         }).catch(() => {
@@ -670,7 +758,6 @@
                 localStorage.setItem('orderDataV3', JSON.stringify(parsedData));
             } else if (parsedData && parsedData.collections) {
                 localStorage.setItem('orderDataV3', JSON.stringify(parsedData.collections));
-                
                 if (parsedData.banks) localStorage.setItem('bankData', JSON.stringify(parsedData.banks));
                 if (parsedData.selectedBank) localStorage.setItem('bank', parsedData.selectedBank);
                 
@@ -681,15 +768,16 @@
                     localStorage.setItem('check_shipping', parsedData.settings.check_shipping);
                     localStorage.setItem('check_special', parsedData.settings.check_special);
                     localStorage.setItem('check_deposit', parsedData.settings.check_deposit);
-                    
                     if (parsedData.settings.appTheme) {
                         localStorage.setItem('appTheme', parsedData.settings.appTheme);
                         document.getElementById('themeSelector').value = parsedData.settings.appTheme;
                         document.documentElement.setAttribute('data-theme', parsedData.settings.appTheme);
                     }
+                    if (parsedData.settings.color_shipping) localStorage.setItem('iconColor_shipping', parsedData.settings.color_shipping);
+                    if (parsedData.settings.color_special) localStorage.setItem('iconColor_special', parsedData.settings.color_special);
+                    if (parsedData.settings.color_deposit) localStorage.setItem('iconColor_deposit', parsedData.settings.color_deposit);
                 }
             }
-            
             renderBanks();
             loadData(); 
             generateText(); 
@@ -716,6 +804,7 @@
         if (block.nextElementSibling) { block.parentNode.insertBefore(block.nextElementSibling, block); saveData(); generateText(); }
     }
 
+    // v9.4 อัปเดต HTML สร้างคอลเลคชั่น (ปุ่ม Finder & Navigation Highlight)
     function addCollectionBlock(colName = '', isCollapsed = false) {
         const container = document.getElementById('collectionsContainer');
         const block = document.createElement('div');
@@ -724,10 +813,10 @@
         
         block.innerHTML = `
             <div class="collection-header">
-                <div class="collection-top-controls">
-                    <button class="btn-icon btn-remove" onclick="removeCollectionBlock(this)" title="ลบคอลเลคชั่น">${ICON_TRASH}</button>
-                    <button class="btn-icon btn-move" onclick="moveCollectionUp(this)" title="เลื่อนขึ้น">${ICON_UP}</button>
-                    <button class="btn-icon btn-move" onclick="moveCollectionDown(this)" title="เลื่อนลง">${ICON_DOWN}</button>
+                <div class="mac-controls">
+                    <button class="mac-btn mac-close" onclick="removeCollectionBlock(this)" title="ลบคอลเลคชั่น">${MAC_CLOSE}</button>
+                    <button class="mac-btn mac-min" onclick="moveCollectionUp(this)" title="เลื่อนขึ้น">${MAC_MIN}</button>
+                    <button class="mac-btn mac-max" onclick="moveCollectionDown(this)" title="เลื่อนลง">${MAC_MAX}</button>
                 </div>
                 <div class="collection-name-box">
                     <input type="text" class="collectionName" placeholder="ชื่อคอลเลคชั่น (ไม่ระบุก็ได้)" value="${colName}">
@@ -762,11 +851,9 @@
     function clearAllPills() {
         document.querySelectorAll('.product-options-container .pill.active').forEach(pill => pill.classList.remove('active'));
         document.querySelectorAll('.productQty').forEach(qty => qty.value = 1);
-        
         ['special', 'deposit'].forEach(id => {
             document.getElementById('check_' + id).checked = false;
         });
-        
         saveData(); generateText();
     }
 
