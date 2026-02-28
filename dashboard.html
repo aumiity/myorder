@@ -1,37 +1,85 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
-        body { margin: 0; font-family: sans-serif; background: #121212; color: white; display: flex; height: 100vh; overflow: hidden; }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #121212; color: white; display: flex; height: 100vh; overflow: hidden; }
         
-        /* แถบเมนูด้านซ้าย: ล็อกติดจอ */
-        .sidebar { width: 380px; background: #1e1e1e; border-right: 1px solid #333; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; overflow-y: auto; }
+        /* ======================================= */
+        /* 💻 โหมดหน้าจอคอมพิวเตอร์ (Dashboard) */
+        /* ======================================= */
+        
+        /* แถบเมนูด้านซ้าย: โชว์ปกติ ล็อกติดจอ */
+        .sidebar { width: 380px; background: #1e1e1e; border-right: 1px solid #333; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; overflow-y: auto; transition: left 0.3s ease; z-index: 200; box-sizing: border-box; }
         
         /* พื้นที่ทำงานหลัก: ไถขึ้นลงได้อย่างอิสระ */
-        .main-workspace { flex: 1; padding: 2rem 3rem; overflow-y: auto; background: #0a0a0a; }
+        .main-workspace { flex: 1; padding: 2rem; overflow-y: auto; background: #0a0a0a; }
         
-        .mock-box { background: #2d2d2d; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; border: 1px dashed #444; }
-        .mock-textarea { width: 100%; height: 120px; background: #111; border-radius: 8px; border: 1px solid #333; margin-top: 10px; }
-        .mock-collection { height: 300px; background: #1e1e1e; border-radius: 16px; margin-bottom: 2rem; border: 1px solid #333; display: flex; align-items: center; justify-content: center; color: #666; }
+        /* กล่องจำลอง UI */
+        .mock-box { background: #2d2d2d; border-radius: 12px; padding: 1.5rem; border: 1px dashed #444; }
+        .mock-collection { height: 250px; background: #1e1e1e; border-radius: 16px; margin-bottom: 2rem; border: 1px solid #333; display: flex; align-items: center; justify-content: center; color: #888; }
+        
+        /* ซ่อนปุ่มลอยและฉากดำเมื่ออยู่บนจอคอม */
+        .fab-btn { display: none; position: fixed; bottom: 30px; right: 30px; background: #0A84FF; color: white; border: none; border-radius: 30px; padding: 1rem 1.5rem; font-size: 1rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(0,132,255,0.4); z-index: 100; }
+        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 150; backdrop-filter: blur(4px); }
+        .close-btn { display: none; align-self: flex-end; background: transparent; color: white; border: none; font-size: 1.5rem; cursor: pointer; margin-bottom: 0.5rem; }
+
+        /* ======================================= */
+        /* 📱 โหมดหน้าจอมือถือ (iPhone / จอแคบ) */
+        /* ======================================= */
+        @media (max-width: 800px) {
+            /* เปลี่ยน Sidebar ให้เป็น Drawer ซ่อนไว้ขอบซ้าย */
+            .sidebar { 
+                position: fixed; 
+                top: 0; 
+                left: -100%; /* ซ่อนออกไปนอกจอ */
+                width: 85%; /* กว้าง 85% ของจอมือถือ */
+                max-width: 400px;
+                height: 100vh;
+                box-shadow: 5px 0 20px rgba(0,0,0,0.5);
+            }
+            .sidebar.open { left: 0; /* เลื่อนเข้ามาเมื่อกดปุ่ม */ }
+            
+            /* ปรับพื้นที่หลักให้เต็มจอ และเว้นที่ด้านล่างให้ปุ่มลอย */
+            .main-workspace { padding: 1rem; padding-bottom: 100px; }
+            
+            /* เปิดการแสดงผลปุ่มลอยและปุ่มปิด */
+            .fab-btn { display: block; }
+            .close-btn { display: block; }
+            .overlay.show { display: block; }
+        }
     </style>
 </head>
 <body>
-    <aside class="sidebar">
-        <h2 style="margin:0;">⚙️ ตั้งค่า & สรุปยอด</h2>
-        <div class="mock-box">ตั้งค่าจัดส่ง / หักมัดจำ</div>
-        <div class="mock-box">บัญชีธนาคาร</div>
+    
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <button class="close-btn" onclick="toggleSidebar()">✖</button>
+        <h2 style="margin-top:0;">⚙️ ตั้งค่า & สรุปยอด</h2>
+        <div class="mock-box">จัดส่ง / มัดจำ / ธนาคาร</div>
         <div class="mock-box" style="flex:1;">
-            สรุปยอดโอน (อัปเดตเรียลไทม์)
-            <div class="mock-textarea"></div>
+            กล่องข้อความสรุปยอด
+            <div style="height: 150px; background: #111; margin-top: 10px; border-radius: 8px;"></div>
         </div>
+        <button style="background: #32D74B; padding: 1rem; border-radius: 12px; border: none; color: white; font-weight: bold; cursor: pointer;">คัดลอกสรุปยอด</button>
     </aside>
 
     <main class="main-workspace">
-        <h2 style="margin-top:0;">📦 รายการสินค้าทั้งหมด</h2>
-        <div class="mock-collection">คอลเลคชั่นที่ 1 (ไถเมาส์ลงดูเลย)</div>
-        <div class="mock-collection">คอลเลคชั่นที่ 2</div>
-        <div class="mock-collection">คอลเลคชั่นที่ 3</div>
-        <div class="mock-collection">คอลเลคชั่นที่ 4</div>
+        <h2 style="margin-top:0;">📦 คอลเลคชั่นสินค้า</h2>
+        <div class="mock-collection">คอลเลคชั่น 1</div>
+        <div class="mock-collection">คอลเลคชั่น 2</div>
+        <div class="mock-collection">คอลเลคชั่น 3</div>
     </main>
+
+    <button class="fab-btn" onclick="toggleSidebar()">📋 สรุปยอด</button>
+
+    <script>
+        // สคริปต์สลับเปิด/ปิด Sidebar บนมือถือ
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('show');
+        }
+    </script>
 </body>
 </html>
