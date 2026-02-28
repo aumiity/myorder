@@ -88,12 +88,11 @@
         /* ========================================= */
         .collection-block { background-color: var(--theme-surface); border-radius: 16px; padding: 1rem; margin-bottom: 1.5rem; border: 1px solid var(--theme-border); box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.3s ease; }
         
-        /* REVISED: จัดให้ปุ่มและชื่อคอลเลคชั่นอยู่บรรทัดเดียวกัน */
         .collection-header { display: flex; flex-direction: row; align-items: center; gap: 1rem; margin-bottom: 1rem; }
         
         .mac-controls { display: flex; gap: 8px; padding: 0; align-items: center; flex-shrink: 0; }
         .mac-btn { 
-            width: 14px; /* ปรับขนาดเป็น 14px */
+            width: 14px; 
             height: 14px; 
             border-radius: 50%; border: none; padding: 0; 
             display: flex; align-items: center; justify-content: center; 
@@ -101,7 +100,7 @@
         }
         .mac-btn svg { 
             opacity: 0; 
-            width: 8px; /* ปรับไอคอนข้างในให้สมดุลกับ 14px */
+            width: 8px; 
             height: 8px; 
             color: rgba(0,0,0,0.6); transition: opacity 0.2s; 
         }
@@ -113,7 +112,6 @@
         
         .collection-name-box { position: relative; width: 100%; flex-grow: 1; }
         
-        /* REVISED: ปรับกรอบชื่อคอลเลคชั่นให้โค้งมนแบบแคปซูล 20px */
         .collection-name-box input { 
             background-color: transparent; 
             padding: 0.5rem 2.5rem 0.5rem 1rem; 
@@ -129,7 +127,8 @@
         .collection-block.collapsed .collection-name-box input { color: var(--theme-text); }
         .collection-block:not(.collapsed) .collection-name-box input:focus { box-shadow: none; border-color: var(--theme-primary); }
         
-        .btn-toggle-col { position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 4px; transition: all 0.2s; }
+        /* แก้ไข: ปรับปุ่มขยายคอลเลคชั่นให้เป็นวงกลม 50% */
+        .btn-toggle-col { position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.2s; }
         .collection-block:not(.collapsed) .btn-toggle-col { color: white; }
         .collection-block.collapsed .btn-toggle-col { color: var(--theme-text-muted); }
         .collection-block.collapsed .btn-toggle-col:hover { background-color: var(--theme-surface-hover); color: var(--theme-text); }
@@ -351,8 +350,6 @@
             .container { grid-template-columns: 1fr; gap: 1rem; }
             .panel { padding: 1.25rem 0; }
             .main-header { flex-direction: column; align-items: stretch; gap: 1rem; margin-bottom: 1.5rem;}
-            /* REVISED: บนมือถือก็ไม่ต้องดันชื่อตกลงไปบรรทัดใหม่ */
-            /* .collection-header { flex-wrap: wrap; } ถูกนำออกแล้ว */
             .header-left { width: 100%; flex: none; }
             .header-actions { width: 100%; justify-content: flex-end; }
             
@@ -376,7 +373,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                Order Management <span class="version-badge">v9.9.6</span>
+                Order Management <span class="version-badge">v9.9.7</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: var(--theme-surface);" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -817,7 +814,7 @@
     function exportData() {
         saveData();
         const exportObj = {
-            version: "v9.9.6",
+            version: "v9.9.7",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || [],
             selectedBank: localStorage.getItem('bank') || '',
