@@ -104,8 +104,17 @@
         /* ========================================= */
         
         .product-item { background: var(--theme-surface-alt); padding: 0.85rem; border-radius: 12px; margin-bottom: 0.6rem; border: 1px solid var(--theme-border); }
-        .product-header-row { display: grid; grid-template-columns: 1fr 85px 65px auto; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem; }
-        .product-header-row input { padding: 0.5rem; font-size: 0.95rem; background-color: var(--theme-surface); border: 1px solid var(--theme-border); }
+        .product-header-row { display: grid; grid-template-columns: 1fr 90px 70px auto; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem; }
+        
+        /* REVISED: อินพุตชื่อ/ราคา/จำนวน ขอบมนแบบแคปซูล */
+        .product-header-row input { 
+            padding: 0.5rem 0.8rem; /* ปรับ padding ให้พอดีกับขอบโค้ง */
+            font-size: 0.95rem; 
+            background-color: var(--theme-surface); 
+            border: 1px solid var(--theme-border); 
+            border-radius: 20px; /* ทำให้ขอบโค้งมนเหมือนเม็ดแคปซูล */
+        }
+        
         .productName { width: 100%; font-weight: 500; }
         .productPrice, .productQty { width: 100%; text-align: center; background-color: var(--theme-surface)!important; color: var(--theme-text)!important; font-weight: 600; }
         .product-actions { display: flex; gap: 0.3rem; }
@@ -113,10 +122,9 @@
         .option-row { display: flex; align-items: center; margin-bottom: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--theme-border); gap: 1rem; }
         .size-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; width: 100%; }
         
-        /* REVISED: Pill Buttons โค้งมนแบบแคปซูล (ตามรูปที่ 1) */
         .pill { 
             padding: 0.35rem 0.9rem; 
-            border-radius: 20px; /* โค้งมนสุดๆ */
+            border-radius: 20px; 
             background: var(--theme-surface); 
             color: var(--theme-text); 
             font-size: 0.85rem; 
@@ -129,20 +137,22 @@
         .pill:hover { background: var(--theme-surface-hover); }
         .pill.active { background: var(--theme-primary); color: white; border-color: var(--theme-primary); }
         
+        /* REVISED: ปุ่ม 3 จุด มีกรอบวงกลม */
         .pill-action { 
             appearance: none; -webkit-appearance: none; 
             background-color: transparent; 
             color: var(--theme-text-muted); 
-            border: none; 
-            padding: 0.4rem; border-radius: 50%; /* ปุ่ม 3 จุดโค้งกลม */
+            border: 1px solid var(--theme-border); /* เพิ่มเส้นขอบวงกลม */
+            width: 32px; height: 32px; /* ล็อกขนาดให้เป็นวงกลมสมมาตร */
+            padding: 0; 
+            border-radius: 50%; 
             cursor: pointer; display: flex; align-items: center; justify-content: center; 
             transition: all 0.2s ease; flex-shrink: 0;
             margin-left: auto; 
         }
-        .pill-action:hover { background-color: var(--theme-surface-hover); color: var(--theme-text); }
+        .pill-action:hover { background-color: var(--theme-surface-hover); color: var(--theme-text); border-color: var(--theme-text-muted); }
 
-        /* REVISED: ปุ่มหลักโค้งมนเข้าเซ็ต (ตามรูปที่ 1) */
-        .btn { background-color: var(--theme-surface); color: var(--theme-text); border: 1px solid var(--theme-border); padding: 0.85rem 1.5rem; border-radius: 24px; /* โค้งมน */ cursor: pointer; font-weight: 600; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+        .btn { background-color: var(--theme-surface); color: var(--theme-text); border: 1px solid var(--theme-border); padding: 0.85rem 1.5rem; border-radius: 24px; cursor: pointer; font-weight: 600; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
         .btn:hover, .btn:active { background-color: var(--theme-surface-hover); }
         .btn-primary { background-color: var(--theme-primary); color: white; border: 1px solid var(--theme-primary-hover); }
         .btn-primary:hover, .btn-primary:active { background-color: var(--theme-primary-hover); }
@@ -191,29 +201,29 @@
         .inline-fee-input:focus { background-color: var(--theme-surface-hover); color: var(--theme-primary); border-color: rgba(255,255,255,0.1); }
 
         /* ========================================= */
-        /* --- REVISED: Toggle Switch (วงรีแคปซูล ตามรูป 3) --- */
+        /* --- REVISED: Toggle Switch ให้ยาวขึ้น --- */
         /* ========================================= */
-        .ios-switch { position: relative; display: inline-block; width: 50px; height: 28px; flex-shrink: 0; cursor: pointer; }
+        .ios-switch { position: relative; display: inline-block; width: 54px; height: 28px; flex-shrink: 0; cursor: pointer; } /* เพิ่มความกว้างเป็น 54px */
         .ios-switch input { opacity: 0; width: 0; height: 0; }
         .slider { 
             position: absolute; inset: 0; 
-            background-color: #39393D; /* สีเทาเข้มตอนปิด */
+            background-color: #39393D; 
             transition: .2s cubic-bezier(0.25, 0.8, 0.25, 1); 
-            border-radius: 14px; /* โค้งมน */
+            border-radius: 14px; 
         }
         .slider:before { 
             position: absolute; content: ""; 
-            height: 20px; width: 24px; /* ปรับให้ปุ่มเป็นวงรีแนวนอน (Capsule) */
-            left: 4px; bottom: 4px; 
-            background-color: #D1D1D6; /* สีเทาอ่อนตอนปิด */
+            height: 22px; width: 26px; /* แคปซูลกว้างชัดเจน ไม่เป็นวงกลมแล้ว */
+            left: 3px; bottom: 3px; 
+            background-color: #D1D1D6; 
             transition: .2s cubic-bezier(0.25, 0.8, 0.25, 1); 
-            border-radius: 10px; /* ขอบปุ่มโค้งมน */
+            border-radius: 11px; 
             box-shadow: 0 1px 2px rgba(0,0,0,0.2); 
         }
         input:checked + .slider { background-color: var(--theme-primary); }
         input:checked + .slider:before { 
-            transform: translateX(18px); /* ขยับไปขวาพอดีขอบ */
-            background-color: #FFFFFF; /* สีขาวตอนเปิด */
+            transform: translateX(22px); /* ระยะเลื่อนให้พอดีกับความกว้างใหม่ */
+            background-color: #FFFFFF; 
         }
 
         .ios-list-item.clickable:hover { background-color: var(--theme-surface-hover); cursor: pointer; }
@@ -222,33 +232,34 @@
         .bank-action-btn:hover { background-color: var(--theme-surface-hover); color: var(--theme-text); border-color: var(--theme-border); }
         
         /* ========================================= */
-        /* --- REVISED: Radio Button (จุดตัวเลือก ตามรูป 2) --- */
+        /* --- REVISED: Radio Button เล็กลง --- */
         /* ========================================= */
         .bank-radio-container {
             display: inline-flex; align-items: center; cursor: pointer; position: relative; margin-right: 0.8rem; margin-top: 0;
         }
         .bank-radio { opacity: 0; position: absolute; width: 0; height: 0; }
         .custom-radio {
-            width: 22px; height: 22px; 
+            width: 16px; height: 16px; /* ย่อขนาดให้เล็กลง */
             border-radius: 50%; 
-            background-color: #39393D; /* วงกลมเทาเข้มตอนยังไม่เลือก */
+            background-color: #39393D; 
             display: flex; align-items: center; justify-content: center; 
             transition: all 0.2s ease; 
             border: 2px solid transparent;
         }
         .bank-radio:checked + .custom-radio {
-            background-color: var(--theme-primary); /* สีฟ้าตอนเลือก */
+            background-color: var(--theme-primary); 
             border-color: var(--theme-primary);
         }
         /* จุดสีขาวตรงกลาง */
         .custom-radio::after {
-            content: ''; width: 8px; height: 8px; border-radius: 50%; 
+            content: ''; width: 6px; height: 6px; /* ย่อขนาดจุดด้านในให้สมดุล */
+            border-radius: 50%; 
             background-color: #FFFFFF; 
-            transform: scale(0); /* ซ่อนไว้ก่อน */
+            transform: scale(0); 
             transition: transform 0.2s ease;
         }
         .bank-radio:checked + .custom-radio::after {
-            transform: scale(1); /* โชว์จุดตอนเลือก */
+            transform: scale(1); 
         }
 
         /* ========================================= */
@@ -323,7 +334,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                Order Management <span class="version-badge">v9.9.2</span>
+                Order Management <span class="version-badge">v9.9.3</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: var(--theme-surface);" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -615,7 +626,6 @@
             const isChecked = b.id === selectedId ? 'checked' : '';
             const iconColor = b.color || '#0A84FF'; 
             
-            /* REVISED: ใช้ Custom Radio โครงสร้างใหม่ */
             const html = `
                 <div class="ios-list-item clickable" onclick="selectBank('${b.id}')">
                     <div class="ios-list-left">
@@ -765,7 +775,7 @@
     function exportData() {
         saveData();
         const exportObj = {
-            version: "v9.9.2",
+            version: "v9.9.3",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || [],
             selectedBank: localStorage.getItem('bank') || '',
