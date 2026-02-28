@@ -49,7 +49,7 @@
         input[type="number"] { -moz-appearance: textfield; }
         
         /* ========================================= */
-        /* --- คอลเลคชั่น (ดีไซน์ Mac Finder) --- */
+        /* --- คอลเลคชั่น --- */
         /* ========================================= */
         .collection-block { background-color: var(--theme-surface); border-radius: 16px; padding: 1.25rem; margin-bottom: 1.5rem; border: none; transition: all 0.3s ease; }
         
@@ -108,8 +108,8 @@
         .ios-list-left { display: flex; align-items: center; gap: 1rem; flex: 1; min-width: 0; }
         .ios-list-right { display: flex; align-items: center; gap: 0.8rem; flex-shrink: 0; }
         
-        /* v9.1 เพิ่ม position: relative ให้ .ios-icon-box เพื่อให้ใส่ input color เนียนๆ ได้ */
-        .ios-icon-box { position: relative; overflow: hidden; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; transition: background-color 0.3s ease; }
+        .ios-icon-box { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; transition: transform 0.1s ease, background-color 0.3s ease; }
+        .ios-icon-box:active { transform: scale(0.9); } /* กดแล้วมีแอคชันบุ๋มลงไป */
         .bg-shipping { background-color: var(--theme-primary); } 
         .bg-special { background-color: var(--theme-warning); }
         .bg-deposit { background-color: var(--theme-danger); }
@@ -118,23 +118,52 @@
         .ios-item-title { font-size: 1.05rem; font-weight: 500; color: var(--theme-text); white-space: pre-wrap; }
         .ios-item-price { font-size: 0.9rem; color: var(--theme-text-muted); font-weight: normal; }
 
-        /* สวิตช์เปิด-ปิด สไตล์ iOS ทรงรีแนวนอนเป๊ะๆ (51x31) */
-        .ios-switch { position: relative; display: inline-block; width: 51px; height: 31px; flex-shrink: 0; cursor: pointer; }
+        /* ========================================= */
+        /* --- สวิตช์เปิด-ปิด iOS 26 (ทรงรีแนวนอน) --- */
+        /* ========================================= */
+        .ios-switch { position: relative; display: inline-block; width: 56px; height: 32px; flex-shrink: 0; cursor: pointer; }
         .ios-switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #39393D; transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 31px; border: none; }
-        .slider:before { position: absolute; content: ""; height: 27px; width: 27px; left: 2px; bottom: 2px; background-color: white; transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 50%; box-shadow: 0 3px 8px rgba(0,0,0,0.15), 0 1px 1px rgba(0,0,0,0.16), 0 3px 1px rgba(0,0,0,0.1); }
+        .slider { position: absolute; inset: 0; background-color: #39393D; transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 32px; }
+        /* Thumb ทรงรีแนวนอน (Horizontal Oval) กว้าง 34px สูง 26px */
+        .slider:before { 
+            position: absolute; content: ""; height: 26px; width: 34px; 
+            left: 3px; bottom: 3px; background-color: white; 
+            transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 13px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2), 0 1px 1px rgba(0,0,0,0.1); 
+        }
         input:checked + .slider { background-color: var(--theme-success); }
-        input:checked + .slider:before { transform: translateX(20px); }
+        input:checked + .slider:before { transform: translateX(16px); } /* 56(ปุ่ม) - 6(ขอบ) - 34(Thumb) = 16px */
 
         .ios-list-item.clickable:hover { background-color: var(--theme-surface-alt); cursor: pointer; }
         
         .bank-action-btn { background-color: var(--theme-surface-hover); color: var(--theme-text); border: none; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; padding: 0; flex-shrink: 0; }
         .bank-action-btn:hover { opacity: 0.8; }
         
-        /* Input Color ที่ซ่อนไว้ให้เนียนไปกับกล่องไอคอนธนาคาร */
-        .color-picker-input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
-        
         .check-indicator { width: 20px; display: flex; justify-content: center; }
+
+        /* ========================================= */
+        /* --- Modal เลือกสีธนาคาร (จิ้มจากไอคอน) --- */
+        /* ========================================= */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+            z-index: 1000; display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.2s;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-box {
+            background: var(--theme-surface-alt); border: 1px solid var(--theme-border);
+            border-radius: 20px; padding: 1.5rem; width: 90%; max-width: 320px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform: scale(0.95); transition: transform 0.2s;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .modal-overlay.active .modal-box { transform: scale(1); }
+        .modal-title { margin: 0 0 1.25rem 0; color: var(--theme-text); font-size: 1.1rem; font-weight: 600; text-align: center; }
+        .color-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; margin-bottom: 1.5rem; width: 100%; }
+        .color-swatch {
+            width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer; margin: 0 auto;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15); transition: transform 0.1s;
+        }
+        .color-swatch:active { transform: scale(0.85); }
 
         /* ========================================= */
 
@@ -183,7 +212,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                ออเดอร์ <span class="version-badge">v9.1 (Smart Icon)</span>
+                ออเดอร์ <span class="version-badge">v9.2</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.55rem 1rem; font-size: 0.95rem; background: var(--theme-surface);" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -338,6 +367,15 @@
     </select>
 </div>
 
+<div id="colorModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3 class="modal-title">เลือกสีประจำธนาคาร</h3>
+        <div class="color-grid" id="colorGrid">
+            </div>
+        <button class="btn btn-danger-outline" style="width: 100%; padding: 0.8rem;" onclick="closeColorModal()">ยกเลิก</button>
+    </div>
+</div>
+
 <script>
     const ICON_CHEV_RIGHT = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
     const ICON_CHEV_DOWN = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
@@ -349,12 +387,27 @@
     const ICON_PLUS = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
 
     let defaultBanks = [];
+    
+    // พาเลตต์สีสำหรับธนาคารในไทย
+    const thaiBankColors = [
+        { name: 'กสิกรไทย', hex: '#138F2D' },
+        { name: 'ไทยพาณิชย์', hex: '#4E2A81' },
+        { name: 'กรุงเทพ', hex: '#1E3A8A' },
+        { name: 'กรุงไทย', hex: '#00AEEF' },
+        { name: 'กรุงศรี', hex: '#FEC400' },
+        { name: 'ทีทีบี / ธอส.', hex: '#FF9F0A' },
+        { name: 'ออมสิน', hex: '#EB008B' },
+        { name: 'ทั่วไป (สีฟ้า)', hex: '#0A84FF' }
+    ];
+
+    let currentEditingBankId = null;
 
     window.onload = function() {
         const savedTheme = localStorage.getItem('appTheme') || 'ios';
         document.getElementById('themeSelector').value = savedTheme;
         document.documentElement.setAttribute('data-theme', savedTheme);
 
+        initColorModal();
         renderBanks(); 
         loadData();
         generateText(); 
@@ -382,16 +435,41 @@
         }
     }
 
-    // ฟังก์ชันเปลี่ยนสีธนาคาร (ถูกเรียกจาก input type="color")
-    function changeBankColor(id, newColor) {
-        let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
-        const index = banks.findIndex(b => b.id === id);
-        if (index !== -1) {
-            banks[index].color = newColor;
-            localStorage.setItem('bankData', JSON.stringify(banks));
-            renderBanks();
-            updateData();
+    // --- ระบบเลืออกสีธนาคาร ---
+    function initColorModal() {
+        const grid = document.getElementById('colorGrid');
+        thaiBankColors.forEach(color => {
+            const btn = document.createElement('button');
+            btn.className = 'color-swatch';
+            btn.style.backgroundColor = color.hex;
+            btn.title = color.name;
+            btn.onclick = () => selectColor(color.hex);
+            grid.appendChild(btn);
+        });
+    }
+
+    function openColorModal(bankId) {
+        currentEditingBankId = bankId;
+        document.getElementById('colorModal').classList.add('active');
+    }
+
+    function closeColorModal() {
+        document.getElementById('colorModal').classList.remove('active');
+        currentEditingBankId = null;
+    }
+
+    function selectColor(hex) {
+        if (currentEditingBankId) {
+            let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
+            const index = banks.findIndex(b => b.id === currentEditingBankId);
+            if (index !== -1) {
+                banks[index].color = hex;
+                localStorage.setItem('bankData', JSON.stringify(banks));
+                renderBanks();
+                updateData();
+            }
         }
+        closeColorModal();
     }
 
     function renderBanks() {
@@ -409,17 +487,14 @@
         banks.forEach(b => {
             const isActive = b.id === selectedId;
             const checkIcon = isActive ? `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--theme-primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>` : ``;
-            // ดึงสีที่เคยเลือกไว้ ถ้าไม่มีให้ใช้สีฟ้าเป็นค่าเริ่มต้น
             const iconColor = b.color || '#0A84FF'; 
             
-            // v9.1 ย้าย input color ไปฝังไว้ในไอคอนธนาคาร
             const html = `
                 <div class="ios-list-item clickable" onclick="selectBank('${b.id}')">
                     <div class="ios-list-left">
-                        <label class="ios-icon-box" style="background-color: ${iconColor}; cursor: pointer;" title="แตะเพื่อเปลี่ยนสีไอคอน">
+                        <div class="ios-icon-box" style="background-color: ${iconColor}; cursor: pointer;" title="แตะเพื่อเปลี่ยนสีไอคอน" onclick="event.stopPropagation(); openColorModal('${b.id}')">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
-                            <input type="color" class="color-picker-input" value="${iconColor}" onchange="changeBankColor('${b.id}', this.value)" onclick="event.stopPropagation()">
-                        </label>
+                        </div>
                         <span class="ios-item-title">${b.text}</span>
                     </div>
                     <div class="ios-list-right" onclick="event.stopPropagation();">
@@ -488,8 +563,6 @@
         localStorage.setItem('check_shipping', document.getElementById('check_shipping').checked);
         localStorage.setItem('check_special', document.getElementById('check_special').checked);
         localStorage.setItem('check_deposit', document.getElementById('check_deposit').checked);
-
-        const selectedBankNode = localStorage.getItem('bank'); 
 
         const collections = [];
         document.querySelectorAll('.collection-block').forEach(block => {
@@ -561,7 +634,7 @@
         saveData();
         
         const exportObj = {
-            version: "v9.1",
+            version: "v9.2",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || [],
             selectedBank: localStorage.getItem('bank') || '',
