@@ -66,7 +66,19 @@
         .form-group { margin-bottom: 1.5rem; }
         label.section-label { display: block; margin-bottom: 0.8rem; font-weight: 600; font-size: 0.95rem; color: var(--theme-text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-left: 0.5rem; }
         
-        input[type="text"], input[type="number"]:not(.inline-fee-input), textarea { width: 100%; padding: 0.75rem 1rem; background-color: var(--theme-surface); color: var(--theme-text); border: 1px solid var(--theme-border); border-radius: 8px; box-sizing: border-box; font-family: inherit; font-size: 15px; -webkit-appearance: none; appearance: none; transition: all 0.2s ease; }
+        /* แก้ไข: ปรับ border-radius ของ Input ทุกตัวให้เป็น 20px (แคปซูล) เพื่อแก้ปัญหาโดนทับ */
+        input[type="text"], input[type="number"]:not(.inline-fee-input), textarea { 
+            width: 100%; 
+            padding: 0.75rem 1rem; 
+            background-color: var(--theme-surface); 
+            color: var(--theme-text); 
+            border: 1px solid var(--theme-border); 
+            border-radius: 20px !important; /* บังคับให้เป็นแคปซูล */
+            box-sizing: border-box; 
+            font-family: inherit; 
+            font-size: 15px; 
+            -webkit-appearance: none; appearance: none; transition: all 0.2s ease; 
+        }
         input::placeholder, textarea::placeholder { color: var(--theme-text-muted); }
         input:focus, textarea:focus { outline: none; border-color: var(--theme-primary); box-shadow: 0 0 0 3px var(--theme-primary-focus); }
         input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
@@ -89,7 +101,7 @@
         .mac-max { background-color: #27C93F; }
         
         .collection-name-box { position: relative; width: 100%; }
-        .collection-name-box input { background-color: transparent; padding: 0.5rem 2.5rem 0.5rem 0.6rem; font-size: 1.05rem; font-weight: 600; border-radius: 6px; transition: all 0.2s ease; border: 1px solid transparent; }
+        .collection-name-box input { background-color: transparent; padding: 0.5rem 2.5rem 0.5rem 0.6rem; font-size: 1.05rem; font-weight: 600; border-radius: 6px !important; transition: all 0.2s ease; border: 1px solid transparent; }
         .collection-block:not(.collapsed) .collection-name-box input { background-color: var(--theme-primary); color: white; border-color: var(--theme-primary); }
         .collection-block.collapsed .collection-name-box input { color: var(--theme-text); }
         .collection-block:not(.collapsed) .collection-name-box input:focus { box-shadow: none; border-color: var(--theme-primary); }
@@ -106,13 +118,13 @@
         .product-item { background: var(--theme-surface-alt); padding: 0.85rem; border-radius: 12px; margin-bottom: 0.6rem; border: 1px solid var(--theme-border); }
         .product-header-row { display: grid; grid-template-columns: 1fr 90px 70px auto; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem; }
         
-        /* REVISED: อินพุตชื่อ/ราคา/จำนวน ขอบมนแบบแคปซูล */
+        /* ปรับแต่ง Input ด้านใน product ให้มีความเฉพาะตัว (โค้งมน) */
         .product-header-row input { 
-            padding: 0.5rem 0.8rem; /* ปรับ padding ให้พอดีกับขอบโค้ง */
+            padding: 0.5rem 0.8rem !important; 
             font-size: 0.95rem; 
             background-color: var(--theme-surface); 
             border: 1px solid var(--theme-border); 
-            border-radius: 20px; /* ทำให้ขอบโค้งมนเหมือนเม็ดแคปซูล */
+            border-radius: 20px !important; /* แคปซูล 100% */
         }
         
         .productName { width: 100%; font-weight: 500; }
@@ -137,20 +149,20 @@
         .pill:hover { background: var(--theme-surface-hover); }
         .pill.active { background: var(--theme-primary); color: white; border-color: var(--theme-primary); }
         
-        /* REVISED: ปุ่ม 3 จุด มีกรอบวงกลม */
+        /* แก้ไข: ลบ border ออก แล้วใช้ SVG ที่มีกรอบแทน เพื่อความเป๊ะ */
         .pill-action { 
             appearance: none; -webkit-appearance: none; 
             background-color: transparent; 
             color: var(--theme-text-muted); 
-            border: 1px solid var(--theme-border); /* เพิ่มเส้นขอบวงกลม */
-            width: 32px; height: 32px; /* ล็อกขนาดให้เป็นวงกลมสมมาตร */
+            border: none; 
+            width: 32px; height: 32px; 
             padding: 0; 
             border-radius: 50%; 
             cursor: pointer; display: flex; align-items: center; justify-content: center; 
             transition: all 0.2s ease; flex-shrink: 0;
             margin-left: auto; 
         }
-        .pill-action:hover { background-color: var(--theme-surface-hover); color: var(--theme-text); border-color: var(--theme-text-muted); }
+        .pill-action:hover { background-color: var(--theme-surface-hover); color: var(--theme-text); }
 
         .btn { background-color: var(--theme-surface); color: var(--theme-text); border: 1px solid var(--theme-border); padding: 0.85rem 1.5rem; border-radius: 24px; cursor: pointer; font-weight: 600; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
         .btn:hover, .btn:active { background-color: var(--theme-surface-hover); }
@@ -160,7 +172,17 @@
         .btn-danger-outline { background-color: transparent; color: var(--theme-danger); border: 1px solid var(--theme-danger); box-shadow: none; }
         .btn-danger-outline:hover { background-color: var(--theme-danger-alpha); }
         
-        .btn-icon { padding: 0; width: 30px; height: 30px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: var(--theme-text); border: 1px solid transparent; cursor: pointer; transition: all 0.2s; background-color: transparent; }
+        /* แก้ไข: ปรับปุ่ม Tools ย่อย (เลื่อน ขึ้น-ลง ก๊อปปี้ ลบ) ให้เป็นวงกลมมน */
+        .btn-icon { 
+            padding: 0; 
+            width: 30px; height: 30px; 
+            flex-shrink: 0; 
+            display: flex; align-items: center; justify-content: center; 
+            border-radius: 50%; /* เปลี่ยนเป็น 50% ให้กลมดิก */
+            color: var(--theme-text); 
+            border: 1px solid transparent; 
+            cursor: pointer; transition: all 0.2s; background-color: transparent; 
+        }
         .btn-icon:hover { background-color: var(--theme-surface-hover); border-color: var(--theme-border); }
         .btn-add-row { background: transparent; color: var(--theme-primary); border: none; cursor: pointer; font-size: 0.9rem; font-weight: 500; padding: 0.4rem 0; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.3rem; margin-left: 0.5rem; border-radius: 20px;}
         .btn-add-row:hover { opacity: 0.7; text-decoration: underline; }
@@ -192,7 +214,7 @@
             width: 50px;
             padding: 0 4px;
             margin-left: 2px;
-            border-radius: 4px;
+            border-radius: 4px !important;
             outline: none;
             transition: all 0.2s;
             -moz-appearance: textfield;
@@ -201,9 +223,9 @@
         .inline-fee-input:focus { background-color: var(--theme-surface-hover); color: var(--theme-primary); border-color: rgba(255,255,255,0.1); }
 
         /* ========================================= */
-        /* --- REVISED: Toggle Switch ให้ยาวขึ้น --- */
+        /* --- Toggle Switch ให้ยาวขึ้น --- */
         /* ========================================= */
-        .ios-switch { position: relative; display: inline-block; width: 54px; height: 28px; flex-shrink: 0; cursor: pointer; } /* เพิ่มความกว้างเป็น 54px */
+        .ios-switch { position: relative; display: inline-block; width: 54px; height: 28px; flex-shrink: 0; cursor: pointer; } 
         .ios-switch input { opacity: 0; width: 0; height: 0; }
         .slider { 
             position: absolute; inset: 0; 
@@ -213,7 +235,7 @@
         }
         .slider:before { 
             position: absolute; content: ""; 
-            height: 22px; width: 26px; /* แคปซูลกว้างชัดเจน ไม่เป็นวงกลมแล้ว */
+            height: 22px; width: 26px; 
             left: 3px; bottom: 3px; 
             background-color: #D1D1D6; 
             transition: .2s cubic-bezier(0.25, 0.8, 0.25, 1); 
@@ -222,24 +244,24 @@
         }
         input:checked + .slider { background-color: var(--theme-primary); }
         input:checked + .slider:before { 
-            transform: translateX(22px); /* ระยะเลื่อนให้พอดีกับความกว้างใหม่ */
+            transform: translateX(22px); 
             background-color: #FFFFFF; 
         }
 
         .ios-list-item.clickable:hover { background-color: var(--theme-surface-hover); cursor: pointer; }
         
-        .bank-action-btn { background-color: transparent; color: var(--theme-text-muted); border: 1px solid transparent; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; padding: 0; flex-shrink: 0; position: relative; }
-        .bank-action-btn:hover { background-color: var(--theme-surface-hover); color: var(--theme-text); border-color: var(--theme-border); }
+        .bank-action-btn { background-color: transparent; color: var(--theme-text-muted); border: none; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; padding: 0; flex-shrink: 0; position: relative; }
+        .bank-action-btn:hover { background-color: var(--theme-surface-hover); color: var(--theme-text); }
         
         /* ========================================= */
-        /* --- REVISED: Radio Button เล็กลง --- */
+        /* --- Radio Button เล็กลง --- */
         /* ========================================= */
         .bank-radio-container {
             display: inline-flex; align-items: center; cursor: pointer; position: relative; margin-right: 0.8rem; margin-top: 0;
         }
         .bank-radio { opacity: 0; position: absolute; width: 0; height: 0; }
         .custom-radio {
-            width: 16px; height: 16px; /* ย่อขนาดให้เล็กลง */
+            width: 16px; height: 16px; 
             border-radius: 50%; 
             background-color: #39393D; 
             display: flex; align-items: center; justify-content: center; 
@@ -250,9 +272,8 @@
             background-color: var(--theme-primary); 
             border-color: var(--theme-primary);
         }
-        /* จุดสีขาวตรงกลาง */
         .custom-radio::after {
-            content: ''; width: 6px; height: 6px; /* ย่อขนาดจุดด้านในให้สมดุล */
+            content: ''; width: 6px; height: 6px; 
             border-radius: 50%; 
             background-color: #FFFFFF; 
             transform: scale(0); 
@@ -289,7 +310,7 @@
 
         /* ========================================= */
 
-        textarea { height: 350px; resize: vertical; line-height: 1.6; border-radius: 12px;}
+        textarea { height: 350px; resize: vertical; line-height: 1.6; border-radius: 12px !important;}
         .action-buttons-group { display: flex; gap: 1rem; margin-top: 1rem; }
 
         .help-section { width: 100%; max-width: 1800px; margin: 2rem auto 0 auto; background: var(--theme-surface); border: 1px solid var(--theme-border); border-radius: 16px; overflow: hidden; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
@@ -334,7 +355,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                Order Management <span class="version-badge">v9.9.3</span>
+                Order Management <span class="version-badge">v9.9.4</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: var(--theme-surface);" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -491,7 +512,8 @@
     const ICON_COPY = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
     const ICON_PLUS = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
     
-    const ICON_DOTS = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1.5" fill="currentColor"></circle><circle cx="5" cy="12" r="1.5" fill="currentColor"></circle><circle cx="19" cy="12" r="1.5" fill="currentColor"></circle></svg>`;
+    /* แก้ไข: เปลี่ยนไอคอน 3 จุด ให้เป็น "วงแหวนที่มี 3 จุดข้างใน" เหมือนภาพที่ 4 */
+    const ICON_DOTS = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"></circle><circle cx="7.5" cy="12" r="1.5" fill="currentColor" stroke="none"></circle><circle cx="16.5" cy="12" r="1.5" fill="currentColor" stroke="none"></circle></svg>`;
 
     const MAC_CLOSE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>`;
     const MAC_MIN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>`;
@@ -775,7 +797,7 @@
     function exportData() {
         saveData();
         const exportObj = {
-            version: "v9.9.3",
+            version: "v9.9.4",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || [],
             selectedBank: localStorage.getItem('bank') || '',
