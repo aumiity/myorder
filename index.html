@@ -53,31 +53,13 @@
         /* ========================================= */
         .collection-block { background-color: var(--theme-surface); border-radius: 16px; padding: 1.25rem; margin-bottom: 1.5rem; border: none; transition: all 0.3s ease; }
         
-        .collection-header { 
-            display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; 
-        }
+        .collection-header { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
+        .collection-top-controls { display: flex; gap: 0.4rem; }
+        .collection-top-controls .btn-icon { width: 30px; height: 30px; border-radius: 8px; }
         
-        .collection-top-controls { 
-            display: flex; gap: 0.4rem; 
-        }
-        .collection-top-controls .btn-icon { 
-            width: 30px; height: 30px; border-radius: 8px;
-        }
-        
-        .collection-name-box { 
-            position: relative; width: 100%; 
-        }
-        .collection-name-box input { 
-            background-color: var(--theme-surface-alt); 
-            padding-right: 3rem; 
-            font-size: 1.1rem; font-weight: 600;
-        }
-        .btn-toggle-col { 
-            position: absolute; right: 0.4rem; top: 50%; transform: translateY(-50%); 
-            width: 32px; height: 32px; background: transparent; color: var(--theme-text-muted); 
-            border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; 
-            border-radius: 8px; transition: all 0.2s; 
-        }
+        .collection-name-box { position: relative; width: 100%; }
+        .collection-name-box input { background-color: var(--theme-surface-alt); padding-right: 3rem; font-size: 1.1rem; font-weight: 600; }
+        .btn-toggle-col { position: absolute; right: 0.4rem; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; background: transparent; color: var(--theme-text-muted); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: all 0.2s; }
         .btn-toggle-col:hover { background-color: var(--theme-surface-hover); color: var(--theme-text); }
         
         .collection-block.collapsed .collection-header { margin-bottom: 0; }
@@ -99,19 +81,8 @@
         .pill:hover { background: var(--theme-surface-hover); }
         .pill.active { background: var(--theme-primary); color: white; }
         
-        /* v8.9 ปรับปุ่มเฟืองตัวเลือก ให้เป็นสีเทา ไม่มีขอบ แต่ทรงมนเหมือนเดิม */
-        .pill-action { 
-            appearance: none; -webkit-appearance: none; 
-            background-color: var(--theme-surface-hover); 
-            color: var(--theme-text); 
-            border: none; 
-            padding: 0.4rem 0.85rem; border-radius: 20px; 
-            cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 0.3rem; 
-            transition: all 0.2s ease; 
-        }
-        .pill-action:hover { 
-            opacity: 0.8;
-        }
+        .pill-action { appearance: none; -webkit-appearance: none; background-color: var(--theme-surface-hover); color: var(--theme-text); border: none; padding: 0.4rem 0.85rem; border-radius: 20px; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 0.3rem; transition: all 0.2s ease; }
+        .pill-action:hover { opacity: 0.8; }
 
         .btn { background-color: var(--theme-surface); color: var(--theme-text); border: none; padding: 1rem 1.5rem; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 1.05rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; }
         .btn:hover, .btn:active { background-color: var(--theme-surface-hover); }
@@ -121,7 +92,6 @@
         .btn-danger-outline { background-color: transparent; color: var(--theme-danger); border: 1px solid var(--theme-danger); }
         .btn-danger-outline:hover { background-color: var(--theme-danger-alpha); }
         
-        /* ปุ่มเลื่อน ก๊อป ลบ (สีเทา) */
         .btn-icon { padding: 0; width: 34px; height: 34px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: var(--theme-text); border: none; cursor: pointer; transition: all 0.2s; background-color: var(--theme-surface-hover); }
         .btn-icon:hover { opacity: 0.8; }
         .btn-clone { color: var(--theme-primary); }
@@ -137,16 +107,18 @@
         .ios-list-item:not(:last-child)::after { content: ''; position: absolute; bottom: 0; left: 3.5rem; right: 0; height: 1px; background-color: var(--theme-border); }
         .ios-list-left { display: flex; align-items: center; gap: 1rem; flex: 1; min-width: 0; }
         .ios-list-right { display: flex; align-items: center; gap: 0.8rem; flex-shrink: 0; }
-        .ios-icon-box { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; }
+        
+        /* v9.1 เพิ่ม position: relative ให้ .ios-icon-box เพื่อให้ใส่ input color เนียนๆ ได้ */
+        .ios-icon-box { position: relative; overflow: hidden; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; transition: background-color 0.3s ease; }
         .bg-shipping { background-color: var(--theme-primary); } 
         .bg-special { background-color: var(--theme-warning); }
         .bg-deposit { background-color: var(--theme-danger); }
-        .bg-bank { background-color: var(--theme-primary); }
 
         .fee-text-group { display: flex; flex-direction: column; line-height: 1.3; gap: 0.2rem; }
         .ios-item-title { font-size: 1.05rem; font-weight: 500; color: var(--theme-text); white-space: pre-wrap; }
         .ios-item-price { font-size: 0.9rem; color: var(--theme-text-muted); font-weight: normal; }
 
+        /* สวิตช์เปิด-ปิด สไตล์ iOS ทรงรีแนวนอนเป๊ะๆ (51x31) */
         .ios-switch { position: relative; display: inline-block; width: 51px; height: 31px; flex-shrink: 0; cursor: pointer; }
         .ios-switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #39393D; transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 31px; border: none; }
@@ -159,7 +131,12 @@
         .bank-action-btn { background-color: var(--theme-surface-hover); color: var(--theme-text); border: none; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; padding: 0; flex-shrink: 0; }
         .bank-action-btn:hover { opacity: 0.8; }
         
+        /* Input Color ที่ซ่อนไว้ให้เนียนไปกับกล่องไอคอนธนาคาร */
+        .color-picker-input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+        
         .check-indicator { width: 20px; display: flex; justify-content: center; }
+
+        /* ========================================= */
 
         textarea { height: 350px; resize: vertical; line-height: 1.6; }
         .action-buttons-group { display: flex; gap: 1rem; margin-top: 1rem; }
@@ -206,7 +183,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                ออเดอร์ <span class="version-badge">v8.9</span>
+                ออเดอร์ <span class="version-badge">v9.1 (Smart Icon)</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.55rem 1rem; font-size: 0.95rem; background: var(--theme-surface);" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -405,6 +382,18 @@
         }
     }
 
+    // ฟังก์ชันเปลี่ยนสีธนาคาร (ถูกเรียกจาก input type="color")
+    function changeBankColor(id, newColor) {
+        let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
+        const index = banks.findIndex(b => b.id === id);
+        if (index !== -1) {
+            banks[index].color = newColor;
+            localStorage.setItem('bankData', JSON.stringify(banks));
+            renderBanks();
+            updateData();
+        }
+    }
+
     function renderBanks() {
         let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
         const container = document.getElementById('bankContainer');
@@ -420,20 +409,24 @@
         banks.forEach(b => {
             const isActive = b.id === selectedId;
             const checkIcon = isActive ? `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--theme-primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>` : ``;
+            // ดึงสีที่เคยเลือกไว้ ถ้าไม่มีให้ใช้สีฟ้าเป็นค่าเริ่มต้น
+            const iconColor = b.color || '#0A84FF'; 
             
+            // v9.1 ย้าย input color ไปฝังไว้ในไอคอนธนาคาร
             const html = `
                 <div class="ios-list-item clickable" onclick="selectBank('${b.id}')">
                     <div class="ios-list-left">
-                        <div class="ios-icon-box bg-bank">
+                        <label class="ios-icon-box" style="background-color: ${iconColor}; cursor: pointer;" title="แตะเพื่อเปลี่ยนสีไอคอน">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
-                        </div>
+                            <input type="color" class="color-picker-input" value="${iconColor}" onchange="changeBankColor('${b.id}', this.value)" onclick="event.stopPropagation()">
+                        </label>
                         <span class="ios-item-title">${b.text}</span>
                     </div>
-                    <div class="ios-list-right">
-                        <button class="bank-action-btn" onclick="event.stopPropagation(); editBank('${b.id}')" title="แก้ไข">
+                    <div class="ios-list-right" onclick="event.stopPropagation();">
+                        <button class="bank-action-btn" onclick="editBank('${b.id}')" title="แก้ไขชื่อบัญชี">
                             ${ICON_GEAR}
                         </button>
-                        <button class="bank-action-btn" onclick="event.stopPropagation(); deleteBank('${b.id}')" title="ลบ">
+                        <button class="bank-action-btn" onclick="deleteBank('${b.id}')" title="ลบ">
                             ${ICON_TRASH}
                         </button>
                         <div class="check-indicator">${checkIcon}</div>
@@ -456,7 +449,7 @@
             let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
             const formattedText = input.split('//').map(s => s.trim()).join('\n');
             const newId = 'b' + Date.now();
-            banks.push({ id: newId, text: formattedText });
+            banks.push({ id: newId, text: formattedText, color: '#0A84FF' });
             localStorage.setItem('bankData', JSON.stringify(banks));
             selectBank(newId); 
         }
@@ -568,7 +561,7 @@
         saveData();
         
         const exportObj = {
-            version: "v8.9",
+            version: "v9.1",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || [],
             selectedBank: localStorage.getItem('bank') || '',
@@ -587,7 +580,7 @@
         const encodedData = btoa(encodeURIComponent(dataStr));
         
         navigator.clipboard.writeText(encodedData).then(() => {
-            alert('📋 คัดลอกโค้ดสำเร็จ! (รวมข้อมูลสินค้า ธนาคาร และการตั้งค่าแล้ว)');
+            alert('📋 คัดลอกโค้ดสำเร็จ! (รวมข้อมูลสินค้า ธนาคาร สีไอคอน และการตั้งค่าแล้ว)');
         }).catch(() => {
             prompt('คัดลอกโค้ดนี้:', encodedData);
         });
