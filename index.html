@@ -110,14 +110,24 @@
         .productPrice, .productQty { width: 100%; text-align: center; background-color: var(--theme-surface)!important; color: var(--theme-text)!important; font-weight: 600; }
         .product-actions { display: flex; gap: 0.3rem; }
         
-        .option-row { display: flex; align-items: center; margin-bottom: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--theme-border); }
+        .option-row { display: flex; align-items: center; margin-bottom: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--theme-border); gap: 1rem; }
         .size-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; width: 100%; }
         .pill { padding: 0.3rem 0.8rem; border-radius: 6px; background: var(--theme-surface); color: var(--theme-text); font-size: 0.85rem; font-weight: 500; cursor: pointer; user-select: none; transition: all 0.2s ease; border: 1px solid var(--theme-border); }
         .pill:hover { background: var(--theme-surface-hover); }
         .pill.active { background: var(--theme-primary); color: white; border-color: var(--theme-primary); }
         
-        .pill-action { appearance: none; -webkit-appearance: none; background-color: transparent; color: var(--theme-text-muted); border: 1px solid transparent; padding: 0.3rem 0.6rem; border-radius: 6px; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 0.3rem; transition: all 0.2s ease; }
-        .pill-action:hover { background-color: var(--theme-surface-hover); color: var(--theme-text); border-color: var(--theme-border); }
+        /* v9.9: ปุ่มตั้งค่า 3 จุด แบบใหญ่ขึ้น และมีขอบ เน้นย้ายไปซ้าย */
+        .pill-action { 
+            appearance: none; -webkit-appearance: none; 
+            background-color: var(--theme-surface); 
+            color: var(--theme-text-muted); 
+            border: 1px solid var(--theme-border); 
+            padding: 0.4rem 0.8rem; border-radius: 8px; 
+            cursor: pointer; display: flex; align-items: center; justify-content: center; 
+            transition: all 0.2s ease; flex-shrink: 0;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .pill-action:hover { background-color: var(--theme-surface-hover); color: var(--theme-text); border-color: var(--theme-text-muted); }
 
         .btn { background-color: var(--theme-surface); color: var(--theme-text); border: 1px solid var(--theme-border); padding: 0.85rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
         .btn:hover, .btn:active { background-color: var(--theme-surface-hover); }
@@ -149,13 +159,14 @@
         .ios-item-title { font-size: 0.95rem; font-weight: 500; color: var(--theme-text); white-space: pre-wrap; }
         .ios-item-price { font-size: 0.85rem; color: var(--theme-text-muted); font-weight: normal; display: flex; align-items: center; gap: 2px;}
 
-        /* v9.8: อินพุตแก้ไขข้อความแบบล่องหน (Inline Edit) */
+        /* v9.9: อินพุตล่องหนสีเทาให้กลืนไปกับตัว ฿ */
         .inline-fee-input {
             background: transparent;
             border: 1px solid transparent;
-            color: var(--theme-text);
+            color: var(--theme-text-muted); /* เปลี่ยนเป็นสีเทา */
             font-size: inherit;
             font-family: inherit;
+            font-weight: normal;
             width: 50px;
             padding: 0 4px;
             margin-left: 2px;
@@ -167,21 +178,28 @@
         .inline-fee-input:hover { background-color: rgba(255,255,255,0.05); }
         .inline-fee-input:focus { background-color: var(--theme-surface-hover); color: var(--theme-primary); border-color: rgba(255,255,255,0.1); }
 
-        /* สวิตช์เปิด-ปิด macOS */
-        .ios-switch { position: relative; display: inline-block; width: 38px; height: 22px; flex-shrink: 0; cursor: pointer; }
+        /* ========================================= */
+        /* --- สวิตช์เปิด-ปิด แบบ Rounded Rectangle --- */
+        /* ========================================= */
+        .ios-switch { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; cursor: pointer; }
         .ios-switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; inset: 0; background-color: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.05); transition: .2s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 22px; }
-        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 1px; bottom: 1px; background-color: white; transition: .2s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 50%; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+        .slider { position: absolute; inset: 0; background-color: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.05); transition: .2s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 6px; /* สี่เหลี่ยมขอบมน */ }
+        .slider:before { 
+            position: absolute; content: ""; height: 18px; width: 18px; 
+            left: 2px; bottom: 2px; background-color: white; 
+            transition: .2s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 4px; /* สี่เหลี่ยมขอบมน */
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2); 
+        }
         input:checked + .slider { background-color: var(--theme-primary); border-color: var(--theme-primary); }
-        input:checked + .slider:before { transform: translateX(16px); }
+        input:checked + .slider:before { transform: translateX(20px); }
 
         .ios-list-item.clickable:hover { background-color: var(--theme-surface-hover); cursor: pointer; }
         
         .bank-action-btn { background-color: transparent; color: var(--theme-text-muted); border: 1px solid transparent; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; padding: 0; flex-shrink: 0; position: relative; }
         .bank-action-btn:hover { background-color: var(--theme-surface-hover); color: var(--theme-text); border-color: var(--theme-border); }
         
-        .check-indicator { width: 18px; display: flex; justify-content: center; }
-        .check-indicator svg { width: 16px; height: 16px; }
+        /* v9.9: นำ Radio Button กลับมาแทนที่ */
+        .bank-radio { margin-right: 0.2rem; width: 16px; height: 16px; accent-color: var(--theme-primary); cursor: pointer; flex-shrink: 0; margin-top: 0;}
 
         /* ========================================= */
         /* --- Popover เลือกสี --- */
@@ -255,7 +273,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                Order Management <span class="version-badge">v9.8 (Inline Edit)</span>
+                Order Management <span class="version-badge">v9.9</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: var(--theme-surface);" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -411,7 +429,9 @@
     const ICON_TRASH = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
     const ICON_COPY = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
     const ICON_PLUS = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
-    const ICON_DOTS = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 12h.01M12 12h.01M16 12h.01" stroke-width="3"></path></svg>`;
+    
+    // v9.9 ไอคอนจุด 3 จุดที่ชัดขึ้นและสวยงามขึ้น
+    const ICON_DOTS = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="8" cy="12" r="1.5" fill="currentColor"></circle><circle cx="12" cy="12" r="1.5" fill="currentColor"></circle><circle cx="16" cy="12" r="1.5" fill="currentColor"></circle></svg>`;
 
     const MAC_CLOSE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>`;
     const MAC_MIN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>`;
@@ -543,13 +563,14 @@
         const group = document.getElementById('bankListGroup');
 
         banks.forEach(b => {
-            const isActive = b.id === selectedId;
-            const checkIcon = isActive ? `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--theme-primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>` : ``;
+            const isChecked = b.id === selectedId ? 'checked' : '';
             const iconColor = b.color || '#0A84FF'; 
             
+            // v9.9 นำ Radio กลับมาไว้ข้างหน้า
             const html = `
                 <div class="ios-list-item clickable" onclick="selectBank('${b.id}')">
                     <div class="ios-list-left">
+                        <input type="radio" class="bank-radio" name="bank" value="${b.id}" ${isChecked} onclick="event.stopPropagation(); selectBank('${b.id}')">
                         <div class="ios-icon-box" style="background-color: ${iconColor};" title="แตะเพื่อเปลี่ยนสีไอคอน" onclick="openColorPopover(event, '${b.id}', 'bank')">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
                         </div>
@@ -559,7 +580,6 @@
                         <button class="bank-action-btn" onclick="editBank('${b.id}')" title="ตั้งค่า / ลบบัญชี">
                             ${ICON_DOTS}
                         </button>
-                        <div class="check-indicator">${checkIcon}</div>
                     </div>
                 </div>
             `;
@@ -609,7 +629,6 @@
     }
 
     function saveData() {
-        // ดึงค่า value จาก input ล่องหน แทน innerText
         localStorage.setItem('val_shipping', document.getElementById('val_shipping').value);
         localStorage.setItem('val_special', document.getElementById('val_special').value);
         localStorage.setItem('val_deposit', document.getElementById('val_deposit').value);
@@ -618,7 +637,8 @@
         localStorage.setItem('check_special', document.getElementById('check_special').checked);
         localStorage.setItem('check_deposit', document.getElementById('check_deposit').checked);
 
-        const selectedBankNode = localStorage.getItem('bank'); 
+        const selectedBankNode = document.querySelector('input[name="bank"]:checked');
+        if(selectedBankNode) localStorage.setItem('bank', selectedBankNode.value);
 
         const collections = [];
         document.querySelectorAll('.collection-block').forEach(block => {
@@ -650,7 +670,6 @@
     }
 
     function loadData() {
-        // โหลดค่า value ลงใน input ล่องหน
         if (localStorage.getItem('val_shipping')) document.getElementById('val_shipping').value = localStorage.getItem('val_shipping');
         if (localStorage.getItem('val_special')) document.getElementById('val_special').value = localStorage.getItem('val_special');
         if (localStorage.getItem('val_deposit')) document.getElementById('val_deposit').value = localStorage.getItem('val_deposit');
@@ -694,7 +713,7 @@
     function exportData() {
         saveData();
         const exportObj = {
-            version: "v9.8",
+            version: "v9.9",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || [],
             selectedBank: localStorage.getItem('bank') || '',
@@ -846,8 +865,9 @@
 
     function createOptionRowHtml(availableSizes, selectedSizes) {
         let pillsHtml = availableSizes.map(s => `<div class="pill ${selectedSizes.includes(s) ? 'active' : ''}" onclick="togglePill(this)" data-size="${s}">${s}</div>`).join('');
+        // v9.9 ย้ายปุ่ม 3 จุดมาไว้ด้านหน้าสุดของแถวตัวเลือก
         let actionsHtml = `<button class="pill-action" onclick="editPillsList(this)" title="ตั้งค่าตัวเลือก/ลบแถว">${ICON_DOTS}</button>`;
-        return `<div class="option-row"><div class="size-pills">${pillsHtml}${actionsHtml}</div></div>`;
+        return `<div class="option-row">${actionsHtml}<div class="size-pills">${pillsHtml}</div></div>`;
     }
 
     function createProductItemElement(name = '', price = '', qty = 1, optionRowsArray = null) {
@@ -904,9 +924,8 @@
     function togglePill(pill) { pill.classList.toggle('active'); saveData(); generateText(); }
 
     function editPillsList(btn) {
-        const container = btn.closest('.size-pills');
-        const row = container.closest('.option-row');
-        const item = row.closest('.product-item');
+        const container = btn.closest('.option-row');
+        const item = container.closest('.product-item');
         const currentSizes = Array.from(container.querySelectorAll('.pill[data-size]')).map(p => p.getAttribute('data-size'));
         
         const newSizesStr = prompt('ตั้งค่าปุ่ม (คั่นด้วยลูกน้ำ ,)\n* หากต้องการลบแถวนี้ออก ให้ลบข้อความออกให้หมดแล้วกด OK:', currentSizes.join(','));
@@ -916,10 +935,10 @@
             if (newSizes.length === 0) {
                 const allRows = item.querySelectorAll('.option-row');
                 if (allRows.length <= 1) newSizes = ['-'];
-                else { row.remove(); saveData(); generateText(); return; }
+                else { container.remove(); saveData(); generateText(); return; }
             }
             const selectedSizes = Array.from(container.querySelectorAll('.pill.active')).map(p => p.getAttribute('data-size'));
-            row.outerHTML = createOptionRowHtml(newSizes, selectedSizes);
+            container.outerHTML = createOptionRowHtml(newSizes, selectedSizes);
             saveData(); generateText();
         }
     }
