@@ -66,14 +66,13 @@
         .form-group { margin-bottom: 1.5rem; }
         label.section-label { display: block; margin-bottom: 0.8rem; font-weight: 600; font-size: 0.95rem; color: var(--theme-text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-left: 0.5rem; }
         
-        /* แก้ไข: ปรับ border-radius ของ Input ทุกตัวให้เป็น 20px (แคปซูล) เพื่อแก้ปัญหาโดนทับ */
         input[type="text"], input[type="number"]:not(.inline-fee-input), textarea { 
             width: 100%; 
             padding: 0.75rem 1rem; 
             background-color: var(--theme-surface); 
             color: var(--theme-text); 
             border: 1px solid var(--theme-border); 
-            border-radius: 20px !important; /* บังคับให้เป็นแคปซูล */
+            border-radius: 20px !important; 
             box-sizing: border-box; 
             font-family: inherit; 
             font-size: 15px; 
@@ -91,10 +90,24 @@
         
         .collection-header { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
         
-        .mac-controls { display: flex; gap: 8px; padding: 0.25rem 0.25rem; }
-        .mac-btn { width: 12px; height: 12px; border-radius: 50%; border: none; padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; transition: filter 0.2s; }
-        .mac-btn svg { opacity: 0; width: 8px; height: 8px; color: rgba(0,0,0,0.6); transition: opacity 0.2s; }
-        .mac-controls:hover .mac-btn svg { opacity: 1; }
+        /* REVISED: ปุ่ม Mac Controls ขยายขนาด & โชว์ไอคอนแยกกัน */
+        .mac-controls { display: flex; gap: 8px; padding: 0.25rem 0.25rem; align-items: center;}
+        .mac-btn { 
+            width: 16px; /* ใหญ่ขึ้นจากเดิม 12px */
+            height: 16px; 
+            border-radius: 50%; border: none; padding: 0; 
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; position: relative; transition: filter 0.2s; 
+        }
+        .mac-btn svg { 
+            opacity: 0; 
+            width: 10px; /* ไอคอนข้างในใหญ่ขึ้นตามปุ่ม */
+            height: 10px; 
+            color: rgba(0,0,0,0.6); transition: opacity 0.2s; 
+        }
+        /* เปลี่ยนมาใช้ Hover ที่ตัวปุ่มโดยตรง แทนการ Hover ทั้งกล่อง */
+        .mac-btn:hover svg { opacity: 1; } 
+        
         .mac-btn:active { filter: brightness(0.8); }
         .mac-close { background-color: #FF5F56; }
         .mac-min { background-color: #FFBD2E; }
@@ -118,13 +131,12 @@
         .product-item { background: var(--theme-surface-alt); padding: 0.85rem; border-radius: 12px; margin-bottom: 0.6rem; border: 1px solid var(--theme-border); }
         .product-header-row { display: grid; grid-template-columns: 1fr 90px 70px auto; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem; }
         
-        /* ปรับแต่ง Input ด้านใน product ให้มีความเฉพาะตัว (โค้งมน) */
         .product-header-row input { 
             padding: 0.5rem 0.8rem !important; 
             font-size: 0.95rem; 
             background-color: var(--theme-surface); 
             border: 1px solid var(--theme-border); 
-            border-radius: 20px !important; /* แคปซูล 100% */
+            border-radius: 20px !important; 
         }
         
         .productName { width: 100%; font-weight: 500; }
@@ -149,7 +161,6 @@
         .pill:hover { background: var(--theme-surface-hover); }
         .pill.active { background: var(--theme-primary); color: white; border-color: var(--theme-primary); }
         
-        /* แก้ไข: ลบ border ออก แล้วใช้ SVG ที่มีกรอบแทน เพื่อความเป๊ะ */
         .pill-action { 
             appearance: none; -webkit-appearance: none; 
             background-color: transparent; 
@@ -172,13 +183,12 @@
         .btn-danger-outline { background-color: transparent; color: var(--theme-danger); border: 1px solid var(--theme-danger); box-shadow: none; }
         .btn-danger-outline:hover { background-color: var(--theme-danger-alpha); }
         
-        /* แก้ไข: ปรับปุ่ม Tools ย่อย (เลื่อน ขึ้น-ลง ก๊อปปี้ ลบ) ให้เป็นวงกลมมน */
         .btn-icon { 
             padding: 0; 
             width: 30px; height: 30px; 
             flex-shrink: 0; 
             display: flex; align-items: center; justify-content: center; 
-            border-radius: 50%; /* เปลี่ยนเป็น 50% ให้กลมดิก */
+            border-radius: 50%; 
             color: var(--theme-text); 
             border: 1px solid transparent; 
             cursor: pointer; transition: all 0.2s; background-color: transparent; 
@@ -223,7 +233,7 @@
         .inline-fee-input:focus { background-color: var(--theme-surface-hover); color: var(--theme-primary); border-color: rgba(255,255,255,0.1); }
 
         /* ========================================= */
-        /* --- Toggle Switch ให้ยาวขึ้น --- */
+        /* --- Toggle Switch --- */
         /* ========================================= */
         .ios-switch { position: relative; display: inline-block; width: 54px; height: 28px; flex-shrink: 0; cursor: pointer; } 
         .ios-switch input { opacity: 0; width: 0; height: 0; }
@@ -254,7 +264,7 @@
         .bank-action-btn:hover { background-color: var(--theme-surface-hover); color: var(--theme-text); }
         
         /* ========================================= */
-        /* --- Radio Button เล็กลง --- */
+        /* --- Radio Button --- */
         /* ========================================= */
         .bank-radio-container {
             display: inline-flex; align-items: center; cursor: pointer; position: relative; margin-right: 0.8rem; margin-top: 0;
@@ -355,7 +365,7 @@
         <div class="main-header">
             <h2>
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                Order Management <span class="version-badge">v9.9.4</span>
+                Order Management <span class="version-badge">v9.9.5</span>
             </h2>
             <button class="btn btn-danger-outline" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: var(--theme-surface);" onclick="clearAllPills()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
@@ -512,7 +522,6 @@
     const ICON_COPY = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
     const ICON_PLUS = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
     
-    /* แก้ไข: เปลี่ยนไอคอน 3 จุด ให้เป็น "วงแหวนที่มี 3 จุดข้างใน" เหมือนภาพที่ 4 */
     const ICON_DOTS = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"></circle><circle cx="7.5" cy="12" r="1.5" fill="currentColor" stroke="none"></circle><circle cx="16.5" cy="12" r="1.5" fill="currentColor" stroke="none"></circle></svg>`;
 
     const MAC_CLOSE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>`;
@@ -797,7 +806,7 @@
     function exportData() {
         saveData();
         const exportObj = {
-            version: "v9.9.4",
+            version: "v9.9.5",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || [],
             selectedBank: localStorage.getItem('bank') || '',
