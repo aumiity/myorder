@@ -2,13 +2,14 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UX Prototype Testing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>UX Prototype - Off-Canvas Cart</title>
     <style>
         :root {
             --bg: #0B1120;
             --surface: #151C2C;
-            --primary: #3B82F6;
+            --surface-alt: #1E293B;
+            --primary: #0A84FF;
             --text: #F8FAFC;
             --muted: #94A3B8;
         }
@@ -16,250 +17,188 @@
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
             background: var(--bg); color: var(--text); margin: 0; padding: 0; 
-            display: flex; flex-direction: column; height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* เมนูควบคุมด้านบน (สำหรับทดสอบ) */
-        .admin-controls {
-            background: #222; padding: 15px; text-align: center; border-bottom: 2px solid #444; z-index: 9999;
+        /* ======================================================== */
+        /* 1. พื้นที่หลัก (เต็มจอ 100%) โฟกัสแค่สินค้า */
+        /* ======================================================== */
+        .main-content {
+            padding: 40px 20px 120px 20px; /* เว้นที่ด้านล่างให้ปุ่มลอย */
+            max-width: 1200px;
+            margin: 0 auto;
+            transition: transform 0.3s ease;
         }
-        .admin-controls button {
-            background: #555; color: white; border: none; padding: 10px 20px; margin: 0 5px; border-radius: 8px; cursor: pointer; font-weight: bold;
+
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; }
+        
+        .mock-collection { 
+            background: var(--surface); padding: 30px; border-radius: 20px; margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
-        .admin-controls button:hover, .admin-controls button.active { background: var(--primary); }
-
-        /* คอนเทนเนอร์หลักของแต่ละแบบ */
-        .ux-concept { display: none; flex: 1; overflow: hidden; position: relative; }
-        .ux-concept.active { display: flex; flex-direction: column; }
-
-        /* สไตล์ร่วมสำหรับปุ่ม/กล่องทั่วไป */
-        .btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; }
-        .btn-outline { background: transparent; border: 1px solid var(--muted); }
-        .box { background: var(--surface); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
-        
-        /* ======================================================== */
-        /* แนวทางที่ 1: File Manager (ดริลลงไปทีละชั้น) */
-        /* ======================================================== */
-        .fm-header { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
-        .fm-content { padding: 20px; overflow-y: auto; flex: 1; }
-        .fm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-        
-        /* การ์ดคอลเลคชั่น */
-        .fm-card { background: var(--surface); padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.2s; text-align: center; }
-        .fm-card:hover { border-color: var(--primary); transform: translateY(-5px); }
-        
-        /* หน้าข้างใน */
-        .fm-page { display: none; }
-        .fm-page.active { display: block; }
-        
-        /* ======================================================== */
-        /* แนวทางที่ 2: Step-by-Step Wizard (เดินหน้าไปเรื่อยๆ) */
-        /* ======================================================== */
-        .wiz-container { max-width: 800px; margin: 40px auto; width: 100%; display: flex; flex-direction: column; height: 100%; }
-        
-        /* แถบบอกสถานะ */
-        .wiz-steps { display: flex; justify-content: space-between; margin-bottom: 30px; position: relative; }
-        .wiz-steps::before { content: ''; position: absolute; top: 15px; left: 0; right: 0; height: 2px; background: #333; z-index: -1; }
-        .wiz-step { background: #222; color: var(--muted); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid #333;}
-        .wiz-step.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 0 10px var(--primary); }
-        
-        .wiz-page { display: none; background: var(--surface); padding: 30px; border-radius: 16px; flex: 1; border: 1px solid rgba(255,255,255,0.1); }
-        .wiz-page.active { display: block; }
-        .wiz-footer { display: flex; justify-content: space-between; margin-top: 20px; padding-bottom: 40px;}
+        .mock-product {
+            background: var(--surface-alt); height: 80px; border-radius: 12px; margin-top: 15px;
+            display: flex; align-items: center; justify-content: center; color: var(--muted); border: 1px dashed #334155;
+        }
 
         /* ======================================================== */
-        /* แนวทางที่ 3: Top Navigation Tabs (แบบระบบแอดมิน) */
+        /* 2. แถบเครื่องมือลอยตัว (Floating Cart Button) */
         /* ======================================================== */
-        .tab-header { background: var(--surface); padding: 0 20px; display: flex; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .tab-btn { background: transparent; color: var(--muted); border: none; padding: 20px 30px; font-size: 1rem; font-weight: bold; cursor: pointer; border-bottom: 3px solid transparent; }
-        .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
-        .tab-btn:hover { color: white; }
+        .floating-cart-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 10px 10px 25px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+
+        .floating-cart-btn .total-text {
+            font-size: 1.1rem; font-weight: 600;
+        }
+
+        .floating-cart-btn button {
+            background: var(--primary); color: white; border: none; padding: 12px 24px;
+            border-radius: 30px; font-weight: bold; font-size: 1rem; cursor: pointer;
+            display: flex; align-items: center; gap: 8px; transition: transform 0.2s;
+        }
+        .floating-cart-btn button:hover { transform: scale(1.05); }
+
+        /* ======================================================== */
+        /* 3. แผงสไลด์ด้านข้าง (Off-Canvas Sidebar) */
+        /* ======================================================== */
+        .offcanvas-panel {
+            position: fixed;
+            top: 0;
+            right: -450px; /* ซ่อนไว้ขอบขวา */
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: var(--surface);
+            box-shadow: -10px 0 40px rgba(0,0,0,0.5);
+            z-index: 1000;
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* แอนิเมชันตอนสไลด์ */
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .offcanvas-panel.open { right: 0; /* เลื่อนเข้ามา */ }
+
+        .panel-header {
+            padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .panel-close {
+            background: transparent; border: none; color: var(--muted); font-size: 1.5rem; cursor: pointer;
+            width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        }
+        .panel-close:hover { background: rgba(255,255,255,0.1); color: white; }
+
+        .panel-content {
+            padding: 20px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 20px;
+        }
+
+        .mock-setting-box { background: var(--bg); border-radius: 16px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); }
         
-        .tab-content { padding: 30px; overflow-y: auto; flex: 1; max-width: 1000px; margin: 0 auto; width: 100%; }
-        .tab-page { display: none; }
-        .tab-page.active { display: block; }
+        .mock-textarea { background: #000; height: 180px; border-radius: 12px; margin-top: 10px; border: 1px solid #333; }
+
+        .panel-footer {
+            padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); background: var(--surface);
+        }
+        .btn-copy { width: 100%; background: #32D74B; color: white; border: none; padding: 15px; border-radius: 20px; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
+
+        /* ฉากหลังเบลอ (Backdrop) */
+        .backdrop {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+            z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .backdrop.show { opacity: 1; pointer-events: auto; }
 
     </style>
 </head>
 <body>
 
-    <div class="admin-controls">
-        <span style="margin-right: 15px;">เลือกทดสอบ UX:</span>
-        <button id="btn-ux1" onclick="switchConcept('concept1')">1. File Manager</button>
-        <button id="btn-ux2" onclick="switchConcept('concept2')">2. Step-by-Step</button>
-        <button id="btn-ux3" onclick="switchConcept('concept3')">3. Top Tabs</button>
+    <main class="main-content" id="mainContent">
+        <div class="header">
+            <h1 style="margin: 0;">📦 จัดการคอลเลคชั่นสินค้า</h1>
+            <button style="background: transparent; color: var(--primary); border: 2px dashed var(--primary); padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold;">+ เพิ่มคอลเลคชั่น</button>
+        </div>
+
+        <div class="mock-collection">
+            <h3 style="margin-top: 0;">คอลเลคชั่น: เสื้อยืดลายดอก</h3>
+            <div class="mock-product">กรอกข้อมูลสินค้า 1</div>
+            <div class="mock-product">กรอกข้อมูลสินค้า 2</div>
+        </div>
+
+        <div class="mock-collection">
+            <h3 style="margin-top: 0;">คอลเลคชั่น: กางเกงยีนส์ขาสั้น</h3>
+            <div class="mock-product">กรอกข้อมูลสินค้า 1</div>
+        </div>
+        
+        <div class="mock-collection">
+            <h3 style="margin-top: 0;">คอลเลคชั่น: หมวกบักเก็ต</h3>
+            <div class="mock-product">กรอกข้อมูลสินค้า 1</div>
+        </div>
+    </main>
+
+    <div class="floating-cart-btn">
+        <div class="total-text">สถานะ: <span style="color: #32D74B;">กำลังพิมพ์บิล...</span></div>
+        <button onclick="toggleCart()">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            ดูสรุปยอด & ตั้งค่า
+        </button>
     </div>
 
-    <div id="concept1" class="ux-concept">
-        <div class="fm-header">
-            <h2 style="margin: 0;">🗂️ คอลเลคชั่นทั้งหมด</h2>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn btn-outline" onclick="fmGoTo('fm-summary')">ดูสรุปยอดรวม</button>
-                <button class="btn">+ สร้างคอลเลคชั่นใหม่</button>
+    <div class="backdrop" id="backdrop" onclick="toggleCart()"></div>
+
+    <aside class="offcanvas-panel" id="cartPanel">
+        <div class="panel-header">
+            <h2 style="margin: 0;">📋 สรุปยอดโอน</h2>
+            <button class="panel-close" onclick="toggleCart()">✖</button>
+        </div>
+        
+        <div class="panel-content">
+            <div class="mock-setting-box">
+                <h4 style="margin-top: 0; color: var(--primary);">⚙️ ตั้งค่าค่าใช้จ่าย</h4>
+                <div style="color: var(--muted); font-size: 0.9rem;">+ ค่าจัดส่ง 50 บาท</div>
+                <div style="color: var(--muted); font-size: 0.9rem; margin-top: 10px;">- หักมัดจำ 100 บาท</div>
+            </div>
+
+            <div class="mock-setting-box">
+                <h4 style="margin-top: 0; color: var(--primary);">🏦 บัญชีธนาคาร</h4>
+                <div style="color: var(--muted); font-size: 0.9rem;">(เลือก) กสิกรไทย / ไทยพาณิชย์</div>
+            </div>
+
+            <div class="mock-setting-box" style="flex: 1;">
+                <h4 style="margin-top: 0; color: var(--primary);">📄 ข้อความเตรียมคัดลอก</h4>
+                <div class="mock-textarea"></div>
             </div>
         </div>
 
-        <div class="fm-content">
-            <div id="fm-home" class="fm-page active">
-                <div class="fm-grid">
-                    <div class="fm-card" onclick="fmGoTo('fm-detail')">
-                        <h3 style="margin:0 0 10px 0;">เสื้อลายดอก</h3>
-                        <span style="color: var(--muted);">มี 5 รายการสินค้า</span>
-                    </div>
-                    <div class="fm-card" onclick="fmGoTo('fm-detail')">
-                        <h3 style="margin:0 0 10px 0;">กางเกงยีนส์</h3>
-                        <span style="color: var(--muted);">มี 2 รายการสินค้า</span>
-                    </div>
-                </div>
-            </div>
-
-            <div id="fm-detail" class="fm-page">
-                <button class="btn btn-outline" style="margin-bottom: 20px;" onclick="fmGoTo('fm-home')">⬅ กลับไปหน้าหลัก</button>
-                <div class="box" style="height: 300px; display: flex; align-items: center; justify-content: center; border: 2px dashed #444;">
-                    (พื้นที่จัดการสินค้าของ "เสื้อลายดอก" เต็มจอ)
-                </div>
-            </div>
-
-            <div id="fm-summary" class="fm-page">
-                <button class="btn btn-outline" style="margin-bottom: 20px;" onclick="fmGoTo('fm-home')">⬅ กลับไปหน้าหลัก</button>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div class="box">ตั้งค่าจัดส่ง / ธนาคาร</div>
-                    <div class="box">
-                        ข้อความสรุปยอด
-                        <div style="height: 150px; background: #111; margin-top: 10px; border-radius: 8px;"></div>
-                        <button class="btn" style="width: 100%; margin-top: 15px;">คัดลอก</button>
-                    </div>
-                </div>
-            </div>
+        <div class="panel-footer">
+            <button class="btn-copy">ก๊อปปี้ข้อความส่งลูกค้า</button>
         </div>
-    </div>
-
-
-    <div id="concept2" class="ux-concept">
-        <div class="wiz-container">
-            <div class="wiz-steps">
-                <div id="step1-icon" class="wiz-step active">1</div>
-                <div id="step2-icon" class="wiz-step">2</div>
-                <div id="step3-icon" class="wiz-step">3</div>
-            </div>
-
-            <div id="wiz-step1" class="wiz-page active">
-                <h2 style="margin-top: 0;">1. จัดการคอลเลคชั่นและสินค้า</h2>
-                <div class="box" style="height: 250px; display: flex; align-items: center; justify-content: center; border: 2px dashed #444; background: transparent;">
-                    (พื้นที่เพิ่มสินค้า ไถลงได้เรื่อยๆ)
-                </div>
-                <div class="wiz-footer" style="justify-content: flex-end;">
-                    <button class="btn" onclick="wizGoTo(2)">ถัดไป: ตั้งค่าบิล ➡</button>
-                </div>
-            </div>
-
-            <div id="wiz-step2" class="wiz-page">
-                <h2 style="margin-top: 0;">2. ตั้งค่าการจัดส่งและธนาคาร</h2>
-                <div class="box" style="margin-bottom: 15px;">Toggle เปิด/ปิด ค่าจัดส่ง 50 บาท</div>
-                <div class="box" style="margin-bottom: 15px;">Toggle เปิด/ปิด หักมัดจำ</div>
-                <div class="box">เลือกบัญชีธนาคาร (กสิกร, ไทยพาณิชย์)</div>
-                
-                <div class="wiz-footer">
-                    <button class="btn btn-outline" onclick="wizGoTo(1)">⬅ ย้อนกลับ</button>
-                    <button class="btn" onclick="wizGoTo(3)">ดูสรุปยอดโอน ➡</button>
-                </div>
-            </div>
-
-            <div id="wiz-step3" class="wiz-page">
-                <h2 style="margin-top: 0; color: #32D74B;">3. พร้อมคัดลอก!</h2>
-                <div class="box" style="height: 200px; background: #111;">
-                    ลูกค้าสั่งซื้อ:<br>- เสื้อลายดอก M x1<br><br>ค่าจัดส่ง: 50<br>รวม: 200 บาท
-                </div>
-                <button class="btn" style="width: 100%; padding: 15px; margin-top: 15px; font-size: 1.1rem; background: #32D74B;">📋 คัดลอกข้อความไปส่งลูกค้า</button>
-                
-                <div class="wiz-footer" style="justify-content: flex-start; margin-top: 30px;">
-                    <button class="btn btn-outline" onclick="wizGoTo(2)">⬅ มีบางอย่างผิด? ย้อนกลับไปแก้</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div id="concept3" class="ux-concept">
-        <div class="tab-header">
-            <button id="tab-btn-1" class="tab-btn active" onclick="tabGoTo(1)">📦 รายการสินค้า</button>
-            <button id="tab-btn-2" class="tab-btn" onclick="tabGoTo(2)">⚙️ ตั้งค่าบิล & ธนาคาร</button>
-            <button id="tab-btn-3" class="tab-btn" onclick="tabGoTo(3)">📋 สรุปยอดโอน</button>
-        </div>
-
-        <div class="tab-content">
-            <div id="tab-page-1" class="tab-page active">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h2>คอลเลคชั่นสินค้า</h2>
-                    <button class="btn">+ เพิ่มคอลเลคชั่น</button>
-                </div>
-                <div class="box" style="height: 300px; display: flex; align-items: center; justify-content: center; border: 2px dashed #444; background: transparent;">
-                    (รายการสินค้าเรียงยาวลงมาเต็มจอ)
-                </div>
-            </div>
-
-            <div id="tab-page-2" class="tab-page">
-                <h2>ตั้งค่าค่าใช้จ่าย</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div class="box">จัดการค่าจัดส่ง / พื้นที่พิเศษ / หักมัดจำ</div>
-                    <div class="box">เพิ่ม/ลบ บัญชีธนาคาร</div>
-                </div>
-            </div>
-
-            <div id="tab-page-3" class="tab-page">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div>
-                        <h2 style="margin-top:0;">สรุปยอด</h2>
-                        <div class="box" style="height: 300px; background: #111;"></div>
-                        <button class="btn" style="width: 100%; margin-top: 15px;">คัดลอกสรุปยอด</button>
-                    </div>
-                    <div>
-                        <h2 style="margin-top:0;">ใบปะหน้า</h2>
-                        <div class="box" style="height: 150px; background: #111;"></div>
-                        <button class="btn" style="width: 100%; margin-top: 15px; background: #32D74B;">คัดลอกใบปะหน้า</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    </aside>
 
     <script>
-        // เริ่มต้นแสดงแบบที่ 1
-        switchConcept('concept1');
-
-        function switchConcept(conceptId) {
-            document.querySelectorAll('.ux-concept').forEach(el => el.classList.remove('active'));
-            document.getElementById(conceptId).classList.add('active');
+        function toggleCart() {
+            const panel = document.getElementById('cartPanel');
+            const backdrop = document.getElementById('backdrop');
             
-            document.querySelectorAll('.admin-controls button').forEach(el => el.classList.remove('active'));
-            if(conceptId === 'concept1') document.getElementById('btn-ux1').classList.add('active');
-            if(conceptId === 'concept2') document.getElementById('btn-ux2').classList.add('active');
-            if(conceptId === 'concept3') document.getElementById('btn-ux3').classList.add('active');
-        }
-
-        // Script สำหรับแบบที่ 1 (File Manager)
-        function fmGoTo(pageId) {
-            document.querySelectorAll('.fm-page').forEach(el => el.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-        }
-
-        // Script สำหรับแบบที่ 2 (Wizard)
-        function wizGoTo(stepNum) {
-            document.querySelectorAll('.wiz-page').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.wiz-step').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById('wiz-step' + stepNum).classList.add('active');
-            document.getElementById('step' + stepNum + '-icon').classList.add('active');
-        }
-
-        // Script สำหรับแบบที่ 3 (Tabs)
-        function tabGoTo(tabNum) {
-            document.querySelectorAll('.tab-page').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById('tab-page-' + tabNum).classList.add('active');
-            document.getElementById('tab-btn-' + tabNum).classList.add('active');
+            // สลับคลาสเปิด/ปิด
+            panel.classList.toggle('open');
+            backdrop.classList.toggle('show');
         }
     </script>
 </body>
