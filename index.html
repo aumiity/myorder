@@ -62,7 +62,7 @@
             z-index: 1000; position: relative; transition: 0.3s;
         }
         .header-logo { font-size: 1.4rem; font-weight: 600; color: var(--text-main); }
-        .btn-purple { background: var(--shop-pay); color: white; border: none; padding: 10px 20px; border-radius: 50px; font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px;}
+        .btn-purple { background: var(--shop-pay); color: white; border: none; padding: 10px 20px; border-radius: 50px; font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 8px;}
         .btn-purple:hover { background: var(--shop-pay-hover); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(90, 49, 244, 0.3);}
 
         .layout-container { display: flex; flex: 1; width: 100%; overflow: hidden; }
@@ -108,11 +108,11 @@
         .collection-name-box input { background: transparent; border: 1px solid transparent; padding: 6px; font-size: 1rem; font-weight: bold; box-shadow: none !important;}
         .collection-name-box input:focus { background: var(--bg-input); border: 1px solid var(--border); }
         
-        /* Finder Controls: ทรงกลม ขนาดใหญ่ขึ้น */
-        .mac-controls { display: flex; gap: 8px; }
-        .mac-btn { width: 24px; height: 24px; border-radius: 50%; border: none; cursor: pointer; background-color: var(--setting-gray); position: relative; display: flex; align-items: center; justify-content: center; color: white; transition: 0.2s; }
-        .mac-btn svg { width: 14px; height: 14px; opacity: 0; transition: 0.2s; stroke-width: 2.5;}
-        .mac-btn:hover { background-color: #666666;}
+        /* Finder Controls: ปุ่มเล็ก แต่สัญลักษณ์ข้างในใหญ่ */
+        .mac-controls { display: flex; gap: 6px; }
+        .mac-btn { width: 16px; height: 16px; border-radius: 50%; border: none; cursor: pointer; background-color: var(--setting-gray); position: relative; display: flex; align-items: center; justify-content: center; color: white; transition: 0.2s; }
+        .mac-btn svg { width: 12px; height: 12px; opacity: 0; transition: 0.2s; stroke-width: 3;}
+        .mac-btn:hover { background-color: #555555;}
         .mac-btn:hover svg { opacity: 1; }
         .mac-close:hover { background-color: var(--danger); }
         
@@ -176,8 +176,8 @@
         
         .payment-text { flex: 1; font-size: 0.95rem; color: var(--text-main); }
         
-        /* ป้ายธนาคาร เพิ่มความสูง (Padding) */
-        .bank-badge { padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); color: #FFF; font-size: 0.8rem; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; min-width: 50px; min-height: 26px; text-align: center; text-shadow: 0 1px 2px rgba(0,0,0,0.3); box-sizing: border-box;}
+        /* ป้ายธนาคาร Fix ขนาดให้เหมือนบัตรเครดิต */
+        .bank-badge { width: 60px; height: 38px; border-radius: 6px; border: 1px solid var(--border); color: #FFF; font-size: 0.75rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; text-align: center; box-sizing: border-box; box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);}
 
         .bank-popover { position: absolute; z-index: 2000; background: var(--bg-box); border: 1px solid var(--border); padding: 10px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 4px; opacity: 0; visibility: hidden; transition: 0.2s; min-width: 160px; max-height: 250px; overflow-y: auto;}
         .bank-popover.active { opacity: 1; visibility: visible; }
@@ -248,17 +248,17 @@
             .productQty { grid-column: 2 / 3; grid-row: 2; } 
         }
 
-        .footer-links { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 30px; padding-top: 15px; border-top: 1px solid var(--border); justify-content: center; align-items: center;}
+        .footer-links { display: flex; gap: 15px; margin-top: 30px; padding-top: 15px; border-top: 1px solid var(--border); justify-content: center; align-items: center;}
     </style>
 </head>
 <body>
 
     <header class="top-header">
         <div class="header-logo">
-            Shop Management <span style="font-size:0.8rem; color:var(--text-muted); font-weight:normal; margin-left: 5px;">v18.0</span>
+            Shop Management <span style="font-size:0.8rem; color:var(--text-muted); font-weight:normal; margin-left: 5px;">v18.1</span>
         </div>
         <button class="btn-purple" onclick="clearAllPills()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path><line x1="18" y1="9" x2="12" y2="15"></line><line x1="12" y1="9" x2="18" y2="15"></line></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
             Clear Options
         </button>
     </header>
@@ -320,7 +320,9 @@
                     <button class="btn-text" style="color:var(--text-muted);" onclick="importData()">Import data</button>
                     <span style="color:var(--border-dark);">|</span>
                     <button class="btn-text" style="color:var(--danger);" onclick="clearData()">Reset system</button>
-                    <span style="color:var(--border-dark);">|</span>
+                </div>
+                
+                <div style="text-align: center; margin-top: 15px;">
                     <button class="btn-text" style="color:var(--text-main); font-size:0.9rem;" onclick="toggleTheme()">🌗 Toggle Dark Theme</button>
                 </div>
 
@@ -398,7 +400,7 @@
     // ไอคอนลูกศรทึบ (เปิด/ปิดคอลเลคชั่น)
     const ICON_CHEV_DOWN_SOLID = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"></path></svg>`;
     
-    // ไอคอนควบคุมสินค้า
+    // ไอคอนควบคุมสินค้า และ Finder 
     const ICON_UP = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>`;
     const ICON_DOWN = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
     const ICON_TRASH = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
@@ -407,7 +409,7 @@
     // ไอคอน Option 3 จุด
     const ICON_DOTS = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1.5"></circle><circle cx="19" cy="12" r="1.5"></circle><circle cx="5" cy="12" r="1.5"></circle></svg>`;
     
-    // ไอคอนกากบาทสำหรับลบคอลเลคชั่น
+    // ไอคอนกากบาทสำหรับลบคอลเลคชั่น (Finder Control)
     const ICON_CROSS = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
 
     const bankConfig = [
@@ -574,7 +576,7 @@
     }
 
     // ==========================================
-    // Logic ทั่วไป (ดึงคีย์เดิมกลับมาทั้งหมด orderDataV3)
+    // Logic ทั่วไป (ใช้คีย์ orderDataV3 ดึงข้อมูลเดิม)
     // ==========================================
     function saveData() {
         localStorage.setItem('val_shipping', document.getElementById('val_shipping').value);
@@ -894,7 +896,7 @@
     function exportData() {
         saveData();
         const exportObj = {
-            version: "v18.0",
+            version: "v18.1",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || defaultBanks,
             selectedBank: localStorage.getItem('bank') || '',
