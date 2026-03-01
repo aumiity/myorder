@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Order Management - v13.0 Shopify Exact</title>
+    <title>Order Management - v14.0 Shopify Layout</title>
     <style>
         :root {
             /* สีตามแบบ Shopify Checkout */
-            --bg-summary: #FAFAFA;    /* ฝั่งสรุปยอด เทาอ่อน */
-            --bg-manage: #FFFFFF;     /* ฝั่งจัดการข้อมูล ขาวล้วน */
+            --bg-left: #FFFFFF;       /* ฝั่งจัดการข้อมูล ขาวล้วน */
+            --bg-right: #FAFAFA;      /* ฝั่งสรุปยอด เทาอ่อน */
             --border: #D9D9D9;
             --border-dark: #C9C9C9;
             
@@ -21,18 +21,14 @@
             --shop-pay-hover: #4524C1;
             
             --danger: #E32C2B;
+            --success: #008060;
         }
 
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
             margin: 0; padding: 0; color: var(--text-main); 
-        }
-
-        /* Container หลักสำหรับแบ่ง 2 ฝั่ง */
-        .layout-container {
-            display: flex;
-            min-height: 100vh;
-            width: 100%;
+            display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+            background-color: var(--bg-left);
         }
 
         ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -41,87 +37,39 @@
         ::-webkit-scrollbar-thumb:hover { background-color: #B3B3B3; }
 
         /* ======================================= */
-        /* 📄 ฝั่งซ้าย (อดีตขวา): สรุปยอด (45%) */
+        /* 🔝 แถบ Header ด้านบน */
         /* ======================================= */
-        .summary-panel {
-            flex: 1; 
-            background-color: var(--bg-summary);
-            border-right: 1px solid var(--border);
-            order: 1; /* บังคับให้อยู่ซ้าย */
-            position: relative;
+        .top-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 5%; background: #FFFFFF; border-bottom: 1px solid var(--border);
+            z-index: 1000; position: relative;
         }
-        
-        .summary-content {
-            width: 100%;
-            max-width: 500px;
-            padding: 50px 40px;
-            box-sizing: border-box;
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            overflow-y: auto;
-            margin-left: auto; /* ดันเนื้อหาไปชิดขอบขวาของกล่องตัวเอง ให้ดูรวมตรงกลางจอ */
+        .header-logo { font-size: 1.5rem; font-weight: 500; color: #000; }
+        .btn-purple { background: var(--shop-pay); color: white; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: 0.2s;}
+        .btn-purple:hover { background: var(--shop-pay-hover); }
+
+        /* Container หลักสำหรับแบ่ง 2 ฝั่ง */
+        .layout-container {
+            display: flex; flex: 1; width: 100%; overflow: hidden;
         }
 
-        /* บิลจำลองแบบ Shopify */
-        .summary-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font-size: 0.95rem; }
-        
-        .thumbnail { width: 64px; height: 64px; background: #FFFFFF; border-radius: 8px; border: 1px solid rgba(175,175,175,0.34); position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
-        .qty-badge { position: absolute; top: -8px; right: -8px; background: rgba(114, 114, 114, 0.9); color: white; font-size: 0.75rem; min-width: 20px; height: 20px; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 0 5px; box-sizing: border-box; font-weight: bold;}
-        
-        .totals-section { border-top: 1px solid var(--border); margin-top: 15px; padding-top: 10px; }
-        .cost-line { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.9rem; color: var(--text-main); }
-        .cost-line .label { color: var(--text-muted); }
-        
-        .total-line { border-top: 1px solid var(--border); align-items: center; padding-top: 15px; margin-top: 10px; font-size: 1rem; color: var(--text-main);}
-        .total-price { display: flex; align-items: center; gap: 8px; }
-        .total-amount { font-size: 1.5rem; font-weight: 500; }
-
-        /* ปุ่ม Review Order */
-        .btn-primary { width: 100%; background: var(--primary); color: white; border: none; padding: 20px; border-radius: 5px; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.2s; margin-top: 15px; }
-        .btn-primary:hover { background: var(--primary-hover); }
-
-        /* ระบบ TABS สำหรับข้อความ */
-        .tabs-container { margin-top: 30px; border: 1px solid var(--border); border-radius: 5px; background: #FFFFFF; overflow: hidden; }
-        .tabs-header { display: flex; border-bottom: 1px solid var(--border); background: var(--bg-summary); }
-        .tab-btn { flex: 1; background: transparent; border: none; border-right: 1px solid var(--border); padding: 12px 0; font-size: 0.9rem; color: var(--text-muted); cursor: pointer; font-weight: bold; }
-        .tab-btn:last-child { border-right: none; }
-        .tab-btn.active { background: #FFFFFF; color: var(--primary); box-shadow: inset 0 2px 0 var(--primary); }
-
-        .tab-content { display: none; padding: 15px; }
-        .tab-content.active { display: block; }
-        
-        /* เปลี่ยนฟอนต์ Textarea ให้เหมือนส่วนอื่นๆ */
-        textarea.final-output { width: 100%; height: 180px; background: transparent; border: none; font-family: inherit; font-size: 0.95rem; color: var(--text-main); resize: vertical; outline: none; line-height: 1.5; }
-
         /* ======================================= */
-        /* 🛒 ฝั่งขวา (อดีตซ้าย): พื้นที่จัดการ (55%) */
+        /* 🛒 ฝั่งซ้าย: พื้นที่จัดการสินค้า (55%) */
         /* ======================================= */
         .management-panel {
-            flex: 1.25; 
-            background-color: var(--bg-manage);
-            order: 2; /* บังคับให้อยู่ขวา */
-            display: flex;
-            justify-content: flex-start; /* ดันให้ชิดซ้ายของกล่องตัวเอง */
+            flex: 1.3; 
+            background-color: var(--bg-left);
+            border-right: 1px solid var(--border);
+            display: flex; justify-content: flex-end; /* ดันเนื้อหาเข้าหากลางจอ */
+            overflow-y: auto;
         }
         
         .management-content {
-            width: 100%;
-            max-width: 650px;
-            padding: 50px 40px 80px 40px;
-            box-sizing: border-box;
-            overflow-y: auto;
-            height: 100vh;
+            width: 100%; max-width: 650px; /* ไม่ให้กว้างเกินไป */
+            padding: 40px 40px 80px 20px; box-sizing: border-box;
         }
 
-        .header-logo { font-size: 1.8rem; font-weight: normal; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;}
-        .header-logo span { font-weight: 500; }
-        
-        .section-title { font-size: 1.3rem; font-weight: bold; margin-top: 40px; margin-bottom: 20px; color: #000;}
-
-        /* ปุ่มม่วง Shop Pay */
-        .btn-purple { background: var(--shop-pay); color: white; border: none; padding: 10px 18px; border-radius: 5px; font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: 0.2s;}
-        .btn-purple:hover { background: var(--shop-pay-hover); }
+        .section-title { font-size: 1.25rem; font-weight: bold; margin-top: 40px; margin-bottom: 20px; color: #000;}
 
         /* Input แบบ Shopify */
         input[type="text"], input[type="number"]:not(.inline-fee-input) {
@@ -139,7 +87,7 @@
         /* ======================================= */
         .collection-block { margin-bottom: 25px; background: #FFFFFF; border-radius: 5px; border: 1px solid var(--border); }
         
-        .collection-header { display: flex; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--border); background: var(--bg-summary); border-top-left-radius: 5px; border-top-right-radius: 5px;}
+        .collection-header { display: flex; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--border); background: var(--bg-right); border-top-left-radius: 5px; border-top-right-radius: 5px;}
         .collection-block.collapsed .collection-header { border-bottom: none; border-radius: 5px; }
         .collection-block.collapsed .collection-body { display: none; }
         
@@ -152,7 +100,6 @@
         .mac-btn:hover.mac-close { background-color: var(--danger); }
         .mac-btn:hover.mac-min, .mac-btn:hover.mac-max { background-color: var(--text-muted); }
         
-        /* ลูกศรทึบ */
         .btn-toggle-col { background: transparent; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 4px; transition: 0.2s;}
         .btn-toggle-col:hover { background: #EAEAEA; color: var(--text-main); }
         .collection-block.collapsed .btn-toggle-col { transform: rotate(-90deg); }
@@ -178,35 +125,10 @@
         .icon-btn:hover { background: #F0F0F0; color: var(--text-main); }
 
         /* ======================================= */
-        /* การตั้งค่ากลุ่ม (Fees & Payment) */
+        /* การตั้งค่า (Delivery & Fees) */
         /* ======================================= */
-        
-        /* กล่องรวมค่าส่ง / พื้นที่ / มัดจำ */
         .fee-group-box { border: 1px solid var(--border); border-radius: 5px; padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; background: #FFFFFF; }
         .fee-item { display: flex; flex-direction: column; gap: 10px; }
-        
-        /* สไตล์ Payment ของ Shopify */
-        .payment-box { border: 1px solid var(--border); border-radius: 5px; background: #FFFFFF; display: flex; flex-direction: column; overflow: hidden; margin-bottom: 10px; }
-        .payment-item { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid var(--border); cursor: pointer; background: #FFFFFF;}
-        .payment-item:last-child { border-bottom: none; }
-        .payment-item:hover { background: var(--bg-summary); }
-        
-        /* Dot Radio (ขอบดำ ตรงกลางขาวเวลาเลือก) */
-        .dot-radio { appearance: none; width: 18px; height: 18px; border: 1px solid var(--border-dark); border-radius: 50%; margin: 0 15px 0 0; outline: none; cursor: pointer; background: #FFFFFF; flex-shrink: 0; transition: border-width 0.2s;}
-        .dot-radio:checked { border: 5px solid var(--radio-color, #000000); background: #FFFFFF; }
-        
-        .payment-text { flex: 1; font-size: 0.95rem; color: var(--text-main);}
-        
-        /* ไอคอนบัตรเครดิต */
-        .cc-icons-group { display: flex; align-items: center; gap: 5px;}
-        .cc-icon { width: 34px; height: 22px; border-radius: 3px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #EAEAEA; background: #FFF; box-sizing: border-box; }
-        .cc-visa { color: #1434CB; font-weight: 900; font-size: 10px; font-style: italic;}
-        .cc-mc { position: relative; overflow: hidden; }
-        .cc-mc::before { content:''; position:absolute; width:12px; height:12px; border-radius:50%; background:#EB001B; left:4px;}
-        .cc-mc::after { content:''; position:absolute; width:12px; height:12px; border-radius:50%; background:#F79E1B; right:4px;}
-        
-        /* ปุ่มเปลี่ยนสี */
-        .color-trigger { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #FFF; box-shadow: 0 0 0 1px var(--border-dark); cursor: pointer; margin-left: 5px; flex-shrink: 0;}
 
         /* Checkbox Delivery */
         .custom-checkbox { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.95rem; color: var(--text-main); font-weight: bold;}
@@ -216,11 +138,66 @@
         .custom-checkbox input:checked ~ .checkmark::after { content: '✔'; color: white; font-size: 12px; }
 
         /* ======================================= */
+        /* 🏦 ธนาคาร (Payment Box) */
+        /* ======================================= */
+        .payment-box { border: 1px solid var(--border); border-radius: 5px; background: #FFFFFF; display: flex; flex-direction: column; overflow: hidden; margin-bottom: 10px; }
+        .payment-item { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid var(--border); cursor: pointer; background: #FFFFFF; transition: 0.2s;}
+        .payment-item:last-child { border-bottom: none; }
+        .payment-item:hover { background: var(--bg-right); }
+        
+        /* จุด Dot แบบเทาดำตามธีม */
+        .dot-radio { appearance: none; width: 18px; height: 18px; border: 1px solid var(--border-dark); border-radius: 50%; margin: 0 15px 0 0; outline: none; cursor: pointer; background: #FFFFFF; flex-shrink: 0; transition: border-width 0.2s;}
+        .dot-radio:checked { border: 5px solid var(--text-main); background: #FFFFFF; } /* เปลี่ยนเป็นสีดำ #333 */
+        
+        .payment-text { flex: 1; font-size: 0.95rem; color: var(--text-main); }
+        
+        /* ไอคอนบัตรเครดิต (คลิกเปลี่ยนสีได้) */
+        .cc-icon-btn { cursor: pointer; padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); background: #fff; display: flex; align-items: center; justify-content: center; transition: 0.2s;}
+        .cc-icon-btn:hover { background: var(--bg-right); border-color: var(--border-dark); }
+
+        /* ======================================= */
         /* Popover เลือกสี */
         /* ======================================= */
-        .color-popover { position: absolute; z-index: 1000; background: #FFFFFF; border: 1px solid var(--border); border-radius: 8px; padding: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; opacity: 0; visibility: hidden; transform: translateY(10px) scale(0.95); transition: 0.2s; }
+        .color-popover { position: absolute; z-index: 2000; background: #FFFFFF; border: 1px solid var(--border); border-radius: 8px; padding: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; opacity: 0; visibility: hidden; transform: translateY(10px) scale(0.95); transition: 0.2s; }
         .color-popover.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
         .color-swatch { width: 24px; height: 24px; border-radius: 50%; border: none; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+
+        /* ======================================= */
+        /* 📄 ฝั่งขวา: สรุปยอด (45%) */
+        /* ======================================= */
+        .summary-panel {
+            flex: 1; 
+            background-color: var(--bg-right);
+            overflow-y: auto;
+        }
+        
+        .summary-content {
+            width: 100%; max-width: 500px;
+            padding: 40px 40px 80px 40px; box-sizing: border-box;
+        }
+
+        /* บิลจำลองแบบ Shopify */
+        .summary-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font-size: 0.95rem; }
+        
+        .thumbnail { width: 64px; height: 64px; background: #FFFFFF; border-radius: 8px; border: 1px solid rgba(175,175,175,0.34); position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
+        .qty-badge { position: absolute; top: -8px; right: -8px; background: rgba(114, 114, 114, 0.9); color: white; font-size: 0.75rem; min-width: 20px; height: 20px; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 0 5px; box-sizing: border-box; font-weight: bold;}
+        
+        .totals-section { border-top: 1px solid var(--border); margin-top: 15px; padding-top: 10px; }
+        .cost-line { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.9rem; color: var(--text-main); }
+        .cost-line .label { color: var(--text-muted); }
+        
+        .total-line { border-top: 1px solid var(--border); align-items: center; padding-top: 15px; margin-top: 10px; font-size: 1rem; color: var(--text-main);}
+        .total-price { display: flex; align-items: center; gap: 8px; }
+        .total-amount { font-size: 1.5rem; font-weight: 500; }
+
+        /* ปุ่ม Review Order */
+        .btn-primary { width: 100%; background: var(--primary); color: white; border: none; padding: 20px; border-radius: 5px; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.2s;}
+        .btn-primary:hover { background: var(--primary-hover); }
+
+        /* กล่องข้อความ (แยกบน-ล่าง) */
+        .output-box-title { margin-top: 40px; margin-bottom: 10px; font-size: 1rem; font-weight: bold; color: var(--text-main); border-bottom: 1px solid var(--border); padding-bottom: 8px;}
+        textarea.final-output { width: 100%; background: #FFFFFF; border: 1px solid var(--border); border-radius: 5px; padding: 15px; font-family: inherit; font-size: 0.95rem; color: var(--text-main); resize: vertical; outline: none; line-height: 1.5; box-sizing: border-box;}
+        textarea.final-output:focus { border-color: var(--primary); }
 
         /* ======================================= */
         /* Mobile Layout */
@@ -228,24 +205,23 @@
         .mobile-summary-toggle { display: none; }
 
         @media (max-width: 1000px) {
-            .layout-container { flex-direction: column; }
+            body { overflow: auto; height: auto; }
+            .layout-container { flex-direction: column; overflow: visible;}
             
-            /* บนมือถือ สรุปยอดต้องอยู่ข้างบน (ตาม Shopify) */
-            .summary-panel { order: 1; border-right: none; border-bottom: 1px solid var(--border); }
+            .summary-panel { order: 1; overflow: visible; border-right: none; border-bottom: 1px solid var(--border); }
             .summary-content { position: static; padding: 20px; max-width: 100%; height: auto; display: none; }
             .summary-content.show { display: block; }
 
-            .management-panel { order: 2; justify-content: center; }
+            .management-panel { order: 2; justify-content: center; overflow: visible;}
             .management-content { padding: 30px 20px; max-width: 100%; height: auto; }
             
             .mobile-summary-toggle {
                 display: flex; justify-content: space-between; align-items: center;
-                background-color: var(--bg-summary); padding: 20px; cursor: pointer;
-                color: var(--primary); font-size: 0.95rem; border-bottom: 1px solid var(--border);
+                background-color: var(--bg-right); padding: 20px; cursor: pointer;
+                color: var(--primary); font-size: 0.95rem;
             }
 
             .fee-group-box { grid-template-columns: 1fr; }
-            
             .product-header-row { grid-template-columns: 1fr 90px 70px; grid-template-rows: auto auto; }
             .productName { grid-column: 1 / 4; grid-row: 1; } 
             .productPrice { grid-column: 1 / 2; grid-row: 2; } 
@@ -258,72 +234,19 @@
 </head>
 <body>
 
+    <header class="top-header">
+        <div class="header-logo">
+            Kenergy <span style="font-size:0.85rem; color:var(--text-muted); font-weight:normal; margin-left: 5px;">v14.0</span>
+        </div>
+        <button class="btn-purple" onclick="clearAllPills()">ล้างตัวเลือกทั้งหมด</button>
+    </header>
+
     <div class="layout-container">
-
-        <aside class="summary-panel">
-            <div class="mobile-summary-toggle" onclick="toggleMobileSummary()">
-                <span id="toggle-text" style="display:flex; align-items:center; gap:8px;">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm1.336-5l1.977-7h-16.813l2.938 7h11.9zm3.164-9l-2.731 9.614c-.179.629-.757 1.052-1.411 1.052h-10.742c-.653 0-1.231-.423-1.411-1.052l-3.21-11.614h-2.995v-2h4.522l.536 1.936h17.442z"/></svg>
-                    <span>แสดงสรุปยอด (Show order summary) ▾</span>
-                </span>
-                <span id="mobile-total-price" style="color:var(--text-main); font-weight:500; font-size: 1.1rem;">฿0.00</span>
-            </div>
-
-            <div class="summary-content" id="summary-box">
-                
-                <div id="visual-bill">
-                    </div>
-
-                <div class="totals-section">
-                    <div class="cost-line">
-                        <span class="label">Subtotal</span>
-                        <span id="display-subtotal" style="font-weight: 500;">฿0.00</span>
-                    </div>
-                    <div class="cost-line" id="display-shipping-row">
-                        <span class="label">Shipping</span>
-                        <span id="display-shipping" style="font-weight: 500;">฿0.00</span>
-                    </div>
-                    <div class="cost-line" id="display-deposit-row" style="display:none;">
-                        <span class="label">Deposit</span>
-                        <span id="display-deposit" style="font-weight: 500; color: var(--danger);">-฿0.00</span>
-                    </div>
-                    
-                    <div class="cost-line total-line">
-                        <span style="font-weight: bold;">Total</span>
-                        <div class="total-price">
-                            <span class="total-currency">THB</span>
-                            <span id="display-total" class="total-amount">฿0.00</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tabs-container">
-                    <div class="tabs-header">
-                        <button class="tab-btn active" onclick="switchTab('tab-customer', event)">ข้อความบิล</button>
-                        <button class="tab-btn" onclick="switchTab('tab-label', event)">ใบปะหน้า</button>
-                    </div>
-                    <div id="tab-customer" class="tab-content active">
-                        <textarea id="outputText" class="final-output" readonly placeholder="บิลสำหรับส่งลูกค้า..."></textarea>
-                        <button class="btn-primary" onclick="copyText('outputText')">Review order (คัดลอกสรุปยอด)</button>
-                    </div>
-                    <div id="tab-label" class="tab-content">
-                        <textarea id="outputLabelText" class="final-output" readonly placeholder="ข้อมูลปะหน้าพัสดุ..."></textarea>
-                        <button class="btn-primary" style="background:var(--success);" onclick="copyText('outputLabelText')">คัดลอกใบปะหน้า</button>
-                    </div>
-                </div>
-
-            </div>
-        </aside>
 
         <main class="management-panel">
             <div class="management-content">
                 
-                <div class="header-logo">
-                    <span>Kenergy <span style="font-size:0.8rem; color:var(--text-muted); font-weight:normal;">v13.0</span></span>
-                    <button class="btn-purple" onclick="clearAllPills()">ล้างตัวเลือกทั้งหมด</button>
-                </div>
-
-                <h2 class="section-title">Product</h2>
+                <h2 class="section-title" style="margin-top: 10px;">Product</h2>
                 
                 <div id="collectionsContainer"></div>
 
@@ -366,7 +289,6 @@
                         <button class="btn-text" style="color:var(--text-muted);" onclick="editBankList()">Edit</button>
                     </div>
                 </div>
-                <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">All transactions are secure and encrypted.</div>
                 
                 <div class="payment-box" id="bankContainer">
                     </div>
@@ -381,20 +303,66 @@
 
             </div>
         </main>
+
+        <aside class="summary-panel">
+            <div class="mobile-summary-toggle" onclick="toggleMobileSummary()">
+                <span id="toggle-text" style="display:flex; align-items:center; gap:8px;">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm1.336-5l1.977-7h-16.813l2.938 7h11.9zm3.164-9l-2.731 9.614c-.179.629-.757 1.052-1.411 1.052h-10.742c-.653 0-1.231-.423-1.411-1.052l-3.21-11.614h-2.995v-2h4.522l.536 1.936h17.442z"/></svg>
+                    <span>แสดงสรุปยอด (Show order summary) ▾</span>
+                </span>
+                <span id="mobile-total-price" style="color:var(--text-main); font-weight:500; font-size: 1.1rem;">฿0.00</span>
+            </div>
+
+            <div class="summary-content" id="summary-box">
+                
+                <div id="visual-bill">
+                    </div>
+
+                <div class="totals-section">
+                    <div class="cost-line">
+                        <span class="label">Subtotal</span>
+                        <span id="display-subtotal" style="font-weight: 500;">฿0.00</span>
+                    </div>
+                    <div class="cost-line" id="display-shipping-row">
+                        <span class="label">Shipping</span>
+                        <span id="display-shipping" style="font-weight: 500;">฿0.00</span>
+                    </div>
+                    <div class="cost-line" id="display-deposit-row" style="display:none;">
+                        <span class="label">Deposit</span>
+                        <span id="display-deposit" style="font-weight: 500; color: var(--danger);">-฿0.00</span>
+                    </div>
+                    
+                    <div class="cost-line total-line">
+                        <span style="font-weight: bold;">Total</span>
+                        <div class="total-price">
+                            <span class="total-currency">THB</span>
+                            <span id="display-total" class="total-amount">฿0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="output-box-title">📋 ข้อความสรุปยอด</div>
+                <textarea id="outputText" class="final-output" style="height: 180px;" readonly placeholder="บิลสำหรับส่งลูกค้า..."></textarea>
+                <button class="btn-primary" style="margin-top: 10px;" onclick="copyText('outputText')">Review order (คัดลอกสรุปยอด)</button>
+
+                <div class="output-box-title" style="margin-top: 30px;">🏷️ ใบปะหน้า</div>
+                <textarea id="outputLabelText" class="final-output" style="height: 100px;" readonly placeholder="ข้อมูลปะหน้าพัสดุ..."></textarea>
+                <button class="btn-primary" style="margin-top: 10px; background: var(--success);" onclick="copyText('outputLabelText')">คัดลอกใบปะหน้า</button>
+
+            </div>
+        </aside>
         
     </div> <div id="colorPopover" class="color-popover"></div>
 
 <script>
-    // เปลี่ยนลูกศรเป็นแบบทึบ (Solid)
     const ICON_CHEV_DOWN_SOLID = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"></path></svg>`;
-    
     const ICON_UP = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"></polyline></svg>`;
     const ICON_DOWN = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
     const ICON_TRASH = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
     const ICON_COPY = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
     const ICON_DOTS = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1.5"></circle><circle cx="19" cy="12" r="1.5"></circle><circle cx="5" cy="12" r="1.5"></circle></svg>`;
 
-    let defaultBanks = [{id: 'b1', text: 'กสิกรไทย\n123-4-56789-0\nนาย สมชาย ขายดี', color: '#1434CB'}];
+    let defaultBanks = [{id: 'b1', text: 'กสิกรไทย\n123-4-56789-0\nนาย สมชาย ขายดี', color: '#10B981'}];
 
     const thaiBankColors = [
         { name: 'กสิกรไทย', hex: '#10B981' }, 
@@ -402,7 +370,7 @@
         { name: 'กรุงเทพ', hex: '#197BBD' },
         { name: 'กรุงไทย', hex: '#06B6D4' },
         { name: 'กรุงศรี', hex: '#F59E0B' },
-        { name: 'ดำ', hex: '#000000' }
+        { name: 'ดำ', hex: '#333333' }
     ];
 
     let currentEditingBankId = null;
@@ -424,20 +392,13 @@
         }
     }
 
-    function switchTab(tabId, event) {
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        event.currentTarget.classList.add('active');
-    }
-
     // ==========================================
-    // ส่วนธนาคาร (Radio กล่อง Payment พร้อม Color Picker)
+    // ส่วนธนาคาร (ซ่อนเลขบัญชี + CC Icon)
     // ==========================================
     function renderBanks() {
-        let banks = JSON.parse(localStorage.getItem('bankDataV13')) || defaultBanks;
+        let banks = JSON.parse(localStorage.getItem('bankDataV14')) || defaultBanks;
         const container = document.getElementById('bankContainer');
-        let selectedId = localStorage.getItem('bankV13');
+        let selectedId = localStorage.getItem('bankV14');
         
         container.innerHTML = '';
         if(banks.length === 0) {
@@ -449,20 +410,21 @@
 
         banks.forEach(b => {
             const isChecked = b.id === selectedId ? 'checked' : '';
-            const bColor = b.color || '#000000';
-            const bankName = b.text.split('\n')[0]; // โชว์แค่บรรทัดแรก
+            const bColor = b.color || '#333333';
+            const bankName = b.text.split('\n')[0]; // โชว์แค่ชื่อ ไม่โชว์เลขบัญชี
             
             const html = `
                 <label class="payment-item">
                     <div style="display:flex; align-items:center; gap:15px; flex:1;">
-                        <input type="radio" class="dot-radio" name="bankSelect" value="${b.id}" style="--radio-color: ${bColor};" ${isChecked} onchange="updateData()">
+                        <input type="radio" class="dot-radio" name="bankSelect" value="${b.id}" ${isChecked} onchange="updateData()">
                         <span class="payment-text"><strong>${bankName}</strong></span>
                     </div>
                     
-                    <div class="cc-icons-group">
-                        <div class="cc-icon cc-visa">VISA</div>
-                        <div class="cc-icon cc-mc"></div>
-                        <button type="button" class="color-trigger" style="background:${bColor};" onclick="openColorPopover(event, '${b.id}')" title="เปลี่ยนสีปุ่ม"></button>
+                    <div class="cc-icon-btn" style="color:${bColor};" onclick="openColorPopover(event, '${b.id}')" title="เปลี่ยนสีไอคอน">
+                        <svg width="26" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                            <line x1="2" y1="10" x2="22" y2="10"></line>
+                        </svg>
                     </div>
                 </label>
             `;
@@ -471,7 +433,7 @@
     }
 
     function openColorPopover(event, bankId) {
-        event.preventDefault(); // กันไม่ให้ Click label ทำงาน
+        event.preventDefault(); 
         event.stopPropagation();
         currentEditingBankId = bankId;
         
@@ -495,11 +457,11 @@
 
     function selectColor(hex) {
         if (currentEditingBankId) {
-            let banks = JSON.parse(localStorage.getItem('bankDataV13')) || defaultBanks;
+            let banks = JSON.parse(localStorage.getItem('bankDataV14')) || defaultBanks;
             const index = banks.findIndex(b => b.id === currentEditingBankId);
             if (index !== -1) { 
                 banks[index].color = hex; 
-                localStorage.setItem('bankDataV13', JSON.stringify(banks)); 
+                localStorage.setItem('bankDataV14', JSON.stringify(banks)); 
                 renderBanks(); 
             }
         }
@@ -509,7 +471,7 @@
 
     document.addEventListener('click', function(event) {
         const popover = document.getElementById('colorPopover');
-        if (popover && popover.classList.contains('active') && !event.target.closest('.color-popover') && !event.target.closest('.color-trigger')) {
+        if (popover && popover.classList.contains('active') && !event.target.closest('.color-popover') && !event.target.closest('.cc-icon-btn')) {
             popover.classList.remove('active');
             currentEditingBankId = null;
         }
@@ -518,17 +480,17 @@
     function addBank() {
         const input = prompt("🏦 เพิ่มข้อมูลบัญชีใหม่\n(พิมพ์ // เพื่อบังคับขึ้นบรรทัดใหม่ เช่น ธ.กสิกร // 12345 // สมชาย):");
         if (input && input.trim()) {
-            let banks = JSON.parse(localStorage.getItem('bankDataV13')) || defaultBanks;
+            let banks = JSON.parse(localStorage.getItem('bankDataV14')) || defaultBanks;
             let newId = 'b' + Date.now();
-            banks.push({ id: newId, text: input.split('//').map(s => s.trim()).join('\n'), color: '#000000' });
-            localStorage.setItem('bankDataV13', JSON.stringify(banks));
-            localStorage.setItem('bankV13', newId);
+            banks.push({ id: newId, text: input.split('//').map(s => s.trim()).join('\n'), color: '#333333' });
+            localStorage.setItem('bankDataV14', JSON.stringify(banks));
+            localStorage.setItem('bankV14', newId);
             renderBanks(); updateData();
         }
     }
 
     function editBankList() {
-        let banks = JSON.parse(localStorage.getItem('bankDataV13')) || defaultBanks;
+        let banks = JSON.parse(localStorage.getItem('bankDataV14')) || defaultBanks;
         const selectedNode = document.querySelector('input[name="bankSelect"]:checked');
         if(!selectedNode) { alert('กรุณาเลือกธนาคารที่ต้องการแก้ไขก่อน'); return;}
         
@@ -539,7 +501,7 @@
             if (input !== null) {
                 if (input.trim() === '') banks = banks.filter(b => b.id !== selectedId);
                 else bank.text = input.split('//').map(s => s.trim()).join('\n');
-                localStorage.setItem('bankDataV13', JSON.stringify(banks));
+                localStorage.setItem('bankDataV14', JSON.stringify(banks));
                 renderBanks(); updateData();
             }
         }
@@ -557,7 +519,7 @@
         localStorage.setItem('check_deposit', document.getElementById('check_deposit').checked);
         
         const selectedBankNode = document.querySelector('input[name="bankSelect"]:checked');
-        if(selectedBankNode) localStorage.setItem('bankV13', selectedBankNode.value);
+        if(selectedBankNode) localStorage.setItem('bankV14', selectedBankNode.value);
 
         const collections = [];
         document.querySelectorAll('.collection-block').forEach(block => {
@@ -582,7 +544,7 @@
             });
             collections.push({ colName, isCollapsed, products });
         });
-        localStorage.setItem('orderDataV13', JSON.stringify(collections));
+        localStorage.setItem('orderDataV14', JSON.stringify(collections));
     }
 
     function loadData() {
@@ -600,7 +562,7 @@
 
         const container = document.getElementById('collectionsContainer');
         container.innerHTML = ''; 
-        let savedData = JSON.parse(localStorage.getItem('orderDataV13'));
+        let savedData = JSON.parse(localStorage.getItem('orderDataV14'));
         
         if (savedData && savedData.length > 0) {
             savedData.forEach(col => {
@@ -761,8 +723,8 @@
         let breakdown = (ship > 0 ? `ค่าจัดส่ง: ${ship} บาท\n` : '') + (spec > 0 ? `พื้นที่พิเศษ: ${spec} บาท\n` : '') + (dep > 0 ? `หักมัดจำ: -${dep} บาท\n` : '');
         
         // ข้อมูลธนาคาร เอาแบบเต็ม (ชื่อธนาคาร + เลขบัญชี) มาใส่ใน Text
-        let bankId = localStorage.getItem('bankV13'), bankText = "(กรุณาเลือกบัญชีธนาคาร)";
-        if (bankId) { let b = (JSON.parse(localStorage.getItem('bankDataV13'))||defaultBanks).find(x=>x.id===bankId); if(b) bankText = b.text; }
+        let bankId = localStorage.getItem('bankV14'), bankText = "(กรุณาเลือกบัญชีธนาคาร)";
+        if (bankId) { let b = (JSON.parse(localStorage.getItem('bankDataV14'))||defaultBanks).find(x=>x.id===bankId); if(b) bankText = b.text; }
 
         document.getElementById('outputText').value = !finalProductsText ? '- ไม่มีรายการสินค้า -\n\n' : `${finalProductsText}${breakdown}ยอดรวม: ${pStr} บาท\n\n--------------------------\nชำระเงินได้ที่:\n${bankText}\n\nโอนเงินแล้วกรุณาส่งสลิป และที่อยู่ให้ด้วยนะคะ`;
         document.getElementById('outputLabelText').value = labelLines.join('\n');
@@ -809,7 +771,7 @@
     function moveProductUp(btn) { const i = btn.closest('.product-item'); if (i.previousElementSibling) { i.parentNode.insertBefore(i, i.previousElementSibling); updateData(); } }
     function moveProductDown(btn) { const i = btn.closest('.product-item'); if (i.nextElementSibling) { i.parentNode.insertBefore(i.nextElementSibling, i); updateData(); } }
     function removeProduct(btn) { if(confirm('❌ ลบสินค้านี้?')) { btn.closest('.product-item').remove(); updateData(); } }
-    function clearData() { if(confirm('🚨 ล้างข้อมูลสินค้าทั้งหมด?')) { localStorage.removeItem('orderDataV13'); location.reload(); } }
+    function clearData() { if(confirm('🚨 ล้างข้อมูลสินค้าทั้งหมด?')) { localStorage.removeItem('orderDataV14'); location.reload(); } }
 
     function createOptionRowHtml(availableSizes, selectedSizes) {
         let pillsHtml = availableSizes.map(s => `<div class="pill ${selectedSizes.includes(s) ? 'active' : ''}" onclick="togglePill(this)" data-size="${s}">${s}</div>`).join('');
@@ -871,10 +833,10 @@
     function exportData() {
         saveData();
         const exportObj = {
-            version: "v13.0",
-            collections: JSON.parse(localStorage.getItem('orderDataV13')) || [],
-            banks: JSON.parse(localStorage.getItem('bankDataV13')) || defaultBanks,
-            selectedBank: localStorage.getItem('bankV13') || '',
+            version: "v14.0",
+            collections: JSON.parse(localStorage.getItem('orderDataV14')) || [],
+            banks: JSON.parse(localStorage.getItem('bankDataV14')) || defaultBanks,
+            selectedBank: localStorage.getItem('bankV14') || '',
             settings: {
                 val_shipping: localStorage.getItem('val_shipping') || '50', val_special: localStorage.getItem('val_special') || '50', val_deposit: localStorage.getItem('val_deposit') || '100',
                 check_shipping: localStorage.getItem('check_shipping') === 'true', check_special: localStorage.getItem('check_special') === 'true', check_deposit: localStorage.getItem('check_deposit') === 'true',
@@ -889,11 +851,11 @@
         if (!code) return;
         try {
             const parsedData = JSON.parse(decodeURIComponent(atob(code)));
-            if (Array.isArray(parsedData)) localStorage.setItem('orderDataV13', JSON.stringify(parsedData));
+            if (Array.isArray(parsedData)) localStorage.setItem('orderDataV14', JSON.stringify(parsedData));
             else if (parsedData && parsedData.collections) {
-                localStorage.setItem('orderDataV13', JSON.stringify(parsedData.collections));
-                if (parsedData.banks) localStorage.setItem('bankDataV13', JSON.stringify(parsedData.banks));
-                if (parsedData.selectedBank) localStorage.setItem('bankV13', parsedData.selectedBank);
+                localStorage.setItem('orderDataV14', JSON.stringify(parsedData.collections));
+                if (parsedData.banks) localStorage.setItem('bankDataV14', JSON.stringify(parsedData.banks));
+                if (parsedData.selectedBank) localStorage.setItem('bankV14', parsedData.selectedBank);
                 if (parsedData.settings) {
                     ['val_shipping', 'val_special', 'val_deposit', 'check_shipping', 'check_special', 'check_deposit'].forEach(key => {
                         if(parsedData.settings[key] !== undefined) localStorage.setItem(key, parsedData.settings[key]);
