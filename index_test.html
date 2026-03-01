@@ -3,59 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Order Management - Shopify Classic</title>
+    <title>Order Management - Shopify Checkout Style</title>
     <style>
         :root {
-            /* สีแบบ Shopify Classic Checkout (อ้างอิงจากรูป) */
-            --bg-left: #FFFFFF;       /* ซ้ายขาวล้วน */
-            --bg-right: #FAFAFA;      /* ขวาเทาอ่อน */
-            --border: #D9D9D9;        /* ขอบเทาอ่อน */
+            /* สีตามแบบ Shopify Checkout ของแท้ */
+            --bg-left: #FFFFFF;
+            --bg-right: #FAFAFA;
+            --border: #D9D9D9;
             --border-dark: #C9C9C9;
             
-            --text-main: #333333;     /* ดำเทา */
-            --text-muted: #737373;    /* เทากลาง */
+            --text-main: #333333;
+            --text-muted: #737373;
             
-            /* สีปุ่มฟ้าอ้างอิงจากปุ่ม Review order */
-            --primary: #1773B0; 
-            --primary-hover: #135d8e;
-            --primary-bg-light: #F0F5F8; /* สีพื้นหลังตอน Active */
+            /* สีปุ่มหลัก (อ้างอิงสีน้ำเงินจากปุ่ม Review order) */
+            --primary: #197BBD; 
+            --primary-hover: #135D8E;
             
-            --danger: #DD4B39;
-            --success: #008060;
+            /* สี Shop Pay ม่วงเผื่ออยากใช้: #5A31F4 */
+            
+            --danger: #E32C2B;
         }
 
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
             margin: 0; padding: 0; color: var(--text-main); 
             display: flex; min-height: 100vh;
-            background-color: var(--bg-left);
         }
 
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background-color: #D9D9D9; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background-color: #C9C9C9; }
+        ::-webkit-scrollbar-thumb { background-color: #D9D9D9; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background-color: #B3B3B3; }
 
         /* ======================================= */
         /* ฝั่งซ้าย: พื้นที่เพิ่มสินค้า (55%) */
         /* ======================================= */
         .left-panel {
-            flex: 1.3; 
+            flex: 1.25; 
             background-color: var(--bg-left);
-            padding: 50px 8% 80px 10%;
+            border-right: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end; /* ดันเนื้อหาให้ชิดขอบกลางเหมือน Shopify */
+        }
+        
+        .left-content {
+            width: 100%;
+            max-width: 650px; /* จำกัดความกว้างไม่ให้ยืดเกินไป */
+            padding: 50px 40px 80px 20px;
             box-sizing: border-box;
-            overflow-y: auto;
         }
 
-        .header-logo { font-size: 1.7rem; font-weight: normal; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; color: #000;}
+        .header-logo { font-size: 1.8rem; font-weight: normal; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;}
+        .header-logo span { font-weight: 500; }
         
-        .section-title { font-size: 1.25rem; font-weight: normal; margin-top: 40px; margin-bottom: 15px; color: #333;}
+        .section-title { font-size: 1.15rem; font-weight: normal; margin-top: 40px; margin-bottom: 15px; color: var(--text-main);}
 
         /* Input แบบ Shopify */
         input[type="text"], input[type="number"]:not(.inline-fee-input) {
             width: 100%; background: #FFFFFF; border: 1px solid var(--border);
-            padding: 13px 12px; border-radius: 5px; color: var(--text-main); font-size: 0.95rem;
-            box-sizing: border-box; transition: 0.2s; font-family: inherit;
+            padding: 12px; border-radius: 5px; color: var(--text-main); font-size: 0.95rem;
+            box-sizing: border-box; transition: border-color 0.2s, box-shadow 0.2s; font-family: inherit;
         }
         input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
         input::placeholder { color: #999; }
@@ -63,274 +70,286 @@
         input[type="number"] { -moz-appearance: textfield; }
 
         /* ======================================= */
-        /* Collection & Products */
+        /* คอลเลคชั่น (UX เดิม) */
         /* ======================================= */
-        .collection-block { margin-bottom: 30px; background: #FFFFFF; border-radius: 5px; border: 1px solid var(--border); transition: 0.3s; }
+        .collection-block { margin-bottom: 25px; background: #FFFFFF; border-radius: 5px; border: 1px solid var(--border); }
         
-        .collection-header { display: flex; align-items: center; padding: 10px 15px; border-bottom: 1px solid var(--border); background: #FAFAFA; border-top-left-radius: 5px; border-top-right-radius: 5px;}
+        .collection-header { display: flex; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--border); background: var(--bg-right); border-top-left-radius: 5px; border-top-right-radius: 5px;}
         .collection-block.collapsed .collection-header { border-bottom: none; border-radius: 5px; }
         .collection-block.collapsed .collection-body { display: none; }
         
-        .collection-name-box { flex-grow: 1; margin: 0 15px; }
-        .collection-name-box input { background: transparent; border: 1px solid transparent; padding: 6px; font-size: 1.05rem; font-weight: 500; }
-        .collection-name-box input:focus { background: white; border: 1px solid var(--primary); }
+        .collection-name-box { flex-grow: 1; margin: 0 10px; }
+        .collection-name-box input { background: transparent; border: 1px solid transparent; padding: 6px; font-size: 1rem; font-weight: 600; box-shadow: none !important;}
+        .collection-name-box input:focus { background: white; border: 1px solid var(--border); }
         
-        .mac-controls { display: flex; gap: 6px; }
-        .mac-btn { width: 12px; height: 12px; border-radius: 50%; border: none; cursor: pointer; background-color: var(--border-dark); }
+        .mac-controls { display: flex; gap: 5px; }
+        .mac-btn { width: 11px; height: 11px; border-radius: 50%; border: none; cursor: pointer; background-color: var(--border-dark); }
         .mac-btn:hover.mac-close { background-color: var(--danger); }
         .mac-btn:hover.mac-min, .mac-btn:hover.mac-max { background-color: var(--text-muted); }
         
-        .btn-toggle-col { background: transparent; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 4px; width: 28px; height: 28px; transition: 0.2s;}
-        .btn-toggle-col:hover { background: var(--border); color: var(--text-main); }
+        .btn-toggle-col { background: transparent; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 4px;}
+        .btn-toggle-col:hover { background: #EAEAEA; color: var(--text-main); }
         .collection-block.collapsed .btn-toggle-col { transform: rotate(-90deg); }
 
         .collection-body { padding: 15px; }
 
-        /* สินค้าย่อย */
-        .product-item { background: #FFFFFF; padding: 15px; border-radius: 5px; margin-bottom: 15px; border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.02);}
-        .product-header-row { display: grid; grid-template-columns: 1fr 100px 80px auto; gap: 10px; margin-bottom: 10px; }
+        /* สินค้า */
+        .product-item { background: #FFFFFF; padding: 12px; border-radius: 5px; margin-bottom: 12px; border: 1px solid var(--border); }
+        .product-header-row { display: grid; grid-template-columns: 1fr 90px 70px auto; gap: 10px; margin-bottom: 10px; }
         
-        /* ปุ่มตัวเลือกไซส์ */
-        .option-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #F0F0F0; }
-        .size-pills { display: flex; flex-wrap: wrap; gap: 8px; flex: 1;}
-        .pill { padding: 6px 12px; border-radius: 4px; background: #FFFFFF; color: var(--text-main); font-size: 0.85rem; border: 1px solid var(--border); cursor: pointer; user-select: none; transition: 0.2s;}
+        /* ไซส์ */
+        .option-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #EAEAEA; }
+        .size-pills { display: flex; flex-wrap: wrap; gap: 6px; flex: 1;}
+        .pill { padding: 5px 12px; border-radius: 4px; background: #FAFAFA; color: var(--text-main); font-size: 0.85rem; border: 1px solid var(--border); cursor: pointer; user-select: none; transition: 0.2s;}
         .pill:hover { border-color: var(--text-muted); }
         .pill.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* ปุ่มต่างๆ */
-        .btn { background: var(--primary); color: white; border: none; padding: 18px 24px; border-radius: 5px; font-weight: 500; font-size: 1rem; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; box-sizing: border-box;}
-        .btn:hover { background: var(--primary-hover); }
-        .btn-outline { background: white; border: 1px solid var(--border-dark); color: var(--text-main); padding: 12px 20px;}
-        .btn-outline:hover { border-color: var(--text-main); }
-        .btn-text { background: transparent; color: var(--primary); border: none; font-weight: normal; font-size: 0.9rem; cursor: pointer; padding: 5px 0; }
+        /* ปุ่มฝั่งซ้าย */
+        .btn-add-collection { width: 100%; text-align: left; background: transparent; border: none; color: var(--primary); font-size: 0.95rem; cursor: pointer; padding: 5px 0; margin-bottom: 40px; }
+        .btn-add-collection:hover { color: var(--primary-hover); }
+        
+        .btn-text { background: transparent; color: var(--primary); border: none; font-size: 0.85rem; cursor: pointer; padding: 5px; }
         .btn-text:hover { color: var(--primary-hover); }
         
-        .icon-btn { background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 6px; border-radius: 4px; display: flex; align-items: center; justify-content: center; transition: 0.2s;}
-        .icon-btn:hover { background: #F5F5F5; color: var(--text-main); }
+        .icon-btn { background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 6px; border-radius: 4px; display: flex; align-items: center; justify-content: center; }
+        .icon-btn:hover { background: #F0F0F0; color: var(--text-main); }
 
         /* ======================================= */
-        /* การตั้งค่า (สไตล์ Payment ของ Shopify) */
+        /* การตั้งค่า & ธนาคาร (Payment Section) */
         /* ======================================= */
         .setting-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 30px; }
         
-        /* ธนาคารแบบ กล่องติดกัน (Radio) */
-        .bank-list { display: flex; flex-direction: column; background: #FFFFFF; border-radius: 5px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 10px;}
-        .bank-item-label { display: block; position: relative; cursor: pointer; border-bottom: 1px solid var(--border); margin-bottom: -1px; }
-        .bank-item-label:last-child { border-bottom: none; }
+        /* สไตล์ Payment ของ Shopify (กล่องติดกัน) */
+        .payment-box { border: 1px solid var(--border); border-radius: 5px; background: #FFFFFF; display: flex; flex-direction: column; overflow: hidden; margin-bottom: 10px; }
+        .payment-item { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid var(--border); cursor: pointer; background: #FFFFFF;}
+        .payment-item:last-child { border-bottom: none; }
         
-        .bank-item-content { display: flex; align-items: center; gap: 15px; padding: 15px; background: #FFFFFF; transition: 0.2s; border: 1px solid transparent; border-radius: 5px;}
-        .bank-radio { appearance: none; width: 18px; height: 18px; border: 1px solid var(--border-dark); border-radius: 50%; margin: 0; outline: none; cursor: pointer; position: relative; background: #fff; flex-shrink: 0;}
-        .bank-radio:checked { border-color: var(--primary); border-width: 6px; background: white; }
+        /* Radio Button แบบจุด (Dot) */
+        .dot-radio { appearance: none; width: 18px; height: 18px; border: 1px solid var(--border-dark); border-radius: 50%; margin: 0 15px 0 0; outline: none; cursor: pointer; position: relative; background: #FFFFFF; flex-shrink: 0;}
+        .dot-radio:checked { border: 5px solid var(--primary); background: #FFFFFF; }
         
-        /* เมื่อถูกเลือก ให้กล่องเป็นสีฟ้าอ่อนแบบ Shopify */
-        .bank-item-label input:checked + .bank-item-content {
-            background-color: var(--primary-bg-light);
-            border-color: var(--primary);
-            z-index: 1; /* ดันขอบขึ้นมาทับเส้นอื่น */
-        }
-        .bank-text-info { font-size: 0.95rem; color: var(--text-main); flex: 1; line-height: 1.4;}
+        .payment-text { flex: 1; font-size: 0.95rem; line-height: 1.4; color: var(--text-main);}
+        .payment-item:hover { background: var(--bg-right); }
 
-        /* Checkbox แบบคลีน */
-        .custom-checkbox { display: flex; align-items: center; gap: 10px; cursor: pointer; color: var(--text-main); font-size: 0.95rem;}
+        /* Checkbox Delivery */
+        .custom-checkbox { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.95rem; color: var(--text-main); }
         .custom-checkbox input { display: none; }
-        .checkmark { width: 18px; height: 18px; border: 1px solid var(--border-dark); border-radius: 4px; display: flex; align-items: center; justify-content: center; background: white; transition: 0.2s;}
+        .checkmark { width: 18px; height: 18px; border: 1px solid var(--border-dark); border-radius: 4px; display: flex; align-items: center; justify-content: center; background: #FFFFFF; }
         .custom-checkbox input:checked ~ .checkmark { background: var(--primary); border-color: var(--primary); }
         .custom-checkbox input:checked ~ .checkmark::after { content: '✔'; color: white; font-size: 12px; }
 
         /* ======================================= */
-        /* ฝั่งขวา: สรุปยอด (45%) Sticky */
+        /* ฝั่งขวา: สรุปยอด (45%) */
         /* ======================================= */
         .right-panel {
             flex: 1; 
             background-color: var(--bg-right);
-            padding: 50px 8% 50px 5%;
+            position: relative;
+        }
+        
+        .right-content {
+            width: 100%;
+            max-width: 500px;
+            padding: 50px 40px;
             box-sizing: border-box;
-            border-left: 1px solid var(--border);
-            position: relative; 
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
         }
 
-        .sticky-summary { position: sticky; top: 50px; display: flex; flex-direction: column; }
-
         /* บิลจำลองแบบ Shopify เป๊ะๆ */
-        .visual-bill-container { margin-bottom: 20px; }
-
-        .summary-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; font-size: 0.95rem;}
-        .product-line { border-bottom: none; } /* สินค้าไม่มีเส้นขอบกั้นใน Shopify */
+        .summary-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font-size: 0.95rem; }
         
-        .thumbnail { width: 64px; height: 64px; background: #FFFFFF; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1); position: relative; display: flex; align-items: center; justify-content: center;}
-        .thumbnail img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px;}
-        .qty-badge { position: absolute; top: -10px; right: -10px; background: rgba(114, 114, 114, 0.9); color: white; font-size: 0.8rem; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center;}
+        /* รูป Thumbnail (กล่องสี่เหลี่ยม + badge วงกลมบนขวา) */
+        .thumbnail { width: 64px; height: 64px; background: #FFFFFF; border-radius: 8px; border: 1px solid rgba(175,175,175,0.34); position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
+        .qty-badge { position: absolute; top: -8px; right: -8px; background: rgba(114, 114, 114, 0.9); color: white; font-size: 0.75rem; min-width: 20px; height: 20px; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 0 5px; box-sizing: border-box; font-weight: 500;}
         
-        .cost-line { border-top: 1px solid var(--border); padding: 15px 0; display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-main);}
-        .cost-line.total-line { border-top: 1px solid var(--border); align-items: center; padding-top: 20px; font-size: 1rem;}
+        /* กล่องรวมยอด (ดันติดรายการสินค้า ไม่เว้นว่าง) */
+        .totals-section { border-top: 1px solid var(--border); margin-top: 15px; padding-top: 10px; }
+        
+        .cost-line { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.9rem; color: var(--text-main); }
+        .cost-line .label { color: var(--text-muted); }
+        
+        .total-line { border-top: 1px solid var(--border); align-items: center; padding-top: 15px; margin-top: 10px; font-size: 1rem; color: var(--text-main);}
+        .total-price { display: flex; align-items: center; gap: 8px; }
+        .total-currency { color: var(--text-muted); font-size: 0.8rem; }
+        .total-amount { font-size: 1.5rem; font-weight: 500; }
 
-        /* ======================================= */
-        /* ระบบ Tabs สำหรับข้อความ */
-        /* ======================================= */
-        .tabs-header { display: flex; gap: 20px; margin-top: 30px; margin-bottom: 10px;}
-        .tab-btn { background: transparent; border: none; padding: 5px 0; font-size: 0.9rem; color: var(--primary); cursor: pointer; border-bottom: 1px solid transparent; transition: 0.2s;}
-        .tab-btn:hover { color: var(--primary-hover); }
-        .tab-btn.active { color: var(--text-main); font-weight: 500; cursor: default;}
+        /* ปุ่ม Review Order ใหญ่ๆ */
+        .btn-primary { width: 100%; background: var(--primary); color: white; border: none; padding: 20px; border-radius: 5px; font-weight: 500; font-size: 1.1rem; cursor: pointer; transition: 0.2s; margin-top: 25px; }
+        .btn-primary:hover { background: var(--primary-hover); }
 
-        .tab-content { display: none; flex-direction: column; flex: 1; }
-        .tab-content.active { display: flex; }
+        /* ระบบ TABS สำหรับข้อความ (ซ่อนไว้ให้เนียนตา) */
+        .tabs-container { margin-top: 30px; border: 1px solid var(--border); border-radius: 5px; background: #FFFFFF; overflow: hidden; }
+        .tabs-header { display: flex; border-bottom: 1px solid var(--border); background: var(--bg-right); }
+        .tab-btn { flex: 1; background: transparent; border: none; border-right: 1px solid var(--border); padding: 12px 0; font-size: 0.9rem; color: var(--text-muted); cursor: pointer; font-weight: 500; }
+        .tab-btn:last-child { border-right: none; }
+        .tab-btn.active { background: #FFFFFF; color: var(--primary); box-shadow: inset 0 2px 0 var(--primary); }
 
-        textarea.final-output { width: 100%; min-height: 120px; background: #FFFFFF; border: 1px solid var(--border); border-radius: 5px; padding: 12px; font-family: monospace; font-size: 0.85rem; color: var(--text-main); resize: vertical; box-sizing: border-box;}
+        .tab-content { display: none; padding: 15px; }
+        .tab-content.active { display: block; }
+        textarea.final-output { width: 100%; height: 120px; background: transparent; border: none; font-family: monospace; font-size: 0.85rem; color: var(--text-main); resize: vertical; outline: none; }
 
         /* ======================================= */
         /* Mobile Layout */
         /* ======================================= */
         .mobile-summary-toggle { display: none; }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 1000px) {
             body { flex-direction: column; }
             
-            .left-panel { padding: 20px 5%; order: 2; flex: none; }
-            .right-panel { padding: 0; order: 1; flex: none; border-left: none; border-bottom: 1px solid var(--border); }
+            .left-panel { flex: none; justify-content: center; border-right: none; }
+            .left-content { padding: 20px; max-width: 100%; }
+            
+            .right-panel { flex: none; border-bottom: 1px solid var(--border); }
+            .right-content { position: static; padding: 20px; max-width: 100%; height: auto; display: none; }
+            .right-content.show { display: block; }
 
             .mobile-summary-toggle {
                 display: flex; justify-content: space-between; align-items: center;
-                background-color: var(--bg-right); padding: 20px 5%; cursor: pointer;
-                color: var(--primary); font-size: 0.95rem; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+                background-color: var(--bg-right); padding: 20px; cursor: pointer;
+                color: var(--primary); font-size: 0.95rem; border-bottom: 1px solid var(--border);
             }
-
-            .sticky-summary { position: static; padding: 20px 5%; display: none; height: auto; }
-            .sticky-summary.show { display: block; border-bottom: 1px solid var(--border);}
 
             .product-header-row { grid-template-columns: 1fr 90px 70px; grid-template-rows: auto auto; }
             .productName { grid-column: 1 / 4; grid-row: 1; } 
             .productPrice { grid-column: 1 / 2; grid-row: 2; } 
             .productQty { grid-column: 2 / 3; grid-row: 2; } 
             .product-actions { grid-column: 3 / 4; grid-row: 2; justify-content: flex-end; } 
-            
-            .setting-grid { grid-template-columns: 1fr; }
         }
+
+        .footer-links { display: flex; gap: 15px; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); }
     </style>
 </head>
 <body>
 
-    <main class="left-panel">
-        <div class="header-logo">
-            <span>Kenergy <span style="font-size:0.8rem; color:var(--text-muted); font-weight:normal;">v12.0 (Classic)</span></span>
-        </div>
-
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h2 class="section-title" style="margin:0;">ตะกร้าสินค้า</h2>
-            <button class="btn-text" onclick="clearAllPills()">ล้างตัวเลือกทั้งหมด</button>
-        </div>
-
-        <div id="collectionsContainer"></div>
-
-        <button class="btn-text" style="width: 100%; text-align: left; margin-bottom: 40px;" onclick="addCollectionBlock()">
-            + เพิ่มคอลเลคชั่นใหม่
-        </button>
-
-        <h2 class="section-title">การตั้งค่าค่าใช้จ่าย</h2>
-        <div class="setting-grid">
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <label class="custom-checkbox">
-                    <input type="checkbox" id="check_shipping" onchange="updateData()" checked>
-                    <span class="checkmark"></span> ค่าจัดส่ง
-                </label>
-                <input type="number" id="val_shipping" placeholder="ราคาจัดส่ง" value="50" oninput="updateData()">
-            </div>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <label class="custom-checkbox">
-                    <input type="checkbox" id="check_special" onchange="updateData()">
-                    <span class="checkmark"></span> พื้นที่พิเศษ
-                </label>
-                <input type="number" id="val_special" placeholder="ราคาพิเศษ" value="50" oninput="updateData()">
-            </div>
-            <div style="grid-column: 1 / -1; display: flex; align-items: center; gap: 10px;">
-                <label class="custom-checkbox" style="min-width: 80px;">
-                    <input type="checkbox" id="check_deposit" onchange="updateData()">
-                    <span class="checkmark"></span> หักมัดจำ
-                </label>
-                <input type="number" id="val_deposit" placeholder="ยอดมัดจำ" value="100" oninput="updateData()">
-            </div>
-        </div>
-
-        <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-            <h2 class="section-title" style="margin-bottom: 15px;">บัญชีธนาคาร (Payment)</h2>
-            <div style="margin-bottom: 15px;">
-                <button class="btn-text" onclick="addBank()" style="margin-right: 15px;">เพิ่ม</button>
-                <button class="btn-text" style="color:var(--text-muted);" onclick="editBankList()">จัดการ</button>
-            </div>
-        </div>
-        
-        <div class="bank-list" id="bankContainer">
-            </div>
-
-        <div style="display: flex; gap: 10px; margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--border);">
-            <button class="btn-outline btn" style="flex: 1;" onclick="exportData()">ส่งออกข้อมูล</button>
-            <button class="btn-outline btn" style="flex: 1;" onclick="importData()">นำเข้าข้อมูล</button>
-        </div>
-
-    </main>
-
-
     <aside class="right-panel">
         <div class="mobile-summary-toggle" onclick="toggleMobileSummary()">
             <span id="toggle-text" style="display:flex; align-items:center; gap:8px;">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm1.336-5l1.977-7h-16.813l2.938 7h11.9zm3.164-9l-2.731 9.614c-.179.629-.757 1.052-1.411 1.052h-10.742c-.653 0-1.231-.423-1.411-1.052l-3.21-11.614h-2.995v-2h4.522l.536 1.936h17.442z"/></svg>
-                <span>แสดงสรุปยอดโอน ▾</span>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm1.336-5l1.977-7h-16.813l2.938 7h11.9zm3.164-9l-2.731 9.614c-.179.629-.757 1.052-1.411 1.052h-10.742c-.653 0-1.231-.423-1.411-1.052l-3.21-11.614h-2.995v-2h4.522l.536 1.936h17.442z"/></svg>
+                <span>แสดงสรุปยอด (Show order summary) ▾</span>
             </span>
-            <span id="mobile-total-price" style="color:var(--text-main); font-weight:500;">฿0.00</span>
+            <span id="mobile-total-price" style="color:var(--text-main); font-weight:500; font-size: 1.1rem;">฿0.00</span>
         </div>
 
-        <div class="sticky-summary" id="summary-box">
+        <div class="right-content" id="summary-box">
             
-            <div class="visual-bill-container" id="visual-bill">
+            <div id="visual-bill">
                 </div>
 
-            <div>
-                <div class="cost-line" style="border-top: 1px solid var(--border);">
-                    <span style="color: var(--text-muted);">Subtotal</span>
+            <div class="totals-section">
+                <div class="cost-line">
+                    <span class="label">Subtotal</span>
                     <span id="display-subtotal" style="font-weight: 500;">฿0.00</span>
                 </div>
-                <div class="cost-line" id="display-shipping-row" style="border-top: none; padding-top: 0;">
-                    <span style="color: var(--text-muted);">Shipping</span>
+                <div class="cost-line" id="display-shipping-row">
+                    <span class="label">Shipping</span>
                     <span id="display-shipping" style="font-weight: 500;">฿0.00</span>
                 </div>
-                <div class="cost-line" id="display-deposit-row" style="border-top: none; padding-top: 0; display:none;">
-                    <span style="color: var(--text-muted);">Deposit</span>
-                    <span id="display-deposit" style="font-weight: 500;">-฿0.00</span>
+                <div class="cost-line" id="display-deposit-row" style="display:none;">
+                    <span class="label">Deposit</span>
+                    <span id="display-deposit" style="font-weight: 500; color: var(--danger);">-฿0.00</span>
                 </div>
                 
                 <div class="cost-line total-line">
-                    <span style="font-size: 1.1rem;">Total</span>
-                    <div style="display:flex; align-items:baseline; gap:8px;">
-                        <span style="color: var(--text-muted); font-size: 0.8rem;">THB</span>
-                        <span id="display-total" style="font-size: 1.4rem; font-weight: 600;">฿0.00</span>
+                    <span>Total</span>
+                    <div class="total-price">
+                        <span class="total-currency">THB</span>
+                        <span id="display-total" class="total-amount">฿0.00</span>
                     </div>
                 </div>
             </div>
 
-            <button class="btn" style="margin-top: 20px;" onclick="copyText('outputText')">Review order (คัดลอกสรุปยอด)</button>
+            <button class="btn-primary" onclick="copyText('outputText')">Review order (คัดลอกสรุปยอด)</button>
 
-            <div class="tabs-header">
-                <button class="tab-btn active" onclick="switchTab('tab-customer')">ข้อความส่งลูกค้า</button>
-                <button class="tab-btn" onclick="switchTab('tab-label')">ใบปะหน้า</button>
-            </div>
-
-            <div id="tab-customer" class="tab-content active">
-                <textarea id="outputText" class="final-output" readonly placeholder="ข้อความสรุปยอดจะแสดงที่นี่..."></textarea>
-            </div>
-
-            <div id="tab-label" class="tab-content">
-                <textarea id="outputLabelText" class="final-output" readonly placeholder="ข้อความใบปะหน้าจะแสดงที่นี่..."></textarea>
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-btn active" onclick="switchTab('tab-customer')">ข้อความบิล</button>
+                    <button class="tab-btn" onclick="switchTab('tab-label')">ใบปะหน้า</button>
+                </div>
+                <div id="tab-customer" class="tab-content active">
+                    <textarea id="outputText" class="final-output" readonly placeholder="บิลสำหรับส่งลูกค้า..."></textarea>
+                </div>
+                <div id="tab-label" class="tab-content">
+                    <textarea id="outputLabelText" class="final-output" readonly placeholder="ข้อมูลปะหน้าพัสดุ..."></textarea>
+                    <button onclick="copyText('outputLabelText')" style="width:100%; margin-top:10px; background:var(--bg-right); border:1px solid var(--border); padding:8px; border-radius:4px; cursor:pointer;">คัดลอกใบปะหน้า</button>
+                </div>
             </div>
 
         </div>
     </aside>
 
+    <main class="left-panel">
+        <div class="left-content">
+            
+            <div class="header-logo">
+                <span>Order Management</span>
+                <button class="btn-text" style="color:var(--text-muted);" onclick="clearAllPills()">เคลียร์ตัวเลือก</button>
+            </div>
+
+            <div id="collectionsContainer"></div>
+
+            <button class="btn-add-collection" onclick="addCollectionBlock()">
+                + Add new collection
+            </button>
+
+            <h2 class="section-title">Delivery</h2>
+            <div class="setting-grid">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="check_shipping" onchange="updateData()" checked>
+                        <span class="checkmark"></span> ค่าส่ง
+                    </label>
+                    <input type="number" id="val_shipping" placeholder="Shipping fee" value="50" oninput="updateData()">
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="check_special" onchange="updateData()">
+                        <span class="checkmark"></span> พื้นที่พิเศษ
+                    </label>
+                    <input type="number" id="val_special" placeholder="Remote area" value="50" oninput="updateData()">
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <h2 class="section-title" style="margin-bottom: 10px; border:none; padding:0;">Payment</h2>
+                <div>
+                    <button class="btn-text" onclick="addBank()">Add</button>
+                    <span style="color:var(--border-dark);">|</span>
+                    <button class="btn-text" style="color:var(--text-muted);" onclick="editBankList()">Edit</button>
+                </div>
+            </div>
+            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">All transactions are secure and encrypted.</div>
+            
+            <div class="payment-box" id="bankContainer">
+                </div>
+
+            <div style="display: flex; align-items: center; gap: 10px; margin-top: 20px;">
+                <label class="custom-checkbox">
+                    <input type="checkbox" id="check_deposit" onchange="updateData()">
+                    <span class="checkmark"></span> หักยอดมัดจำ (Deposit)
+                </label>
+                <input type="number" id="val_deposit" style="width: 150px;" placeholder="Amount" value="100" oninput="updateData()">
+            </div>
+
+            <div class="footer-links">
+                <button class="btn-text" style="font-size: 0.85rem;" onclick="exportData()">Export data</button>
+                <button class="btn-text" style="font-size: 0.85rem;" onclick="importData()">Import data</button>
+                <button class="btn-text" style="font-size: 0.85rem; color: var(--danger); margin-left: auto;" onclick="clearData()">Reset system</button>
+            </div>
+
+        </div>
+    </main>
+
 <script>
-    const ICON_CHEV_DOWN = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
-    const ICON_UP = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>`;
-    const ICON_DOWN = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
-    const ICON_TRASH = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
-    const ICON_COPY = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
-    const ICON_DOTS = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>`;
+    // ไอคอน UI
+    const ICON_CHEV_DOWN = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+    const ICON_UP = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"></polyline></svg>`;
+    const ICON_DOWN = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+    const ICON_TRASH = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
+    const ICON_COPY = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+    const ICON_DOTS = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1.5"></circle><circle cx="19" cy="12" r="1.5"></circle><circle cx="5" cy="12" r="1.5"></circle></svg>`;
 
     let defaultBanks = [{id: 'b1', text: 'Credit card / กสิกรไทย\n123-4-56789-0\nนาย สมชาย ขายดี'}];
 
@@ -345,9 +364,9 @@
         const txt = document.getElementById('toggle-text');
         box.classList.toggle('show');
         if(box.classList.contains('show')) {
-            txt.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm1.336-5l1.977-7h-16.813l2.938 7h11.9zm3.164-9l-2.731 9.614c-.179.629-.757 1.052-1.411 1.052h-10.742c-.653 0-1.231-.423-1.411-1.052l-3.21-11.614h-2.995v-2h4.522l.536 1.936h17.442z"/></svg><span>ซ่อนสรุปยอดโอน ▴</span>`;
+            txt.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm1.336-5l1.977-7h-16.813l2.938 7h11.9zm3.164-9l-2.731 9.614c-.179.629-.757 1.052-1.411 1.052h-10.742c-.653 0-1.231-.423-1.411-1.052l-3.21-11.614h-2.995v-2h4.522l.536 1.936h17.442z"/></svg><span>ซ่อนสรุปยอด ▴</span>`;
         } else {
-            txt.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm1.336-5l1.977-7h-16.813l2.938 7h11.9zm3.164-9l-2.731 9.614c-.179.629-.757 1.052-1.411 1.052h-10.742c-.653 0-1.231-.423-1.411-1.052l-3.21-11.614h-2.995v-2h4.522l.536 1.936h17.442z"/></svg><span>แสดงสรุปยอดโอน ▾</span>`;
+            txt.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm1.336-5l1.977-7h-16.813l2.938 7h11.9zm3.164-9l-2.731 9.614c-.179.629-.757 1.052-1.411 1.052h-10.742c-.653 0-1.231-.423-1.411-1.052l-3.21-11.614h-2.995v-2h4.522l.536 1.936h17.442z"/></svg><span>แสดงสรุปยอด (Show order summary) ▾</span>`;
         }
     }
 
@@ -359,7 +378,7 @@
     }
 
     // ==========================================
-    // ส่วนธนาคาร (Radio กล่องติดกันแบบ Shopify)
+    // ส่วนธนาคาร (Radio กล่อง Payment)
     // ==========================================
     function renderBanks() {
         let banks = JSON.parse(localStorage.getItem('bankDataV12')) || defaultBanks;
@@ -368,7 +387,7 @@
         
         container.innerHTML = '';
         if(banks.length === 0) {
-            container.innerHTML = '<div style="color:var(--text-muted); font-size:0.9rem; padding:15px;">ยังไม่มีบัญชีธนาคาร</div>';
+            container.innerHTML = '<div style="padding:15px; color:#737373;">ไม่มีบัญชีธนาคาร (กด Add เพื่อเพิ่ม)</div>';
             return;
         }
 
@@ -377,31 +396,15 @@
         banks.forEach(b => {
             const isChecked = b.id === selectedId ? 'checked' : '';
             const html = `
-                <label class="bank-item-label">
-                    <input type="radio" class="bank-radio" style="display:none;" name="bankSelect" value="${b.id}" ${isChecked} onchange="updateData()">
-                    <div class="bank-item-content">
-                        <div class="bank-radio" style="${isChecked ? 'border-color:var(--primary); border-width:6px; background:white;' : ''}"></div>
-                        <div class="bank-text-info">
-                            <strong style="display:block;">${b.text.split('\n')[0]}</strong>
-                            <span style="color:var(--text-muted); font-size:0.85rem;">${b.text.split('\n').slice(1).join(' - ')}</span>
-                        </div>
+                <label class="payment-item">
+                    <input type="radio" class="dot-radio" name="bankSelect" value="${b.id}" ${isChecked} onchange="updateData()">
+                    <div class="payment-text">
+                        <strong>${b.text.split('\n')[0]}</strong>
+                        <div style="color:var(--text-muted); font-size:0.85rem; margin-top:2px;">${b.text.split('\n').slice(1).join('<br>')}</div>
                     </div>
                 </label>
             `;
             container.insertAdjacentHTML('beforeend', html);
-        });
-        
-        // ผูก Event ให้ CSS Custom Radio เปลี่ยนรูปร่างตอนกด
-        document.querySelectorAll('.bank-item-label input').forEach(input => {
-            input.addEventListener('change', function() {
-                document.querySelectorAll('.bank-item-content .bank-radio').forEach(r => { r.style.borderColor = 'var(--border-dark)'; r.style.borderWidth = '1px'; });
-                if(this.checked) {
-                    const customRadio = this.nextElementSibling.querySelector('.bank-radio');
-                    customRadio.style.borderColor = 'var(--primary)';
-                    customRadio.style.borderWidth = '6px';
-                    customRadio.style.background = 'white';
-                }
-            });
         });
     }
 
@@ -425,7 +428,7 @@
         let selectedId = selectedNode.value;
         let bank = banks.find(b => b.id === selectedId);
         if(bank) {
-            const input = prompt("✏️ แก้ไขข้อมูลบัญชี (พิมพ์ // ขึ้นบรรทัดใหม่)\n🚨 ลบข้อความทั้งหมดเพื่อลบบัญชีนี้:", bank.text.split('\n').join(' // '));
+            const input = prompt("✏️ แก้ไขข้อมูลบัญชี (พิมพ์ // ขึ้นบรรทัดใหม่)\n🚨 ลบข้อความทั้งหมดเพื่อลบ:", bank.text.split('\n').join(' // '));
             if (input !== null) {
                 if (input.trim() === '') banks = banks.filter(b => b.id !== selectedId);
                 else bank.text = input.split('//').map(s => s.trim()).join('\n');
@@ -436,7 +439,7 @@
     }
 
     // ==========================================
-    // ส่วน Core Logic
+    // Core Logic (Save/Load)
     // ==========================================
     function saveData() {
         localStorage.setItem('val_shipping', document.getElementById('val_shipping').value);
@@ -503,7 +506,7 @@
     }
 
     // ==========================================
-    // ส่วนแสดงผล
+    // แสดงผล & คำนวณ (Visual & Text)
     // ==========================================
     function updateData() {
         saveData();
@@ -542,12 +545,18 @@
                             priceText = `฿${(p * qtyVal).toFixed(2)}`;
                         }
                         
-                        visualBillHtml += `<div class="summary-item product-line">
+                        visualBillHtml += `<div class="summary-item">
                             <div style="display:flex; align-items:center; gap:15px;">
-                                <div class="thumbnail"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg><div class="qty-badge">${qtyVal}</div></div>
-                                <div><div style="font-weight:500; color:var(--text-main);">${nameVal}</div><div style="font-size:0.8rem; color:var(--text-muted);">${colName}</div></div>
+                                <div class="thumbnail">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                                    <div class="qty-badge">${qtyVal}</div>
+                                </div>
+                                <div style="flex:1;">
+                                    <div style="font-weight:500; color:var(--text-main);">${nameVal}</div>
+                                    <div style="font-size:0.8rem; color:var(--text-muted);">${colName}</div>
+                                </div>
                             </div>
-                            <span style="font-weight:500; font-size:0.9rem;">${priceText}</span>
+                            <span style="font-weight:500;">${priceText}</span>
                         </div>`;
                     }
                 } else {
@@ -572,12 +581,18 @@
                             priceText = `฿${(p * maxActive * qtyVal).toFixed(2)}`;
                         }
 
-                        visualBillHtml += `<div class="summary-item product-line">
+                        visualBillHtml += `<div class="summary-item">
                             <div style="display:flex; align-items:center; gap:15px;">
-                                <div class="thumbnail"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg><div class="qty-badge">${maxActive * qtyVal}</div></div>
-                                <div><div style="font-weight:500; color:var(--text-main);">${nameVal}</div><div style="font-size:0.8rem; color:var(--text-muted);">${colName} ${textParts.length > 0 ? `(${textParts.join(' ')})` : ''}</div></div>
+                                <div class="thumbnail">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                                    <div class="qty-badge">${maxActive * qtyVal}</div>
+                                </div>
+                                <div style="flex:1;">
+                                    <div style="font-weight:500; color:var(--text-main);">${nameVal}</div>
+                                    <div style="font-size:0.8rem; color:var(--text-muted);">${colName} ${textParts.length > 0 ? `(${textParts.join(' ')})` : ''}</div>
+                                </div>
                             </div>
-                            <span style="font-weight:500; font-size:0.9rem;">${priceText}</span>
+                            <span style="font-weight:500;">${priceText}</span>
                         </div>`;
                     }
                 }
@@ -593,11 +608,11 @@
             if (colLabelProducts.length) labelLines.push(colName ? `${colName} = ${colLabelProducts.join(' / ')}` : colLabelProducts.join(' / '));
         });
 
-        if(!hasItem) visualBillHtml = '<div style="text-align:center; color:var(--text-muted); margin: 20px 0; font-size:0.9rem;">ยังไม่มีสินค้าในออเดอร์นี้</div>';
+        if(!hasItem) visualBillHtml = '<div style="text-align:center; color:#999; margin: 20px 0; font-size:0.9rem;">Cart is empty.</div>';
         
         document.getElementById('visual-bill').innerHTML = visualBillHtml;
 
-        // คำนวณยอดเงิน Visual
+        // คำนวณยอดเงิน
         document.getElementById('display-subtotal').innerText = hasMissingPrice ? '***' : `฿${productsSum.toFixed(2)}`;
         
         let totalShipping = ship + spec;
@@ -620,7 +635,7 @@
         document.getElementById('display-total').innerText = displayTotalText;
         document.getElementById('mobile-total-price').innerText = displayTotalText;
 
-        // สร้างข้อความ Text
+        // สร้างข้อความ
         let terms = hasMissingPrice ? ['***'] : [...validPrices];
         if (ship > 0) terms.push(ship);
         if (spec > 0) terms.push(spec);
@@ -646,7 +661,7 @@
     }
 
     // ==========================================
-    // ส่วนเพิ่ม/ลบ UI Elements
+    // เพิ่ม/ลบ UI
     // ==========================================
     function toggleCollection(btn) { btn.closest('.collection-block').classList.toggle('collapsed'); saveData(); }
 
@@ -663,13 +678,13 @@
                     <button class="mac-btn mac-max" title="ลง" onclick="moveCollectionDown(this)"></button>
                 </div>
                 <div class="collection-name-box">
-                    <input type="text" class="collectionName" placeholder="ชื่อคอลเลคชั่น..." value="${colName}" oninput="updateData()">
+                    <input type="text" class="collectionName" placeholder="Collection name..." value="${colName}" oninput="updateData()">
                 </div>
                 <button class="btn-toggle-col" onclick="toggleCollection(this)">${ICON_CHEV_DOWN}</button>
             </div>
             <div class="collection-body">
                 <div class="productList"></div>
-                <button class="btn-outline btn" style="margin-top:15px; width:100%;" onclick="handleAddProductClick(this)">+ เพิ่มสินค้า</button>
+                <button class="btn-text" style="margin-top:5px;" onclick="handleAddProductClick(this)">+ Add product</button>
             </div>
         `;
         container.appendChild(block);
@@ -686,10 +701,11 @@
     function moveProductUp(btn) { const i = btn.closest('.product-item'); if (i.previousElementSibling) { i.parentNode.insertBefore(i, i.previousElementSibling); updateData(); } }
     function moveProductDown(btn) { const i = btn.closest('.product-item'); if (i.nextElementSibling) { i.parentNode.insertBefore(i.nextElementSibling, i); updateData(); } }
     function removeProduct(btn) { if(confirm('❌ ลบสินค้านี้?')) { btn.closest('.product-item').remove(); updateData(); } }
+    function clearData() { if(confirm('🚨 ล้างข้อมูลสินค้าทั้งหมด?')) { localStorage.removeItem('orderDataV12'); location.reload(); } }
 
     function createOptionRowHtml(availableSizes, selectedSizes) {
         let pillsHtml = availableSizes.map(s => `<div class="pill ${selectedSizes.includes(s) ? 'active' : ''}" onclick="togglePill(this)" data-size="${s}">${s}</div>`).join('');
-        return `<div class="option-row"><div class="size-pills">${pillsHtml}</div><button class="icon-btn" title="แก้ไขไซส์" onclick="editPillsList(this)">${ICON_DOTS}</button></div>`;
+        return `<div class="option-row"><div class="size-pills">${pillsHtml}</div><button class="icon-btn" title="แก้ไข" onclick="editPillsList(this)">${ICON_DOTS}</button></div>`;
     }
 
     function createProductItemElement(name = '', price = '', qty = 1, optionRowsArray = null) {
@@ -697,18 +713,18 @@
         let rows = optionRowsArray !== null ? (optionRowsArray.length === 0 ? [{availableSizes:['-'], selectedSizes:[]}] : optionRowsArray) : [{availableSizes:['S','M','L','XL','2XL'], selectedSizes:[]}];
         newItem.innerHTML = `
             <div class="product-header-row">
-                <input type="text" class="productName" placeholder="ชื่อสินค้า" value="${name}" oninput="updateData()">
-                <input type="number" class="productPrice" placeholder="ราคา" value="${price}" oninput="updateData()">
-                <input type="number" class="productQty" placeholder="ชิ้น" value="${qty || 1}" min="1" oninput="updateData()">
+                <input type="text" class="productName" placeholder="Product name" value="${name}" oninput="updateData()">
+                <input type="number" class="productPrice" placeholder="Price" value="${price}" oninput="updateData()">
+                <input type="number" class="productQty" placeholder="Qty" value="${qty || 1}" min="1" oninput="updateData()">
                 <div class="product-actions">
                     <button class="icon-btn" onclick="moveProductUp(this)">${ICON_UP}</button>
                     <button class="icon-btn" onclick="moveProductDown(this)">${ICON_DOWN}</button>
                     <button class="icon-btn" onclick="cloneProduct(this)">${ICON_COPY}</button>
-                    <button class="icon-btn" onclick="removeProduct(this)" style="color:var(--danger)">${ICON_TRASH}</button>
+                    <button class="icon-btn" onclick="removeProduct(this)">${ICON_TRASH}</button>
                 </div>
             </div>
             <div class="product-options-container">${rows.map(r => createOptionRowHtml(r.availableSizes, r.selectedSizes)).join('')}</div>
-            <button class="btn-text" style="font-size:0.85rem;" onclick="addOptionRow(this)">+ เพิ่มแถวตัวเลือก</button>
+            <button class="btn-text" style="font-size:0.8rem; margin-top:5px;" onclick="addOptionRow(this)">+ Add size row</button>
         `;
         return newItem;
     }
