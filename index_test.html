@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Order Management - v14.0 Shopify Layout</title>
+    <title>Shop Management</title>
     <style>
         :root {
-            /* สีตามแบบ Shopify Checkout */
-            --bg-left: #FFFFFF;       /* ฝั่งจัดการข้อมูล ขาวล้วน */
-            --bg-right: #FAFAFA;      /* ฝั่งสรุปยอด เทาอ่อน */
+            --bg-left: #FFFFFF;       
+            --bg-right: #FAFAFA;      
             --border: #D9D9D9;
             --border-dark: #C9C9C9;
             
             --text-main: #333333;
             --text-muted: #737373;
             
-            --primary: #1773B0;       /* สีน้ำเงิน Shopify */
+            --primary: #1773B0;       
             --primary-hover: #135D8E;
-            --shop-pay: #5A31F4;      /* สีม่วง Shop Pay */
+            --shop-pay: #5A31F4;      
             --shop-pay-hover: #4524C1;
             
             --danger: #E32C2B;
-            --success: #008060;
+            --success: #288A35; /* สีปุ่มสรุปยอด */
+            --warning: #FFC539; /* สีปุ่มใบปะหน้า */
         }
 
         body { 
@@ -33,51 +33,49 @@
 
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background-color: #D9D9D9; border-radius: 3px; }
+        /* สกอร์บาร์สี่เหลี่ยม */
+        ::-webkit-scrollbar-thumb { background-color: #D9D9D9; border-radius: 0; }
         ::-webkit-scrollbar-thumb:hover { background-color: #B3B3B3; }
 
         /* ======================================= */
-        /* 🔝 แถบ Header ด้านบน */
+        /* 🔝 แถบ Header */
         /* ======================================= */
         .top-header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 15px 5%; background: #FFFFFF; border-bottom: 1px solid var(--border);
             z-index: 1000; position: relative;
         }
-        .header-logo { font-size: 1.5rem; font-weight: 500; color: #000; }
-        .btn-purple { background: var(--shop-pay); color: white; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: 0.2s;}
+        .header-logo { font-size: 1.5rem; font-weight: 600; color: #000; }
+        .btn-purple { background: var(--shop-pay); color: white; border: none; padding: 10px 20px; border-radius: 0; font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: 0.2s;}
         .btn-purple:hover { background: var(--shop-pay-hover); }
 
-        /* Container หลักสำหรับแบ่ง 2 ฝั่ง */
-        .layout-container {
-            display: flex; flex: 1; width: 100%; overflow: hidden;
-        }
+        .layout-container { display: flex; flex: 1; width: 100%; overflow: hidden; }
 
         /* ======================================= */
-        /* 🛒 ฝั่งซ้าย: พื้นที่จัดการสินค้า (55%) */
+        /* 🛒 ฝั่งซ้าย: จัดการข้อมูล (55%) */
         /* ======================================= */
         .management-panel {
             flex: 1.3; 
             background-color: var(--bg-left);
             border-right: 1px solid var(--border);
-            display: flex; justify-content: flex-end; /* ดันเนื้อหาเข้าหากลางจอ */
+            display: flex; justify-content: flex-end; 
             overflow-y: auto;
         }
         
         .management-content {
-            width: 100%; max-width: 650px; /* ไม่ให้กว้างเกินไป */
+            width: 100%; max-width: 650px; 
             padding: 40px 40px 80px 20px; box-sizing: border-box;
         }
 
         .section-title { font-size: 1.25rem; font-weight: bold; margin-top: 40px; margin-bottom: 20px; color: #000;}
 
-        /* Input แบบ Shopify */
+        /* Input สี่เหลี่ยม */
         input[type="text"], input[type="number"]:not(.inline-fee-input) {
             width: 100%; background: #FFFFFF; border: 1px solid var(--border);
-            padding: 12px; border-radius: 5px; color: var(--text-main); font-size: 0.95rem;
+            padding: 12px; border-radius: 0; color: var(--text-main); font-size: 0.95rem;
             box-sizing: border-box; transition: 0.2s; font-family: inherit;
         }
-        input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
+        input:focus { outline: none; border-color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary); }
         input::placeholder { color: #999; }
         input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; }
@@ -85,82 +83,95 @@
         /* ======================================= */
         /* คอลเลคชั่น & สินค้า */
         /* ======================================= */
-        .collection-block { margin-bottom: 25px; background: #FFFFFF; border-radius: 5px; border: 1px solid var(--border); }
+        .collection-block { margin-bottom: 25px; background: #FFFFFF; border-radius: 0; border: 1px solid var(--border); }
         
-        .collection-header { display: flex; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--border); background: var(--bg-right); border-top-left-radius: 5px; border-top-right-radius: 5px;}
-        .collection-block.collapsed .collection-header { border-bottom: none; border-radius: 5px; }
+        .collection-header { display: flex; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--border); background: var(--bg-right); }
+        .collection-block.collapsed .collection-header { border-bottom: none; }
         .collection-block.collapsed .collection-body { display: none; }
         
         .collection-name-box { flex-grow: 1; margin: 0 10px; }
         .collection-name-box input { background: transparent; border: 1px solid transparent; padding: 6px; font-size: 1rem; font-weight: bold; box-shadow: none !important;}
         .collection-name-box input:focus { background: white; border: 1px solid var(--border); }
         
-        .mac-controls { display: flex; gap: 5px; }
-        .mac-btn { width: 11px; height: 11px; border-radius: 50%; border: none; cursor: pointer; background-color: var(--border-dark); }
-        .mac-btn:hover.mac-close { background-color: var(--danger); }
-        .mac-btn:hover.mac-min, .mac-btn:hover.mac-max { background-color: var(--text-muted); }
+        /* ปุ่มจัดการ 14px + Overlay Icon */
+        .mac-controls { display: flex; gap: 8px; }
+        .mac-btn { width: 14px; height: 14px; border-radius: 0; border: none; cursor: pointer; background-color: var(--border-dark); position: relative; display: flex; align-items: center; justify-content: center; color: transparent; font-size: 10px; font-weight: bold; transition: 0.2s; }
+        .mac-btn:hover { color: #FFFFFF; }
+        .mac-close:hover { background-color: var(--danger); }
+        .mac-min:hover, .mac-max:hover { background-color: var(--text-muted); }
+        .mac-close::after { content: '×'; font-size: 14px; line-height: 14px; }
+        .mac-min::after { content: '↑'; }
+        .mac-max::after { content: '↓'; }
         
-        .btn-toggle-col { background: transparent; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 4px; transition: 0.2s;}
+        /* ลูกศรทึบขนาดใหญ่ และหันลงตลอด */
+        .btn-toggle-col { background: transparent; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; transition: 0.2s;}
         .btn-toggle-col:hover { background: #EAEAEA; color: var(--text-main); }
-        .collection-block.collapsed .btn-toggle-col { transform: rotate(-90deg); }
+        /* ลบคำสั่งหมุนออก เพื่อให้หันลงตลอด */
 
         .collection-body { padding: 15px; }
 
-        .product-item { background: #FFFFFF; padding: 12px; border-radius: 5px; margin-bottom: 12px; border: 1px solid var(--border); }
-        .product-header-row { display: grid; grid-template-columns: 1fr 90px 70px auto; gap: 10px; margin-bottom: 10px; }
+        .product-item { background: #FFFFFF; padding: 12px; border-radius: 0; margin-bottom: 12px; border: 1px solid var(--border); }
+        
+        /* Toolbars ย้ายมาด้านบน */
+        .product-toolbar { display: flex; justify-content: flex-end; gap: 5px; margin-bottom: 8px; border-bottom: 1px solid #F0F0F0; padding-bottom: 8px;}
+        .product-header-row { display: grid; grid-template-columns: 1fr 90px 70px; gap: 10px; margin-bottom: 10px; }
         
         .option-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #EAEAEA; }
         .size-pills { display: flex; flex-wrap: wrap; gap: 6px; flex: 1;}
-        .pill { padding: 5px 12px; border-radius: 4px; background: #FAFAFA; color: var(--text-main); font-size: 0.85rem; border: 1px solid var(--border); cursor: pointer; user-select: none; transition: 0.2s; font-weight: 500;}
+        .pill { padding: 5px 12px; border-radius: 0; background: #FAFAFA; color: var(--text-main); font-size: 0.85rem; border: 1px solid var(--border); cursor: pointer; user-select: none; transition: 0.2s; font-weight: bold;}
         .pill:hover { border-color: var(--text-muted); }
         .pill.active { background: var(--primary); color: white; border-color: var(--primary); }
 
         .btn-add-collection { width: 100%; text-align: left; background: transparent; border: none; color: var(--primary); font-size: 0.95rem; cursor: pointer; padding: 5px 0; margin-bottom: 40px; font-weight: bold;}
-        .btn-add-collection:hover { color: var(--primary-hover); }
+        .btn-add-collection:hover { color: var(--primary-hover); text-decoration: underline;}
         
         .btn-text { background: transparent; color: var(--primary); border: none; font-size: 0.85rem; cursor: pointer; padding: 5px; font-weight: bold;}
-        .btn-text:hover { color: var(--primary-hover); }
+        .btn-text:hover { color: var(--primary-hover); text-decoration: underline;}
         
-        .icon-btn { background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 6px; border-radius: 4px; display: flex; align-items: center; justify-content: center; }
+        .icon-btn { background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 6px; display: flex; align-items: center; justify-content: center; }
         .icon-btn:hover { background: #F0F0F0; color: var(--text-main); }
+
+        /* ปุ่ม Option (!) วงกลมเทา */
+        .option-btn { width: 22px; height: 22px; background: #EAEAEA; color: #737373; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 13px; border: none; cursor: pointer; padding: 0; transition: 0.2s; }
+        .option-btn:hover { background: #D9D9D9; color: #000; }
 
         /* ======================================= */
         /* การตั้งค่า (Delivery & Fees) */
         /* ======================================= */
-        .fee-group-box { border: 1px solid var(--border); border-radius: 5px; padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; background: #FFFFFF; }
-        .fee-item { display: flex; flex-direction: column; gap: 10px; }
+        .fee-group-box { border: 1px solid var(--border); padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; background: #FFFFFF; }
+        
+        /* เอาหัวข้อไว้คนละบรรทัดกับ Input */
+        .fee-item { display: flex; flex-direction: column; gap: 8px; }
 
-        /* Checkbox Delivery */
+        /* Checkbox ดำ */
         .custom-checkbox { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.95rem; color: var(--text-main); font-weight: bold;}
         .custom-checkbox input { display: none; }
-        .checkmark { width: 18px; height: 18px; border: 1px solid var(--border-dark); border-radius: 4px; display: flex; align-items: center; justify-content: center; background: #FFFFFF; }
-        .custom-checkbox input:checked ~ .checkmark { background: var(--primary); border-color: var(--primary); }
-        .custom-checkbox input:checked ~ .checkmark::after { content: '✔'; color: white; font-size: 12px; }
+        .checkmark { width: 16px; height: 16px; border: 1px solid var(--border-dark); display: flex; align-items: center; justify-content: center; background: #FFFFFF; }
+        .custom-checkbox input:checked ~ .checkmark { background: #000000; border-color: #000000; }
+        .custom-checkbox input:checked ~ .checkmark::after { content: '✔'; color: white; font-size: 11px; }
 
         /* ======================================= */
         /* 🏦 ธนาคาร (Payment Box) */
         /* ======================================= */
-        .payment-box { border: 1px solid var(--border); border-radius: 5px; background: #FFFFFF; display: flex; flex-direction: column; overflow: hidden; margin-bottom: 10px; }
+        .payment-box { border: 1px solid var(--border); background: #FFFFFF; display: flex; flex-direction: column; margin-bottom: 10px; }
         .payment-item { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid var(--border); cursor: pointer; background: #FFFFFF; transition: 0.2s;}
         .payment-item:last-child { border-bottom: none; }
         .payment-item:hover { background: var(--bg-right); }
         
-        /* จุด Dot แบบเทาดำตามธีม */
-        .dot-radio { appearance: none; width: 18px; height: 18px; border: 1px solid var(--border-dark); border-radius: 50%; margin: 0 15px 0 0; outline: none; cursor: pointer; background: #FFFFFF; flex-shrink: 0; transition: border-width 0.2s;}
-        .dot-radio:checked { border: 5px solid var(--text-main); background: #FFFFFF; } /* เปลี่ยนเป็นสีดำ #333 */
+        .dot-radio { appearance: none; width: 16px; height: 16px; border: 1px solid var(--border-dark); border-radius: 50%; margin: 0 15px 0 0; outline: none; cursor: pointer; background: #FFFFFF; flex-shrink: 0; transition: border-width 0.2s;}
+        .dot-radio:checked { border: 5px solid #000000; background: #FFFFFF; } 
         
         .payment-text { flex: 1; font-size: 0.95rem; color: var(--text-main); }
         
-        /* ไอคอนบัตรเครดิต (คลิกเปลี่ยนสีได้) */
-        .cc-icon-btn { cursor: pointer; padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); background: #fff; display: flex; align-items: center; justify-content: center; transition: 0.2s;}
-        .cc-icon-btn:hover { background: var(--bg-right); border-color: var(--border-dark); }
+        /* ไอคอนธนาคารแบบเลือกได้ */
+        .bank-badge { padding: 4px 10px; border-radius: 0; border: 1px solid var(--border); color: #FFF; font-size: 0.75rem; font-weight: bold; cursor: pointer; display: inline-block; min-width: 45px; text-align: center;}
 
-        /* ======================================= */
-        /* Popover เลือกสี */
-        /* ======================================= */
-        .color-popover { position: absolute; z-index: 2000; background: #FFFFFF; border: 1px solid var(--border); border-radius: 8px; padding: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; opacity: 0; visibility: hidden; transform: translateY(10px) scale(0.95); transition: 0.2s; }
-        .color-popover.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
-        .color-swatch { width: 24px; height: 24px; border-radius: 50%; border: none; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        /* Popover เลือกธนาคาร */
+        .bank-popover { position: absolute; z-index: 2000; background: #FFFFFF; border: 1px solid var(--border); border-radius: 0; padding: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); display: flex; flex-direction: column; gap: 5px; opacity: 0; visibility: hidden; transform: translateY(10px) scale(0.95); transition: 0.2s; min-width: 140px;}
+        .bank-popover.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        .bank-option { display: flex; align-items: center; gap: 10px; padding: 8px 10px; cursor: pointer; border: 1px solid transparent; font-size: 0.85rem; font-weight: bold;}
+        .bank-option:hover { background: #F0F0F0; border-color: var(--border); }
+        .bank-color-dot { width: 12px; height: 12px; border-radius: 50%; }
 
         /* ======================================= */
         /* 📄 ฝั่งขวา: สรุปยอด (45%) */
@@ -176,11 +187,11 @@
             padding: 40px 40px 80px 40px; box-sizing: border-box;
         }
 
-        /* บิลจำลองแบบ Shopify */
         .summary-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font-size: 0.95rem; }
         
-        .thumbnail { width: 64px; height: 64px; background: #FFFFFF; border-radius: 8px; border: 1px solid rgba(175,175,175,0.34); position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
-        .qty-badge { position: absolute; top: -8px; right: -8px; background: rgba(114, 114, 114, 0.9); color: white; font-size: 0.75rem; min-width: 20px; height: 20px; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 0 5px; box-sizing: border-box; font-weight: bold;}
+        /* รูปลดขนาดลงเป็น 45px และสี่เหลี่ยม */
+        .thumbnail { width: 45px; height: 45px; background: #FFFFFF; border-radius: 0; border: 1px solid rgba(175,175,175,0.34); position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
+        .qty-badge { position: absolute; top: -6px; right: -6px; background: rgba(114, 114, 114, 0.9); color: white; font-size: 0.7rem; min-width: 18px; height: 18px; border-radius: 0; display: flex; align-items: center; justify-content: center; padding: 0 4px; box-sizing: border-box; font-weight: bold;}
         
         .totals-section { border-top: 1px solid var(--border); margin-top: 15px; padding-top: 10px; }
         .cost-line { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.9rem; color: var(--text-main); }
@@ -188,16 +199,19 @@
         
         .total-line { border-top: 1px solid var(--border); align-items: center; padding-top: 15px; margin-top: 10px; font-size: 1rem; color: var(--text-main);}
         .total-price { display: flex; align-items: center; gap: 8px; }
-        .total-amount { font-size: 1.5rem; font-weight: 500; }
-
-        /* ปุ่ม Review Order */
-        .btn-primary { width: 100%; background: var(--primary); color: white; border: none; padding: 20px; border-radius: 5px; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.2s;}
-        .btn-primary:hover { background: var(--primary-hover); }
+        .total-amount { font-size: 1.5rem; font-weight: bold; }
 
         /* กล่องข้อความ (แยกบน-ล่าง) */
-        .output-box-title { margin-top: 40px; margin-bottom: 10px; font-size: 1rem; font-weight: bold; color: var(--text-main); border-bottom: 1px solid var(--border); padding-bottom: 8px;}
-        textarea.final-output { width: 100%; background: #FFFFFF; border: 1px solid var(--border); border-radius: 5px; padding: 15px; font-family: inherit; font-size: 0.95rem; color: var(--text-main); resize: vertical; outline: none; line-height: 1.5; box-sizing: border-box;}
+        .output-box-title { margin-top: 30px; margin-bottom: 10px; font-size: 1rem; font-weight: bold; color: var(--text-main); display: flex; justify-content: space-between; align-items:flex-end;}
+        textarea.final-output { width: 100%; background: #FFFFFF; border: 1px solid var(--border); border-radius: 0; padding: 15px; font-family: inherit; font-size: 0.95rem; color: var(--text-main); resize: vertical; outline: none; line-height: 1.5; box-sizing: border-box;}
         textarea.final-output:focus { border-color: var(--primary); }
+
+        /* ปุ่มคัดลอก */
+        .btn-copy-main { width: 100%; background: var(--success); color: white; border: none; padding: 16px; font-weight: bold; font-size: 1.05rem; cursor: pointer; transition: 0.2s; margin-top: 8px; border-radius: 0;}
+        .btn-copy-main:hover { filter: brightness(1.1); }
+
+        .btn-copy-label { width: 100%; background: var(--warning); color: #000; border: none; padding: 12px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.2s; margin-top: 8px; border-radius: 0;}
+        .btn-copy-label:hover { filter: brightness(1.1); }
 
         /* ======================================= */
         /* Mobile Layout */
@@ -222,11 +236,6 @@
             }
 
             .fee-group-box { grid-template-columns: 1fr; }
-            .product-header-row { grid-template-columns: 1fr 90px 70px; grid-template-rows: auto auto; }
-            .productName { grid-column: 1 / 4; grid-row: 1; } 
-            .productPrice { grid-column: 1 / 2; grid-row: 2; } 
-            .productQty { grid-column: 2 / 3; grid-row: 2; } 
-            .product-actions { grid-column: 3 / 4; grid-row: 2; justify-content: flex-end; } 
         }
 
         .footer-links { display: flex; gap: 15px; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); justify-content: center;}
@@ -236,7 +245,7 @@
 
     <header class="top-header">
         <div class="header-logo">
-            Kenergy <span style="font-size:0.85rem; color:var(--text-muted); font-weight:normal; margin-left: 5px;">v14.0</span>
+            Shop Management <span style="font-size:0.85rem; color:var(--text-muted); font-weight:normal; margin-left: 5px;">v15.0</span>
         </div>
         <button class="btn-purple" onclick="clearAllPills()">ล้างตัวเลือกทั้งหมด</button>
     </header>
@@ -308,15 +317,14 @@
             <div class="mobile-summary-toggle" onclick="toggleMobileSummary()">
                 <span id="toggle-text" style="display:flex; align-items:center; gap:8px;">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm1.336-5l1.977-7h-16.813l2.938 7h11.9zm3.164-9l-2.731 9.614c-.179.629-.757 1.052-1.411 1.052h-10.742c-.653 0-1.231-.423-1.411-1.052l-3.21-11.614h-2.995v-2h4.522l.536 1.936h17.442z"/></svg>
-                    <span>แสดงสรุปยอด (Show order summary) ▾</span>
+                    <span>แสดงสรุปยอด ▾</span>
                 </span>
-                <span id="mobile-total-price" style="color:var(--text-main); font-weight:500; font-size: 1.1rem;">฿0.00</span>
+                <span id="mobile-total-price" style="color:var(--text-main); font-weight:bold; font-size: 1.1rem;">฿0.00</span>
             </div>
 
             <div class="summary-content" id="summary-box">
                 
-                <div id="visual-bill">
-                    </div>
+                <div id="visual-bill"></div>
 
                 <div class="totals-section">
                     <div class="cost-line">
@@ -342,37 +350,42 @@
                 </div>
 
                 <div class="output-box-title">📋 ข้อความสรุปยอด</div>
-                <textarea id="outputText" class="final-output" style="height: 180px;" readonly placeholder="บิลสำหรับส่งลูกค้า..."></textarea>
-                <button class="btn-primary" style="margin-top: 10px;" onclick="copyText('outputText')">Review order (คัดลอกสรุปยอด)</button>
+                <textarea id="outputText" class="final-output" style="height: 160px;" readonly placeholder="บิลสำหรับส่งลูกค้า..."></textarea>
+                <button class="btn-copy-main" onclick="copyText('outputText')">คัดลอกสรุปยอด</button>
 
-                <div class="output-box-title" style="margin-top: 30px;">🏷️ ใบปะหน้า</div>
-                <textarea id="outputLabelText" class="final-output" style="height: 100px;" readonly placeholder="ข้อมูลปะหน้าพัสดุ..."></textarea>
-                <button class="btn-primary" style="margin-top: 10px; background: var(--success);" onclick="copyText('outputLabelText')">คัดลอกใบปะหน้า</button>
+                <div class="output-box-title" style="margin-top: 35px;">🏷️ ใบปะหน้าพัสดุ</div>
+                <textarea id="outputLabelText" class="final-output" style="height: 90px;" readonly placeholder="ข้อมูลปะหน้าพัสดุ..."></textarea>
+                <button class="btn-copy-label" onclick="copyText('outputLabelText')">คัดลอกใบปะหน้า</button>
 
             </div>
         </aside>
         
-    </div> <div id="colorPopover" class="color-popover"></div>
+    </div> 
+
+    <div id="bankPopover" class="bank-popover"></div>
 
 <script>
-    const ICON_CHEV_DOWN_SOLID = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"></path></svg>`;
+    // ไอคอนลูกศรทึบ (ชี้ลงเสมอ)
+    const ICON_CHEV_DOWN_SOLID = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"></path></svg>`;
+    
     const ICON_UP = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"></polyline></svg>`;
     const ICON_DOWN = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
-    const ICON_TRASH = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
+    const ICON_TRASH = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
     const ICON_COPY = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
-    const ICON_DOTS = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1.5"></circle><circle cx="19" cy="12" r="1.5"></circle><circle cx="5" cy="12" r="1.5"></circle></svg>`;
 
-    let defaultBanks = [{id: 'b1', text: 'กสิกรไทย\n123-4-56789-0\nนาย สมชาย ขายดี', color: '#10B981'}];
-
-    const thaiBankColors = [
-        { name: 'กสิกรไทย', hex: '#10B981' }, 
-        { name: 'ไทยพาณิชย์', hex: '#8B5CF6' },
-        { name: 'กรุงเทพ', hex: '#197BBD' },
-        { name: 'กรุงไทย', hex: '#06B6D4' },
-        { name: 'กรุงศรี', hex: '#F59E0B' },
-        { name: 'ดำ', hex: '#333333' }
+    // ข้อมูลธนาคารหลักของไทย
+    const bankConfig = [
+        { code: 'KBANK', color: '#10B981', name: 'กสิกรไทย' },
+        { code: 'SCB', color: '#8B5CF6', name: 'ไทยพาณิชย์' },
+        { code: 'BBL', color: '#197BBD', name: 'กรุงเทพ' },
+        { code: 'KTB', color: '#06B6D4', name: 'กรุงไทย' },
+        { code: 'BAY', color: '#F59E0B', name: 'กรุงศรี' },
+        { code: 'TTB', color: '#F97316', name: 'ทีทีบี' },
+        { code: 'GSB', color: '#EC4899', name: 'ออมสิน' },
+        { code: 'BANK', color: '#333333', name: 'อื่นๆ/ทั่วไป' }
     ];
 
+    let defaultBanks = [{id: 'b1', text: 'กสิกรไทย\n123-4-56789-0\nนาย สมชาย ขายดี', bankCode: 'KBANK'}];
     let currentEditingBankId = null;
 
     window.onload = function() {
@@ -393,38 +406,36 @@
     }
 
     // ==========================================
-    // ส่วนธนาคาร (ซ่อนเลขบัญชี + CC Icon)
+    // ธนาคาร (ป้ายโลโก้ + เลือกได้)
     // ==========================================
     function renderBanks() {
-        let banks = JSON.parse(localStorage.getItem('bankDataV14')) || defaultBanks;
+        let banks = JSON.parse(localStorage.getItem('bankDataV15')) || defaultBanks;
         const container = document.getElementById('bankContainer');
-        let selectedId = localStorage.getItem('bankV14');
+        let selectedId = localStorage.getItem('bankV15');
         
         container.innerHTML = '';
         if(banks.length === 0) {
             container.innerHTML = '<div style="padding:15px; color:#737373;">ไม่มีบัญชีธนาคาร (กด Add เพื่อเพิ่ม)</div>';
             return;
         }
-
         if (!banks.find(b => b.id === selectedId)) selectedId = banks[0].id;
 
         banks.forEach(b => {
             const isChecked = b.id === selectedId ? 'checked' : '';
-            const bColor = b.color || '#333333';
-            const bankName = b.text.split('\n')[0]; // โชว์แค่ชื่อ ไม่โชว์เลขบัญชี
+            const bankName = b.text.split('\n')[0]; 
             
+            // หา config สีของธนาคารนั้นๆ
+            let code = b.bankCode || 'BANK';
+            let conf = bankConfig.find(x => x.code === code) || bankConfig[7];
+
             const html = `
                 <label class="payment-item">
                     <div style="display:flex; align-items:center; gap:15px; flex:1;">
                         <input type="radio" class="dot-radio" name="bankSelect" value="${b.id}" ${isChecked} onchange="updateData()">
                         <span class="payment-text"><strong>${bankName}</strong></span>
                     </div>
-                    
-                    <div class="cc-icon-btn" style="color:${bColor};" onclick="openColorPopover(event, '${b.id}')" title="เปลี่ยนสีไอคอน">
-                        <svg width="26" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="5" width="20" height="14" rx="2"></rect>
-                            <line x1="2" y1="10" x2="22" y2="10"></line>
-                        </svg>
+                    <div class="bank-badge" style="background:${conf.color};" onclick="openBankPopover(event, '${b.id}')" title="เปลี่ยนไอคอนธนาคาร">
+                        ${conf.code}
                     </div>
                 </label>
             `;
@@ -432,46 +443,45 @@
         });
     }
 
-    function openColorPopover(event, bankId) {
+    function openBankPopover(event, bankId) {
         event.preventDefault(); 
         event.stopPropagation();
         currentEditingBankId = bankId;
         
-        const popover = document.getElementById('colorPopover');
+        const popover = document.getElementById('bankPopover');
         const rect = event.currentTarget.getBoundingClientRect();
         
         popover.innerHTML = '';
-        thaiBankColors.forEach(color => {
-            const btn = document.createElement('button');
-            btn.className = 'color-swatch';
-            btn.style.backgroundColor = color.hex;
-            btn.title = color.name;
-            btn.onclick = (e) => { e.stopPropagation(); selectColor(color.hex); };
-            popover.appendChild(btn);
+        bankConfig.forEach(conf => {
+            const option = document.createElement('div');
+            option.className = 'bank-option';
+            option.innerHTML = `<div class="bank-color-dot" style="background:${conf.color};"></div> ${conf.name} (${conf.code})`;
+            option.onclick = (e) => { e.stopPropagation(); selectBankIcon(conf.code); };
+            popover.appendChild(option);
         });
 
-        popover.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+        popover.style.top = (rect.bottom + window.scrollY + 5) + 'px';
         popover.style.left = (rect.left + window.scrollX - 100) + 'px';
         popover.classList.add('active');
     }
 
-    function selectColor(hex) {
+    function selectBankIcon(code) {
         if (currentEditingBankId) {
-            let banks = JSON.parse(localStorage.getItem('bankDataV14')) || defaultBanks;
+            let banks = JSON.parse(localStorage.getItem('bankDataV15')) || defaultBanks;
             const index = banks.findIndex(b => b.id === currentEditingBankId);
             if (index !== -1) { 
-                banks[index].color = hex; 
-                localStorage.setItem('bankDataV14', JSON.stringify(banks)); 
+                banks[index].bankCode = code; 
+                localStorage.setItem('bankDataV15', JSON.stringify(banks)); 
                 renderBanks(); 
             }
         }
-        document.getElementById('colorPopover').classList.remove('active');
+        document.getElementById('bankPopover').classList.remove('active');
         currentEditingBankId = null;
     }
 
     document.addEventListener('click', function(event) {
-        const popover = document.getElementById('colorPopover');
-        if (popover && popover.classList.contains('active') && !event.target.closest('.color-popover') && !event.target.closest('.cc-icon-btn')) {
+        const popover = document.getElementById('bankPopover');
+        if (popover && popover.classList.contains('active') && !event.target.closest('.bank-popover') && !event.target.closest('.bank-badge')) {
             popover.classList.remove('active');
             currentEditingBankId = null;
         }
@@ -480,17 +490,17 @@
     function addBank() {
         const input = prompt("🏦 เพิ่มข้อมูลบัญชีใหม่\n(พิมพ์ // เพื่อบังคับขึ้นบรรทัดใหม่ เช่น ธ.กสิกร // 12345 // สมชาย):");
         if (input && input.trim()) {
-            let banks = JSON.parse(localStorage.getItem('bankDataV14')) || defaultBanks;
+            let banks = JSON.parse(localStorage.getItem('bankDataV15')) || defaultBanks;
             let newId = 'b' + Date.now();
-            banks.push({ id: newId, text: input.split('//').map(s => s.trim()).join('\n'), color: '#333333' });
-            localStorage.setItem('bankDataV14', JSON.stringify(banks));
-            localStorage.setItem('bankV14', newId);
+            banks.push({ id: newId, text: input.split('//').map(s => s.trim()).join('\n'), bankCode: 'BANK' });
+            localStorage.setItem('bankDataV15', JSON.stringify(banks));
+            localStorage.setItem('bankV15', newId);
             renderBanks(); updateData();
         }
     }
 
     function editBankList() {
-        let banks = JSON.parse(localStorage.getItem('bankDataV14')) || defaultBanks;
+        let banks = JSON.parse(localStorage.getItem('bankDataV15')) || defaultBanks;
         const selectedNode = document.querySelector('input[name="bankSelect"]:checked');
         if(!selectedNode) { alert('กรุณาเลือกธนาคารที่ต้องการแก้ไขก่อน'); return;}
         
@@ -501,14 +511,14 @@
             if (input !== null) {
                 if (input.trim() === '') banks = banks.filter(b => b.id !== selectedId);
                 else bank.text = input.split('//').map(s => s.trim()).join('\n');
-                localStorage.setItem('bankDataV14', JSON.stringify(banks));
+                localStorage.setItem('bankDataV15', JSON.stringify(banks));
                 renderBanks(); updateData();
             }
         }
     }
 
     // ==========================================
-    // Core Logic (Save/Load)
+    // Logic ทั่วไป
     // ==========================================
     function saveData() {
         localStorage.setItem('val_shipping', document.getElementById('val_shipping').value);
@@ -519,7 +529,7 @@
         localStorage.setItem('check_deposit', document.getElementById('check_deposit').checked);
         
         const selectedBankNode = document.querySelector('input[name="bankSelect"]:checked');
-        if(selectedBankNode) localStorage.setItem('bankV14', selectedBankNode.value);
+        if(selectedBankNode) localStorage.setItem('bankV15', selectedBankNode.value);
 
         const collections = [];
         document.querySelectorAll('.collection-block').forEach(block => {
@@ -544,7 +554,7 @@
             });
             collections.push({ colName, isCollapsed, products });
         });
-        localStorage.setItem('orderDataV14', JSON.stringify(collections));
+        localStorage.setItem('orderDataV15', JSON.stringify(collections));
     }
 
     function loadData() {
@@ -562,7 +572,7 @@
 
         const container = document.getElementById('collectionsContainer');
         container.innerHTML = ''; 
-        let savedData = JSON.parse(localStorage.getItem('orderDataV14'));
+        let savedData = JSON.parse(localStorage.getItem('orderDataV15'));
         
         if (savedData && savedData.length > 0) {
             savedData.forEach(col => {
@@ -574,9 +584,6 @@
         } 
     }
 
-    // ==========================================
-    // แสดงผล & คำนวณ (Visual & Text)
-    // ==========================================
     function updateData() {
         saveData();
         generateOutput();
@@ -617,7 +624,7 @@
                         visualBillHtml += `<div class="summary-item">
                             <div style="display:flex; align-items:center; gap:15px;">
                                 <div class="thumbnail">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
                                     <div class="qty-badge">${qtyVal}</div>
                                 </div>
                                 <div style="flex:1;">
@@ -653,7 +660,7 @@
                         visualBillHtml += `<div class="summary-item">
                             <div style="display:flex; align-items:center; gap:15px;">
                                 <div class="thumbnail">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
                                     <div class="qty-badge">${maxActive * qtyVal}</div>
                                 </div>
                                 <div style="flex:1;">
@@ -677,8 +684,7 @@
             if (colLabelProducts.length) labelLines.push(colName ? `${colName} = ${colLabelProducts.join(' / ')}` : colLabelProducts.join(' / '));
         });
 
-        if(!hasItem) visualBillHtml = '<div style="text-align:center; color:#999; margin: 20px 0; font-size:0.9rem;">Cart is empty.</div>';
-        
+        if(!hasItem) visualBillHtml = '<div style="text-align:center; color:#999; margin: 20px 0; font-size:0.9rem;">ยังไม่มีสินค้าในตะกร้า</div>';
         document.getElementById('visual-bill').innerHTML = visualBillHtml;
 
         // คำนวณยอดเงิน
@@ -704,7 +710,7 @@
         document.getElementById('display-total').innerText = displayTotalText;
         document.getElementById('mobile-total-price').innerText = displayTotalText;
 
-        // สร้างข้อความ
+        // สร้างข้อความ Text
         let terms = hasMissingPrice ? ['***'] : [...validPrices];
         if (ship > 0) terms.push(ship);
         if (spec > 0) terms.push(spec);
@@ -722,16 +728,15 @@
 
         let breakdown = (ship > 0 ? `ค่าจัดส่ง: ${ship} บาท\n` : '') + (spec > 0 ? `พื้นที่พิเศษ: ${spec} บาท\n` : '') + (dep > 0 ? `หักมัดจำ: -${dep} บาท\n` : '');
         
-        // ข้อมูลธนาคาร เอาแบบเต็ม (ชื่อธนาคาร + เลขบัญชี) มาใส่ใน Text
-        let bankId = localStorage.getItem('bankV14'), bankText = "(กรุณาเลือกบัญชีธนาคาร)";
-        if (bankId) { let b = (JSON.parse(localStorage.getItem('bankDataV14'))||defaultBanks).find(x=>x.id===bankId); if(b) bankText = b.text; }
+        let bankId = localStorage.getItem('bankV15'), bankText = "(กรุณาเลือกบัญชีธนาคาร)";
+        if (bankId) { let b = (JSON.parse(localStorage.getItem('bankDataV15'))||defaultBanks).find(x=>x.id===bankId); if(b) bankText = b.text; }
 
         document.getElementById('outputText').value = !finalProductsText ? '- ไม่มีรายการสินค้า -\n\n' : `${finalProductsText}${breakdown}ยอดรวม: ${pStr} บาท\n\n--------------------------\nชำระเงินได้ที่:\n${bankText}\n\nโอนเงินแล้วกรุณาส่งสลิป และที่อยู่ให้ด้วยนะคะ`;
         document.getElementById('outputLabelText').value = labelLines.join('\n');
     }
 
     // ==========================================
-    // เพิ่ม/ลบ UI
+    // เพิ่ม/ลบ คอลเลคชั่น & สินค้า
     // ==========================================
     function toggleCollection(btn) { btn.closest('.collection-block').classList.toggle('collapsed'); saveData(); }
 
@@ -748,13 +753,13 @@
                     <button class="mac-btn mac-max" title="ลง" onclick="moveCollectionDown(this)"></button>
                 </div>
                 <div class="collection-name-box">
-                    <input type="text" class="collectionName" placeholder="Collection name..." value="${colName}" oninput="updateData()">
+                    <input type="text" class="collectionName" placeholder="ชื่อคอลเลคชั่น..." value="${colName}" oninput="updateData()">
                 </div>
                 <button class="btn-toggle-col" onclick="toggleCollection(this)">${ICON_CHEV_DOWN_SOLID}</button>
             </div>
             <div class="collection-body">
                 <div class="productList"></div>
-                <button class="btn-text" style="margin-top:5px; font-weight:bold;" onclick="handleAddProductClick(this)">+ Add product</button>
+                <button class="btn-text" style="margin-top:5px;" onclick="handleAddProductClick(this)">+ Add product</button>
             </div>
         `;
         container.appendChild(block);
@@ -771,27 +776,30 @@
     function moveProductUp(btn) { const i = btn.closest('.product-item'); if (i.previousElementSibling) { i.parentNode.insertBefore(i, i.previousElementSibling); updateData(); } }
     function moveProductDown(btn) { const i = btn.closest('.product-item'); if (i.nextElementSibling) { i.parentNode.insertBefore(i.nextElementSibling, i); updateData(); } }
     function removeProduct(btn) { if(confirm('❌ ลบสินค้านี้?')) { btn.closest('.product-item').remove(); updateData(); } }
-    function clearData() { if(confirm('🚨 ล้างข้อมูลสินค้าทั้งหมด?')) { localStorage.removeItem('orderDataV14'); location.reload(); } }
+    function clearData() { if(confirm('🚨 ล้างข้อมูลสินค้าทั้งหมด?')) { localStorage.removeItem('orderDataV15'); location.reload(); } }
 
     function createOptionRowHtml(availableSizes, selectedSizes) {
         let pillsHtml = availableSizes.map(s => `<div class="pill ${selectedSizes.includes(s) ? 'active' : ''}" onclick="togglePill(this)" data-size="${s}">${s}</div>`).join('');
-        return `<div class="option-row"><div class="size-pills">${pillsHtml}</div><button class="icon-btn" title="แก้ไข" onclick="editPillsList(this)">${ICON_DOTS}</button></div>`;
+        return `<div class="option-row"><div class="size-pills">${pillsHtml}</div>
+                <button class="option-btn" title="ตั้งค่าไซส์" onclick="editPillsList(this)">!</button></div>`;
     }
 
     function createProductItemElement(name = '', price = '', qty = 1, optionRowsArray = null) {
         const newItem = document.createElement('div'); newItem.className = 'product-item';
         let rows = optionRowsArray !== null ? (optionRowsArray.length === 0 ? [{availableSizes:['-'], selectedSizes:[]}] : optionRowsArray) : [{availableSizes:['S','M','L','XL','2XL'], selectedSizes:[]}];
+        
+        // ย้าย Toolbar ไปไว้บรรทัดบนเหนือ Input
         newItem.innerHTML = `
+            <div class="product-toolbar">
+                <button class="icon-btn" onclick="moveProductUp(this)" title="ขึ้น">${ICON_UP}</button>
+                <button class="icon-btn" onclick="moveProductDown(this)" title="ลง">${ICON_DOWN}</button>
+                <button class="icon-btn" onclick="cloneProduct(this)" title="คัดลอก">${ICON_COPY}</button>
+                <button class="icon-btn" onclick="removeProduct(this)" title="ลบ" style="color:var(--danger)">${ICON_TRASH}</button>
+            </div>
             <div class="product-header-row">
                 <input type="text" class="productName" placeholder="Product name" value="${name}" oninput="updateData()">
                 <input type="number" class="productPrice" placeholder="Price" value="${price}" oninput="updateData()">
                 <input type="number" class="productQty" placeholder="Qty" value="${qty || 1}" min="1" oninput="updateData()">
-                <div class="product-actions">
-                    <button class="icon-btn" onclick="moveProductUp(this)">${ICON_UP}</button>
-                    <button class="icon-btn" onclick="moveProductDown(this)">${ICON_DOWN}</button>
-                    <button class="icon-btn" onclick="cloneProduct(this)">${ICON_COPY}</button>
-                    <button class="icon-btn" onclick="removeProduct(this)">${ICON_TRASH}</button>
-                </div>
             </div>
             <div class="product-options-container">${rows.map(r => createOptionRowHtml(r.availableSizes, r.selectedSizes)).join('')}</div>
             <button class="btn-text" style="font-size:0.8rem; margin-top:5px; font-weight:normal;" onclick="addOptionRow(this)">+ Add size row</button>
@@ -833,10 +841,10 @@
     function exportData() {
         saveData();
         const exportObj = {
-            version: "v14.0",
-            collections: JSON.parse(localStorage.getItem('orderDataV14')) || [],
-            banks: JSON.parse(localStorage.getItem('bankDataV14')) || defaultBanks,
-            selectedBank: localStorage.getItem('bankV14') || '',
+            version: "v15.0",
+            collections: JSON.parse(localStorage.getItem('orderDataV15')) || [],
+            banks: JSON.parse(localStorage.getItem('bankDataV15')) || defaultBanks,
+            selectedBank: localStorage.getItem('bankV15') || '',
             settings: {
                 val_shipping: localStorage.getItem('val_shipping') || '50', val_special: localStorage.getItem('val_special') || '50', val_deposit: localStorage.getItem('val_deposit') || '100',
                 check_shipping: localStorage.getItem('check_shipping') === 'true', check_special: localStorage.getItem('check_special') === 'true', check_deposit: localStorage.getItem('check_deposit') === 'true',
@@ -851,11 +859,11 @@
         if (!code) return;
         try {
             const parsedData = JSON.parse(decodeURIComponent(atob(code)));
-            if (Array.isArray(parsedData)) localStorage.setItem('orderDataV14', JSON.stringify(parsedData));
+            if (Array.isArray(parsedData)) localStorage.setItem('orderDataV15', JSON.stringify(parsedData));
             else if (parsedData && parsedData.collections) {
-                localStorage.setItem('orderDataV14', JSON.stringify(parsedData.collections));
-                if (parsedData.banks) localStorage.setItem('bankDataV14', JSON.stringify(parsedData.banks));
-                if (parsedData.selectedBank) localStorage.setItem('bankV14', parsedData.selectedBank);
+                localStorage.setItem('orderDataV15', JSON.stringify(parsedData.collections));
+                if (parsedData.banks) localStorage.setItem('bankDataV15', JSON.stringify(parsedData.banks));
+                if (parsedData.selectedBank) localStorage.setItem('bankV15', parsedData.selectedBank);
                 if (parsedData.settings) {
                     ['val_shipping', 'val_special', 'val_deposit', 'check_shipping', 'check_special', 'check_deposit'].forEach(key => {
                         if(parsedData.settings[key] !== undefined) localStorage.setItem(key, parsedData.settings[key]);
