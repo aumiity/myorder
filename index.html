@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Shop Management</title>
+    <title>Shop Management - V21.3</title>
     <style>
         :root {
             --x-bg-main: hsl(0, 0%, 100%);
@@ -46,9 +46,7 @@
 
         html { font-size: 62.5%; text-size-adjust: 100%; }
 
-        /* ======================================= */
         /* เลื่อนขึ้นลงอิสระทั้งหน้า (Global Scroll) */
-        /* ======================================= */
         body { 
             font-family: var(--x-font-family);
             font-size: 1.4rem; 
@@ -91,12 +89,15 @@
         .layout-container { display: flex; flex: 1; width: 100%; max-width: 1200px; margin: 0 auto; align-items: flex-start; }
 
         /* ======================================= */
-        /* 🛒 ฝั่งซ้าย: จัดการข้อมูล */
+        /* 🛒 ฝั่งซ้าย: จัดการข้อมูล (กว้างเท่าฝั่งขวา 500px) */
         /* ======================================= */
         .management-panel {
-            flex: 1.4; 
+            flex: 1; 
             background-color: var(--x-bg-main);
-            padding: 4rem 4rem 8rem 0; box-sizing: border-box;
+            padding: 4rem; box-sizing: border-box;
+        }
+        .management-content {
+            width: 100%; max-width: 500px; margin: 0 auto;
         }
 
         /* หัวข้อทั้งหมดตัวหนา */
@@ -111,7 +112,7 @@
         input::placeholder { color: var(--x-text-subdued); }
 
         /* ======================================= */
-        /* Dropdown Menu (มีแหลมๆ ด้านบน) */
+        /* Dropdown Menu (มีแหลมๆ ด้านบน และตัวหนังสือบาง) */
         /* ======================================= */
         .dropdown-container { position: relative; display: inline-block; }
         .dropdown-menu {
@@ -123,7 +124,6 @@
         }
         .dropdown-menu.show { display: flex; }
         
-        /* ทำมุมแหลมชี้ขึ้นบน */
         .dropdown-menu::before {
             content: ''; position: absolute; top: -6px; right: 12px;
             width: 10px; height: 10px; background: var(--x-bg-main);
@@ -132,7 +132,7 @@
         }
 
         .dropdown-item {
-            padding: 10px 16px; cursor: pointer; font-size: 1.4rem; font-weight: normal; /* ตัวบาง */
+            padding: 10px 16px; cursor: pointer; font-size: 1.4rem; font-weight: normal; 
             color: var(--x-text-main); transition: 0.2s; text-align: left; position: relative; z-index: 2;
         }
         .dropdown-item:hover { background: var(--x-bg-subdued); }
@@ -167,21 +167,21 @@
         .collection-body { padding-top: 1rem; }
 
         /* ======================================= */
-        /* สินค้า (รูปแบบใหม่ ไม่มีช่องกรอก ให้กด Edit แทน) */
+        /* สินค้า (ไม่มีช่องกรอก ชื่อ/ราคาขนาดเท่ากัน) */
         /* ======================================= */
         .product-item { background: var(--x-bg-main); padding: 1.5rem; border-radius: var(--x-radius-base); margin-bottom: 1.5rem; border: 1px solid var(--x-border); transition: 0.2s;}
         .product-item:focus-within { border-color: var(--x-primary); box-shadow: 0 0 0 1px var(--x-primary); }
         
-        .product-header-row { display: grid; grid-template-columns: 1fr 10rem auto; gap: 1rem; margin-bottom: 0.5rem; align-items: center;}
+        .product-header-row { display: grid; grid-template-columns: 1fr auto auto; gap: 1.5rem; margin-bottom: 0.5rem; align-items: center;}
 
-        .product-info-display { display: flex; flex-direction: column; gap: 0.4rem; justify-content: center; }
-        .productName-display { font-size: 1.5rem; font-weight: 600; color: var(--x-text-main); }
-        .productPrice-display { font-size: 1.3rem; color: var(--x-text-subdued); }
+        .product-info-display { display: flex; flex-direction: column; gap: 0.2rem; justify-content: center; }
+        .productName-display { font-size: 1.5rem; font-weight: normal; color: var(--x-text-main); }
+        .productPrice-display { font-size: 1.5rem; color: var(--x-text-subdued); }
 
-        .qty-control { display: flex; align-items: center; background: transparent; border: 1px solid var(--x-border-dark); border-radius: var(--x-radius-base); transition: 0.2s; height: 3.6rem;}
+        .qty-control { display: flex; align-items: center; background: transparent; border: 1px solid var(--x-border-dark); border-radius: var(--x-radius-base); transition: 0.2s; height: 3.2rem; width: 8.5rem;}
         .qty-control:focus-within { border-color: var(--x-primary); box-shadow: inset 0 0 0 1px var(--x-primary);}
-        .qty-control input { width: 100%; text-align: center; border: none !important; box-shadow: none !important; padding: 0.8rem 0 !important; background: transparent; font-weight: normal; font-size: 1.4rem;}
-        .qty-btn { background: transparent; border: none; color: var(--x-text-subdued); font-size: 1.8rem; width: 3.6rem; height: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;}
+        .qty-control input { width: 100%; text-align: center; border: none !important; box-shadow: none !important; padding: 0 !important; background: transparent; font-weight: normal; font-size: 1.4rem;}
+        .qty-btn { background: transparent; border: none; color: var(--x-text-subdued); font-size: 1.8rem; width: 2.6rem; height: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;}
         .qty-btn:hover { color: var(--x-text-main); background: rgba(128, 128, 128, 0.05);}
         
         .option-row { display: flex; align-items: center; gap: 1rem; margin-top: 1rem; padding-top: 1.2rem; border-top: 1px dashed var(--x-border); }
@@ -202,8 +202,7 @@
         
         .shipping-item { display: flex; align-items: center; padding: 1.5rem 0; border-bottom: 1px solid var(--x-border); gap: 1.5rem;}
         
-        .shipping-icon { width: 4.5rem; height: 4.5rem; background: var(--x-text-main); color: var(--x-bg-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
-        
+        .shipping-icon { width: 4.5rem; height: 4.5rem; background: var(--x-paypal); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
         .shipping-text { flex: 1; }
         .shipping-title { font-size: 1.4rem; font-weight: normal; color: var(--x-text-main); display: flex; align-items: center; gap: 0.5rem;}
         .shipping-subtitle { font-size: 1.2rem; color: var(--x-text-subdued); margin-top: 0.2rem;}
@@ -234,14 +233,14 @@
         
         .bank-badge { padding: 0.4rem 1rem; border-radius: 4px; border: 1px solid var(--x-border); font-size: 1.1rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; min-width: 5rem; text-align: center; color: #FFF; box-shadow: 0 1px 2px rgba(0,0,0,0.05);}
 
-        .bank-popover { position: absolute; z-index: 2000; background: var(--x-bg-main); border: 1px solid var(--x-border); padding: 1rem; border-radius: var(--x-radius-large); box-shadow: var(--x-shadow-modal); display: flex; flex-direction: column; gap: 0.4rem; opacity: 0; visibility: hidden; transition: 0.2s; min-width: 16rem; max-height: 25rem; overflow-y: auto;}
+        .bank-popover { position: absolute; z-index: 2000; background: var(--x-bg-main); border: 1px solid var(--x-border); padding: 1rem; border-radius: var(--x-radius-large); box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 0.4rem; opacity: 0; visibility: hidden; transition: 0.2s; min-width: 16rem; max-height: 25rem; overflow-y: auto;}
         .bank-popover.active { opacity: 1; visibility: visible; }
         .bank-option { display: flex; align-items: center; gap: 1rem; padding: 0.8rem 1.2rem; cursor: pointer; font-size: 1.4rem; font-weight: normal; color: var(--x-text-main); border-radius: var(--x-radius-base); transition: 0.2s;}
         .bank-option:hover { background: var(--x-bg-subdued); }
         .bank-color-dot { width: 1.4rem; height: 1.4rem; border-radius: 50%; box-shadow: 0 1px 2px rgba(0,0,0,0.2);}
 
         /* ======================================= */
-        /* 📄 ฝั่งขวา: สรุปยอด (Sticky ให้เกาะติดเวลาเลื่อน) */
+        /* 📄 ฝั่งขวา: สรุปยอด (Sticky Fixed) */
         /* ======================================= */
         .summary-panel {
             flex: 1; 
@@ -282,24 +281,25 @@
         textarea.final-output { width: 100%; background: var(--x-bg-main); border: 1px solid var(--x-border); border-radius: var(--x-radius-large); padding: 1.5rem; padding-bottom: 4.5rem; font-family: inherit; font-size: 1.4rem; color: var(--x-text-main); resize: vertical; outline: none; line-height: 1.5; box-sizing: border-box;}
         textarea.final-output:focus { border-color: var(--x-primary); box-shadow: 0 0 0 1px var(--x-primary);}
 
+        /* ปุ่ม Copy (เปลี่ยนเป็นสีม่วง ไม่มีตัวอักษร) */
         .btn-copy-inline {
             position: absolute;
             bottom: 1.2rem;
             right: 1.2rem;
-            background: var(--x-setting-gray);
+            background: var(--x-primary);
             color: white;
             border: none;
-            padding: 0.8rem 1.4rem;
+            width: 3.6rem;
+            height: 3.6rem;
             border-radius: var(--x-radius-base);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.6rem;
             cursor: pointer;
             transition: 0.2s;
-            font-size: 1.2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .btn-copy-inline:hover { filter: brightness(1.1); }
+        .btn-copy-inline:hover { filter: brightness(1.1); transform: scale(1.05); }
 
         /* ======================================= */
         /* 🪟 Modal Popup (สำหรับแก้ไขสินค้า) */
@@ -324,6 +324,15 @@
         .btn-modal.save:hover { background: var(--x-primary-hover); }
 
         /* ======================================= */
+        /* Footer Links (ข้อความลิงก์) */
+        /* ======================================= */
+        .footer-links { display: flex; gap: 1.5rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--x-border); justify-content: center; align-items: center;}
+        .footer-link { background: none; border: none; color: var(--x-primary); font-size: 1.4rem; cursor: pointer; text-decoration: underline; padding: 0; font-family: inherit;}
+        .footer-link:hover { color: var(--x-primary-hover); }
+        .footer-link.danger { color: var(--x-danger); font-weight: normal; text-decoration: underline;}
+        .footer-link.danger:hover { color: darkred; }
+
+        /* ======================================= */
         /* Mobile Layout */
         /* ======================================= */
         .mobile-summary-toggle { display: none; }
@@ -336,17 +345,15 @@
             .summary-content { position: static; padding: 2rem; max-width: 100%; height: auto; display: none; }
             .summary-content.show { display: block; }
 
-            .management-panel { order: 2; padding: 3rem 2rem; max-width: 100%; height: auto; border-right: none;}
+            .management-panel { order: 2; padding: 3rem 2rem; max-width: 100%; height: auto; overflow: visible;}
             
             .mobile-summary-toggle {
                 display: flex; justify-content: space-between; align-items: center;
                 background-color: var(--x-bg-subdued); padding: 1.5rem 2rem; cursor: pointer;
                 color: var(--x-primary); font-size: 1.4rem; font-weight: bold;
             }
-            .product-header-row { grid-template-columns: 1fr 8.5rem 10rem auto; }
+            .product-header-row { grid-template-columns: 1fr auto auto; }
         }
-
-        .footer-links { display: flex; gap: 1.5rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--x-border); justify-content: center; align-items: center;}
     </style>
 </head>
 <body>
@@ -354,7 +361,7 @@
     <header class="top-header">
         <div class="header-content">
             <div class="header-logo">Shop Management</div>
-            <button class="btn-clear" onclick="clearAllPills()" title="Clear Options">
+            <button class="btn-clear" onclick="clearAllPills()">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
                 Clear Options
             </button>
@@ -394,7 +401,7 @@
                     </div>
 
                     <div class="shipping-item">
-                        <div class="shipping-icon" style="background:var(--x-text-main); color:var(--x-bg-main);">
+                        <div class="shipping-icon" style="background:#008060; color:#FFFFFF;">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
                         </div>
                         <div class="shipping-text">
@@ -409,7 +416,7 @@
                     </div>
 
                     <div class="shipping-item" style="border-bottom:none;">
-                        <div class="shipping-icon" style="background:var(--x-text-main); color:var(--x-bg-main);">
+                        <div class="shipping-icon" style="background:var(--x-danger); color:#FFFFFF;">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
                         </div>
                         <div class="shipping-text">
@@ -441,15 +448,19 @@
                 <div class="payment-box" id="bankContainer"></div>
 
                 <div class="footer-links">
-                    <button class="btn-text" style="color:var(--x-text-subdued);" onclick="exportData()">Export data</button>
+                    <button class="footer-link" onclick="exportData()">Export data</button>
                     <span style="color:var(--x-border-dark);">|</span>
-                    <button class="btn-text" style="color:var(--x-text-subdued);" onclick="importData()">Import data</button>
+                    <button class="footer-link" onclick="importData()">Import data</button>
                     <span style="color:var(--x-border-dark);">|</span>
-                    <button class="btn-text" style="color:var(--x-danger);" onclick="clearData()">Reset system</button>
+                    <button class="footer-link danger" onclick="clearData()">Reset system</button>
                 </div>
                 
                 <div style="text-align: center; margin-top: 1.5rem;">
                     <button class="btn-text" style="color:var(--x-text-main);" onclick="toggleTheme()">🌗 Toggle Dark Theme</button>
+                </div>
+
+                <div style="text-align: center; margin-top: 3rem; color: var(--x-text-subdued); font-size: 1.2rem;">
+                    Version 21.3
                 </div>
 
             </div>
@@ -495,8 +506,7 @@
                 <div class="output-wrapper">
                     <textarea id="outputText" class="final-output" style="height: 180px;" readonly placeholder="Order summary text..."></textarea>
                     <button class="btn-copy-inline" onclick="copyText('outputText')" title="Copy Order Summary">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                        Copy Text
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                     </button>
                 </div>
 
@@ -504,8 +514,7 @@
                 <div class="output-wrapper">
                     <textarea id="outputLabelText" class="final-output" style="height: 100px;" readonly placeholder="Shipping label text..."></textarea>
                     <button class="btn-copy-inline" onclick="copyText('outputLabelText')" title="Copy Shipping Label">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                        Copy Text
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                     </button>
                 </div>
 
@@ -902,11 +911,12 @@
             if (colLabelProducts.length) labelLines.push(colName ? `${colName} = ${colLabelProducts.join(' / ')}` : colLabelProducts.join(' / '));
         });
 
+        // แอด Remote Area เข้าตะกร้า
         if (spec > 0 && document.getElementById('check_special').checked) {
             hasItem = true;
             visualBillHtml += `<div class="summary-item">
                 <div style="display:flex; align-items:flex-start;">
-                    <div class="thumbnail" style="color:var(--x-primary);">
+                    <div class="thumbnail" style="color:#008060;">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon></svg>
                         <div class="qty-badge">1</div>
                     </div>
@@ -1112,14 +1122,30 @@
         div.style.display = 'flex';
         div.style.flexDirection = 'column';
         div.style.gap = '0.5rem';
+        div.className = 'option-row-modal'; 
         div.innerHTML = `
             <label style="display:flex; justify-content:space-between; align-items:center; font-size: 1.3rem; color: var(--x-text-subdued); font-weight: 500;">
-                Option ${displayIndex} (คั่นด้วยลูกน้ำ ,)
-                ${displayIndex > 1 ? `<span style="color:var(--x-danger); cursor:pointer; font-size:1.2rem; font-weight:normal;" onclick="this.parentElement.remove()">Remove</span>` : ''}
+                <div>Option <span class="opt-index">${displayIndex}</span> (คั่นด้วยลูกน้ำ ,)</div>
+                ${displayIndex > 1 ? `<span style="color:var(--x-danger); cursor:pointer; font-size:1.2rem; font-weight:normal;" onclick="removeModalOptionRow(this)">Remove</span>` : ''}
             </label>
             <input type="text" class="modal-option-input" placeholder="เช่น S, M, L หรือ แดง, ดำ" value="${value}">
         `;
         container.appendChild(div);
+        updateModalOptionIndexes();
+    }
+
+    function removeModalOptionRow(btn) {
+        btn.closest('.option-row-modal').remove();
+        updateModalOptionIndexes();
+    }
+
+    function updateModalOptionIndexes() {
+        const container = document.getElementById('modalOptionsContainer');
+        const rows = container.querySelectorAll('.option-row-modal');
+        rows.forEach((row, idx) => {
+            const indexSpan = row.querySelector('.opt-index');
+            if(indexSpan) indexSpan.innerText = idx + 1;
+        });
     }
 
     function closeModal() {
@@ -1165,7 +1191,7 @@
     function exportData() {
         saveData();
         const exportObj = {
-            version: "v21.1",
+            version: "v21.3",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || defaultBanks,
             selectedBank: localStorage.getItem('bank') || '',
