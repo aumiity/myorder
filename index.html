@@ -17,12 +17,13 @@
             --text-main: #333333;
             --text-muted: #737373;
             
-            --primary: #1773B0;       
-            --shop-pay: #5A31F4;      
-            --shop-pay-hover: #4524C1;
+            --primary: #1773B0;       /* สีฟ้า */
+            --primary-hover: #135D8E;
+            --shop-pay: #5A31F4;      /* สีม่วง Shopify */
             
             --danger: #E32C2B;
-            --setting-gray: #808080; /* สีเทาหลัก */
+            --setting-gray: #808080; 
+            --paypal-yellow: #FFC439; /* สีเหลือง PayPal */
         }
 
         /* Dark Theme Variables */
@@ -61,9 +62,12 @@
             padding: 12px 5%; background: var(--bg-box); border-bottom: 1px solid var(--border);
             z-index: 1000; position: relative; transition: 0.3s;
         }
-        .header-logo { font-size: 1.4rem; font-weight: 600; color: var(--text-main); }
-        .btn-purple { background: var(--shop-pay); color: white; border: none; padding: 10px 20px; border-radius: 50px; font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 8px;}
-        .btn-purple:hover { background: var(--shop-pay-hover); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(90, 49, 244, 0.3);}
+        /* ชื่อเว็บเป็นสีม่วง Shopify */
+        .header-logo { font-size: 1.4rem; font-weight: 600; color: var(--shop-pay); }
+        
+        /* ปุ่ม Clear แบบสีเหลือง PayPal (มีเฉพาะไอคอน) */
+        .btn-paypal { background: var(--paypal-yellow); color: #000; border: none; padding: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.15);}
+        .btn-paypal:hover { filter: brightness(1.05); transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.2);}
 
         .layout-container { display: flex; flex: 1; width: 100%; overflow: hidden; }
 
@@ -108,7 +112,6 @@
         .collection-name-box input { background: transparent; border: 1px solid transparent; padding: 6px; font-size: 1rem; font-weight: bold; box-shadow: none !important;}
         .collection-name-box input:focus { background: var(--bg-input); border: 1px solid var(--border); }
         
-        /* Finder Controls: 14px และสัญลักษณ์ขยายเต็มปุ่ม */
         .mac-controls { display: flex; gap: 6px; }
         .mac-btn { width: 14px; height: 14px; border-radius: 50%; border: none; cursor: pointer; background-color: var(--setting-gray); position: relative; display: flex; align-items: center; justify-content: center; color: white; transition: 0.2s; padding: 0; }
         .mac-btn svg { width: 14px; height: 14px; opacity: 0; transition: 0.2s; stroke-width: 3;}
@@ -125,57 +128,17 @@
         
         .product-toolbar { display: flex; justify-content: flex-end; gap: 5px; margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 8px;}
         
-        /* ปรับ Grid ใหม่ให้ช่อง Qty กว้างขึ้นรองรับปุ่ม + / - */
         .product-header-row { display: grid; grid-template-columns: 1fr 85px 110px; gap: 8px; margin-bottom: 8px; }
         .product-header-row input { padding: 8px 10px; font-size: 0.9rem; border-radius: 6px; } 
 
-        /* ======================================= */
-        /* ชุดควบคุมจำนวน Qty (+ / -) */
-        /* ======================================= */
-        .qty-control {
-            display: flex;
-            align-items: center;
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            transition: 0.2s;
-            height: 100%;
-        }
-        .qty-control:focus-within {
-            border-color: var(--primary);
-            box-shadow: inset 0 0 0 1px var(--primary);
-        }
-        .qty-control input {
-            width: 100%;
-            text-align: center;
-            border: none !important;
-            box-shadow: none !important;
-            padding: 8px 0 !important;
-            background: transparent;
-            font-weight: bold;
-        }
-        .qty-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            width: 32px;
-            height: 100%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-        .qty-btn:hover {
-            color: var(--text-main);
-            background: rgba(128, 128, 128, 0.1);
-        }
+        .qty-control { display: flex; align-items: center; background: var(--bg-input); border: 1px solid var(--border); border-radius: 6px; transition: 0.2s; height: 100%;}
+        .qty-control:focus-within { border-color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary);}
+        .qty-control input { width: 100%; text-align: center; border: none !important; box-shadow: none !important; padding: 8px 0 !important; background: transparent; font-weight: bold;}
+        .qty-btn { background: transparent; border: none; color: var(--text-muted); font-size: 1.1rem; width: 32px; height: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; transition: 0.2s;}
+        .qty-btn:hover { color: var(--text-main); background: rgba(128, 128, 128, 0.1);}
         .qty-btn.minus { border-radius: 6px 0 0 6px; }
         .qty-btn.plus { border-radius: 0 6px 6px 0; }
         
-        /* ======================================= */
         .option-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
         .size-pills { display: flex; flex-wrap: wrap; gap: 6px; flex: 1;}
         
@@ -204,11 +167,12 @@
         .fee-group-box { border: 1px solid var(--border); padding: 15px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; background: var(--bg-box); border-radius: 12px;}
         .fee-item { display: flex; flex-direction: column; gap: 6px; }
 
+        /* Checkbox กล่องดำ เครื่องหมายขาว */
         .custom-checkbox { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.9rem; color: var(--text-main); font-weight: bold;}
         .custom-checkbox input { display: none; }
         .checkmark { width: 18px; height: 18px; border: 1px solid var(--border-dark); display: flex; align-items: center; justify-content: center; background: var(--bg-input); border-radius: 4px; transition: 0.2s;}
         .custom-checkbox input:checked ~ .checkmark { background: #000000; border-color: #000000; }
-        .custom-checkbox input:checked ~ .checkmark::after { content: '✔'; color: white; font-size: 11px; }
+        .custom-checkbox input:checked ~ .checkmark::after { content: '✔'; color: #FFFFFF; font-size: 11px; }
 
         /* ======================================= */
         /* 🏦 ธนาคาร */
@@ -247,7 +211,8 @@
 
         .summary-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font-size: 0.95rem; }
         
-        .thumbnail { width: 45px; height: 45px; background: var(--bg-box); border-radius: 8px; border: 1px solid var(--border-dark); position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
+        /* รูป Thumbnail */
+        .thumbnail { width: 45px; height: 45px; background: var(--bg-box); border-radius: 8px; border: 1px solid var(--border-dark); position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--text-muted);}
         .qty-badge { position: absolute; top: -8px; right: -8px; background: var(--text-muted); color: white; font-size: 0.75rem; min-width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0 4px; box-sizing: border-box; font-weight: bold;}
         
         .totals-section { border-top: 1px solid var(--border); margin-top: 15px; padding-top: 10px; }
@@ -258,12 +223,31 @@
         .total-amount { font-size: 1.5rem; font-weight: bold; }
 
         .output-box-title { margin-top: 30px; margin-bottom: 10px; font-size: 1rem; font-weight: bold; color: var(--text-main); display: flex; align-items: center; gap: 8px;}
-        textarea.final-output { width: 100%; background: var(--bg-box); border: 1px solid var(--border); border-radius: 12px; padding: 15px; font-family: inherit; font-size: 0.95rem; color: var(--text-main); resize: vertical; outline: none; line-height: 1.5; box-sizing: border-box;}
+        
+        /* Wrapper สำหรับ Textarea ให้ปุ่ม Copy ลอยอยู่ข้างใน */
+        .output-wrapper { position: relative; width: 100%; }
+        textarea.final-output { width: 100%; background: var(--bg-box); border: 1px solid var(--border); border-radius: 12px; padding: 15px; padding-bottom: 45px; font-family: inherit; font-size: 0.95rem; color: var(--text-main); resize: vertical; outline: none; line-height: 1.5; box-sizing: border-box;}
         textarea.final-output:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(23, 115, 176, 0.1);}
 
-        /* ปุ่ม Copy (Capsule) สี #808080 */
-        .btn-copy { width: 100%; background: var(--setting-gray); color: white; border: none; padding: 14px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.2s; margin-top: 10px; border-radius: 50px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);}
-        .btn-copy:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2);}
+        /* ปุ่ม Copy (Floating Icon Inside) เป็นสีฟ้า */
+        .btn-copy-inline {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+        .btn-copy-inline:hover { filter: brightness(1.1); transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.25);}
 
         /* ======================================= */
         /* Mobile Layout */
@@ -291,7 +275,7 @@
             .product-header-row { grid-template-columns: 1fr 85px 110px; grid-template-rows: auto auto; }
             .productName { grid-column: 1 / 4; grid-row: 1; } 
             .productPrice { grid-column: 1 / 2; grid-row: 2; } 
-            .qty-control { grid-column: 2 / 3; grid-row: 2; } /* Mobile grid for qty */
+            .qty-control { grid-column: 2 / 3; grid-row: 2; } 
         }
 
         .footer-links { display: flex; gap: 15px; margin-top: 30px; padding-top: 15px; border-top: 1px solid var(--border); justify-content: center; align-items: center;}
@@ -301,11 +285,10 @@
 
     <header class="top-header">
         <div class="header-logo">
-            Shop Management <span style="font-size:0.8rem; color:var(--text-muted); font-weight:normal; margin-left: 5px;">v19.1</span>
+            Shop Management <span style="font-size:0.8rem; color:var(--text-muted); font-weight:normal; margin-left: 5px;">v19.2</span>
         </div>
-        <button class="btn-purple" onclick="clearAllPills()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
-            Clear Options
+        <button class="btn-paypal" onclick="clearAllPills()" title="Clear Options">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
         </button>
     </header>
 
@@ -412,18 +395,20 @@
                 </div>
 
                 <div class="output-box-title">Order Summary</div>
-                <textarea id="outputText" class="final-output" style="height: 160px;" readonly placeholder="Order summary text..."></textarea>
-                <button class="btn-copy" onclick="copyText('outputText')">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    Copy Text
-                </button>
+                <div class="output-wrapper">
+                    <textarea id="outputText" class="final-output" style="height: 180px;" readonly placeholder="Order summary text..."></textarea>
+                    <button class="btn-copy-inline" onclick="copyText('outputText')" title="Copy Order Summary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
+                </div>
 
                 <div class="output-box-title" style="margin-top: 30px;">Shipping Label</div>
-                <textarea id="outputLabelText" class="final-output" style="height: 90px;" readonly placeholder="Shipping label text..."></textarea>
-                <button class="btn-copy" onclick="copyText('outputLabelText')">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    Copy Text
-                </button>
+                <div class="output-wrapper">
+                    <textarea id="outputLabelText" class="final-output" style="height: 100px;" readonly placeholder="Shipping label text..."></textarea>
+                    <button class="btn-copy-inline" onclick="copyText('outputLabelText')" title="Copy Shipping Label">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
+                </div>
 
             </div>
         </aside>
@@ -450,10 +435,13 @@
     const ICON_COPY = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
     const ICON_DOTS = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1.5"></circle><circle cx="19" cy="12" r="1.5"></circle><circle cx="5" cy="12" r="1.5"></circle></svg>`;
     
-    // ไอคอน Finder 14px 
+    // ไอคอนสำหรับ Finder Control (Crop SVG viewBox ให้ขยายเต็มปุ่ม 14px)
     const MAC_CROSS = `<svg width="14" height="14" viewBox="4 4 16 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
     const MAC_UP = `<svg width="14" height="14" viewBox="4 4 16 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="18 15 12 9 6 15"></polyline></svg>`;
     const MAC_DOWN = `<svg width="14" height="14" viewBox="4 4 16 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+
+    // ไอคอนเสื้อยืด
+    const SHIRT_ICON = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg>`;
 
     const bankConfig = [
         { code: 'KBANK', color: '#19AC56', name: 'กสิกรไทย' },
@@ -507,14 +495,14 @@
 
             if(!b.bankCode && b.color) displayColor = b.color;
             
-            let lines = b.text.split('\n');
-            let accInfo = lines.length > 1 ? lines.slice(1).join(' ') : lines[0];
+            // แสดงเฉพาะชื่อธนาคาร (บรรทัดแรก)
+            let bankName = b.text.split('\n')[0];
 
             const html = `
                 <label class="payment-item">
                     <div style="display:flex; align-items:center; gap:12px; flex:1;">
                         <input type="radio" class="dot-radio" name="bankSelect" value="${b.id}" ${isChecked} onchange="updateData()">
-                        <span class="payment-text" style="font-weight:normal;">${accInfo}</span>
+                        <span class="payment-text" style="font-weight:normal;">${bankName}</span>
                     </div>
                     <div class="bank-badge" style="background:${displayColor};" onclick="openBankPopover(event, '${b.id}')" title="เปลี่ยนไอคอนธนาคาร">
                         ${displayCode}
@@ -620,12 +608,11 @@
         }
     }
 
-    // ฟังก์ชันปรับจำนวนด้วยปุ่ม + / -
     function adjustQty(btn, delta) {
         const input = btn.parentElement.querySelector('.productQty');
         let currentVal = parseInt(input.value) || 1;
         let newVal = currentVal + delta;
-        if (newVal < 1) newVal = 1; // จำนวนห้ามต่ำกว่า 1
+        if (newVal < 1) newVal = 1;
         input.value = newVal;
         updateData();
     }
@@ -734,7 +721,7 @@
                         visualBillHtml += `<div class="summary-item">
                             <div style="display:flex; align-items:center; gap:15px;">
                                 <div class="thumbnail">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                                    ${SHIRT_ICON}
                                     <div class="qty-badge">${qtyVal}</div>
                                 </div>
                                 <div style="flex:1;">
@@ -770,7 +757,7 @@
                         visualBillHtml += `<div class="summary-item">
                             <div style="display:flex; align-items:center; gap:15px;">
                                 <div class="thumbnail">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                                    ${SHIRT_ICON}
                                     <div class="qty-badge">${maxActive * qtyVal}</div>
                                 </div>
                                 <div style="flex:1;">
@@ -949,7 +936,7 @@
     function exportData() {
         saveData();
         const exportObj = {
-            version: "v19.1",
+            version: "v19.2",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || defaultBanks,
             selectedBank: localStorage.getItem('bank') || '',
