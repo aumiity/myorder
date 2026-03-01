@@ -74,20 +74,20 @@
 
         body { 
             font-family: var(--x-font-family);
-            font-size: var(--x-size-default);
+            font-size: 1.4rem;
             line-height: 1.5;
             margin: 0; padding: 0; color: var(--x-text-main); 
-            display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+            display: flex; flex-direction: column; min-height: 100vh; /* เลิก fix ความสูง */
             background-color: var(--x-bg-main);
             transition: background-color 0.3s, color 0.3s;
         }
 
-        ::-webkit-scrollbar { width: 0.6rem; height: 0.6rem; }
+        ::-webkit-scrollbar { width: 0.8rem; height: 0.8rem; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background-color: var(--x-border-dark); border-radius: 1rem; }
 
         /* ======================================= */
-        /* 🔝 Header (ปรับให้กว้างเท่าพื้นที่ Content) */
+        /* 🔝 Header เต็มจอ */
         /* ======================================= */
         .top-header {
             background: var(--x-bg-main); border-bottom: 1px solid var(--x-border);
@@ -95,14 +95,15 @@
         }
         .header-content {
             display: flex; justify-content: space-between; align-items: center;
-            max-width: 120rem; margin: 0 auto; padding: var(--x-spacing-base) 4rem;
+            max-width: 1200px; margin: 0 auto; padding: 1.5rem 4rem;
         }
-        .header-logo { font-size: var(--x-size-extra-large); font-weight: normal; color: var(--x-primary); letter-spacing: -0.05rem;}
+        .header-logo { font-size: 2.1rem; font-weight: normal; color: var(--x-primary); letter-spacing: -0.05rem;}
         
-        .btn-clear { background: transparent; color: var(--x-primary); border: none; font-weight: 600; font-size: var(--x-size-default); cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 0.6rem; padding: 0.8rem 1.2rem; border-radius: var(--x-radius-base);}
+        /* ปุ่ม Clear แบบใส สีม่วง */
+        .btn-clear { background: transparent; color: var(--x-primary); border: none; font-weight: 600; font-size: 1.4rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 0.6rem; padding: 0.8rem 1.2rem; border-radius: var(--x-radius-base);}
         .btn-clear:hover { background: var(--x-primary-light); }
 
-        .layout-container { display: flex; flex: 1; width: 100%; max-width: 120rem; margin: 0 auto; overflow: hidden; }
+        .layout-container { display: flex; flex: 1; width: 100%; max-width: 1200px; margin: 0 auto; align-items: stretch; } /* ให้สเกลยืดเต็มจอ */
 
         /* ======================================= */
         /* 🛒 ฝั่งซ้าย: จัดการข้อมูล */
@@ -110,8 +111,12 @@
         .management-panel {
             flex: 1.4; 
             background-color: var(--x-bg-main);
-            padding: var(--x-spacing-large-400) 4rem 8rem 0; box-sizing: border-box;
-            overflow-y: auto; transition: 0.3s;
+            transition: 0.3s;
+        }
+        .management-content {
+            width: 100%; max-width: 650px; 
+            padding: 4rem 4rem 8rem 0; box-sizing: border-box;
+            position: sticky; top: 0; /* ทำให้เกาะติดจอ */
         }
 
         .section-title { font-size: var(--x-size-large); font-weight: 600; margin-top: 4rem; margin-bottom: var(--x-spacing-large-100); color: var(--x-primary);}
@@ -239,12 +244,13 @@
         .summary-panel {
             flex: 1; 
             background-color: var(--x-bg-subdued);
-            overflow-y: auto; border-left: 1px solid var(--x-border); transition: 0.3s;
+            border-left: 1px solid var(--x-border); transition: 0.3s;
         }
         
         .summary-content {
-            width: 100%; max-width: 500px;
-            padding: 4rem 4rem 8rem 4rem; box-sizing: border-box;
+            width: 100%; max-width: 500px; margin: 0 auto;
+            padding: 4rem 2rem 8rem 4rem; box-sizing: border-box;
+            position: sticky; top: 0; /* ทำให้เกาะติดจอ */
         }
 
         .summary-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 1.2rem 0; font-size: var(--x-size-default); }
