@@ -108,10 +108,10 @@
         .collection-name-box input { background: transparent; border: 1px solid transparent; padding: 6px; font-size: 1rem; font-weight: bold; box-shadow: none !important;}
         .collection-name-box input:focus { background: var(--bg-input); border: 1px solid var(--border); }
         
-        /* Finder Controls: ปุ่มเล็ก แต่สัญลักษณ์ข้างในใหญ่ */
+        /* Finder Controls: 14px และสัญลักษณ์ขยายเต็มปุ่ม */
         .mac-controls { display: flex; gap: 6px; }
-        .mac-btn { width: 16px; height: 16px; border-radius: 50%; border: none; cursor: pointer; background-color: var(--setting-gray); position: relative; display: flex; align-items: center; justify-content: center; color: white; transition: 0.2s; }
-        .mac-btn svg { width: 12px; height: 12px; opacity: 0; transition: 0.2s; stroke-width: 3;}
+        .mac-btn { width: 14px; height: 14px; border-radius: 50%; border: none; cursor: pointer; background-color: var(--setting-gray); position: relative; display: flex; align-items: center; justify-content: center; color: white; transition: 0.2s; padding: 0; }
+        .mac-btn svg { width: 14px; height: 14px; opacity: 0; transition: 0.2s; stroke-width: 3;}
         .mac-btn:hover { background-color: #555555;}
         .mac-btn:hover svg { opacity: 1; }
         .mac-close:hover { background-color: var(--danger); }
@@ -124,9 +124,58 @@
         .product-item { background: var(--bg-box); padding: 10px 12px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border); }
         
         .product-toolbar { display: flex; justify-content: flex-end; gap: 5px; margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 8px;}
-        .product-header-row { display: grid; grid-template-columns: 1fr 85px 65px; gap: 8px; margin-bottom: 8px; }
-        .product-header-row input { padding: 8px 10px; font-size: 0.9rem; border-radius: 6px; } 
         
+        /* ปรับ Grid ใหม่ให้ช่อง Qty กว้างขึ้นรองรับปุ่ม + / - */
+        .product-header-row { display: grid; grid-template-columns: 1fr 85px 110px; gap: 8px; margin-bottom: 8px; }
+        .product-header-row input { padding: 8px 10px; font-size: 0.9rem; border-radius: 6px; } 
+
+        /* ======================================= */
+        /* ชุดควบคุมจำนวน Qty (+ / -) */
+        /* ======================================= */
+        .qty-control {
+            display: flex;
+            align-items: center;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: 0.2s;
+            height: 100%;
+        }
+        .qty-control:focus-within {
+            border-color: var(--primary);
+            box-shadow: inset 0 0 0 1px var(--primary);
+        }
+        .qty-control input {
+            width: 100%;
+            text-align: center;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 8px 0 !important;
+            background: transparent;
+            font-weight: bold;
+        }
+        .qty-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            width: 32px;
+            height: 100%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .qty-btn:hover {
+            color: var(--text-main);
+            background: rgba(128, 128, 128, 0.1);
+        }
+        .qty-btn.minus { border-radius: 6px 0 0 6px; }
+        .qty-btn.plus { border-radius: 0 6px 6px 0; }
+        
+        /* ======================================= */
         .option-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
         .size-pills { display: flex; flex-wrap: wrap; gap: 6px; flex: 1;}
         
@@ -140,13 +189,11 @@
         .btn-text { background: transparent; color: var(--primary); border: none; font-size: 0.85rem; cursor: pointer; padding: 5px 8px; font-weight: bold; border-radius: 6px;}
         .btn-text:hover { background-color: var(--bg-right); }
         
-        /* Product Controls: สี่เหลี่ยมจัตุรัสเป๊ะๆ */
         .icon-btn { width: 26px; height: 26px; background: var(--setting-gray); border: none; color: #FFFFFF; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 6px; transition: 0.2s;}
         .icon-btn svg { width: 14px; height: 14px; }
         .icon-btn:hover { filter: brightness(0.8); }
         .icon-btn.btn-danger:hover { background: var(--danger); }
 
-        /* ปุ่ม Option: 3 จุด */
         .option-btn { width: 26px; height: 26px; background: var(--setting-gray); color: #FFFFFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; padding: 0; transition: 0.2s; }
         .option-btn svg { width: 16px; height: 16px; }
         .option-btn:hover { filter: brightness(0.8); }
@@ -174,9 +221,8 @@
         .dot-radio { appearance: none; width: 18px; height: 18px; border: 1px solid var(--border-dark); border-radius: 50%; margin: 0 12px 0 0; outline: none; cursor: pointer; background: transparent; flex-shrink: 0; transition: border-width 0.2s;}
         .dot-radio:checked { border: 6px solid var(--text-main); background: var(--bg-box); } 
         
-        .payment-text { flex: 1; font-size: 0.95rem; color: var(--text-main); }
+        .payment-text { flex: 1; font-size: 0.95rem; color: var(--text-main); font-weight: normal;}
         
-        /* ป้ายธนาคาร Fix ขนาดให้เหมือนบัตรเครดิต */
         .bank-badge { width: 60px; height: 38px; border-radius: 6px; border: 1px solid var(--border); color: #FFF; font-size: 0.75rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; text-align: center; box-sizing: border-box; box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);}
 
         .bank-popover { position: absolute; z-index: 2000; background: var(--bg-box); border: 1px solid var(--border); padding: 10px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 4px; opacity: 0; visibility: hidden; transition: 0.2s; min-width: 160px; max-height: 250px; overflow-y: auto;}
@@ -215,7 +261,7 @@
         textarea.final-output { width: 100%; background: var(--bg-box); border: 1px solid var(--border); border-radius: 12px; padding: 15px; font-family: inherit; font-size: 0.95rem; color: var(--text-main); resize: vertical; outline: none; line-height: 1.5; box-sizing: border-box;}
         textarea.final-output:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(23, 115, 176, 0.1);}
 
-        /* ปุ่ม Copy (Capsule) */
+        /* ปุ่ม Copy (Capsule) สี #808080 */
         .btn-copy { width: 100%; background: var(--setting-gray); color: white; border: none; padding: 14px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.2s; margin-top: 10px; border-radius: 50px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);}
         .btn-copy:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2);}
 
@@ -242,10 +288,10 @@
             }
 
             .fee-group-box { grid-template-columns: 1fr; }
-            .product-header-row { grid-template-columns: 1fr 85px 65px; grid-template-rows: auto auto; }
+            .product-header-row { grid-template-columns: 1fr 85px 110px; grid-template-rows: auto auto; }
             .productName { grid-column: 1 / 4; grid-row: 1; } 
             .productPrice { grid-column: 1 / 2; grid-row: 2; } 
-            .productQty { grid-column: 2 / 3; grid-row: 2; } 
+            .qty-control { grid-column: 2 / 3; grid-row: 2; } /* Mobile grid for qty */
         }
 
         .footer-links { display: flex; gap: 15px; margin-top: 30px; padding-top: 15px; border-top: 1px solid var(--border); justify-content: center; align-items: center;}
@@ -255,7 +301,7 @@
 
     <header class="top-header">
         <div class="header-logo">
-            Shop Management <span style="font-size:0.8rem; color:var(--text-muted); font-weight:normal; margin-left: 5px;">v18.1</span>
+            Shop Management <span style="font-size:0.8rem; color:var(--text-muted); font-weight:normal; margin-left: 5px;">v19.1</span>
         </div>
         <button class="btn-purple" onclick="clearAllPills()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
@@ -397,20 +443,17 @@
     const savedTheme = localStorage.getItem('theme_shop');
     if(savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
 
-    // ไอคอนลูกศรทึบ (เปิด/ปิดคอลเลคชั่น)
     const ICON_CHEV_DOWN_SOLID = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"></path></svg>`;
-    
-    // ไอคอนควบคุมสินค้า และ Finder 
     const ICON_UP = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>`;
     const ICON_DOWN = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
     const ICON_TRASH = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
     const ICON_COPY = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
-    
-    // ไอคอน Option 3 จุด
     const ICON_DOTS = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1.5"></circle><circle cx="19" cy="12" r="1.5"></circle><circle cx="5" cy="12" r="1.5"></circle></svg>`;
     
-    // ไอคอนกากบาทสำหรับลบคอลเลคชั่น (Finder Control)
-    const ICON_CROSS = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+    // ไอคอน Finder 14px 
+    const MAC_CROSS = `<svg width="14" height="14" viewBox="4 4 16 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+    const MAC_UP = `<svg width="14" height="14" viewBox="4 4 16 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="18 15 12 9 6 15"></polyline></svg>`;
+    const MAC_DOWN = `<svg width="14" height="14" viewBox="4 4 16 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
 
     const bankConfig = [
         { code: 'KBANK', color: '#19AC56', name: 'กสิกรไทย' },
@@ -456,7 +499,6 @@
 
         banks.forEach(b => {
             const isChecked = b.id === selectedId ? 'checked' : '';
-            const bankName = b.text.split('\n')[0]; 
             
             let code = b.bankCode || 'CUSTOM';
             let conf = bankConfig.find(x => x.code === code);
@@ -464,12 +506,15 @@
             let displayCode = conf ? conf.code : 'CUST';
 
             if(!b.bankCode && b.color) displayColor = b.color;
+            
+            let lines = b.text.split('\n');
+            let accInfo = lines.length > 1 ? lines.slice(1).join(' ') : lines[0];
 
             const html = `
                 <label class="payment-item">
                     <div style="display:flex; align-items:center; gap:12px; flex:1;">
                         <input type="radio" class="dot-radio" name="bankSelect" value="${b.id}" ${isChecked} onchange="updateData()">
-                        <span class="payment-text"><strong>${bankName}</strong></span>
+                        <span class="payment-text" style="font-weight:normal;">${accInfo}</span>
                     </div>
                     <div class="bank-badge" style="background:${displayColor};" onclick="openBankPopover(event, '${b.id}')" title="เปลี่ยนไอคอนธนาคาร">
                         ${displayCode}
@@ -575,9 +620,16 @@
         }
     }
 
-    // ==========================================
-    // Logic ทั่วไป (ใช้คีย์ orderDataV3 ดึงข้อมูลเดิม)
-    // ==========================================
+    // ฟังก์ชันปรับจำนวนด้วยปุ่ม + / -
+    function adjustQty(btn, delta) {
+        const input = btn.parentElement.querySelector('.productQty');
+        let currentVal = parseInt(input.value) || 1;
+        let newVal = currentVal + delta;
+        if (newVal < 1) newVal = 1; // จำนวนห้ามต่ำกว่า 1
+        input.value = newVal;
+        updateData();
+    }
+
     function saveData() {
         localStorage.setItem('val_shipping', document.getElementById('val_shipping').value);
         localStorage.setItem('val_special', document.getElementById('val_special').value);
@@ -791,9 +843,6 @@
         document.getElementById('outputLabelText').value = labelLines.join('\n');
     }
 
-    // ==========================================
-    // เพิ่ม/ลบ คอลเลคชั่น & สินค้า
-    // ==========================================
     function toggleCollection(btn) { btn.closest('.collection-block').classList.toggle('collapsed'); saveData(); }
 
     function addCollectionBlock(colName = '', isCollapsed = false) {
@@ -804,9 +853,9 @@
         block.innerHTML = `
             <div class="collection-header">
                 <div class="mac-controls">
-                    <button class="mac-btn mac-close" title="ลบ" onclick="removeCollectionBlock(this)">${ICON_CROSS}</button>
-                    <button class="mac-btn mac-min" title="ขึ้น" onclick="moveCollectionUp(this)">${ICON_UP}</button>
-                    <button class="mac-btn mac-max" title="ลง" onclick="moveCollectionDown(this)">${ICON_DOWN}</button>
+                    <button class="mac-btn mac-close" title="ลบ" onclick="removeCollectionBlock(this)">${MAC_CROSS}</button>
+                    <button class="mac-btn mac-min" title="ขึ้น" onclick="moveCollectionUp(this)">${MAC_UP}</button>
+                    <button class="mac-btn mac-max" title="ลง" onclick="moveCollectionDown(this)">${MAC_DOWN}</button>
                 </div>
                 <div class="collection-name-box">
                     <input type="text" class="collectionName" placeholder="Collection name..." value="${colName}" oninput="updateData()">
@@ -854,7 +903,11 @@
             <div class="product-header-row">
                 <input type="text" class="productName" placeholder="Product name" value="${name}" oninput="updateData()">
                 <input type="number" class="productPrice" placeholder="Price" value="${price}" oninput="updateData()">
-                <input type="number" class="productQty" placeholder="Qty" value="${qty || 1}" min="1" oninput="updateData()">
+                <div class="qty-control">
+                    <button class="qty-btn minus" type="button" onclick="adjustQty(this, -1)">−</button>
+                    <input type="number" class="productQty" placeholder="Qty" value="${qty || 1}" min="1" oninput="updateData()">
+                    <button class="qty-btn plus" type="button" onclick="adjustQty(this, 1)">+</button>
+                </div>
             </div>
             <div class="product-options-container">${rows.map(r => createOptionRowHtml(r.availableSizes, r.selectedSizes)).join('')}</div>
             <button class="btn-text" style="font-size:0.8rem; margin-top:5px; font-weight:normal;" onclick="addOptionRow(this)">+ Add option</button>
@@ -896,7 +949,7 @@
     function exportData() {
         saveData();
         const exportObj = {
-            version: "v18.1",
+            version: "v19.1",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || defaultBanks,
             selectedBank: localStorage.getItem('bank') || '',
