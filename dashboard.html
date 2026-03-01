@@ -3,202 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>UX Prototype - Off-Canvas Cart</title>
+    <title>UX Prototype - Shop Pay Style</title>
     <style>
         :root {
-            --bg: #0B1120;
-            --surface: #151C2C;
-            --surface-alt: #1E293B;
-            --primary: #0A84FF;
-            --text: #F8FAFC;
-            --muted: #94A3B8;
+            /* สีธีมแบบ Shop Pay Dark Mode */
+            --bg-left: #000000;
+            --bg-right: #111111;
+            --border: #333333;
+            --text-main: #FFFFFF;
+            --text-muted: #888888;
+            /* สีปุ่มแบบ Shop Pay (สีม่วงอมฟ้า หรือใช้สีฟ้าเดิมก็ได้) */
+            --primary: #5A31F4; 
+            --primary-hover: #4524C1;
         }
 
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-            background: var(--bg); color: var(--text); margin: 0; padding: 0; 
-            overflow-x: hidden;
+            margin: 0; padding: 0; color: var(--text-main); 
+            display: flex; min-height: 100vh;
         }
 
-        /* ======================================================== */
-        /* 1. พื้นที่หลัก (เต็มจอ 100%) โฟกัสแค่สินค้า */
-        /* ======================================================== */
-        .main-content {
-            padding: 40px 20px 120px 20px; /* เว้นที่ด้านล่างให้ปุ่มลอย */
-            max-width: 1200px;
-            margin: 0 auto;
-            transition: transform 0.3s ease;
+        /* ======================================= */
+        /* ฝั่งซ้าย: พื้นที่เพิ่มสินค้า (60%) */
+        /* ======================================= */
+        .left-panel {
+            flex: 1.3;
+            background-color: var(--bg-left);
+            padding: 40px 10%;
+            overflow-y: auto;
         }
 
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; }
-        
-        .mock-collection { 
-            background: var(--surface); padding: 30px; border-radius: 20px; margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }
-        .mock-product {
-            background: var(--surface-alt); height: 80px; border-radius: 12px; margin-top: 15px;
-            display: flex; align-items: center; justify-content: center; color: var(--muted); border: 1px dashed #334155;
+        .header-logo { font-size: 1.5rem; font-weight: bold; margin-bottom: 40px; display: flex; align-items: center; gap: 10px;}
+
+        /* ดีไซน์ Input แบบ Shop Pay (เรียบ ขอบบาง) */
+        .mock-input {
+            width: 100%; background: transparent; border: 1px solid var(--border);
+            padding: 15px; border-radius: 8px; color: white; font-size: 1rem;
+            box-sizing: border-box; margin-bottom: 15px;
         }
 
-        /* ======================================================== */
-        /* 2. แถบเครื่องมือลอยตัว (Floating Cart Button) */
-        /* ======================================================== */
-        .floating-cart-btn {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 10px 10px 10px 25px;
-            border-radius: 40px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            z-index: 100;
+        .mock-collection {
+            margin-bottom: 40px;
         }
 
-        .floating-cart-btn .total-text {
-            font-size: 1.1rem; font-weight: 600;
+        .product-row {
+            display: flex; gap: 10px; margin-bottom: 15px;
         }
 
-        .floating-cart-btn button {
-            background: var(--primary); color: white; border: none; padding: 12px 24px;
-            border-radius: 30px; font-weight: bold; font-size: 1rem; cursor: pointer;
-            display: flex; align-items: center; gap: 8px; transition: transform 0.2s;
-        }
-        .floating-cart-btn button:hover { transform: scale(1.05); }
+        .product-row .mock-input { margin-bottom: 0; }
 
-        /* ======================================================== */
-        /* 3. แผงสไลด์ด้านข้าง (Off-Canvas Sidebar) */
-        /* ======================================================== */
-        .offcanvas-panel {
-            position: fixed;
-            top: 0;
-            right: -450px; /* ซ่อนไว้ขอบขวา */
-            width: 100%;
-            max-width: 400px;
-            height: 100vh;
-            background: var(--surface);
-            box-shadow: -10px 0 40px rgba(0,0,0,0.5);
-            z-index: 1000;
-            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* แอนิเมชันตอนสไลด์ */
-            display: flex;
-            flex-direction: column;
-            border-left: 1px solid rgba(255,255,255,0.1);
+        /* ======================================= */
+        /* ฝั่งขวา: สรุปยอด (40%) Sticky */
+        /* ======================================= */
+        .right-panel {
+            flex: 0.8;
+            background-color: var(--bg-right);
+            border-left: 1px solid var(--border);
+            padding: 40px 5%;
+            position: relative;
         }
 
-        .offcanvas-panel.open { right: 0; /* เลื่อนเข้ามา */ }
+        /* กล่องให้ฝั่งขวาล็อกติดหน้าจอเวลา Scroll */
+        .sticky-summary {
+            position: sticky;
+            top: 40px;
+        }
 
-        .panel-header {
-            padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+        /* รายการในบิล */
+        .summary-item {
             display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 0; border-bottom: 1px solid var(--border);
         }
 
-        .panel-close {
-            background: transparent; border: none; color: var(--muted); font-size: 1.5rem; cursor: pointer;
-            width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        /* ปุ่มหลักขนาดใหญ่แบบ Shopify */
+        .btn-pay {
+            width: 100%; background: var(--primary); color: white; border: none;
+            padding: 20px; border-radius: 12px; font-size: 1.2rem; font-weight: bold;
+            cursor: pointer; margin-top: 30px; transition: 0.2s;
         }
-        .panel-close:hover { background: rgba(255,255,255,0.1); color: white; }
+        .btn-pay:hover { background: var(--primary-hover); }
 
-        .panel-content {
-            padding: 20px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 20px;
+        /* ======================================= */
+        /* Mobile Layout (สไตล์มือถือ Shopify) */
+        /* ======================================= */
+        .mobile-summary-toggle { display: none; }
+
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+            
+            .left-panel { padding: 20px; order: 2; flex: none; overflow-y: visible;}
+            .right-panel { padding: 0; order: 1; border-left: none; border-bottom: 1px solid var(--border); flex: none; }
+
+            /* ปุ่มกดกาง/หุบ สรุปยอดบนมือถือ */
+            .mobile-summary-toggle {
+                display: flex; justify-content: space-between; align-items: center;
+                background-color: var(--bg-right); padding: 20px; cursor: pointer;
+                color: var(--primary); font-weight: bold;
+            }
+
+            .sticky-summary { position: static; padding: 20px; display: none; }
+            .sticky-summary.show { display: block; } /* โชว์เมื่อกดกางบนมือถือ */
         }
-
-        .mock-setting-box { background: var(--bg); border-radius: 16px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); }
-        
-        .mock-textarea { background: #000; height: 180px; border-radius: 12px; margin-top: 10px; border: 1px solid #333; }
-
-        .panel-footer {
-            padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); background: var(--surface);
-        }
-        .btn-copy { width: 100%; background: #32D74B; color: white; border: none; padding: 15px; border-radius: 20px; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
-
-        /* ฉากหลังเบลอ (Backdrop) */
-        .backdrop {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
-            z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s;
-        }
-        .backdrop.show { opacity: 1; pointer-events: auto; }
-
     </style>
 </head>
 <body>
 
-    <main class="main-content" id="mainContent">
-        <div class="header">
-            <h1 style="margin: 0;">📦 จัดการคอลเลคชั่นสินค้า</h1>
-            <button style="background: transparent; color: var(--primary); border: 2px dashed var(--primary); padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold;">+ เพิ่มคอลเลคชั่น</button>
+    <aside class="right-panel">
+        <div class="mobile-summary-toggle" onclick="toggleMobileSummary()">
+            <span id="toggle-text">🛒 แสดงสรุปยอดโอน (ดูบิล) ▾</span>
+            <span style="color: white; font-size: 1.2rem;">฿450.00</span>
         </div>
 
-        <div class="mock-collection">
-            <h3 style="margin-top: 0;">คอลเลคชั่น: เสื้อยืดลายดอก</h3>
-            <div class="mock-product">กรอกข้อมูลสินค้า 1</div>
-            <div class="mock-product">กรอกข้อมูลสินค้า 2</div>
-        </div>
-
-        <div class="mock-collection">
-            <h3 style="margin-top: 0;">คอลเลคชั่น: กางเกงยีนส์ขาสั้น</h3>
-            <div class="mock-product">กรอกข้อมูลสินค้า 1</div>
-        </div>
-        
-        <div class="mock-collection">
-            <h3 style="margin-top: 0;">คอลเลคชั่น: หมวกบักเก็ต</h3>
-            <div class="mock-product">กรอกข้อมูลสินค้า 1</div>
-        </div>
-    </main>
-
-    <div class="floating-cart-btn">
-        <div class="total-text">สถานะ: <span style="color: #32D74B;">กำลังพิมพ์บิล...</span></div>
-        <button onclick="toggleCart()">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            ดูสรุปยอด & ตั้งค่า
-        </button>
-    </div>
-
-    <div class="backdrop" id="backdrop" onclick="toggleCart()"></div>
-
-    <aside class="offcanvas-panel" id="cartPanel">
-        <div class="panel-header">
-            <h2 style="margin: 0;">📋 สรุปยอดโอน</h2>
-            <button class="panel-close" onclick="toggleCart()">✖</button>
-        </div>
-        
-        <div class="panel-content">
-            <div class="mock-setting-box">
-                <h4 style="margin-top: 0; color: var(--primary);">⚙️ ตั้งค่าค่าใช้จ่าย</h4>
-                <div style="color: var(--muted); font-size: 0.9rem;">+ ค่าจัดส่ง 50 บาท</div>
-                <div style="color: var(--muted); font-size: 0.9rem; margin-top: 10px;">- หักมัดจำ 100 บาท</div>
+        <div class="sticky-summary" id="summary-box">
+            <h3 style="margin-top:0;">สรุปยอดโอน</h3>
+            
+            <div class="summary-item">
+                <div style="display:flex; align-items:center; gap:15px;">
+                    <div style="width: 50px; height: 50px; background: #222; border-radius: 8px; border: 1px solid #444;"></div>
+                    <span>เสื้อลายดอก (M) x1</span>
+                </div>
+                <span>฿200.00</span>
+            </div>
+            <div class="summary-item">
+                <div style="display:flex; align-items:center; gap:15px;">
+                    <div style="width: 50px; height: 50px; background: #222; border-radius: 8px; border: 1px solid #444;"></div>
+                    <span>กางเกงยีนส์ (L) x1</span>
+                </div>
+                <span>฿200.00</span>
             </div>
 
-            <div class="mock-setting-box">
-                <h4 style="margin-top: 0; color: var(--primary);">🏦 บัญชีธนาคาร</h4>
-                <div style="color: var(--muted); font-size: 0.9rem;">(เลือก) กสิกรไทย / ไทยพาณิชย์</div>
+            <div class="summary-item" style="border-bottom: none; margin-top: 15px;">
+                <span style="color: var(--text-muted);">ค่าจัดส่ง</span>
+                <span>฿50.00</span>
+            </div>
+            
+            <div class="summary-item" style="border-bottom: none; font-size: 1.5rem; font-weight: bold;">
+                <span>รวมทั้งหมด</span>
+                <span>฿450.00</span>
             </div>
 
-            <div class="mock-setting-box" style="flex: 1;">
-                <h4 style="margin-top: 0; color: var(--primary);">📄 ข้อความเตรียมคัดลอก</h4>
-                <div class="mock-textarea"></div>
-            </div>
-        </div>
-
-        <div class="panel-footer">
-            <button class="btn-copy">ก๊อปปี้ข้อความส่งลูกค้า</button>
+            <button class="btn-pay">📋 คัดลอกข้อความสรุปยอด</button>
         </div>
     </aside>
 
-    <script>
-        function toggleCart() {
-            const panel = document.getElementById('cartPanel');
-            const backdrop = document.getElementById('backdrop');
+    <main class="left-panel">
+        <div class="header-logo">
+            🛍️ Order Management
+        </div>
+
+        <h2 style="margin-bottom: 20px;">ข้อมูลสินค้า (คอลเลคชั่นที่ 1)</h2>
+        
+        <div class="mock-collection">
+            <input type="text" class="mock-input" placeholder="ชื่อคอลเลคชั่น (เช่น เสื้อลายดอก)">
             
-            // สลับคลาสเปิด/ปิด
-            panel.classList.toggle('open');
-            backdrop.classList.toggle('show');
+            <div class="product-row">
+                <input type="text" class="mock-input" style="flex:2;" placeholder="ชื่อสินค้า">
+                <input type="text" class="mock-input" style="flex:1;" placeholder="ราคา">
+                <input type="text" class="mock-input" style="flex:1;" placeholder="จำนวน">
+            </div>
+            
+            <button style="background:transparent; color: var(--primary); border:none; cursor:pointer; font-weight:bold;">+ เพิ่มสินค้าใหม่</button>
+        </div>
+
+        <h2 style="margin-bottom: 20px; margin-top: 40px;">การตั้งค่าจัดส่ง & ธนาคาร</h2>
+        <input type="text" class="mock-input" placeholder="ค่าจัดส่ง (เช่น 50)">
+        <input type="text" class="mock-input" placeholder="หักมัดจำ">
+        
+        <select class="mock-input" style="appearance: auto;">
+            <option>กสิกรไทย - 123456789</option>
+            <option>ไทยพาณิชย์ - 987654321</option>
+        </select>
+
+    </main>
+
+    <script>
+        // ฟังก์ชันกาง/หุบ บิลสรุปยอดสำหรับจอมือถือ
+        function toggleMobileSummary() {
+            const summaryBox = document.getElementById('summary-box');
+            const toggleText = document.getElementById('toggle-text');
+            summaryBox.classList.toggle('show');
+            
+            if(summaryBox.classList.contains('show')) {
+                toggleText.innerText = "🛒 ซ่อนสรุปยอดโอน ▴";
+            } else {
+                toggleText.innerText = "🛒 แสดงสรุปยอดโอน (ดูบิล) ▾";
+            }
         }
     </script>
 </body>
