@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Shop Management - V21.1</title>
+    <title>Shop Management</title>
     <style>
         :root {
             --x-bg-main: hsl(0, 0%, 100%);
@@ -46,7 +46,9 @@
 
         html { font-size: 62.5%; text-size-adjust: 100%; }
 
-        /* แก้ไข Scroll ให้เลื่อนได้ทั้งหน้า */
+        /* ======================================= */
+        /* เลื่อนขึ้นลงอิสระทั้งหน้า (Global Scroll) */
+        /* ======================================= */
         body { 
             font-family: var(--x-font-family);
             font-size: 1.4rem; 
@@ -86,7 +88,6 @@
         .btn-clear { background: transparent; color: var(--x-primary); border: none; font-weight: 600; font-size: 1.4rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 0.6rem; padding: 0.8rem 1.2rem; border-radius: var(--x-radius-base);}
         .btn-clear:hover { background: var(--x-primary-light); }
 
-        /* จัด Flex ให้การ Scroll ทำงานถูกต้อง */
         .layout-container { display: flex; flex: 1; width: 100%; max-width: 1200px; margin: 0 auto; align-items: flex-start; }
 
         /* ======================================= */
@@ -110,7 +111,7 @@
         input::placeholder { color: var(--x-text-subdued); }
 
         /* ======================================= */
-        /* Dropdown Menu (แหลมๆ) */
+        /* Dropdown Menu (มีแหลมๆ ด้านบน) */
         /* ======================================= */
         .dropdown-container { position: relative; display: inline-block; }
         .dropdown-menu {
@@ -118,7 +119,7 @@
             background: var(--x-bg-main); border: 1px solid var(--x-border);
             border-radius: var(--x-radius-base); box-shadow: var(--x-shadow-base);
             z-index: 2000; min-width: 120px; display: none; flex-direction: column;
-            padding: 8px 0; overflow: visible; /* ให้เห็นลูกศร */
+            padding: 8px 0; overflow: visible;
         }
         .dropdown-menu.show { display: flex; }
         
@@ -171,17 +172,15 @@
         .product-item { background: var(--x-bg-main); padding: 1.5rem; border-radius: var(--x-radius-base); margin-bottom: 1.5rem; border: 1px solid var(--x-border); transition: 0.2s;}
         .product-item:focus-within { border-color: var(--x-primary); box-shadow: 0 0 0 1px var(--x-primary); }
         
-        /* Grid Layout ใหม่ */
         .product-header-row { display: grid; grid-template-columns: 1fr 10rem auto; gap: 1rem; margin-bottom: 0.5rem; align-items: center;}
 
-        /* แสดงชื่อและราคาเป็น Text */
         .product-info-display { display: flex; flex-direction: column; gap: 0.4rem; justify-content: center; }
         .productName-display { font-size: 1.5rem; font-weight: 600; color: var(--x-text-main); }
         .productPrice-display { font-size: 1.3rem; color: var(--x-text-subdued); }
 
         .qty-control { display: flex; align-items: center; background: transparent; border: 1px solid var(--x-border-dark); border-radius: var(--x-radius-base); transition: 0.2s; height: 3.6rem;}
         .qty-control:focus-within { border-color: var(--x-primary); box-shadow: inset 0 0 0 1px var(--x-primary);}
-        .qty-control input { width: 100%; text-align: center; border: none !important; box-shadow: none !important; padding: 0 !important; background: transparent; font-weight: normal; font-size: 1.4rem;}
+        .qty-control input { width: 100%; text-align: center; border: none !important; box-shadow: none !important; padding: 0.8rem 0 !important; background: transparent; font-weight: normal; font-size: 1.4rem;}
         .qty-btn { background: transparent; border: none; color: var(--x-text-subdued); font-size: 1.8rem; width: 3.6rem; height: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;}
         .qty-btn:hover { color: var(--x-text-main); background: rgba(128, 128, 128, 0.05);}
         
@@ -202,7 +201,9 @@
         .fee-group-box { display: flex; flex-direction: column; margin-bottom: 4rem; }
         
         .shipping-item { display: flex; align-items: center; padding: 1.5rem 0; border-bottom: 1px solid var(--x-border); gap: 1.5rem;}
-        .shipping-icon { width: 4.5rem; height: 4.5rem; background: var(--x-paypal); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
+        
+        .shipping-icon { width: 4.5rem; height: 4.5rem; background: var(--x-text-main); color: var(--x-bg-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
+        
         .shipping-text { flex: 1; }
         .shipping-title { font-size: 1.4rem; font-weight: normal; color: var(--x-text-main); display: flex; align-items: center; gap: 0.5rem;}
         .shipping-subtitle { font-size: 1.2rem; color: var(--x-text-subdued); margin-top: 0.2rem;}
@@ -233,30 +234,28 @@
         
         .bank-badge { padding: 0.4rem 1rem; border-radius: 4px; border: 1px solid var(--x-border); font-size: 1.1rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; min-width: 5rem; text-align: center; color: #FFF; box-shadow: 0 1px 2px rgba(0,0,0,0.05);}
 
-        .bank-popover { position: absolute; z-index: 2000; background: var(--x-bg-main); border: 1px solid var(--x-border); padding: 1rem; border-radius: var(--x-radius-large); box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 0.4rem; opacity: 0; visibility: hidden; transition: 0.2s; min-width: 16rem; max-height: 25rem; overflow-y: auto;}
+        .bank-popover { position: absolute; z-index: 2000; background: var(--x-bg-main); border: 1px solid var(--x-border); padding: 1rem; border-radius: var(--x-radius-large); box-shadow: var(--x-shadow-modal); display: flex; flex-direction: column; gap: 0.4rem; opacity: 0; visibility: hidden; transition: 0.2s; min-width: 16rem; max-height: 25rem; overflow-y: auto;}
         .bank-popover.active { opacity: 1; visibility: visible; }
         .bank-option { display: flex; align-items: center; gap: 1rem; padding: 0.8rem 1.2rem; cursor: pointer; font-size: 1.4rem; font-weight: normal; color: var(--x-text-main); border-radius: var(--x-radius-base); transition: 0.2s;}
         .bank-option:hover { background: var(--x-bg-subdued); }
         .bank-color-dot { width: 1.4rem; height: 1.4rem; border-radius: 50%; box-shadow: 0 1px 2px rgba(0,0,0,0.2);}
 
         /* ======================================= */
-        /* 📄 ฝั่งขวา: สรุปยอด (Sticky Fixed) */
+        /* 📄 ฝั่งขวา: สรุปยอด (Sticky ให้เกาะติดเวลาเลื่อน) */
         /* ======================================= */
         .summary-panel {
             flex: 1; 
             background-color: var(--x-bg-subdued);
             border-left: 1px solid var(--x-border); transition: 0.3s;
-            position: sticky; top: 0; height: 100vh; overflow-y: auto;
         }
         
         .summary-content {
             width: 100%; max-width: 500px; margin: 0 auto;
             padding: 4rem 4rem 8rem 4rem; box-sizing: border-box;
+            position: sticky; top: 0;
         }
 
-        /* --------------------------------- */
-        /* จำกัดบิล 3 รายการ มี Scrollbar */
-        /* --------------------------------- */
+        /* จำกัดโชว์บิล 3 รายการ แล้ว Scroll ได้ */
         .visual-bill-wrapper { max-height: 23rem; overflow-y: auto; padding-right: 0.5rem; margin-bottom: 2rem;}
         .visual-bill-wrapper::-webkit-scrollbar { width: 0.4rem; }
         .visual-bill-wrapper::-webkit-scrollbar-thumb { background-color: var(--x-border-dark); border-radius: 1rem; }
@@ -311,12 +310,12 @@
         }
         .modal-overlay.show { display: flex; opacity: 1; }
         .modal-content {
-            background: var(--x-bg-main); border-radius: var(--x-radius-large); width: 100%; max-width: 400px;
+            background: var(--x-bg-main); border-radius: var(--x-radius-large); width: 100%; max-width: 450px;
             box-shadow: var(--x-shadow-modal); overflow: hidden; transform: translateY(20px); transition: 0.3s;
         }
         .modal-overlay.show .modal-content { transform: translateY(0); }
         .modal-header { padding: 2rem; border-bottom: 1px solid var(--x-border); font-size: 1.6rem; font-weight: bold; color: var(--x-text-main); }
-        .modal-body { padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
+        .modal-body { padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; max-height: 65vh; overflow-y: auto;}
         .modal-body label { font-size: 1.3rem; color: var(--x-text-subdued); font-weight: 500; margin-bottom: -0.5rem;}
         .modal-footer { padding: 1.5rem 2rem; border-top: 1px solid var(--x-border); display: flex; justify-content: flex-end; gap: 1rem; background: var(--x-bg-subdued);}
         
@@ -337,12 +336,12 @@
             .summary-content { position: static; padding: 2rem; max-width: 100%; height: auto; display: none; }
             .summary-content.show { display: block; }
 
-            .management-panel { order: 2; padding: 3rem 2rem; max-width: 100%; height: auto; overflow: visible;}
+            .management-panel { order: 2; padding: 3rem 2rem; max-width: 100%; height: auto; border-right: none;}
             
             .mobile-summary-toggle {
                 display: flex; justify-content: space-between; align-items: center;
                 background-color: var(--x-bg-subdued); padding: 1.5rem 2rem; cursor: pointer;
-                color: var(--x-primary); font-size: 1.4rem;
+                color: var(--x-primary); font-size: 1.4rem; font-weight: bold;
             }
             .product-header-row { grid-template-columns: 1fr 8.5rem 10rem auto; }
         }
@@ -355,7 +354,7 @@
     <header class="top-header">
         <div class="header-content">
             <div class="header-logo">Shop Management</div>
-            <button class="btn-clear" onclick="clearAllPills()">
+            <button class="btn-clear" onclick="clearAllPills()" title="Clear Options">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
                 Clear Options
             </button>
@@ -497,6 +496,7 @@
                     <textarea id="outputText" class="final-output" style="height: 180px;" readonly placeholder="Order summary text..."></textarea>
                     <button class="btn-copy-inline" onclick="copyText('outputText')" title="Copy Order Summary">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        Copy Text
                     </button>
                 </div>
 
@@ -505,6 +505,7 @@
                     <textarea id="outputLabelText" class="final-output" style="height: 100px;" readonly placeholder="Shipping label text..."></textarea>
                     <button class="btn-copy-inline" onclick="copyText('outputLabelText')" title="Copy Shipping Label">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        Copy Text
                     </button>
                 </div>
 
@@ -516,9 +517,9 @@
     <div id="bankPopover" class="bank-popover"></div>
 
     <div class="modal-overlay" id="editModal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 450px;">
             <div class="modal-header">Edit Product</div>
-            <div class="modal-body">
+            <div class="modal-body" style="max-height: 65vh; overflow-y: auto;">
                 <div>
                     <label>Product Name</label>
                     <input type="text" id="modalName" placeholder="Enter product name..." style="margin-top:0.5rem;">
@@ -527,10 +528,14 @@
                     <label>Price</label>
                     <input type="number" id="modalPrice" placeholder="Enter price..." style="margin-top:0.5rem;">
                 </div>
-                <div>
-                    <label>Options (comma separated)</label>
-                    <input type="text" id="modalOptions" placeholder="e.g. S, M, L, XL" style="margin-top:0.5rem;">
-                </div>
+                
+                <div id="modalOptionsContainer" style="display: flex; flex-direction: column; gap: 1.5rem; margin-top: 0.5rem;">
+                    </div>
+
+                <button class="btn-add" type="button" onclick="addModalOptionRow()" style="margin-top: 1rem; padding: 0;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Add another option (เช่น สี, แบบ)
+                </button>
             </div>
             <div class="modal-footer">
                 <button class="btn-modal" onclick="closeModal()">Cancel</button>
@@ -540,7 +545,6 @@
     </div>
 
 <script>
-    // Theme Management
     function toggleTheme() {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -566,7 +570,7 @@
 
     let defaultBanks = [{id: 'b1', text: 'กสิกรไทย\n123-4-56789-0\nนาย สมชาย ขายดี', bankCode: 'KBANK'}];
     let currentEditingBankId = null;
-    let activeProductItem = null;
+    let activeProductItem = null; 
 
     window.onload = function() {
         renderBanks(); 
@@ -574,9 +578,6 @@
         updateData(); 
     };
 
-    // ==========================================
-    // Dropdown Logic (Global)
-    // ==========================================
     function toggleDropdown(e, btn) {
         e.stopPropagation();
         const menu = btn.nextElementSibling;
@@ -623,7 +624,6 @@
             let displayCode = conf ? conf.code : 'CUST';
 
             if(!b.bankCode && b.color) displayColor = b.color;
-            
             let bankName = b.text.split('\n')[0];
 
             const html = `
@@ -737,9 +737,6 @@
         updateData();
     }
 
-    // ==========================================
-    // Save/Load Logic
-    // ==========================================
     function saveData() {
         localStorage.setItem('val_shipping', document.getElementById('val_shipping').value);
         localStorage.setItem('val_special', document.getElementById('val_special').value);
@@ -905,7 +902,6 @@
             if (colLabelProducts.length) labelLines.push(colName ? `${colName} = ${colLabelProducts.join(' / ')}` : colLabelProducts.join(' / '));
         });
 
-        // แอด Remote Area เข้าตะกร้า
         if (spec > 0 && document.getElementById('check_special').checked) {
             hasItem = true;
             visualBillHtml += `<div class="summary-item">
@@ -1088,17 +1084,42 @@
         
         const nameVal = activeProductItem.querySelector('.productName').value;
         const priceVal = activeProductItem.querySelector('.productPrice').value;
-        const optionRows = activeProductItem.querySelectorAll('.option-row');
-        let optionsArr = [];
-        if (optionRows.length > 0) {
-            optionsArr = Array.from(optionRows[0].querySelectorAll('.pill[data-size]')).map(p => p.getAttribute('data-size'));
-        }
         
         document.getElementById('modalName').value = nameVal;
         document.getElementById('modalPrice').value = priceVal;
-        document.getElementById('modalOptions').value = optionsArr.join(', ');
+        
+        const container = document.getElementById('modalOptionsContainer');
+        container.innerHTML = ''; 
+        
+        const optionRows = activeProductItem.querySelectorAll('.option-row');
+        if (optionRows.length > 0) {
+            optionRows.forEach((row, index) => {
+                const optionsArr = Array.from(row.querySelectorAll('.pill[data-size]')).map(p => p.getAttribute('data-size'));
+                addModalOptionRow(optionsArr.join(', '), index + 1);
+            });
+        } else {
+            addModalOptionRow('', 1);
+        }
         
         document.getElementById('editModal').classList.add('show');
+    }
+
+    function addModalOptionRow(value = '', index = null) {
+        const container = document.getElementById('modalOptionsContainer');
+        const displayIndex = index || (container.children.length + 1);
+        
+        const div = document.createElement('div');
+        div.style.display = 'flex';
+        div.style.flexDirection = 'column';
+        div.style.gap = '0.5rem';
+        div.innerHTML = `
+            <label style="display:flex; justify-content:space-between; align-items:center; font-size: 1.3rem; color: var(--x-text-subdued); font-weight: 500;">
+                Option ${displayIndex} (คั่นด้วยลูกน้ำ ,)
+                ${displayIndex > 1 ? `<span style="color:var(--x-danger); cursor:pointer; font-size:1.2rem; font-weight:normal;" onclick="this.parentElement.remove()">Remove</span>` : ''}
+            </label>
+            <input type="text" class="modal-option-input" placeholder="เช่น S, M, L หรือ แดง, ดำ" value="${value}">
+        `;
+        container.appendChild(div);
     }
 
     function closeModal() {
@@ -1111,20 +1132,29 @@
         
         const newName = document.getElementById('modalName').value;
         const newPrice = document.getElementById('modalPrice').value;
-        const newOptionsStr = document.getElementById('modalOptions').value;
         
         activeProductItem.querySelector('.productName').value = newName;
         activeProductItem.querySelector('.productPrice').value = newPrice;
-        
         activeProductItem.querySelector('.productName-display').innerText = newName || 'Product name';
         activeProductItem.querySelector('.productPrice-display').innerText = `฿${newPrice || '0'}`;
         
-        let arr = newOptionsStr.split(',').map(x=>x.trim()).filter(x=>x);
-        if (arr.length === 0) arr = ['-'];
-        
+        const inputs = document.querySelectorAll('.modal-option-input');
         const container = activeProductItem.querySelector('.product-options-container');
-        const activeSizes = Array.from(activeProductItem.querySelectorAll('.pill.active')).map(p=>p.getAttribute('data-size'));
-        container.innerHTML = createOptionRowHtml(arr, activeSizes);
+        
+        const oldActivePills = Array.from(activeProductItem.querySelectorAll('.pill.active')).map(p => p.getAttribute('data-size'));
+        
+        container.innerHTML = ''; 
+        
+        inputs.forEach(input => {
+            let arr = input.value.split(',').map(x=>x.trim()).filter(x=>x);
+            if (arr.length > 0) {
+                container.insertAdjacentHTML('beforeend', createOptionRowHtml(arr, oldActivePills));
+            }
+        });
+        
+        if (container.innerHTML === '') {
+            container.insertAdjacentHTML('beforeend', createOptionRowHtml(['-'], []));
+        }
         
         closeModal();
         updateData();
@@ -1135,7 +1165,7 @@
     function exportData() {
         saveData();
         const exportObj = {
-            version: "v20.1",
+            version: "v21.1",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || defaultBanks,
             selectedBank: localStorage.getItem('bank') || '',
