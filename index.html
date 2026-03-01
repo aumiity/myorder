@@ -3,13 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Shop Management - V20.1</title>
+    <title>Shop Management - V21.1</title>
     <style>
         :root {
-            --x-primary: #5b00ed; 
-            --x-primary-light: #F5F6FF; 
-            --x-primary-hover: #4a00c2;
-            
             --x-bg-main: hsl(0, 0%, 100%);
             --x-bg-subdued: hsl(0, 0%, 96%); 
             --x-border: hsl(0, 0%, 87%);
@@ -18,18 +14,23 @@
             --x-text-main: hsl(0, 0%, 0%);
             --x-text-subdued: hsl(0, 0%, 44%);
             
+            --x-primary: #5b00ed; 
+            --x-primary-hover: #4a00c2;
+            --x-primary-light: #F5F6FF;
+            
             --x-danger: #D91C1C;
             --x-danger-light: #FEECEC;
             --x-setting-gray: #808080;
             --x-paypal: #FFC439;
 
+            --x-spacing-base: 1.4rem;
             --x-radius-base: 8px;
             --x-radius-large: 12px;
-            
-            --x-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-            
+
             --x-shadow-base: 0 4px 12px rgba(0, 0, 0, 0.1);
             --x-shadow-modal: 0 10px 30px rgba(0, 0, 0, 0.2);
+            
+            --x-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
         }
 
         [data-theme="dark"] {
@@ -45,19 +46,28 @@
 
         html { font-size: 62.5%; text-size-adjust: 100%; }
 
+        /* แก้ไข Scroll ให้เลื่อนได้ทั้งหน้า */
         body { 
             font-family: var(--x-font-family);
             font-size: 1.4rem; 
             line-height: 1.5;
             margin: 0; padding: 0; color: var(--x-text-main); 
-            display: flex; flex-direction: column; min-height: 100vh; overflow: hidden;
+            display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden;
             background-color: var(--x-bg-main);
             transition: background-color 0.3s, color 0.3s;
         }
 
-        ::-webkit-scrollbar { width: 0.6rem; height: 0.6rem; }
+        ::-webkit-scrollbar { width: 0.8rem; height: 0.8rem; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background-color: var(--x-border-dark); border-radius: 1rem; }
+
+        /* ปิดลูกศรขึ้นลงในช่องตัวเลข (Spinners) */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] { -moz-appearance: textfield; }
 
         /* ======================================= */
         /* 🔝 Header */
@@ -70,12 +80,14 @@
             display: flex; justify-content: space-between; align-items: center;
             max-width: 1200px; margin: 0 auto; padding: 1.5rem 4rem;
         }
-        .header-logo { font-size: 2.1rem; font-weight: normal; color: var(--x-primary); letter-spacing: -0.05rem;}
+        /* ชื่อเว็บตัวหนา */
+        .header-logo { font-size: 2.1rem; font-weight: bold; color: var(--x-primary); letter-spacing: -0.05rem;}
         
         .btn-clear { background: transparent; color: var(--x-primary); border: none; font-weight: 600; font-size: 1.4rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 0.6rem; padding: 0.8rem 1.2rem; border-radius: var(--x-radius-base);}
         .btn-clear:hover { background: var(--x-primary-light); }
 
-        .layout-container { display: flex; flex: 1; width: 100%; max-width: 1200px; margin: 0 auto; overflow: hidden; align-items: stretch;}
+        /* จัด Flex ให้การ Scroll ทำงานถูกต้อง */
+        .layout-container { display: flex; flex: 1; width: 100%; max-width: 1200px; margin: 0 auto; align-items: flex-start; }
 
         /* ======================================= */
         /* 🛒 ฝั่งซ้าย: จัดการข้อมูล */
@@ -83,16 +95,11 @@
         .management-panel {
             flex: 1.4; 
             background-color: var(--x-bg-main);
-            transition: 0.3s;
-            overflow-y: auto;
-        }
-        .management-content {
-            width: 100%; max-width: 650px; 
             padding: 4rem 4rem 8rem 0; box-sizing: border-box;
-            margin-left: auto;
         }
 
-        .section-title { font-size: 1.8rem; font-weight: normal; margin-top: 4rem; margin-bottom: 1.5rem; color: var(--x-primary);}
+        /* หัวข้อทั้งหมดตัวหนา */
+        .section-title { font-size: 1.8rem; font-weight: bold; margin-top: 4rem; margin-bottom: 1.5rem; color: var(--x-primary);}
 
         input[type="text"], input[type="number"]:not(.inline-fee-input) {
             width: 100%; background: transparent; border: 1px solid var(--x-border-dark);
@@ -103,26 +110,34 @@
         input::placeholder { color: var(--x-text-subdued); }
 
         /* ======================================= */
-        /* Dropdown Menu (Universal) */
+        /* Dropdown Menu (แหลมๆ) */
         /* ======================================= */
         .dropdown-container { position: relative; display: inline-block; }
         .dropdown-menu {
-            position: absolute; right: 0; top: 100%; margin-top: 4px;
+            position: absolute; right: 0; top: calc(100% + 8px);
             background: var(--x-bg-main); border: 1px solid var(--x-border);
             border-radius: var(--x-radius-base); box-shadow: var(--x-shadow-base);
             z-index: 2000; min-width: 120px; display: none; flex-direction: column;
-            padding: 8px 0; overflow: hidden;
+            padding: 8px 0; overflow: visible; /* ให้เห็นลูกศร */
         }
         .dropdown-menu.show { display: flex; }
+        
+        /* ทำมุมแหลมชี้ขึ้นบน */
+        .dropdown-menu::before {
+            content: ''; position: absolute; top: -6px; right: 12px;
+            width: 10px; height: 10px; background: var(--x-bg-main);
+            border-top: 1px solid var(--x-border); border-left: 1px solid var(--x-border);
+            transform: rotate(45deg); z-index: 1;
+        }
+
         .dropdown-item {
-            padding: 10px 16px; cursor: pointer; font-size: 1.4rem; font-weight: 500;
-            color: var(--x-text-main); transition: 0.2s; text-align: left;
+            padding: 10px 16px; cursor: pointer; font-size: 1.4rem; font-weight: normal; /* ตัวบาง */
+            color: var(--x-text-main); transition: 0.2s; text-align: left; position: relative; z-index: 2;
         }
         .dropdown-item:hover { background: var(--x-bg-subdued); }
         .dropdown-item.edit { color: var(--x-primary); }
         .dropdown-item.delete { color: var(--x-danger); }
 
-        /* ปุ่ม Option 3 จุด (ไม่มี Hover Overlay) */
         .option-btn { 
             width: 3.2rem; height: 3.2rem; background: transparent; color: var(--x-setting-gray); 
             border-radius: 50%; display: flex; align-items: center; justify-content: center; 
@@ -140,9 +155,7 @@
         .collection-block.collapsed .collection-body { display: none; }
         .collection-block.collapsed .collection-header { padding-bottom: 0; border-bottom: none;}
         
-        .collection-name-text { 
-            font-size: 1.6rem; font-weight: normal; color: var(--x-text-subdued); flex: 1; transition: 0.2s; 
-        }
+        .collection-name-text { font-size: 1.6rem; font-weight: normal; color: var(--x-text-subdued); flex: 1; transition: 0.2s; }
         .collection-header:hover .collection-name-text { color: var(--x-text-main); }
         
         .header-actions { display: flex; align-items: center; gap: 0.5rem; }
@@ -153,18 +166,23 @@
         .collection-body { padding-top: 1rem; }
 
         /* ======================================= */
-        /* สินค้า */
+        /* สินค้า (รูปแบบใหม่ ไม่มีช่องกรอก ให้กด Edit แทน) */
         /* ======================================= */
         .product-item { background: var(--x-bg-main); padding: 1.5rem; border-radius: var(--x-radius-base); margin-bottom: 1.5rem; border: 1px solid var(--x-border); transition: 0.2s;}
         .product-item:focus-within { border-color: var(--x-primary); box-shadow: 0 0 0 1px var(--x-primary); }
         
-        .product-header-row { display: grid; grid-template-columns: 1fr 8.5rem 10rem auto; gap: 1rem; margin-bottom: 0.5rem; align-items: center;}
-        .product-header-row input { padding: 1rem 1.2rem; } 
+        /* Grid Layout ใหม่ */
+        .product-header-row { display: grid; grid-template-columns: 1fr 10rem auto; gap: 1rem; margin-bottom: 0.5rem; align-items: center;}
 
-        .qty-control { display: flex; align-items: center; background: transparent; border: 1px solid var(--x-border-dark); border-radius: var(--x-radius-base); transition: 0.2s; height: 100%;}
+        /* แสดงชื่อและราคาเป็น Text */
+        .product-info-display { display: flex; flex-direction: column; gap: 0.4rem; justify-content: center; }
+        .productName-display { font-size: 1.5rem; font-weight: 600; color: var(--x-text-main); }
+        .productPrice-display { font-size: 1.3rem; color: var(--x-text-subdued); }
+
+        .qty-control { display: flex; align-items: center; background: transparent; border: 1px solid var(--x-border-dark); border-radius: var(--x-radius-base); transition: 0.2s; height: 3.6rem;}
         .qty-control:focus-within { border-color: var(--x-primary); box-shadow: inset 0 0 0 1px var(--x-primary);}
-        .qty-control input { width: 100%; text-align: center; border: none !important; box-shadow: none !important; padding: 0.8rem 0 !important; background: transparent; font-weight: normal;}
-        .qty-btn { background: transparent; border: none; color: var(--x-text-subdued); font-size: 1.6rem; width: 3.2rem; height: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;}
+        .qty-control input { width: 100%; text-align: center; border: none !important; box-shadow: none !important; padding: 0 !important; background: transparent; font-weight: normal; font-size: 1.4rem;}
+        .qty-btn { background: transparent; border: none; color: var(--x-text-subdued); font-size: 1.8rem; width: 3.6rem; height: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;}
         .qty-btn:hover { color: var(--x-text-main); background: rgba(128, 128, 128, 0.05);}
         
         .option-row { display: flex; align-items: center; gap: 1rem; margin-top: 1rem; padding-top: 1.2rem; border-top: 1px dashed var(--x-border); }
@@ -174,7 +192,6 @@
         .pill:hover { border-color: var(--x-setting-gray); }
         .pill.active { background: var(--x-setting-gray); color: white; border-color: var(--x-setting-gray); }
 
-        /* ปุ่ม Add มีไอคอน + ใหญ่ๆ */
         .btn-add { width: 100%; text-align: left; background: transparent; border: none; color: var(--x-primary); font-size: 1.4rem; cursor: pointer; padding: 0.5rem 0; font-weight: normal; display: flex; align-items: center; gap: 0.8rem; margin-top: 1rem;}
         .btn-add svg { stroke-width: 2.5; width: 1.8rem; height: 1.8rem; }
         .btn-add:hover { text-decoration: underline;}
@@ -185,15 +202,11 @@
         .fee-group-box { display: flex; flex-direction: column; margin-bottom: 4rem; }
         
         .shipping-item { display: flex; align-items: center; padding: 1.5rem 0; border-bottom: 1px solid var(--x-border); gap: 1.5rem;}
-        
-        /* ไอคอนตั้งค่าสีมาตรฐานขาวดำ */
-        .shipping-icon { width: 4.5rem; height: 4.5rem; background: var(--x-text-main); color: var(--x-bg-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
-        
+        .shipping-icon { width: 4.5rem; height: 4.5rem; background: var(--x-paypal); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
         .shipping-text { flex: 1; }
         .shipping-title { font-size: 1.4rem; font-weight: normal; color: var(--x-text-main); display: flex; align-items: center; gap: 0.5rem;}
         .shipping-subtitle { font-size: 1.2rem; color: var(--x-text-subdued); margin-top: 0.2rem;}
         
-        /* Toggle Switch */
         .ios-switch { position: relative; display: inline-block; width: 4.6rem; height: 2.6rem; flex-shrink: 0; margin-left: 1rem;}
         .ios-switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; inset: 0; background-color: var(--x-border-dark); border-radius: 3rem; transition: .3s; cursor: pointer;}
@@ -220,26 +233,33 @@
         
         .bank-badge { padding: 0.4rem 1rem; border-radius: 4px; border: 1px solid var(--x-border); font-size: 1.1rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; min-width: 5rem; text-align: center; color: #FFF; box-shadow: 0 1px 2px rgba(0,0,0,0.05);}
 
-        .bank-popover { position: absolute; z-index: 2000; background: var(--x-bg-main); border: 1px solid var(--x-border); padding: 1rem; border-radius: var(--x-radius-large); box-shadow: var(--x-shadow-modal); display: flex; flex-direction: column; gap: 0.4rem; opacity: 0; visibility: hidden; transition: 0.2s; min-width: 16rem; max-height: 25rem; overflow-y: auto;}
+        .bank-popover { position: absolute; z-index: 2000; background: var(--x-bg-main); border: 1px solid var(--x-border); padding: 1rem; border-radius: var(--x-radius-large); box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 0.4rem; opacity: 0; visibility: hidden; transition: 0.2s; min-width: 16rem; max-height: 25rem; overflow-y: auto;}
         .bank-popover.active { opacity: 1; visibility: visible; }
         .bank-option { display: flex; align-items: center; gap: 1rem; padding: 0.8rem 1.2rem; cursor: pointer; font-size: 1.4rem; font-weight: normal; color: var(--x-text-main); border-radius: var(--x-radius-base); transition: 0.2s;}
         .bank-option:hover { background: var(--x-bg-subdued); }
         .bank-color-dot { width: 1.4rem; height: 1.4rem; border-radius: 50%; box-shadow: 0 1px 2px rgba(0,0,0,0.2);}
 
         /* ======================================= */
-        /* 📄 ฝั่งขวา: สรุปยอด */
+        /* 📄 ฝั่งขวา: สรุปยอด (Sticky Fixed) */
         /* ======================================= */
         .summary-panel {
             flex: 1; 
             background-color: var(--x-bg-subdued);
             border-left: 1px solid var(--x-border); transition: 0.3s;
-            overflow-y: auto;
+            position: sticky; top: 0; height: 100vh; overflow-y: auto;
         }
         
         .summary-content {
             width: 100%; max-width: 500px; margin: 0 auto;
             padding: 4rem 4rem 8rem 4rem; box-sizing: border-box;
         }
+
+        /* --------------------------------- */
+        /* จำกัดบิล 3 รายการ มี Scrollbar */
+        /* --------------------------------- */
+        .visual-bill-wrapper { max-height: 23rem; overflow-y: auto; padding-right: 0.5rem; margin-bottom: 2rem;}
+        .visual-bill-wrapper::-webkit-scrollbar { width: 0.4rem; }
+        .visual-bill-wrapper::-webkit-scrollbar-thumb { background-color: var(--x-border-dark); border-radius: 1rem; }
 
         .summary-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 1.2rem 0; font-size: 1.4rem; }
         
@@ -248,7 +268,7 @@
         
         .qty-badge { position: absolute; top: -0.8rem; right: -0.8rem; background: rgba(114, 114, 114, 0.9); color: white; font-size: 1.2rem; min-width: 2rem; height: 2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0 0.4rem; box-sizing: border-box; font-weight: normal; z-index: 2;}
         
-        .totals-section { border-top: 1px solid var(--x-border); margin-top: 2rem; padding-top: 1.5rem; }
+        .totals-section { border-top: 1px solid var(--x-border); padding-top: 1.5rem; }
         .cost-line { display: flex; justify-content: space-between; padding: 0.8rem 0; font-size: 1.4rem; color: var(--x-text-main); }
         .cost-line .label { color: var(--x-text-subdued); }
         
@@ -295,7 +315,7 @@
             box-shadow: var(--x-shadow-modal); overflow: hidden; transform: translateY(20px); transition: 0.3s;
         }
         .modal-overlay.show .modal-content { transform: translateY(0); }
-        .modal-header { padding: 2rem; border-bottom: 1px solid var(--x-border); font-size: 1.6rem; font-weight: 600; color: var(--x-text-main); }
+        .modal-header { padding: 2rem; border-bottom: 1px solid var(--x-border); font-size: 1.6rem; font-weight: bold; color: var(--x-text-main); }
         .modal-body { padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
         .modal-body label { font-size: 1.3rem; color: var(--x-text-subdued); font-weight: 500; margin-bottom: -0.5rem;}
         .modal-footer { padding: 1.5rem 2rem; border-top: 1px solid var(--x-border); display: flex; justify-content: flex-end; gap: 1rem; background: var(--x-bg-subdued);}
@@ -310,22 +330,21 @@
         .mobile-summary-toggle { display: none; }
 
         @media (max-width: 1000px) {
-            body { overflow: auto; height: auto; }
             .header-content { padding: 1.5rem 2rem; }
             .layout-container { flex-direction: column; overflow: visible;}
             
-            .summary-panel { order: 1; overflow: visible; border-right: none; border-bottom: 1px solid var(--x-border); border-left: none;}
+            .summary-panel { order: 1; position: static; height: auto; overflow: visible; border-right: none; border-bottom: 1px solid var(--x-border); border-left: none;}
             .summary-content { position: static; padding: 2rem; max-width: 100%; height: auto; display: none; }
             .summary-content.show { display: block; }
 
-            .management-panel { order: 2; padding: 3rem 2rem; max-width: 100%; height: auto; border-right: none;}
+            .management-panel { order: 2; padding: 3rem 2rem; max-width: 100%; height: auto; overflow: visible;}
             
             .mobile-summary-toggle {
                 display: flex; justify-content: space-between; align-items: center;
                 background-color: var(--x-bg-subdued); padding: 1.5rem 2rem; cursor: pointer;
                 color: var(--x-primary); font-size: 1.4rem;
             }
-            .product-header-row { grid-template-columns: 1fr 8.5rem 11rem auto; }
+            .product-header-row { grid-template-columns: 1fr 8.5rem 10rem auto; }
         }
 
         .footer-links { display: flex; gap: 1.5rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--x-border); justify-content: center; align-items: center;}
@@ -336,7 +355,7 @@
     <header class="top-header">
         <div class="header-content">
             <div class="header-logo">Shop Management</div>
-            <button class="btn-clear" onclick="clearAllPills()" title="Clear Options">
+            <button class="btn-clear" onclick="clearAllPills()">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
                 Clear Options
             </button>
@@ -376,7 +395,7 @@
                     </div>
 
                     <div class="shipping-item">
-                        <div class="shipping-icon">
+                        <div class="shipping-icon" style="background:var(--x-text-main); color:var(--x-bg-main);">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
                         </div>
                         <div class="shipping-text">
@@ -391,7 +410,7 @@
                     </div>
 
                     <div class="shipping-item" style="border-bottom:none;">
-                        <div class="shipping-icon">
+                        <div class="shipping-icon" style="background:var(--x-text-main); color:var(--x-bg-main);">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
                         </div>
                         <div class="shipping-text">
@@ -414,8 +433,8 @@
                             <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
                         </button>
                         <div class="dropdown-menu">
-                            <div class="dropdown-item" onclick="addBank()">Add Payment</div>
-                            <div class="dropdown-item edit" onclick="editBankList()">Edit Selected</div>
+                            <div class="dropdown-item edit" onclick="addBank()">Add Payment</div>
+                            <div class="dropdown-item" onclick="editBankList()">Edit Selected</div>
                         </div>
                     </div>
                 </div>
@@ -448,7 +467,7 @@
 
             <div class="summary-content" id="summary-box">
                 
-                <div id="visual-bill"></div>
+                <div class="visual-bill-wrapper" id="visual-bill"></div>
 
                 <div class="totals-section">
                     <div class="cost-line">
@@ -465,7 +484,7 @@
                     </div>
                     
                     <div class="cost-line total-line">
-                        <span style="font-weight: normal;">Total</span>
+                        <span style="font-weight: bold;">Total</span>
                         <div class="total-price">
                             <span class="total-currency">THB</span>
                             <span id="display-total" class="total-amount">฿0.00</span>
@@ -478,7 +497,6 @@
                     <textarea id="outputText" class="final-output" style="height: 180px;" readonly placeholder="Order summary text..."></textarea>
                     <button class="btn-copy-inline" onclick="copyText('outputText')" title="Copy Order Summary">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                        Copy Text
                     </button>
                 </div>
 
@@ -487,7 +505,6 @@
                     <textarea id="outputLabelText" class="final-output" style="height: 100px;" readonly placeholder="Shipping label text..."></textarea>
                     <button class="btn-copy-inline" onclick="copyText('outputLabelText')" title="Copy Shipping Label">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                        Copy Text
                     </button>
                 </div>
 
@@ -500,11 +517,15 @@
 
     <div class="modal-overlay" id="editModal">
         <div class="modal-content">
-            <div class="modal-header">Edit Product Details</div>
+            <div class="modal-header">Edit Product</div>
             <div class="modal-body">
                 <div>
                     <label>Product Name</label>
                     <input type="text" id="modalName" placeholder="Enter product name..." style="margin-top:0.5rem;">
+                </div>
+                <div>
+                    <label>Price</label>
+                    <input type="number" id="modalPrice" placeholder="Enter price..." style="margin-top:0.5rem;">
                 </div>
                 <div>
                     <label>Options (comma separated)</label>
@@ -513,7 +534,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn-modal" onclick="closeModal()">Cancel</button>
-                <button class="btn-modal save" onclick="saveModal()">Save Changes</button>
+                <button class="btn-modal save" onclick="saveModal()">Save</button>
             </div>
         </div>
     </div>
@@ -545,7 +566,7 @@
 
     let defaultBanks = [{id: 'b1', text: 'กสิกรไทย\n123-4-56789-0\nนาย สมชาย ขายดี', bankCode: 'KBANK'}];
     let currentEditingBankId = null;
-    let activeProductItem = null; // สำหรับจำว่ากำลัง Edit สินค้าชิ้นไหนใน Modal
+    let activeProductItem = null;
 
     window.onload = function() {
         renderBanks(); 
@@ -953,9 +974,6 @@
         document.getElementById('outputLabelText').value = labelLines.join('\n');
     }
 
-    // ==========================================
-    // เพิ่ม/ลบ/แก้ไข คอลเลคชั่น & สินค้า
-    // ==========================================
     function toggleCollection(el) { el.closest('.collection-block').classList.toggle('collapsed'); saveData(); }
 
     function editCollectionName(btn) {
@@ -981,19 +999,18 @@
         const block = document.createElement('div');
         block.className = 'collection-block';
         if(isCollapsed) block.classList.add('collapsed');
-        let uniqueId = 'cdrop-' + Date.now();
         block.innerHTML = `
-            <div class="collection-header">
-                <div class="collection-name-text" onclick="toggleCollection(this)">${colName || 'New Collection'}</div>
+            <div class="collection-header" onclick="toggleCollection(this)">
+                <div class="collection-name-text">${colName || 'New Collection'}</div>
                 <div class="header-actions">
                     <div class="dropdown-container">
                         <button class="option-btn" onclick="toggleDropdown(event, this)">${ICON_DOTS}</button>
                         <div class="dropdown-menu">
-                            <div class="dropdown-item edit" onclick="editCollectionName(this)">Edit Name</div>
+                            <div class="dropdown-item edit" onclick="editCollectionName(this)">Edit</div>
                             <div class="dropdown-item delete" onclick="removeCollectionBlock(this)">Delete</div>
                         </div>
                     </div>
-                    <div class="chevron-box" onclick="toggleCollection(this)">${ICON_CHEV_UP}</div>
+                    <div class="chevron-box">${ICON_CHEV_UP}</div>
                 </div>
                 <input type="hidden" class="collectionName" value="${colName}">
             </div>
@@ -1012,8 +1029,6 @@
 
     function clearAllPills() { document.querySelectorAll('.pill.active').forEach(p => p.classList.remove('active')); document.querySelectorAll('.productQty').forEach(q => q.value = 1); ['special', 'deposit'].forEach(id => document.getElementById('check_' + id).checked = false); updateData(); }
     function handleAddProductClick(btn) { btn.previousElementSibling.appendChild(createProductItemElement()); updateData(); }
-    function moveProductUp(btn) { const i = btn.closest('.product-item'); if (i.previousElementSibling) { i.parentNode.insertBefore(i, i.previousElementSibling); updateData(); } }
-    function moveProductDown(btn) { const i = btn.closest('.product-item'); if (i.nextElementSibling) { i.parentNode.insertBefore(i.nextElementSibling, i); updateData(); } }
     function removeProduct(btn) { if(confirm('Delete this product?')) { btn.closest('.product-item').remove(); updateData(); } }
     function clearData() { if(confirm('🚨 Reset all data?')) { localStorage.removeItem('orderDataV3'); location.reload(); } }
 
@@ -1028,17 +1043,24 @@
         
         newItem.innerHTML = `
             <div class="product-header-row">
-                <input type="text" class="productName" placeholder="Product name" value="${name}" oninput="updateData()">
-                <input type="number" class="productPrice" placeholder="Price" value="${price}" oninput="updateData()">
+                <div class="product-info-display">
+                    <div class="productName-display">${name || 'Product name'}</div>
+                    <div class="productPrice-display">฿${price || '0'}</div>
+                </div>
+                
+                <input type="hidden" class="productName" value="${name}">
+                <input type="hidden" class="productPrice" value="${price}">
+                
                 <div class="qty-control">
                     <button class="qty-btn minus" type="button" onclick="adjustQty(this, -1)">−</button>
                     <input type="number" class="productQty" value="${qty || 1}" min="1" oninput="updateData()">
                     <button class="qty-btn plus" type="button" onclick="adjustQty(this, 1)">+</button>
                 </div>
+                
                 <div class="dropdown-container">
                     <button class="option-btn" onclick="toggleDropdown(event, this)">${ICON_DOTS}</button>
                     <div class="dropdown-menu">
-                        <div class="dropdown-item edit" onclick="openEditModal(this)">Edit Options</div>
+                        <div class="dropdown-item edit" onclick="openEditModal(this)">Edit</div>
                         <div class="dropdown-item" onclick="cloneProduct(this)">Copy</div>
                         <div class="dropdown-item delete" onclick="removeProduct(this)">Delete</div>
                     </div>
@@ -1059,12 +1081,13 @@
     function togglePill(pill) { pill.classList.toggle('active'); updateData(); }
 
     // ==========================================
-    // Modal Logic (สำหรับ Edit ชื่อและไซส์)
+    // Modal Logic (แก้ไขสินค้าแบบ Popup)
     // ==========================================
     function openEditModal(btn) {
         activeProductItem = btn.closest('.product-item');
         
         const nameVal = activeProductItem.querySelector('.productName').value;
+        const priceVal = activeProductItem.querySelector('.productPrice').value;
         const optionRows = activeProductItem.querySelectorAll('.option-row');
         let optionsArr = [];
         if (optionRows.length > 0) {
@@ -1072,6 +1095,7 @@
         }
         
         document.getElementById('modalName').value = nameVal;
+        document.getElementById('modalPrice').value = priceVal;
         document.getElementById('modalOptions').value = optionsArr.join(', ');
         
         document.getElementById('editModal').classList.add('show');
@@ -1086,15 +1110,19 @@
         if (!activeProductItem) return;
         
         const newName = document.getElementById('modalName').value;
+        const newPrice = document.getElementById('modalPrice').value;
         const newOptionsStr = document.getElementById('modalOptions').value;
         
         activeProductItem.querySelector('.productName').value = newName;
+        activeProductItem.querySelector('.productPrice').value = newPrice;
+        
+        activeProductItem.querySelector('.productName-display').innerText = newName || 'Product name';
+        activeProductItem.querySelector('.productPrice-display').innerText = `฿${newPrice || '0'}`;
         
         let arr = newOptionsStr.split(',').map(x=>x.trim()).filter(x=>x);
         if (arr.length === 0) arr = ['-'];
         
         const container = activeProductItem.querySelector('.product-options-container');
-        // รักษาไซส์ที่ถูกเลือกไว้ถ้ามันยังมีอยู่ใน list ใหม่
         const activeSizes = Array.from(activeProductItem.querySelectorAll('.pill.active')).map(p=>p.getAttribute('data-size'));
         container.innerHTML = createOptionRowHtml(arr, activeSizes);
         
