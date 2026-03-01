@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Order Management</title>
+    <style>
+        /* ========================================= */
+        /* --- 1. ระบบจัดการ THEME (สีหลักของเว็บ) --- */
+        /* ========================================= */
+        
+        :root {
+            --theme-bg: #000000;
+            --theme-surface: #1E1E1E; 
+            --theme-surface-alt: #2D2D2D;
+            --theme-surface-hover: #3A3A3C;
+            --theme-primary: #0A84FF; --theme-primary-hover: #007AFF; 
+            --theme-primary-alpha: rgba(10, 132, 255, 0.15); 
+            --theme-primary-focus: rgba(10, 132, 255, 0.3); 
+            --theme-accent-text: #64D2FF; 
+            --theme-danger: #FF453A; --theme-danger-hover: #FF3B30; 
+            --theme-danger-alpha: rgba(255, 69, 58, 0.15);
+            --theme-success: #32D74B; 
+            --theme-warning: #FFD60A; 
+            --theme-text: #FFFFFF; 
+            --theme-text-muted: #8E8E93; 
+            --theme-border: rgba(255, 255, 255, 0.1); 
+        }
+
+        [data-theme="github"] {
+            --theme-bg: #0d1117;
+            --theme-surface: #161b22;
+            --theme-surface-alt: #21262d;
+            --theme-surface-hover: #30363d;
+            --theme-primary: #2f81f7; --theme-primary-hover: #388bfd; 
+            --theme-primary-alpha: rgba(47, 129, 247, 0.15); 
+            --theme-primary-focus: rgba(47, 129, 247, 0.3);
+            --theme-accent-text: #79c0ff; 
+            --theme-danger: #f85149; --theme-danger-hover: #ff7b72; 
+            --theme-danger-alpha: rgba(248, 81, 73, 0.15);
+            --theme-success: #238636; 
+            --theme-warning: #d29922; 
+            --theme-text: #c9d1d9; 
+            --theme-text-muted: #8b949e; 
+            --theme-border: #30363d;
+        }
+
+        /* ========================================= */
+        /* --- Scrollbar แบบ macOS --- */
+        /* ========================================= */
+        ::-webkit-scrollbar { width: 14px; height: 14px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background-color: rgba(255, 255, 255, 0.2); border-radius: 10px; border: 4px solid var(--theme-bg); }
+        ::-webkit-scrollbar-thumb:hover { background-color: rgba(255, 255, 255, 0.4); }
+
+        /* ========================================= */
+
+        body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--theme-bg); color: var(--theme-text); margin: 0; padding: 2rem 3rem; display: flex; flex-direction: column; align-items: center; transition: background-color 0.3s ease, color 0.3s ease; }
+        .container { display: grid; grid-template-columns: 1.4fr 1fr; gap: 2rem; width: 100%; max-width: 1800px; }
+        
+        .panel { background: transparent; padding: 1rem 0; border-radius: 0; border: none; box-shadow: none; transition: background-color 0.3s ease; }
+        
+        .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--theme-border); }
+        h2 { margin: 0; color: var(--theme-text); font-size: 1.6rem; font-weight: 700; display: flex; align-items: center; gap: 0.75rem; }
+        .version-badge { font-size: 0.85rem; color: var(--theme-text-muted); font-weight: normal; }
+        .form-group { margin-bottom: 1.5rem; }
+        label.section-label { display: block; margin-bottom: 0.8rem; font-weight: 600; font-size: 0.95rem; color: var(--theme-text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-left: 0.5rem; }
+        
+        input[type="text"], input[type="number"]:not(.inline-fee-input), textarea { 
+            width: 100%; 
+            padding: 0.75rem 1rem; 
+            background-color: var(--theme-surface); 
+            color: var(--theme-text); 
+            border: 1px solid var(--theme-border); 
+            border-radius: 20px !important; 
+            box-sizing: border-box; 
+            font-family: inherit; 
+            font-size: 15px; 
+            -webkit-appearance: none; appearance: none; transition: all 0.2s ease; 
+        }
+        input::placeholder, textarea::placeholder { color: var(--theme-text-muted); }
+        input:focus, textarea:focus { outline: none; border-color: var(--theme-primary); box-shadow: 0 0 0 3px var(--theme-primary-focus); }
+        input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type="number"] { -moz-appearance: textfield; }
+        
+        /* ========================================= */
+        /* --- คอลเลคชั่น (ดีไซน์ Mac Finder) --- */
+        /* ========================================= */
+        .collection-block { background-color: var(--theme-surface); border-radius: 16px; padding: 1rem; margin-bottom: 1.5rem; border: 1px solid var(--theme-border); box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.3s ease; }
+        
+        .collection-header { display: flex; flex-direction: row; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        
+        .mac-controls { display: flex; gap: 8px; padding: 0; align-items: center; flex-shrink: 0; }
+        .mac-btn { 
+            width: 14px; 
+            height: 14px; 
+            border-radius: 50%; border: none; padding: 0; 
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; position: relative; transition: filter 0.2s; 
+        }
+        .mac-btn svg { 
+            opacity: 0; 
+            width: 8px; 
+            height: 8px; 
+            color: rgba(0,0,0,0.6); transition: opacity 0.2s; 
+        }
+        .mac-btn:hover svg { opacity: 1; } 
+        .mac-btn:active { filter: brightness(0.8); }
+        .mac-close { background-color: #FF5F56; }
+        .mac-min { background-color: #FFBD2E; }
+        .mac-max { background-color: #27C93F; }
+        
+        .collection-name-box { position: relative; width: 100%; flex-grow: 1; }
+        
+        .collection-name-box input { 
+            background-color: transparent; 
+            padding: 0.5rem 2.5rem 0.5rem 1rem; 
+            font-size: 1.05rem; 
+            font-weight: 600; 
+            border-radius: 20px !important; 
+            transition: all 0.2s ease; 
+            border: 1px solid transparent; 
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .collection-block:not(.collapsed) .collection-name-box input { background-color: var(--theme-primary); color: white; border-color: var(--theme-primary); }
+        .collection-block.collapsed .collection-name-box input { color: var(--theme-text); }
+        .collection-block:not(.collapsed) .collection-name-box input:focus { box-shadow: none; border-color: var(--theme-primary); }
+        
+        .btn-toggle-col { position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.2s; }
+        .collection-block:not(.collapsed) .btn-toggle-col { color: white; }
+        .collection-block.collapsed .btn-toggle-col { color: var(--theme-text-muted); }
+        .collection-block.collapsed .btn-toggle-col:hover { background-color: var(--theme-surface-hover); color: var(--theme-text); }
+        
+        .collection-block.collapsed .collection-body { display: none; }
+        
+        /* ========================================= */
+        
+        .product-item { background: var(--theme-surface-alt); padding: 0.85rem; border-radius: 12px; margin-bottom: 0.6rem; border: 1px solid var(--theme-border); }
+        .product-header-row { display: grid; grid-template-columns: 1fr 90px 70px auto; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem; }
+        
+        .product-header-row input { 
+            padding: 0.5rem 0.8rem !important; 
+            font-size: 0.95rem; 
+            background-color: var(--theme-surface); 
+            border: 1px solid var(--theme-border); 
+            border-radius: 20px !important; 
+        }
+        
+        .productName { width: 100%; font-weight: 500; }
+        .productPrice, .productQty { width: 100%; text-align: center; background-color: var(--theme-surface)!important; color: var(--theme-text)!important; font-weight: 600; }
+        .product-actions { display: flex; gap: 0.3rem; }
+        
+        .option-row { display: flex; align-items: center; margin-bottom: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--theme-border); gap: 1rem; }
+        .size-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; width: 100%; }
+        
+        .pill { 
+            padding: 0.35rem 0.9rem; 
+            border-radius: 20px; 
+            background: var(--theme-surface); 
+            color: var(--theme-text); 
+            font-size: 0.85rem; 
+            font-weight: 500; 
+            cursor: pointer; 
+            user-select: none; 
+            transition: all 0.2s ease; 
+            border: 1px solid var(--theme-border); 
+        }
+        .pill:hover { background: var(--theme-surface-hover); }
+        .pill.active { background: var(--theme-primary); color: white; border-color: var(--theme-primary); }
+        
+        .pill-action { 
+            appearance: none; -webkit-appearance: none; 
+            background-color: transparent; 
+            color: var(--theme-text-muted); 
+            border: none; 
+            width: 32px; height: 32px; 
+            padding: 0; 
+            border-radius: 50%; 
+            cursor: pointer; display: flex; align-items: center; justify-content: center; 
+            transition: all 0.2s ease; flex-shrink: 0;
+            margin-left: auto; 
+        }
+        .pill-action:hover { background-color: var(--theme-surface-hover); color: var(--theme-text); }
+
+        .btn { background-color: var(--theme-surface); color: var(--theme-text); border: 1px solid var(--theme-border); padding: 0.85rem 1.5rem; border-radius: 24px; cursor: pointer; font-weight: 600; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+        .btn:hover, .btn:active { background-color: var(--theme-surface-hover); }
+        .btn-primary { background-color: var(--theme-primary); color: white; border: 1px solid var(--theme-primary-hover); }
+        .btn-primary:hover, .btn-primary:active { background-color: var(--theme-primary-hover); }
+        .btn-success { background-color: var(--theme-success); color: white; border: none; }
+        .btn-danger-outline { background-color: transparent; color: var(--theme-danger); border: 1px solid var(--theme-danger); box-shadow: none; }
+        .btn-danger-outline:hover { background-color: var(--theme-danger-alpha); }
+        
+        .btn-icon { 
+            padding: 0; 
+            width: 30px; height: 30px; 
+            flex-shrink: 0; 
+            display: flex; align-items: center; justify-content: center; 
+            border-radius: 50%; 
+            color: var(--theme-text); 
+            border: 1px solid transparent; 
+            cursor: pointer; transition: all 0.2s; background-color: transparent; 
+        }
+        .btn-icon:hover { background-color: var(--theme-surface-hover); border-color: var(--theme-border); }
+        .btn-add-row { background: transparent; color: var(--theme-primary); border: none; cursor: pointer; font-size: 0.9rem; font-weight: 500; padding: 0.4rem 0; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.3rem; margin-left: 0.5rem; border-radius: 20px;}
+        .btn-add-row:hover { opacity: 0.7; text-decoration: underline; }
+
+        /* ========================================= */
+        /* --- ระบบ macOS System Settings List --- */
+        /* ========================================= */
+        .ios-list-group { background-color: var(--theme-surface); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid var(--theme-border); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .ios-list-item { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; background-color: transparent; transition: background-color 0.2s; position: relative; }
+        .ios-list-item:not(:last-child)::after { content: ''; position: absolute; bottom: 0; left: 3.2rem; right: 0; height: 1px; background-color: var(--theme-border); }
+        .ios-list-left { display: flex; align-items: center; gap: 0.8rem; flex: 1; min-width: 0; }
+        .ios-list-right { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; }
+        
+        .ios-icon-box { position: relative; overflow: hidden; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; transition: transform 0.1s ease, filter 0.2s ease; cursor: pointer; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1); }
+        .ios-icon-box:active { transform: scale(0.95); filter: brightness(0.8); }
+        .ios-icon-box svg { width: 14px; height: 14px; }
+
+        .fee-text-group { display: flex; flex-direction: column; line-height: 1.2; gap: 0.1rem; }
+        .ios-item-title { font-size: 0.95rem; font-weight: 500; color: var(--theme-text); white-space: pre-wrap; }
+        .ios-item-price { font-size: 0.85rem; color: var(--theme-text-muted); font-weight: normal; display: flex; align-items: center; gap: 2px;}
+
+        .inline-fee-input {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--theme-text-muted); 
+            font-size: inherit;
+            font-family: inherit;
+            font-weight: normal;
+            width: 50px;
+            padding: 0 4px;
+            margin-left: 2px;
+            border-radius: 4px !important;
+            outline: none;
+            transition: all 0.2s;
+            -moz-appearance: textfield;
+        }
+        .inline-fee-input:hover { background-color: rgba(255,255,255,0.05); }
+        .inline-fee-input:focus { background-color: var(--theme-surface-hover); color: var(--theme-primary); border-color: rgba(255,255,255,0.1); }
+
+        /* ========================================= */
+        /* --- Toggle Switch --- */
+        /* ========================================= */
+        .ios-switch { position: relative; display: inline-block; width: 54px; height: 28px; flex-shrink: 0; cursor: pointer; } 
+        .ios-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { 
+            position: absolute; inset: 0; 
+            background-color: #39393D; 
+            transition: .2s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            border-radius: 14px; 
+        }
+        .slider:before { 
+            position: absolute; content: ""; 
+            height: 22px; width: 26px; 
+            left: 3px; bottom: 3px; 
+            background-color: #D1D1D6; 
+            transition: .2s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            border-radius: 11px; 
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2); 
+        }
+        input:checked + .slider { background-color: var(--theme-primary); }
+        input:checked + .slider:before { 
+            transform: translateX(22px); 
+            background-color: #FFFFFF; 
+        }
+
+        .ios-list-item.clickable:hover { background-color: var(--theme-surface-hover); cursor: pointer; }
+        
+        .bank-action-btn { background-color: transparent; color: var(--theme-text-muted); border: none; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; padding: 0; flex-shrink: 0; position: relative; }
+        .bank-action-btn:hover { background-color: var(--theme-surface-hover); color: var(--theme-text); }
+        
+        /* ========================================= */
+        /* --- Radio Button --- */
+        /* ========================================= */
+        .bank-radio-container {
+            display: inline-flex; align-items: center; cursor: pointer; position: relative; margin-right: 0.8rem; margin-top: 0;
+        }
+        .bank-radio { opacity: 0; position: absolute; width: 0; height: 0; }
+        .custom-radio {
+            width: 16px; height: 16px; 
+            border-radius: 50%; 
+            background-color: #39393D; 
+            display: flex; align-items: center; justify-content: center; 
+            transition: all 0.2s ease; 
+            border: 2px solid transparent;
+        }
+        .bank-radio:checked + .custom-radio {
+            background-color: var(--theme-primary); 
+            border-color: var(--theme-primary);
+        }
+        .custom-radio::after {
+            content: ''; width: 6px; height: 6px; 
+            border-radius: 50%; 
+            background-color: #FFFFFF; 
+            transform: scale(0); 
+            transition: transform 0.2s ease;
+        }
+        .bank-radio:checked + .custom-radio::after {
+            transform: scale(1); 
+        }
+
+        /* ========================================= */
+        /* --- Popover เลือกสี --- */
+        /* ========================================= */
+        .color-popover {
+            position: absolute; z-index: 1000;
+            background: var(--theme-surface-alt);
+            border: 1px solid var(--theme-border);
+            border-radius: 12px; padding: 0.75rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem;
+            opacity: 0; visibility: hidden;
+            transform: translateY(10px) scale(0.95);
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-origin: top left;
+        }
+        .color-popover.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        .color-swatch {
+            width: 24px; height: 24px; border-radius: 50%; border: none; cursor: pointer;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15); transition: transform 0.1s;
+        }
+        .color-swatch:active { transform: scale(0.85); }
+        .color-swatch.custom-color { background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .color-swatch.custom-color input[type="color"] { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; cursor: pointer; }
+        .color-swatch.custom-color svg { width: 12px; height: 12px; color: white; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8)); pointer-events: none; }
+
+        /* ========================================= */
+
+        textarea { height: 350px; resize: vertical; line-height: 1.6; border-radius: 12px !important;}
+        .action-buttons-group { display: flex; gap: 1rem; margin-top: 1rem; }
+
+        .help-section { width: 100%; max-width: 1800px; margin: 2rem auto 0 auto; background: var(--theme-surface); border: 1px solid var(--theme-border); border-radius: 16px; overflow: hidden; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .help-toggle { width: 100%; background: transparent; color: var(--theme-text); border: none; padding: 1rem 1.5rem; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background-color 0.2s; }
+        .help-toggle:hover { background-color: var(--theme-surface-hover); }
+        .help-content { max-height: 0; padding: 0 1.5rem; opacity: 0; transition: all 0.3s ease; }
+        .help-content.open { max-height: 2500px; padding: 0 1.5rem 1.5rem 1.5rem; opacity: 1; border-top: 1px solid var(--theme-border); }
+        .help-content h3 { color: var(--theme-primary); margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1rem; }
+        .help-content ul { margin: 0; padding-left: 1.5rem; color: var(--theme-text-muted); line-height: 1.6; font-size: 0.95rem; }
+        .help-content li { margin-bottom: 0.5rem; }
+        .help-content code { background: var(--theme-bg); padding: 0.15rem 0.5rem; border-radius: 6px; color: var(--theme-accent-text); border: 1px solid var(--theme-border); }
+        
+        .app-footer { margin-top: 2rem; text-align: center; color: var(--theme-text-muted); font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem; width: 100%; padding-bottom: 2rem;}
+        #themeSelector { padding: 0.3rem 0.6rem; border-radius: 12px; background: var(--theme-surface); color: var(--theme-text); border: 1px solid var(--theme-border); font-family: inherit; font-size: 0.9rem; cursor: pointer; outline: none; transition: all 0.2s; }
+
+        @media (max-width: 800px) {
+            body { padding: 0 0.5rem; } 
+            .container { grid-template-columns: 1fr; gap: 1rem; }
+            .panel { padding: 1.25rem 0; }
+            .main-header { flex-direction: column; align-items: stretch; gap: 1rem; margin-bottom: 1.5rem;}
+            .header-left { width: 100%; flex: none; }
+            .header-actions { width: 100%; justify-content: flex-end; }
+            
+            .product-header-row { grid-template-columns: 85px 1fr 85px; grid-template-rows: auto auto; gap: 0.6rem; }
+            .productName { grid-column: 1 / 3; grid-row: 1; } 
+            .productPrice { grid-column: 3 / 4; grid-row: 1; } 
+            .productQty { grid-column: 1 / 2; grid-row: 2; } 
+            .product-actions { grid-column: 2 / 4; grid-row: 2; justify-content: flex-end; } 
+
+            .action-buttons-group { flex-direction: column; gap: 0.5rem; }
+            textarea { height: 250px; } 
+            .help-toggle { padding: 1rem; font-size: 1rem; }
+            .help-content.open { padding: 0 1rem 1.5rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="panel">
+        <div class="main-header">
+            <h2>
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--theme-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                Order Management <span class="version-badge">v9.9.8</span>
+            </h2>
+            <button class="btn btn-danger-outline" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: var(--theme-surface);" onclick="clearAllPills()">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+                ล้างตัวเลือก
+            </button>
+        </div>
+        
+        <div id="collectionsContainer"></div>
+
+        <button class="btn btn-primary" style="width: 100%; margin-bottom: 2rem;" onclick="addCollectionBlock()">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            เพิ่มคอลเลคชั่นใหม่
+        </button>
+        
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label class="section-label">ตั้งค่าจัดส่ง & มัดจำ</label>
+            <div class="ios-list-group">
+                
+                <div class="ios-list-item">
+                    <div class="ios-list-left">
+                        <div class="ios-icon-box" id="icon_shipping" title="แตะเพื่อเปลี่ยนสีไอคอน" onclick="openColorPopover(event, 'shipping', 'fee')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                        </div>
+                        <div class="fee-text-group">
+                            <span class="ios-item-title">ค่าจัดส่ง</span>
+                            <span class="ios-item-price">฿<input type="number" id="val_shipping" class="inline-fee-input" value="50" oninput="updateData()" title="พิมพ์เพื่อแก้ไข"></span>
+                        </div>
+                    </div>
+                    <div class="ios-list-right">
+                        <label class="ios-switch" title="เปิด/ปิด ค่าจัดส่ง">
+                            <input type="checkbox" id="check_shipping" onchange="updateData()" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="ios-list-item">
+                    <div class="ios-list-left">
+                        <div class="ios-icon-box" id="icon_special" title="แตะเพื่อเปลี่ยนสีไอคอน" onclick="openColorPopover(event, 'special', 'fee')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        </div>
+                        <div class="fee-text-group">
+                            <span class="ios-item-title">พื้นที่พิเศษ</span>
+                            <span class="ios-item-price">฿<input type="number" id="val_special" class="inline-fee-input" value="50" oninput="updateData()" title="พิมพ์เพื่อแก้ไข"></span>
+                        </div>
+                    </div>
+                    <div class="ios-list-right">
+                        <label class="ios-switch" title="เปิด/ปิด พื้นที่พิเศษ">
+                            <input type="checkbox" id="check_special" onchange="updateData()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="ios-list-item">
+                    <div class="ios-list-left">
+                        <div class="ios-icon-box" id="icon_deposit" title="แตะเพื่อเปลี่ยนสีไอคอน" onclick="openColorPopover(event, 'deposit', 'fee')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                        </div>
+                        <div class="fee-text-group">
+                            <span class="ios-item-title">หักมัดจำ</span>
+                            <span class="ios-item-price">฿<input type="number" id="val_deposit" class="inline-fee-input" value="100" oninput="updateData()" title="พิมพ์เพื่อแก้ไข"></span>
+                        </div>
+                    </div>
+                    <div class="ios-list-right">
+                        <label class="ios-switch" title="เปิด/ปิด หักมัดจำ">
+                            <input type="checkbox" id="check_deposit" onchange="updateData()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                <label class="section-label" style="margin: 0;">บัญชีธนาคาร</label>
+                <button class="btn-add-row" onclick="addBank()" style="margin: 0; font-size: 0.9rem;">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    เพิ่มบัญชี
+                </button>
+            </div>
+            <div id="bankContainer">
+                </div>
+        </div>
+
+        <button class="btn btn-danger-outline" style="width: 100%; margin-top: 1.5rem;" onclick="clearData()">
+            ล้างข้อมูลสินค้าทั้งหมด
+        </button>
+        
+        <div class="action-buttons-group">
+            <button class="btn" style="flex: 1;" onclick="exportData()">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                ส่งออก
+            </button>
+            <button class="btn" style="flex: 1;" onclick="importData()">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                นำเข้า
+            </button>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h2 style="margin-bottom: 1.5rem; font-size: 1.3rem; margin-left: 0.5rem;">สรุปยอดโอน</h2>
+        <div class="form-group">
+            <textarea id="outputText" readonly placeholder="ข้อความสรุปยอดจะแสดงตรงนี้..."></textarea>
+        </div>
+        <button class="btn btn-primary" style="width: 100%; margin-bottom: 3rem;" onclick="copyText('outputText')">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            คัดลอกสรุปยอด
+        </button>
+
+        <h2 style="margin-bottom: 1.5rem; font-size: 1.3rem; margin-left: 0.5rem;">ใบปะหน้า</h2>
+        <div class="form-group">
+            <textarea id="outputLabelText" readonly placeholder="ข้อความสำหรับใบปะหน้าจะแสดงตรงนี้..."></textarea>
+        </div>
+        <button class="btn btn-success" style="width: 100%;" onclick="copyText('outputLabelText')">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            คัดลอกใบปะหน้า
+        </button>
+    </div>
+</div>
+
+<div class="help-section">
+    <button class="help-toggle" onclick="toggleHelp()">
+        <span>📖 คู่มือการใช้งานระบบ</span>
+        <span id="help-icon" style="transition: transform 0.3s;">▼</span>
+    </button>
+    <div class="help-content" id="helpContent">
+        <div id="helpLoading" style="display: none; text-align: center; padding: 2rem; color: var(--theme-text-muted);">
+            ⏳ กำลังโหลดข้อมูล...
+        </div>
+        <div id="helpInner"></div>
+    </div>
+</div>
+
+<div class="app-footer">
+    <label for="themeSelector">🎨 Theme:</label>
+    <select id="themeSelector" onchange="changeTheme()">
+        <option value="ios">macOS Dark</option>
+        <option value="github">GitHub Dark</option>
+    </select>
+</div>
+
+<div id="colorPopover" class="color-popover"></div>
+
+<script>
+    const ICON_CHEV_RIGHT = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
+    const ICON_CHEV_DOWN = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+    const ICON_UP = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>`;
+    const ICON_DOWN = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+    const ICON_TRASH = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
+    const ICON_COPY = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+    const ICON_PLUS = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
+    
+    const ICON_DOTS = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"></circle><circle cx="7.5" cy="12" r="1.5" fill="currentColor" stroke="none"></circle><circle cx="16.5" cy="12" r="1.5" fill="currentColor" stroke="none"></circle></svg>`;
+
+    const MAC_CLOSE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>`;
+    const MAC_MIN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>`;
+    const MAC_MAX = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>`;
+
+    let defaultBanks = [];
+    
+    const thaiBankColors = [
+        { name: 'กสิกรไทย', hex: '#138F2D' },
+        { name: 'ไทยพาณิชย์', hex: '#4E2A81' },
+        { name: 'กรุงเทพ', hex: '#1E3A8A' },
+        { name: 'กรุงไทย', hex: '#00AEEF' },
+        { name: 'กรุงศรี', hex: '#FEC400' },
+        { name: 'ทีทีบี / ธอส.', hex: '#FF9F0A' },
+        { name: 'ออมสิน', hex: '#EB008B' },
+        { name: 'ทั่วไป', hex: '#0A84FF' },
+        { name: 'ดำ', hex: '#333333' }
+    ];
+
+    let currentEditingColorId = null;
+    let currentEditingColorType = null;
+
+    window.onload = function() {
+        const savedTheme = localStorage.getItem('appTheme') || 'ios';
+        document.getElementById('themeSelector').value = savedTheme;
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        renderBanks(); 
+        loadData();
+        generateText(); 
+    };
+
+    function updateData() {
+        saveData();
+        generateText();
+    }
+
+    function openColorPopover(event, id, type) {
+        event.stopPropagation();
+        currentEditingColorId = id;
+        currentEditingColorType = type; 
+        
+        const popover = document.getElementById('colorPopover');
+        const rect = event.currentTarget.getBoundingClientRect();
+        
+        popover.innerHTML = '';
+        
+        thaiBankColors.forEach(color => {
+            const btn = document.createElement('button');
+            btn.className = 'color-swatch';
+            btn.style.backgroundColor = color.hex;
+            btn.title = color.name;
+            btn.onclick = (e) => {
+                e.stopPropagation();
+                selectColor(color.hex);
+            };
+            popover.appendChild(btn);
+        });
+
+        let currentColor = '#0A84FF';
+        if (type === 'bank') {
+            let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
+            let b = banks.find(x => x.id === id);
+            if(b) currentColor = b.color || '#0A84FF';
+        } else {
+            currentColor = localStorage.getItem('iconColor_' + id) || '#0A84FF';
+        }
+
+        const customBtn = document.createElement('label');
+        customBtn.className = 'color-swatch custom-color';
+        customBtn.title = 'เลือกสีตามต้องการ';
+        customBtn.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <input type="color" value="${currentColor}" onchange="selectColor(this.value)" onclick="event.stopPropagation()">
+        `;
+        popover.appendChild(customBtn);
+
+        popover.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+        popover.style.left = (rect.left + window.scrollX - 5) + 'px';
+        popover.classList.add('active');
+    }
+
+    document.addEventListener('click', function(event) {
+        const popover = document.getElementById('colorPopover');
+        if (popover && popover.classList.contains('active') && !event.target.closest('.ios-icon-box') && !event.target.closest('.color-popover')) {
+            popover.classList.remove('active');
+            currentEditingColorId = null;
+            currentEditingColorType = null;
+        }
+    });
+
+    function selectColor(hex) {
+        if (currentEditingColorType === 'bank' && currentEditingColorId) {
+            let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
+            const index = banks.findIndex(b => b.id === currentEditingColorId);
+            if (index !== -1) {
+                banks[index].color = hex;
+                localStorage.setItem('bankData', JSON.stringify(banks));
+                renderBanks();
+            }
+        } else if (currentEditingColorType === 'fee' && currentEditingColorId) {
+            localStorage.setItem('iconColor_' + currentEditingColorId, hex);
+            document.getElementById('icon_' + currentEditingColorId).style.backgroundColor = hex;
+        }
+        
+        updateData();
+        document.getElementById('colorPopover').classList.remove('active');
+        currentEditingColorId = null;
+        currentEditingColorType = null;
+    }
+
+    function changeTheme() {
+        const theme = document.getElementById('themeSelector').value;
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('appTheme', theme);
+        updateData();
+    }
+
+    function renderBanks() {
+        let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
+        const container = document.getElementById('bankContainer');
+        let selectedId = localStorage.getItem('bank');
+        
+        if (!banks.find(b => b.id === selectedId) && banks.length > 0) {
+            selectedId = banks[0].id;
+        }
+
+        container.innerHTML = '<div class="ios-list-group" id="bankListGroup"></div>';
+        const group = document.getElementById('bankListGroup');
+
+        banks.forEach(b => {
+            const isChecked = b.id === selectedId ? 'checked' : '';
+            const iconColor = b.color || '#0A84FF'; 
+            
+            const html = `
+                <div class="ios-list-item clickable" onclick="selectBank('${b.id}')">
+                    <div class="ios-list-left">
+                        <label class="bank-radio-container" onclick="event.stopPropagation(); selectBank('${b.id}')">
+                            <input type="radio" class="bank-radio" name="bank" value="${b.id}" ${isChecked}>
+                            <span class="custom-radio"></span>
+                        </label>
+                        <div class="ios-icon-box" style="background-color: ${iconColor};" title="แตะเพื่อเปลี่ยนสีไอคอน" onclick="openColorPopover(event, '${b.id}', 'bank')">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                        </div>
+                        <span class="ios-item-title">${b.text}</span>
+                    </div>
+                    <div class="ios-list-right" onclick="event.stopPropagation();">
+                        <button class="bank-action-btn" onclick="editBank('${b.id}')" title="ตั้งค่า / ลบบัญชี">
+                            ${ICON_DOTS}
+                        </button>
+                    </div>
+                </div>
+            `;
+            group.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
+    function selectBank(id) {
+        localStorage.setItem('bank', id);
+        renderBanks();
+        updateData();
+    }
+
+    function addBank() {
+        const input = prompt("🏦 เพิ่มข้อมูลบัญชีใหม่\n(พิมพ์ // เพื่อบังคับขึ้นบรรทัดใหม่ เช่น ธ.กสิกร // 12345 // สมชาย):");
+        if (input && input.trim() !== '') {
+            let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
+            const formattedText = input.split('//').map(s => s.trim()).join('\n');
+            const newId = 'b' + Date.now();
+            banks.push({ id: newId, text: formattedText, color: '#0A84FF' });
+            localStorage.setItem('bankData', JSON.stringify(banks));
+            selectBank(newId); 
+        }
+    }
+
+    function editBank(id) {
+        let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
+        const bank = banks.find(b => b.id === id);
+        if (bank) {
+            const currentText = bank.text.split('\n').join(' // ');
+            const input = prompt("✏️ แก้ไขข้อมูลบัญชี\n(พิมพ์ // เพื่อบังคับขึ้นบรรทัดใหม่)\n\n🚨 หากต้องการลบบัญชีนี้ ให้ลบข้อความออกให้หมดแล้วกด OK:", currentText);
+            
+            if (input !== null) {
+                if (input.trim() === '') {
+                    banks = banks.filter(b => b.id !== id);
+                    localStorage.setItem('bankData', JSON.stringify(banks));
+                    renderBanks();
+                    updateData();
+                } else {
+                    bank.text = input.split('//').map(s => s.trim()).join('\n');
+                    localStorage.setItem('bankData', JSON.stringify(banks));
+                    renderBanks();
+                    updateData();
+                }
+            }
+        }
+    }
+
+    function saveData() {
+        localStorage.setItem('val_shipping', document.getElementById('val_shipping').value);
+        localStorage.setItem('val_special', document.getElementById('val_special').value);
+        localStorage.setItem('val_deposit', document.getElementById('val_deposit').value);
+        
+        localStorage.setItem('check_shipping', document.getElementById('check_shipping').checked);
+        localStorage.setItem('check_special', document.getElementById('check_special').checked);
+        localStorage.setItem('check_deposit', document.getElementById('check_deposit').checked);
+
+        const selectedBankNode = document.querySelector('input[name="bank"]:checked');
+        if(selectedBankNode) localStorage.setItem('bank', selectedBankNode.value);
+
+        const collections = [];
+        document.querySelectorAll('.collection-block').forEach(block => {
+            const colName = block.querySelector('.collectionName').value;
+            const isCollapsed = block.classList.contains('collapsed');
+            const products = [];
+            
+            block.querySelectorAll('.product-item').forEach(item => {
+                const name = item.querySelector('.productName').value;
+                const price = item.querySelector('.productPrice').value;
+                const qty = item.querySelector('.productQty').value;
+                const optionRows = [];
+                
+                item.querySelectorAll('.option-row').forEach(rowEl => {
+                    const availableSizes = [];
+                    const selectedSizes = [];
+                    rowEl.querySelectorAll('.pill[data-size]').forEach(pill => {
+                        const size = pill.getAttribute('data-size');
+                        availableSizes.push(size);
+                        if (pill.classList.contains('active')) selectedSizes.push(size);
+                    });
+                    optionRows.push({ availableSizes, selectedSizes });
+                });
+                products.push({ name, price, qty, optionRows });
+            });
+            collections.push({ colName, isCollapsed, products });
+        });
+        localStorage.setItem('orderDataV3', JSON.stringify(collections));
+    }
+
+    function loadData() {
+        if (localStorage.getItem('val_shipping')) document.getElementById('val_shipping').value = localStorage.getItem('val_shipping');
+        if (localStorage.getItem('val_special')) document.getElementById('val_special').value = localStorage.getItem('val_special');
+        if (localStorage.getItem('val_deposit')) document.getElementById('val_deposit').value = localStorage.getItem('val_deposit');
+
+        document.getElementById('icon_shipping').style.backgroundColor = localStorage.getItem('iconColor_shipping') || '#0A84FF';
+        document.getElementById('icon_special').style.backgroundColor = localStorage.getItem('iconColor_special') || '#FF9F0A';
+        document.getElementById('icon_deposit').style.backgroundColor = localStorage.getItem('iconColor_deposit') || '#FF453A';
+
+        ['shipping', 'special', 'deposit'].forEach(id => {
+            let savedState = localStorage.getItem('check_' + id);
+            let checkbox = document.getElementById('check_' + id);
+            
+            if (savedState === 'false') {
+                checkbox.checked = false;
+            } else if (savedState === 'true') {
+                checkbox.checked = true;
+            } else {
+                if(id === 'shipping') checkbox.checked = true;
+                else checkbox.checked = false;
+            }
+        });
+
+        const container = document.getElementById('collectionsContainer');
+        container.innerHTML = ''; 
+        let savedData = JSON.parse(localStorage.getItem('orderDataV3'));
+        
+        if (savedData && savedData.length > 0) {
+            savedData.forEach(col => {
+                const block = addCollectionBlock(col.colName, col.isCollapsed);
+                if(col.products.length > 0) {
+                    col.products.forEach(p => {
+                        block.querySelector('.productList').appendChild(createProductItemElement(p.name, p.price, p.qty, p.optionRows));
+                    });
+                } else {
+                    block.querySelector('.productList').appendChild(createProductItemElement()); 
+                }
+            });
+        } 
+    }
+
+    function exportData() {
+        saveData();
+        const exportObj = {
+            version: "v9.9.8",
+            collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
+            banks: JSON.parse(localStorage.getItem('bankData')) || [],
+            selectedBank: localStorage.getItem('bank') || '',
+            settings: {
+                val_shipping: localStorage.getItem('val_shipping') || '50',
+                val_special: localStorage.getItem('val_special') || '50',
+                val_deposit: localStorage.getItem('val_deposit') || '100',
+                check_shipping: localStorage.getItem('check_shipping') === 'true',
+                check_special: localStorage.getItem('check_special') === 'true',
+                check_deposit: localStorage.getItem('check_deposit') === 'true',
+                appTheme: localStorage.getItem('appTheme') || 'ios',
+                color_shipping: localStorage.getItem('iconColor_shipping') || '#0A84FF',
+                color_special: localStorage.getItem('iconColor_special') || '#FF9F0A',
+                color_deposit: localStorage.getItem('iconColor_deposit') || '#FF453A'
+            }
+        };
+
+        const dataStr = JSON.stringify(exportObj);
+        const encodedData = btoa(encodeURIComponent(dataStr));
+        navigator.clipboard.writeText(encodedData).then(() => {
+            alert('📋 คัดลอกโค้ดสำเร็จ! (รวมข้อมูลสินค้า ธนาคาร สีไอคอน และการตั้งค่าแล้ว)');
+        }).catch(() => {
+            prompt('คัดลอกโค้ดนี้:', encodedData);
+        });
+    }
+
+    function importData() {
+        const code = prompt('📥 วางโค้ดที่คัดลอกมา:');
+        if (!code) return;
+        try {
+            const decodedStr = decodeURIComponent(atob(code));
+            const parsedData = JSON.parse(decodedStr);
+
+            if (Array.isArray(parsedData)) {
+                localStorage.setItem('orderDataV3', JSON.stringify(parsedData));
+            } else if (parsedData && parsedData.collections) {
+                localStorage.setItem('orderDataV3', JSON.stringify(parsedData.collections));
+                if (parsedData.banks) localStorage.setItem('bankData', JSON.stringify(parsedData.banks));
+                if (parsedData.selectedBank) localStorage.setItem('bank', parsedData.selectedBank);
+                
+                if (parsedData.settings) {
+                    localStorage.setItem('val_shipping', parsedData.settings.val_shipping);
+                    localStorage.setItem('val_special', parsedData.settings.val_special);
+                    localStorage.setItem('val_deposit', parsedData.settings.val_deposit);
+                    localStorage.setItem('check_shipping', parsedData.settings.check_shipping);
+                    localStorage.setItem('check_special', parsedData.settings.check_special);
+                    localStorage.setItem('check_deposit', parsedData.settings.check_deposit);
+                    if (parsedData.settings.appTheme) {
+                        localStorage.setItem('appTheme', parsedData.settings.appTheme);
+                        document.getElementById('themeSelector').value = parsedData.settings.appTheme;
+                        document.documentElement.setAttribute('data-theme', parsedData.settings.appTheme);
+                    }
+                    if (parsedData.settings.color_shipping) localStorage.setItem('iconColor_shipping', parsedData.settings.color_shipping);
+                    if (parsedData.settings.color_special) localStorage.setItem('iconColor_special', parsedData.settings.color_special);
+                    if (parsedData.settings.color_deposit) localStorage.setItem('iconColor_deposit', parsedData.settings.color_deposit);
+                }
+            }
+            renderBanks();
+            loadData(); 
+            generateText(); 
+            alert('✅ นำเข้าสำเร็จ! (อัปเดตข้อมูลและตั้งค่าเรียบร้อย)');
+        } catch(e) { 
+            alert('❌ โค้ดไม่ถูกต้อง'); 
+        }
+    }
+
+    function toggleCollection(btn) {
+        const block = btn.closest('.collection-block');
+        block.classList.toggle('collapsed');
+        saveData();
+    }
+
+    function moveCollectionUp(btn) {
+        const block = btn.closest('.collection-block');
+        if (block.previousElementSibling) { block.parentNode.insertBefore(block, block.previousElementSibling); saveData(); generateText(); }
+    }
+
+    function moveCollectionDown(btn) {
+        const block = btn.closest('.collection-block');
+        if (block.nextElementSibling) { block.parentNode.insertBefore(block.nextElementSibling, block); saveData(); generateText(); }
+    }
+
+    /* แก้ไข: ใส่ oninput="updateData()" ใน collectionName */
+    function addCollectionBlock(colName = '', isCollapsed = false) {
+        const container = document.getElementById('collectionsContainer');
+        const block = document.createElement('div');
+        block.className = 'collection-block';
+        if(isCollapsed) block.classList.add('collapsed');
+        
+        block.innerHTML = `
+            <div class="collection-header">
+                <div class="mac-controls">
+                    <button class="mac-btn mac-close" onclick="removeCollectionBlock(this)" title="ลบคอลเลคชั่น">${MAC_CLOSE}</button>
+                    <button class="mac-btn mac-min" onclick="moveCollectionUp(this)" title="เลื่อนขึ้น">${MAC_MIN}</button>
+                    <button class="mac-btn mac-max" onclick="moveCollectionDown(this)" title="เลื่อนลง">${MAC_MAX}</button>
+                </div>
+                <div class="collection-name-box">
+                    <input type="text" class="collectionName" placeholder="ชื่อคอลเลคชั่น (ไม่ระบุก็ได้)" value="${colName}" oninput="updateData()">
+                    <button class="btn-toggle-col" onclick="toggleCollection(this)" title="ซ่อน/ขยาย">
+                        ${ICON_CHEV_DOWN}
+                    </button>
+                </div>
+            </div>
+            <div class="collection-body">
+                <div class="productList"></div>
+                <button class="btn-add-row" style="margin-top: 1rem; width: 100%; justify-content: center; background: transparent;" onclick="handleAddProductClick(this)">
+                    ${ICON_PLUS} เพิ่มสินค้า
+                </button>
+            </div>
+        `;
+        container.appendChild(block);
+        if(colName === '' && arguments.length === 0) {
+            block.querySelector('.productList').appendChild(createProductItemElement());
+            saveData(); generateText();
+        }
+        return block;
+    }
+
+    function removeCollectionBlock(btn) {
+        if(confirm('❌ ต้องการลบคอลเลคชั่นนี้พร้อมรายการสินค้าข้างในทิ้งทั้งหมด ใช่หรือไม่?')) { 
+            btn.closest('.collection-block').remove(); 
+            saveData(); 
+            generateText(); 
+        }
+    }
+
+    function clearAllPills() {
+        document.querySelectorAll('.product-options-container .pill.active').forEach(pill => pill.classList.remove('active'));
+        document.querySelectorAll('.productQty').forEach(qty => qty.value = 1);
+        ['special', 'deposit'].forEach(id => {
+            document.getElementById('check_' + id).checked = false;
+        });
+        saveData(); generateText();
+    }
+
+    function handleAddProductClick(btn) {
+        btn.previousElementSibling.appendChild(createProductItemElement());
+        saveData(); generateText();
+    }
+
+    function moveProductUp(btn) {
+        const item = btn.closest('.product-item');
+        if (item.previousElementSibling) { item.parentNode.insertBefore(item, item.previousElementSibling); saveData(); generateText(); }
+    }
+
+    function moveProductDown(btn) {
+        const item = btn.closest('.product-item');
+        if (item.nextElementSibling) { item.parentNode.insertBefore(item.nextElementSibling, item); saveData(); generateText(); }
+    }
+
+    function createOptionRowHtml(availableSizes, selectedSizes) {
+        let pillsHtml = availableSizes.map(s => `<div class="pill ${selectedSizes.includes(s) ? 'active' : ''}" onclick="togglePill(this)" data-size="${s}">${s}</div>`).join('');
+        let actionsHtml = `<button class="pill-action" onclick="editPillsList(this)" title="ตั้งค่าตัวเลือก/ลบแถว">${ICON_DOTS}</button>`;
+        return `<div class="option-row"><div class="size-pills">${pillsHtml}</div>${actionsHtml}</div>`;
+    }
+
+    /* แก้ไข: ใส่ oninput="updateData()" ให้ทุกช่อง (ชื่อ, ราคา, จำนวน) */
+    function createProductItemElement(name = '', price = '', qty = 1, optionRowsArray = null) {
+        const newItem = document.createElement('div');
+        newItem.className = 'product-item';
+        let rows = [];
+        if (optionRowsArray !== null) {
+            if (optionRowsArray.length === 0) rows = [ { availableSizes: ['-'], selectedSizes: [] } ];
+            else rows = optionRowsArray;
+        } else {
+            rows = [ { availableSizes: ['S', 'M', 'L', 'XL', '2XL'], selectedSizes: [] } ];
+        }
+        let rowsHtml = rows.map((r) => createOptionRowHtml(r.availableSizes, r.selectedSizes)).join('');
+        
+        newItem.innerHTML = `
+            <div class="product-header-row">
+                <input type="text" class="productName" placeholder="ชื่อสินค้า" value="${name}" oninput="updateData()">
+                <input type="number" class="productPrice" placeholder="ราคา" value="${price}" oninput="updateData()">
+                <input type="number" class="productQty" placeholder="ชิ้น" title="จำนวนชิ้น" value="${qty || 1}" min="1" oninput="updateData()">
+                <div class="product-actions">
+                    <button class="btn-icon btn-move" onclick="moveProductUp(this)" title="เลื่อนขึ้น">${ICON_UP}</button>
+                    <button class="btn-icon btn-move" onclick="moveProductDown(this)" title="เลื่อนลง">${ICON_DOWN}</button>
+                    <button class="btn-icon btn-clone" onclick="cloneProduct(this)" title="คัดลอก">${ICON_COPY}</button>
+                    <button class="btn-icon btn-remove" onclick="removeProduct(this)" title="ลบสินค้านี้">${ICON_TRASH}</button>
+                </div>
+            </div>
+            <div class="product-options-container">${rowsHtml}</div>
+            <button class="btn-add-row" onclick="addOptionRow(this)">${ICON_PLUS} เพิ่มตัวเลือก</button>
+        `;
+        return newItem;
+    }
+
+    function addOptionRow(btn) {
+        const newSizesStr = prompt('ตั้งค่าตัวเลือก (คั่นด้วยลูกน้ำ ,):');
+        if (newSizesStr && newSizesStr.trim() !== '') {
+            let newSizes = newSizesStr.split(',').map(s => s.trim()).filter(s => s !== '');
+            if (newSizes.length > 0) {
+                btn.previousElementSibling.insertAdjacentHTML('beforeend', createOptionRowHtml(newSizes, []));
+                saveData(); generateText();
+            }
+        }
+    }
+
+    function cloneProduct(btn) {
+        const item = btn.closest('.product-item');
+        const rows = Array.from(item.querySelectorAll('.option-row')).map(rowEl => ({
+            availableSizes: Array.from(rowEl.querySelectorAll('.pill[data-size]')).map(p => p.getAttribute('data-size')),
+            selectedSizes: []
+        }));
+        item.parentNode.insertBefore(createProductItemElement(item.querySelector('.productName').value, item.querySelector('.productPrice').value, 1, rows), item.nextSibling);
+        saveData(); generateText();
+    }
+
+    function togglePill(pill) { pill.classList.toggle('active'); saveData(); generateText(); }
+
+    function editPillsList(btn) {
+        const container = btn.closest('.option-row');
+        const item = container.closest('.product-item');
+        const currentSizes = Array.from(container.querySelectorAll('.pill[data-size]')).map(p => p.getAttribute('data-size'));
+        
+        const newSizesStr = prompt('ตั้งค่าปุ่ม (คั่นด้วยลูกน้ำ ,)\n* หากต้องการลบแถวนี้ออก ให้ลบข้อความออกให้หมดแล้วกด OK:', currentSizes.join(','));
+
+        if (newSizesStr !== null) {
+            let newSizes = newSizesStr.split(',').map(s => s.trim()).filter(s => s !== '');
+            if (newSizes.length === 0) {
+                const allRows = item.querySelectorAll('.option-row');
+                if (allRows.length <= 1) newSizes = ['-'];
+                else { container.remove(); saveData(); generateText(); return; }
+            }
+            const selectedSizes = Array.from(container.querySelectorAll('.pill.active')).map(p => p.getAttribute('data-size'));
+            container.outerHTML = createOptionRowHtml(newSizes, selectedSizes);
+            saveData(); generateText();
+        }
+    }
+
+    function removeProduct(btn) { 
+        if(confirm('❌ ต้องการลบสินค้านี้ใช่หรือไม่?')) {
+            btn.closest('.product-item').remove(); 
+            saveData(); 
+            generateText(); 
+        }
+    }
+
+    function clearData() { 
+        if(confirm('🚨 คุณกำลังจะล้างข้อมูลรายการสินค้าที่สร้างไว้ทั้งหมด!\n(ข้อมูลบัญชีธนาคารและการตั้งค่าจะไม่หาย)\n\nแน่ใจใช่หรือไม่?')) { 
+            localStorage.removeItem('orderDataV3'); 
+            location.reload(); 
+        } 
+    }
+
+    function generateText() {
+        const shippingValue = document.getElementById('check_shipping').checked ? parseFloat(document.getElementById('val_shipping').value) || 0 : 0;
+        const specialShippingValue = document.getElementById('check_special').checked ? parseFloat(document.getElementById('val_special').value) || 0 : 0;
+        const depositValue = document.getElementById('check_deposit').checked ? parseFloat(document.getElementById('val_deposit').value) || 0 : 0;
+
+        let finalProductsText = '', labelLines = [], validPrices = [], hasMissingPrice = false, productsSum = 0;
+        
+        document.querySelectorAll('.collection-block').forEach(block => {
+            const colName = block.querySelector('.collectionName').value.trim();
+            let colText = '', colLabelProducts = [], mergedMap = {}, orderArr = [];
+            
+            block.querySelectorAll('.product-item').forEach(item => {
+                const nameVal = item.querySelector('.productName').value.trim();
+                const rawPrice = item.querySelector('.productPrice').value.trim();
+                const qtyVal = parseInt(item.querySelector('.productQty').value.trim()) || 1; 
+                const rowEls = item.querySelectorAll('.option-row');
+                
+                if (rowEls.length === 0 || (rowEls.length === 1 && rowEls[0].querySelector('.pill.active[data-size="-"]'))) {
+                    if (nameVal !== '') {
+                        const hasOtherActive = item.querySelector('.pill.active:not([data-size="-"])');
+                        if (!hasOtherActive) {
+                            if (!mergedMap[nameVal]) { mergedMap[nameVal] = []; orderArr.push(nameVal); }
+                            let token = qtyVal > 1 ? `x${qtyVal}` : '';
+                            mergedMap[nameVal].push(token);
+                            if (rawPrice === '') {
+                                validPrices.push('***'); hasMissingPrice = true;
+                            } else {
+                                const pVal = parseFloat(rawPrice);
+                                validPrices.push(qtyVal > 1 ? `${pVal}x${qtyVal}` : pVal);
+                                productsSum += (pVal * qtyVal);
+                            }
+                        }
+                    }
+                } 
+                else {
+                    let textParts = [], activeCounts = [0];
+                    rowEls.forEach(rowEl => {
+                        const actives = rowEl.querySelectorAll('.pill.active');
+                        activeCounts.push(actives.length);
+                        if (actives.length > 0) {
+                            const validSizes = Array.from(actives).map(p => p.getAttribute('data-size')).filter(s => s !== '-');
+                            if (validSizes.length > 0) textParts.push(validSizes.join(',')); 
+                        }
+                    });
+
+                    let totalActive = Math.max(...activeCounts);
+
+                    if (nameVal !== '' && totalActive > 0) {
+                        if (!mergedMap[nameVal]) { mergedMap[nameVal] = []; orderArr.push(nameVal); }
+                        let token = textParts.length > 0 ? `(${textParts.join(' ')})` : '';
+                        if (qtyVal > 1) token += (token !== '' ? ` x${qtyVal}` : `x${qtyVal}`); 
+                        
+                        if (token !== '') mergedMap[nameVal].push(token);
+                        else mergedMap[nameVal].push('');
+
+                        if (rawPrice === '') {
+                            for(let i=0; i<totalActive; i++) validPrices.push('***');
+                            hasMissingPrice = true;
+                        } else {
+                            const pVal = parseFloat(rawPrice);
+                            for(let i=0; i<totalActive; i++) {
+                                validPrices.push(qtyVal > 1 ? `${pVal}x${qtyVal}` : pVal);
+                                productsSum += (pVal * qtyVal);
+                            }
+                        }
+                    }
+                }
+            });
+
+            orderArr.forEach(name => {
+                const sizes = mergedMap[name].filter(s => s !== '').join(', ');
+                const str = sizes ? `- ${name} ${sizes}\n` : `- ${name}\n`;
+                colText += str; colLabelProducts.push(sizes ? `${name} ${sizes}` : `${name}`);
+            });
+
+            if (colText !== '') finalProductsText += (colName !== '' ? `${colName}\n` : '') + colText + '\n';
+            if (colLabelProducts.length > 0) labelLines.push(colName !== '' ? `${colName} = ${colLabelProducts.join(' / ')}` : colLabelProducts.join(' / '));
+        });
+        
+        let pStr = '';
+        let terms = [];
+
+        if (hasMissingPrice) {
+            terms.push('***');
+        } else if (validPrices.length > 0) {
+            terms.push(...validPrices);
+        }
+
+        if (shippingValue > 0) terms.push(shippingValue);
+        if (specialShippingValue > 0) terms.push(specialShippingValue);
+
+        if (hasMissingPrice) {
+            pStr = terms.length > 1 ? `${terms.join(' + ')}` : terms[0] || '***';
+            if (depositValue > 0) pStr += ` - ${depositValue}`;
+            pStr += ` = ***`;
+        } else {
+            let total = productsSum + shippingValue + specialShippingValue - depositValue;
+            if (terms.length > 0) {
+                pStr = terms.length > 1 ? `${terms.join(' + ')}` : `${terms[0]}`;
+                if (depositValue > 0) pStr += ` - ${depositValue}`;
+                pStr += ` = ${total}`;
+            } else {
+                pStr = depositValue > 0 ? `0 - ${depositValue} = ${total}` : `0 = 0`;
+            }
+        }
+
+        let costBreakdownText = '';
+        if (shippingValue > 0) costBreakdownText += `ค่าจัดส่ง: ${shippingValue} บาท\n`;
+        if (specialShippingValue > 0) costBreakdownText += `พื้นที่พิเศษ: ${specialShippingValue} บาท\n`;
+        if (depositValue > 0) costBreakdownText += `หักมัดจำ: -${depositValue} บาท\n`;
+
+        let bankText = '';
+        const selectedBankId = localStorage.getItem('bank');
+        if (selectedBankId) {
+            let banks = JSON.parse(localStorage.getItem('bankData')) || defaultBanks;
+            const selectedBank = banks.find(b => b.id === selectedBankId);
+            if (selectedBank) bankText = selectedBank.text;
+        }
+        if (bankText === '') bankText = "(กรุณาเลือกหรือเพิ่มบัญชีธนาคาร)";
+
+        document.getElementById('outputText').value = finalProductsText === '' ? '- ไม่มีรายการสินค้า -\n\n' : `${finalProductsText}${costBreakdownText}ยอดรวม: ${pStr} บาท\n\n--------------------------\nชำระเงินได้ที่:\n${bankText}\n\nโอนเงินแล้วกรุณาส่งสลิป และที่อยู่ให้ด้วยนะคะ`;
+        document.getElementById('outputLabelText').value = labelLines.join('\n');
+    }
+
+    function copyText(id) {
+        const el = document.getElementById(id);
+        if(el.value.trim() === '') return;
+        el.select(); document.execCommand('copy'); window.getSelection().removeAllRanges();
+    }
+
+    let helpLoaded = false;
+    async function toggleHelp() {
+        const content = document.getElementById('helpContent');
+        const icon = document.getElementById('help-icon');
+        const inner = document.getElementById('helpInner');
+        const loading = document.getElementById('helpLoading');
+
+        if (content.classList.contains('open')) {
+            content.classList.remove('open');
+            icon.style.transform = 'rotate(0deg)';
+        } else {
+            content.classList.add('open');
+            icon.style.transform = 'rotate(180deg)';
+            if (!helpLoaded) {
+                loading.style.display = 'block';
+                try {
+                    const response = await fetch('help.html');
+                    if (response.ok) {
+                        inner.innerHTML = await response.text();
+                        helpLoaded = true;
+                    } else {
+                        inner.innerHTML = '<p style="color: var(--theme-danger); text-align: center; margin-top: 2rem;">ไม่สามารถโหลดคู่มือได้</p>';
+                    }
+                } catch (error) {
+                    inner.innerHTML = '<p style="color: var(--theme-danger); text-align: center; margin-top: 2rem;">เกิดข้อผิดพลาดในการโหลดไฟล์คู่มือ</p>';
+                } finally {
+                    loading.style.display = 'none';
+                }
+            }
+        }
+    }
+</script>
+</body>
+</html>
