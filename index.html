@@ -3,251 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Shop Management</title>
+    <title>Shop Management - V20.0</title>
     <style>
         :root {
-            /* Light Theme Variables */
-            --bg-left: #FFFFFF;       
-            --bg-right: #FAFAFA;      
-            --bg-box: #FFFFFF;
-            --bg-input: #FFFFFF;
-            --border: #D9D9D9;
-            --border-dark: #C9C9C9;
+            /* ดึงสีมาจาก CSS Variables ของ Shopify แท้ที่คุณให้มา */
+            --x-bg-main: hsl(0, 0%, 100%); /* #FFFFFF */
+            --x-bg-subdued: hsl(0, 0%, 96%); /* #F5F5F5 (ฝั่งขวา) */
+            --x-border: hsl(0, 0%, 87%); /* เส้นขอบบางๆ */
+            --x-border-dark: #C9C9C9;
             
-            --text-main: #333333;
-            --text-muted: #737373;
+            --x-text-main: hsl(0, 0%, 0%); /* ดำสนิท */
+            --x-text-subdued: hsl(0, 0%, 44%); /* เทาอ่อน */
             
-            --primary: #1773B0;       /* สีฟ้า */
-            --primary-hover: #135D8E;
-            --shop-pay: #5A31F4;      /* สีม่วง Shopify */
-            
-            --danger: #E32C2B;
-            --setting-gray: #808080; 
-            --paypal-yellow: #FFC439; /* สีเหลือง PayPal */
+            /* สีปุ่มดึงมาจากรูปภาพและ CSS */
+            --x-primary: #197BBD; /* สีน้ำเงิน (จากปุ่ม Review order) */
+            --x-shop-pay: #5A31F4; /* สีม่วง Shop Pay */
+            --x-paypal: #FFC439; /* สีเหลือง PayPal */
+            --x-danger: #D91C1C; /* แดงจากตัวแปร --swn0je */
+            --x-setting-gray: #808080;
+
+            /* ค่าตัวเลขที่ใช้บ่อยจากต้นฉบับ */
+            --x-radius-base: 4px;
+            --x-radius-large: 8px;
+            --x-radius-badge: 50%;
+            --x-spacing: 14px;
         }
 
-        /* Dark Theme Variables */
+        /* Dark Theme Variables (รองรับระบบของคุณ) */
         [data-theme="dark"] {
-            --bg-left: #121212;       
-            --bg-right: #1A1A1A;      
-            --bg-box: #1E1E1E;
-            --bg-input: #2D2D2D;
-            --border: #333333;
-            --border-dark: #444444;
-            
-            --text-main: #F5F5F5;
-            --text-muted: #A0A0A0;
-            
-            --primary: #2F81F7;       
+            --x-bg-main: #121212;       
+            --x-bg-subdued: #1A1A1A;      
+            --x-border: #333333;
+            --x-text-main: #F5F5F5;
+            --x-text-subdued: #A0A0A0;
+            --x-primary: #2F81F7;       
         }
 
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            margin: 0; padding: 0; color: var(--text-main); 
+            /* ใช้ฟอนต์ตรงตาม CSS ต้นฉบับ */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            margin: 0; padding: 0; color: var(--x-text-main); 
             display: flex; flex-direction: column; height: 100vh; overflow: hidden;
-            background-color: var(--bg-left);
+            background-color: var(--x-bg-main);
             transition: background-color 0.3s, color 0.3s;
+            line-height: 1.5; /* อ้างอิง --x-skeleton-typography-line-base */
         }
 
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background-color: var(--border-dark); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background-color: var(--setting-gray); }
+        ::-webkit-scrollbar-thumb { background-color: var(--x-border-dark); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background-color: var(--x-setting-gray); }
 
         /* ======================================= */
-        /* 🔝 แถบ Header */
+        /* 🔝 แถบ Header (จำลองจากรูป) */
         /* ======================================= */
         .top-header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 5%; background: var(--bg-box); border-bottom: 1px solid var(--border);
+            padding: 15px 5%; background: var(--x-bg-main); border-bottom: 1px solid var(--x-border);
             z-index: 1000; position: relative; transition: 0.3s;
         }
-        /* ชื่อเว็บเป็นสีม่วง Shopify */
-        .header-logo { font-size: 1.4rem; font-weight: 600; color: var(--shop-pay); }
+        /* โลโก้สีดำเหมือนรูป Kenergy */
+        .header-logo { font-size: 1.6rem; font-weight: normal; color: var(--x-text-main); letter-spacing: -0.5px;}
         
-        /* ปุ่ม Clear แบบสีเหลือง PayPal (มีเฉพาะไอคอน) */
-        .btn-paypal { background: var(--paypal-yellow); color: #000; border: none; padding: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.15);}
-        .btn-paypal:hover { filter: brightness(1.05); transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.2);}
+        .btn-paypal { background: var(--x-paypal); color: #000; border: none; padding: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.1);}
+        .btn-paypal:hover { filter: brightness(1.05); }
 
         .layout-container { display: flex; flex: 1; width: 100%; overflow: hidden; }
 
         /* ======================================= */
-        /* 🛒 ฝั่งซ้าย: จัดการข้อมูล */
+        /* 🛒 ฝั่งซ้าย: จัดการข้อมูล (จำลองจากฟอร์ม Contact/Delivery) */
         /* ======================================= */
         .management-panel {
             flex: 1.3; 
-            background-color: var(--bg-left);
-            border-right: 1px solid var(--border);
+            background-color: var(--x-bg-main);
+            border-right: 1px solid var(--x-border);
             display: flex; justify-content: flex-end; 
             overflow-y: auto; transition: 0.3s;
         }
         
         .management-content {
             width: 100%; max-width: 650px; 
-            padding: 30px 40px 80px 20px; box-sizing: border-box;
+            padding: 40px 50px 80px 20px; box-sizing: border-box;
         }
 
-        .section-title { font-size: 1.15rem; font-weight: bold; margin-top: 35px; margin-bottom: 15px; color: var(--text-main);}
+        .section-title { font-size: 1.15rem; font-weight: normal; margin-top: 35px; margin-bottom: 15px; color: var(--x-text-main);}
 
+        /* Input แบบ Shopify แท้ (ขอบมน 4px) */
         input[type="text"], input[type="number"]:not(.inline-fee-input) {
-            width: 100%; background: var(--bg-input); border: 1px solid var(--border);
-            padding: 10px 12px; border-radius: 8px; color: var(--text-main); font-size: 0.95rem;
+            width: 100%; background: var(--x-bg-main); border: 1px solid var(--x-border-dark);
+            padding: 14px 12px; border-radius: var(--x-radius-base); color: var(--x-text-main); font-size: 0.95rem;
             box-sizing: border-box; transition: 0.2s; font-family: inherit;
         }
-        input:focus { outline: none; border-color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary); }
-        input::placeholder { color: var(--text-muted); }
+        input:focus { outline: none; border-color: var(--x-primary); box-shadow: 0 0 0 1px var(--x-primary); }
+        input::placeholder { color: var(--x-text-subdued); }
         input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; }
 
         /* ======================================= */
-        /* คอลเลคชั่น & สินค้า */
+        /* คอลเลคชั่น & สินค้า (ปรับให้คล้ายกล่อง Contact) */
         /* ======================================= */
-        .collection-block { margin-bottom: 20px; background: var(--bg-box); border-radius: 12px; border: 1px solid var(--border); transition: 0.3s; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.02);}
+        .collection-block { margin-bottom: 25px; background: var(--x-bg-main); border-radius: var(--x-radius-large); border: 1px solid var(--x-border); transition: 0.3s; overflow: hidden; }
         
-        .collection-header { display: flex; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--border); background: var(--bg-right); }
+        .collection-header { display: flex; align-items: center; padding: 10px 15px; border-bottom: 1px solid var(--x-border); background: var(--x-bg-subdued); }
         .collection-block.collapsed .collection-header { border-bottom: none; }
         .collection-block.collapsed .collection-body { display: none; }
         
         .collection-name-box { flex-grow: 1; margin: 0 10px; }
-        .collection-name-box input { background: transparent; border: 1px solid transparent; padding: 6px; font-size: 1rem; font-weight: bold; box-shadow: none !important;}
-        .collection-name-box input:focus { background: var(--bg-input); border: 1px solid var(--border); }
+        .collection-name-box input { background: transparent; border: 1px solid transparent; padding: 6px; font-size: 1rem; font-weight: normal; box-shadow: none !important;}
+        .collection-name-box input:focus { background: var(--x-bg-main); border: 1px solid var(--x-border); }
         
         .mac-controls { display: flex; gap: 6px; }
-        .mac-btn { width: 14px; height: 14px; border-radius: 50%; border: none; cursor: pointer; background-color: var(--setting-gray); position: relative; display: flex; align-items: center; justify-content: center; color: white; transition: 0.2s; padding: 0; }
+        .mac-btn { width: 14px; height: 14px; border-radius: 50%; border: none; cursor: pointer; background-color: var(--x-setting-gray); position: relative; display: flex; align-items: center; justify-content: center; color: white; transition: 0.2s; padding: 0; }
         .mac-btn svg { width: 14px; height: 14px; opacity: 0; transition: 0.2s; stroke-width: 3;}
         .mac-btn:hover { background-color: #555555;}
         .mac-btn:hover svg { opacity: 1; }
-        .mac-close:hover { background-color: var(--danger); }
+        .mac-close:hover { background-color: var(--x-danger); }
         
-        .btn-toggle-col { background: transparent; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; transition: 0.2s; border-radius: 50%;}
-        .btn-toggle-col:hover { background-color: var(--border); color: var(--text-main); }
+        .btn-toggle-col { background: transparent; border: none; color: var(--x-text-subdued); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; transition: 0.2s; border-radius: 50%;}
+        .btn-toggle-col:hover { color: var(--x-text-main); }
 
-        .collection-body { padding: 15px; }
+        .collection-body { padding: 20px 15px; }
 
-        .product-item { background: var(--bg-box); padding: 10px 12px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border); }
+        .product-item { background: var(--x-bg-main); padding: 15px 12px; border-radius: var(--x-radius-base); margin-bottom: 15px; border: 1px solid var(--x-border); }
         
-        .product-toolbar { display: flex; justify-content: flex-end; gap: 5px; margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 8px;}
+        .product-toolbar { display: flex; justify-content: flex-end; gap: 5px; margin-bottom: 12px; border-bottom: 1px solid var(--x-border); padding-bottom: 8px;}
         
-        .product-header-row { display: grid; grid-template-columns: 1fr 85px 110px; gap: 8px; margin-bottom: 8px; }
-        .product-header-row input { padding: 8px 10px; font-size: 0.9rem; border-radius: 6px; } 
+        .product-header-row { display: grid; grid-template-columns: 1fr 85px 110px; gap: 10px; margin-bottom: 10px; }
+        .product-header-row input { padding: 10px 12px; font-size: 0.95rem; border-radius: var(--x-radius-base); } 
 
-        .qty-control { display: flex; align-items: center; background: var(--bg-input); border: 1px solid var(--border); border-radius: 6px; transition: 0.2s; height: 100%;}
-        .qty-control:focus-within { border-color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary);}
-        .qty-control input { width: 100%; text-align: center; border: none !important; box-shadow: none !important; padding: 8px 0 !important; background: transparent; font-weight: bold;}
-        .qty-btn { background: transparent; border: none; color: var(--text-muted); font-size: 1.1rem; width: 32px; height: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; transition: 0.2s;}
-        .qty-btn:hover { color: var(--text-main); background: rgba(128, 128, 128, 0.1);}
-        .qty-btn.minus { border-radius: 6px 0 0 6px; }
-        .qty-btn.plus { border-radius: 0 6px 6px 0; }
+        .qty-control { display: flex; align-items: center; background: var(--x-bg-main); border: 1px solid var(--x-border-dark); border-radius: var(--x-radius-base); transition: 0.2s; height: 100%;}
+        .qty-control:focus-within { border-color: var(--x-primary); box-shadow: inset 0 0 0 1px var(--x-primary);}
+        .qty-control input { width: 100%; text-align: center; border: none !important; box-shadow: none !important; padding: 8px 0 !important; background: transparent; font-weight: normal;}
+        .qty-btn { background: transparent; border: none; color: var(--x-text-subdued); font-size: 1.1rem; width: 32px; height: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: normal; transition: 0.2s;}
+        .qty-btn:hover { color: var(--x-text-main); background: rgba(128, 128, 128, 0.05);}
         
-        .option-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
+        .option-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--x-border); }
         .size-pills { display: flex; flex-wrap: wrap; gap: 6px; flex: 1;}
         
-        .pill { padding: 4px 12px; border-radius: 50px; background: var(--bg-right); color: var(--text-main); font-size: 0.85rem; border: 1px solid var(--border); cursor: pointer; user-select: none; transition: 0.2s; font-weight: bold;}
-        .pill:hover { border-color: var(--setting-gray); }
-        .pill.active { background: var(--setting-gray); color: white; border-color: var(--setting-gray); }
+        .pill { padding: 6px 14px; border-radius: 50px; background: var(--x-bg-subdued); color: var(--x-text-main); font-size: 0.85rem; border: 1px solid var(--x-border); cursor: pointer; user-select: none; transition: 0.2s; font-weight: normal;}
+        .pill:hover { border-color: var(--x-setting-gray); }
+        .pill.active { background: var(--x-setting-gray); color: white; border-color: var(--x-setting-gray); }
 
-        .btn-add-collection { width: 100%; text-align: left; background: transparent; border: none; color: var(--primary); font-size: 0.95rem; cursor: pointer; padding: 5px 0; margin-bottom: 30px; font-weight: bold;}
+        .btn-add-collection { width: 100%; text-align: left; background: transparent; border: none; color: var(--x-primary); font-size: 0.95rem; cursor: pointer; padding: 5px 0; margin-bottom: 30px; font-weight: normal;}
         .btn-add-collection:hover { text-decoration: underline;}
         
-        .btn-text { background: transparent; color: var(--primary); border: none; font-size: 0.85rem; cursor: pointer; padding: 5px 8px; font-weight: bold; border-radius: 6px;}
-        .btn-text:hover { background-color: var(--bg-right); }
+        .btn-text { background: transparent; color: var(--x-primary); border: none; font-size: 0.85rem; cursor: pointer; padding: 5px 8px; font-weight: normal; border-radius: var(--x-radius-base);}
+        .btn-text:hover { background-color: var(--x-bg-subdued); }
         
-        .icon-btn { width: 26px; height: 26px; background: var(--setting-gray); border: none; color: #FFFFFF; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 6px; transition: 0.2s;}
+        .icon-btn { width: 26px; height: 26px; background: var(--x-setting-gray); border: none; color: #FFFFFF; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: var(--x-radius-base); transition: 0.2s;}
         .icon-btn svg { width: 14px; height: 14px; }
         .icon-btn:hover { filter: brightness(0.8); }
-        .icon-btn.btn-danger:hover { background: var(--danger); }
+        .icon-btn.btn-danger:hover { background: var(--x-danger); }
 
-        .option-btn { width: 26px; height: 26px; background: var(--setting-gray); color: #FFFFFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; padding: 0; transition: 0.2s; }
+        .option-btn { width: 26px; height: 26px; background: var(--x-setting-gray); color: #FFFFFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; padding: 0; transition: 0.2s; }
         .option-btn svg { width: 16px; height: 16px; }
         .option-btn:hover { filter: brightness(0.8); }
 
         /* ======================================= */
-        /* การตั้งค่า (Delivery & Fees) */
+        /* การตั้งค่า (เหมือนช่อง Delivery ในรูป) */
         /* ======================================= */
-        .fee-group-box { border: 1px solid var(--border); padding: 15px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; background: var(--bg-box); border-radius: 12px;}
-        .fee-item { display: flex; flex-direction: column; gap: 6px; }
+        .fee-group-box { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+        .fee-item { display: flex; flex-direction: column; gap: 8px; }
 
-        /* Checkbox กล่องดำ เครื่องหมายขาว */
-        .custom-checkbox { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.9rem; color: var(--text-main); font-weight: bold;}
+        .custom-checkbox { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.9rem; color: var(--x-text-main); font-weight: normal;}
         .custom-checkbox input { display: none; }
-        .checkmark { width: 18px; height: 18px; border: 1px solid var(--border-dark); display: flex; align-items: center; justify-content: center; background: var(--bg-input); border-radius: 4px; transition: 0.2s;}
+        /* กล่องดำ เครื่องหมายขาว ตามบรีฟ */
+        .checkmark { width: 18px; height: 18px; border: 1px solid var(--x-border-dark); display: flex; align-items: center; justify-content: center; background: var(--x-bg-main); border-radius: var(--x-radius-base); transition: 0.2s;}
         .custom-checkbox input:checked ~ .checkmark { background: #000000; border-color: #000000; }
         .custom-checkbox input:checked ~ .checkmark::after { content: '✔'; color: #FFFFFF; font-size: 11px; }
 
         /* ======================================= */
-        /* 🏦 ธนาคาร */
+        /* 🏦 ธนาคาร (ถอดแบบช่อง Payment จากรูปเป๊ะ) */
         /* ======================================= */
-        .payment-box { border: 1px solid var(--border); background: var(--bg-box); display: flex; flex-direction: column; margin-bottom: 10px; border-radius: 12px; overflow: hidden;}
-        .payment-item { display: flex; align-items: center; padding: 12px 15px; border-bottom: 1px solid var(--border); cursor: pointer; background: transparent; transition: 0.2s;}
+        .payment-box { border: 1px solid var(--x-border-dark); background: var(--x-bg-main); display: flex; flex-direction: column; margin-bottom: 10px; border-radius: var(--x-radius-base); overflow: hidden;}
+        .payment-item { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid var(--x-border); cursor: pointer; background: transparent; transition: 0.2s;}
         .payment-item:last-child { border-bottom: none; }
-        .payment-item:hover { background: var(--bg-right); }
+        /* ตอนเลือกจะเป็นพื้นหลังสีฟ้าอ่อน พร้อมขอบหนา */
+        .payment-item.active { background-color: rgba(23, 115, 176, 0.05); } 
         
-        .dot-radio { appearance: none; width: 18px; height: 18px; border: 1px solid var(--border-dark); border-radius: 50%; margin: 0 12px 0 0; outline: none; cursor: pointer; background: transparent; flex-shrink: 0; transition: border-width 0.2s;}
-        .dot-radio:checked { border: 6px solid var(--text-main); background: var(--bg-box); } 
+        /* จุดดำตรงกลางขาวแบบรูปต้นฉบับ */
+        .dot-radio { appearance: none; width: 18px; height: 18px; border: 1px solid var(--x-border-dark); border-radius: 50%; margin: 0 12px 0 0; outline: none; cursor: pointer; background: transparent; flex-shrink: 0; position: relative;}
+        .dot-radio:checked { border-color: var(--x-primary); background: transparent; }
+        .dot-radio:checked::after { content: ''; position: absolute; top: 4px; left: 4px; width: 8px; height: 8px; border-radius: 50%; background: var(--x-primary); }
         
-        .payment-text { flex: 1; font-size: 0.95rem; color: var(--text-main); font-weight: normal;}
+        .payment-text { flex: 1; font-size: 0.95rem; color: var(--x-text-main); font-weight: normal;}
         
-        .bank-badge { width: 60px; height: 38px; border-radius: 6px; border: 1px solid var(--border); color: #FFF; font-size: 0.75rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; text-align: center; box-sizing: border-box; box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);}
+        .bank-badge { width: 50px; height: 32px; border-radius: 4px; border: 1px solid var(--x-border); color: #FFF; font-size: 0.75rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; text-align: center; box-sizing: border-box; background: #EAEAEA; color: var(--x-text-main);}
 
-        .bank-popover { position: absolute; z-index: 2000; background: var(--bg-box); border: 1px solid var(--border); padding: 10px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 4px; opacity: 0; visibility: hidden; transition: 0.2s; min-width: 160px; max-height: 250px; overflow-y: auto;}
+        .bank-popover { position: absolute; z-index: 2000; background: var(--x-bg-main); border: 1px solid var(--x-border); padding: 10px; border-radius: var(--x-radius-large); box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 4px; opacity: 0; visibility: hidden; transition: 0.2s; min-width: 160px; max-height: 250px; overflow-y: auto;}
         .bank-popover.active { opacity: 1; visibility: visible; }
-        .bank-option { display: flex; align-items: center; gap: 10px; padding: 8px 12px; cursor: pointer; font-size: 0.85rem; font-weight: bold; color: var(--text-main); border-radius: 6px; transition: 0.2s;}
-        .bank-option:hover { background: var(--bg-right); }
+        .bank-option { display: flex; align-items: center; gap: 10px; padding: 8px 12px; cursor: pointer; font-size: 0.85rem; font-weight: normal; color: var(--x-text-main); border-radius: var(--x-radius-base); transition: 0.2s;}
+        .bank-option:hover { background: var(--x-bg-subdued); }
         .bank-color-dot { width: 14px; height: 14px; border-radius: 50%; box-shadow: 0 1px 2px rgba(0,0,0,0.2);}
 
         /* ======================================= */
-        /* 📄 ฝั่งขวา: สรุปยอด */
+        /* 📄 ฝั่งขวา: สรุปยอด (เหมือนรูปขวาเป๊ะ) */
         /* ======================================= */
         .summary-panel {
             flex: 1; 
-            background-color: var(--bg-right);
-            overflow-y: auto; border-left: 1px solid var(--border); transition: 0.3s;
+            background-color: var(--x-bg-subdued);
+            overflow-y: auto; border-left: 1px solid var(--x-border); transition: 0.3s;
         }
         
         .summary-content {
             width: 100%; max-width: 500px;
-            padding: 30px 40px 80px 40px; box-sizing: border-box;
+            padding: 40px 40px 80px 40px; box-sizing: border-box;
         }
 
-        .summary-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font-size: 0.95rem; }
+        .summary-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 12px 0; font-size: 0.95rem; }
         
-        /* รูป Thumbnail */
-        .thumbnail { width: 45px; height: 45px; background: var(--bg-box); border-radius: 8px; border: 1px solid var(--border-dark); position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--text-muted);}
-        .qty-badge { position: absolute; top: -8px; right: -8px; background: var(--text-muted); color: white; font-size: 0.75rem; min-width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0 4px; box-sizing: border-box; font-weight: bold;}
+        /* รูปสินค้ามีกรอบซ้อนด้านในเหมือนรูปต้นฉบับ */
+        .thumbnail { width: 64px; height: 64px; background: var(--x-bg-main); border-radius: var(--x-radius-large); border: 1px solid var(--x-border-dark); position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--x-text-muted); box-sizing: border-box; margin-right: 15px;}
+        .thumbnail::after { content:''; position:absolute; inset: 4px; border: 1px solid rgba(0,0,0,0.05); border-radius: 4px;} /* กรอบซ้อนด้านใน */
         
-        .totals-section { border-top: 1px solid var(--border); margin-top: 15px; padding-top: 10px; }
-        .cost-line { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.9rem; color: var(--text-main); }
-        .cost-line .label { color: var(--text-muted); }
+        /* ป้ายกลมเทา แปะมุมขวาบน */
+        .qty-badge { position: absolute; top: -8px; right: -8px; background: rgba(114, 114, 114, 0.9); color: white; font-size: 0.75rem; min-width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0 4px; box-sizing: border-box; font-weight: normal; z-index: 2;}
         
-        .total-line { border-top: 1px solid var(--border); align-items: center; padding-top: 15px; margin-top: 10px; font-size: 1rem; color: var(--text-main);}
-        .total-amount { font-size: 1.5rem; font-weight: bold; }
+        .totals-section { border-top: 1px solid var(--x-border); margin-top: 20px; padding-top: 15px; }
+        .cost-line { display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.9rem; color: var(--x-text-main); }
+        .cost-line .label { color: var(--x-text-subdued); }
+        
+        /* ยอด Total ตามรูป */
+        .total-line { border-top: 1px solid var(--x-border); align-items: center; padding-top: 20px; margin-top: 15px; font-size: 1rem; color: var(--x-text-main);}
+        .total-price { display: flex; align-items: baseline; gap: 8px; }
+        .total-currency { color: var(--x-text-subdued); font-size: 0.8rem; }
+        .total-amount { font-size: 1.5rem; font-weight: bold; } /* ตัวหนาใหญ่ๆ */
 
-        .output-box-title { margin-top: 30px; margin-bottom: 10px; font-size: 1rem; font-weight: bold; color: var(--text-main); display: flex; align-items: center; gap: 8px;}
+        .output-box-title { margin-top: 40px; margin-bottom: 12px; font-size: 1.1rem; font-weight: normal; color: var(--x-text-main); }
         
-        /* Wrapper สำหรับ Textarea ให้ปุ่ม Copy ลอยอยู่ข้างใน */
         .output-wrapper { position: relative; width: 100%; }
-        textarea.final-output { width: 100%; background: var(--bg-box); border: 1px solid var(--border); border-radius: 12px; padding: 15px; padding-bottom: 45px; font-family: inherit; font-size: 0.95rem; color: var(--text-main); resize: vertical; outline: none; line-height: 1.5; box-sizing: border-box;}
-        textarea.final-output:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(23, 115, 176, 0.1);}
+        textarea.final-output { width: 100%; background: var(--x-bg-main); border: 1px solid var(--x-border); border-radius: var(--x-radius-large); padding: 15px; padding-bottom: 45px; font-family: inherit; font-size: 0.95rem; color: var(--x-text-main); resize: vertical; outline: none; line-height: 1.5; box-sizing: border-box;}
+        textarea.final-output:focus { border-color: var(--x-primary); box-shadow: 0 0 0 1px var(--x-primary);}
 
-        /* ปุ่ม Copy (Floating Icon Inside) เป็นสีฟ้า */
+        /* ปุ่ม Copy (สีเทา) */
         .btn-copy-inline {
             position: absolute;
             bottom: 12px;
             right: 12px;
-            background: var(--primary);
+            background: var(--x-setting-gray);
             color: white;
             border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
+            padding: 8px 14px;
+            border-radius: var(--x-radius-base);
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 6px;
             cursor: pointer;
             transition: 0.2s;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            font-size: 0.85rem;
         }
-        .btn-copy-inline:hover { filter: brightness(1.1); transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.25);}
+        .btn-copy-inline:hover { filter: brightness(1.1); }
 
         /* ======================================= */
         /* Mobile Layout */
@@ -258,7 +264,7 @@
             body { overflow: auto; height: auto; }
             .layout-container { flex-direction: column; overflow: visible;}
             
-            .summary-panel { order: 1; overflow: visible; border-right: none; border-bottom: 1px solid var(--border); border-left: none;}
+            .summary-panel { order: 1; overflow: visible; border-right: none; border-bottom: 1px solid var(--x-border); border-left: none;}
             .summary-content { position: static; padding: 20px; max-width: 100%; height: auto; display: none; }
             .summary-content.show { display: block; }
 
@@ -267,8 +273,8 @@
             
             .mobile-summary-toggle {
                 display: flex; justify-content: space-between; align-items: center;
-                background-color: var(--bg-right); padding: 15px 20px; cursor: pointer;
-                color: var(--primary); font-size: 0.95rem; font-weight: bold;
+                background-color: var(--x-bg-subdued); padding: 15px 20px; cursor: pointer;
+                color: var(--x-primary); font-size: 0.95rem;
             }
 
             .fee-group-box { grid-template-columns: 1fr; }
@@ -278,14 +284,14 @@
             .qty-control { grid-column: 2 / 3; grid-row: 2; } 
         }
 
-        .footer-links { display: flex; gap: 15px; margin-top: 30px; padding-top: 15px; border-top: 1px solid var(--border); justify-content: center; align-items: center;}
+        .footer-links { display: flex; gap: 15px; margin-top: 30px; padding-top: 15px; border-top: 1px solid var(--x-border); justify-content: center; align-items: center;}
     </style>
 </head>
 <body>
 
     <header class="top-header">
         <div class="header-logo">
-            Shop Management <span style="font-size:0.8rem; color:var(--text-muted); font-weight:normal; margin-left: 5px;">v19.2</span>
+            Shop Management
         </div>
         <button class="btn-paypal" onclick="clearAllPills()" title="Clear Options">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
@@ -336,23 +342,23 @@
                     <h2 class="section-title" style="margin-bottom: 12px; margin-top:0;">Payment</h2>
                     <div>
                         <button class="btn-text" onclick="addBank()">Add</button>
-                        <span style="color:var(--border-dark);">|</span>
-                        <button class="btn-text" style="color:var(--text-muted);" onclick="editBankList()">Edit</button>
+                        <span style="color:var(--x-border-dark);">|</span>
+                        <button class="btn-text" style="color:var(--x-text-muted);" onclick="editBankList()">Edit</button>
                     </div>
                 </div>
                 
                 <div class="payment-box" id="bankContainer"></div>
 
                 <div class="footer-links">
-                    <button class="btn-text" style="color:var(--text-muted);" onclick="exportData()">Export data</button>
-                    <span style="color:var(--border-dark);">|</span>
-                    <button class="btn-text" style="color:var(--text-muted);" onclick="importData()">Import data</button>
-                    <span style="color:var(--border-dark);">|</span>
-                    <button class="btn-text" style="color:var(--danger);" onclick="clearData()">Reset system</button>
+                    <button class="btn-text" style="color:var(--x-text-muted);" onclick="exportData()">Export data</button>
+                    <span style="color:var(--x-border-dark);">|</span>
+                    <button class="btn-text" style="color:var(--x-text-muted);" onclick="importData()">Import data</button>
+                    <span style="color:var(--x-border-dark);">|</span>
+                    <button class="btn-text" style="color:var(--x-danger);" onclick="clearData()">Reset system</button>
                 </div>
                 
                 <div style="text-align: center; margin-top: 15px;">
-                    <button class="btn-text" style="color:var(--text-main); font-size:0.9rem;" onclick="toggleTheme()">🌗 Toggle Dark Theme</button>
+                    <button class="btn-text" style="color:var(--x-text-main); font-size:0.9rem;" onclick="toggleTheme()">🌗 Toggle Dark Theme</button>
                 </div>
 
             </div>
@@ -362,9 +368,9 @@
             <div class="mobile-summary-toggle" onclick="toggleMobileSummary()">
                 <span id="toggle-text" style="display:flex; align-items:center; gap:8px;">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm1.336-5l1.977-7h-16.813l2.938 7h11.9zm3.164-9l-2.731 9.614c-.179.629-.757 1.052-1.411 1.052h-10.742c-.653 0-1.231-.423-1.411-1.052l-3.21-11.614h-2.995v-2h4.522l.536 1.936h17.442z"/></svg>
-                    <span>แสดงสรุปยอด ▾</span>
+                    <span>Show order summary ▾</span>
                 </span>
-                <span id="mobile-total-price" style="color:var(--text-main); font-weight:bold; font-size: 1.1rem;">฿0.00</span>
+                <span id="mobile-total-price" style="color:var(--x-text-main); font-weight:bold; font-size: 1.1rem;">฿0.00</span>
             </div>
 
             <div class="summary-content" id="summary-box">
@@ -382,11 +388,11 @@
                     </div>
                     <div class="cost-line" id="display-deposit-row" style="display:none;">
                         <span class="label">Deposit</span>
-                        <span id="display-deposit" style="font-weight: 500; color: var(--danger);">-฿0.00</span>
+                        <span id="display-deposit" style="font-weight: 500; color: var(--x-danger);">-฿0.00</span>
                     </div>
                     
                     <div class="cost-line total-line">
-                        <span style="font-weight: bold;">Total</span>
+                        <span style="font-weight: normal;">Total</span>
                         <div class="total-price">
                             <span class="total-currency">THB</span>
                             <span id="display-total" class="total-amount">฿0.00</span>
@@ -398,7 +404,8 @@
                 <div class="output-wrapper">
                     <textarea id="outputText" class="final-output" style="height: 180px;" readonly placeholder="Order summary text..."></textarea>
                     <button class="btn-copy-inline" onclick="copyText('outputText')" title="Copy Order Summary">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        Copy Text
                     </button>
                 </div>
 
@@ -406,7 +413,8 @@
                 <div class="output-wrapper">
                     <textarea id="outputLabelText" class="final-output" style="height: 100px;" readonly placeholder="Shipping label text..."></textarea>
                     <button class="btn-copy-inline" onclick="copyText('outputLabelText')" title="Copy Shipping Label">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        Copy Text
                     </button>
                 </div>
 
@@ -435,7 +443,6 @@
     const ICON_COPY = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
     const ICON_DOTS = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1.5"></circle><circle cx="19" cy="12" r="1.5"></circle><circle cx="5" cy="12" r="1.5"></circle></svg>`;
     
-    // ไอคอนสำหรับ Finder Control (Crop SVG viewBox ให้ขยายเต็มปุ่ม 14px)
     const MAC_CROSS = `<svg width="14" height="14" viewBox="4 4 16 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
     const MAC_UP = `<svg width="14" height="14" viewBox="4 4 16 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="18 15 12 9 6 15"></polyline></svg>`;
     const MAC_DOWN = `<svg width="14" height="14" viewBox="4 4 16 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
@@ -467,9 +474,9 @@
         const txt = document.getElementById('toggle-text');
         box.classList.toggle('show');
         if(box.classList.contains('show')) {
-            txt.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm1.336-5l1.977-7h-16.813l2.938 7h11.9zm3.164-9l-2.731 9.614c-.179.629-.757 1.052-1.411 1.052h-10.742c-.653 0-1.231-.423-1.411-1.052l-3.21-11.614h-2.995v-2h4.522l.536 1.936h17.442z"/></svg><span>ซ่อนสรุปยอด ▴</span>`;
+            txt.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm1.336-5l1.977-7h-16.813l2.938 7h11.9zm3.164-9l-2.731 9.614c-.179.629-.757 1.052-1.411 1.052h-10.742c-.653 0-1.231-.423-1.411-1.052l-3.21-11.614h-2.995v-2h4.522l.536 1.936h17.442z"/></svg><span>Hide order summary ▴</span>`;
         } else {
-            txt.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm1.336-5l1.977-7h-16.813l2.938 7h11.9zm3.164-9l-2.731 9.614c-.179.629-.757 1.052-1.411 1.052h-10.742c-.653 0-1.231-.423-1.411-1.052l-3.21-11.614h-2.995v-2h4.522l.536 1.936h17.442z"/></svg><span>แสดงสรุปยอด ▾</span>`;
+            txt.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm1.336-5l1.977-7h-16.813l2.938 7h11.9zm3.164-9l-2.731 9.614c-.179.629-.757 1.052-1.411 1.052h-10.742c-.653 0-1.231-.423-1.411-1.052l-3.21-11.614h-2.995v-2h4.522l.536 1.936h17.442z"/></svg><span>Show order summary ▾</span>`;
         }
     }
 
@@ -480,7 +487,7 @@
         
         container.innerHTML = '';
         if(banks.length === 0) {
-            container.innerHTML = '<div style="padding:15px; color:var(--text-muted);">ไม่มีบัญชีธนาคาร (กด Add เพื่อเพิ่ม)</div>';
+            container.innerHTML = '<div style="padding:15px; color:var(--x-text-muted);">ไม่มีบัญชีธนาคาร (กด Add เพื่อเพิ่ม)</div>';
             return;
         }
         if (!banks.find(b => b.id === selectedId)) selectedId = banks[0].id;
@@ -495,14 +502,15 @@
 
             if(!b.bankCode && b.color) displayColor = b.color;
             
-            // แสดงเฉพาะชื่อธนาคาร (บรรทัดแรก)
-            let bankName = b.text.split('\n')[0];
+            // แสดงเลขบัญชีและชื่อ (ซ่อนชื่อธนาคาร)
+            let lines = b.text.split('\n');
+            let accInfo = lines.length > 1 ? lines.slice(1).join(' ') : lines[0];
 
             const html = `
-                <label class="payment-item">
+                <label class="payment-item ${isChecked ? 'active' : ''}">
                     <div style="display:flex; align-items:center; gap:12px; flex:1;">
                         <input type="radio" class="dot-radio" name="bankSelect" value="${b.id}" ${isChecked} onchange="updateData()">
-                        <span class="payment-text" style="font-weight:normal;">${bankName}</span>
+                        <span class="payment-text">${accInfo}</span>
                     </div>
                     <div class="bank-badge" style="background:${displayColor};" onclick="openBankPopover(event, '${b.id}')" title="เปลี่ยนไอคอนธนาคาร">
                         ${displayCode}
@@ -532,7 +540,7 @@
 
         const customOpt = document.createElement('label');
         customOpt.className = 'bank-option';
-        customOpt.style.borderTop = '1px solid var(--border)';
+        customOpt.style.borderTop = '1px solid var(--x-border)';
         customOpt.style.marginTop = '5px';
         customOpt.style.paddingTop = '10px';
         customOpt.innerHTML = `
@@ -617,6 +625,9 @@
         updateData();
     }
 
+    // ==========================================
+    // Logic ทั่วไป (ใช้คีย์ orderDataV3 ดึงข้อมูลเดิม)
+    // ==========================================
     function saveData() {
         localStorage.setItem('val_shipping', document.getElementById('val_shipping').value);
         localStorage.setItem('val_special', document.getElementById('val_special').value);
@@ -683,6 +694,7 @@
 
     function updateData() {
         saveData();
+        renderBanks(); // ให้คลาส active ทำงานเวลากด radio
         generateOutput();
     }
 
@@ -719,17 +731,17 @@
                         }
                         
                         visualBillHtml += `<div class="summary-item">
-                            <div style="display:flex; align-items:center; gap:15px;">
+                            <div style="display:flex; align-items:flex-start;">
                                 <div class="thumbnail">
                                     ${SHIRT_ICON}
                                     <div class="qty-badge">${qtyVal}</div>
                                 </div>
                                 <div style="flex:1;">
-                                    <div style="font-weight:600; color:var(--text-main);">${nameVal}</div>
-                                    <div style="font-size:0.8rem; color:var(--text-muted); margin-top:2px;">${colName}</div>
+                                    <div style="font-weight:bold; color:var(--x-text-main); font-size:0.95rem;">${nameVal}</div>
+                                    <div style="font-size:0.8rem; color:var(--x-text-subdued); margin-top:2px;">${colName}</div>
                                 </div>
                             </div>
-                            <span style="font-weight:500;">${priceText}</span>
+                            <span style="font-weight:normal;">${priceText}</span>
                         </div>`;
                     }
                 } else {
@@ -755,17 +767,17 @@
                         }
 
                         visualBillHtml += `<div class="summary-item">
-                            <div style="display:flex; align-items:center; gap:15px;">
+                            <div style="display:flex; align-items:flex-start;">
                                 <div class="thumbnail">
                                     ${SHIRT_ICON}
                                     <div class="qty-badge">${maxActive * qtyVal}</div>
                                 </div>
                                 <div style="flex:1;">
-                                    <div style="font-weight:600; color:var(--text-main);">${nameVal}</div>
-                                    <div style="font-size:0.8rem; color:var(--text-muted); margin-top:2px;">${colName} ${textParts.length > 0 ? `(${textParts.join(' ')})` : ''}</div>
+                                    <div style="font-weight:bold; color:var(--x-text-main); font-size:0.95rem;">${nameVal}</div>
+                                    <div style="font-size:0.8rem; color:var(--x-text-subdued); margin-top:2px;">${colName} ${textParts.length > 0 ? `(${textParts.join(' ')})` : ''}</div>
                                 </div>
                             </div>
-                            <span style="font-weight:500;">${priceText}</span>
+                            <span style="font-weight:normal;">${priceText}</span>
                         </div>`;
                     }
                 }
@@ -781,7 +793,7 @@
             if (colLabelProducts.length) labelLines.push(colName ? `${colName} = ${colLabelProducts.join(' / ')}` : colLabelProducts.join(' / '));
         });
 
-        if(!hasItem) visualBillHtml = '<div style="text-align:center; color:var(--text-muted); margin: 20px 0; font-size:0.9rem;">Cart is empty.</div>';
+        if(!hasItem) visualBillHtml = '<div style="text-align:center; color:var(--x-text-subdued); margin: 20px 0; font-size:0.9rem;">Cart is empty.</div>';
         document.getElementById('visual-bill').innerHTML = visualBillHtml;
 
         document.getElementById('display-subtotal').innerText = hasMissingPrice ? '***' : `฿${productsSum.toFixed(2)}`;
@@ -802,9 +814,9 @@
         }
 
         let netTotal = productsSum + totalShipping - dep;
-        let displayTotalText = hasMissingPrice ? '***' : `฿${netTotal.toFixed(2)}`;
+        let displayTotalText = hasMissingPrice ? '***' : `${netTotal.toFixed(2)}`;
         document.getElementById('display-total').innerText = displayTotalText;
-        document.getElementById('mobile-total-price').innerText = displayTotalText;
+        document.getElementById('mobile-total-price').innerText = `฿${displayTotalText}`;
 
         let terms = hasMissingPrice ? ['***'] : [...validPrices];
         if (ship > 0) terms.push(ship);
@@ -936,7 +948,7 @@
     function exportData() {
         saveData();
         const exportObj = {
-            version: "v19.2",
+            version: "v20.0",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || defaultBanks,
             selectedBank: localStorage.getItem('bank') || '',
