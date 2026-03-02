@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Shop Management - V21.4</title>
+    <title>Shop Management - V21.5</title>
     <style>
         :root {
             --x-bg-main: hsl(0, 0%, 100%);
@@ -46,9 +46,6 @@
 
         html { font-size: 62.5%; text-size-adjust: 100%; }
 
-        /* ======================================= */
-        /* เลื่อนขึ้นลงอิสระทั้งหน้า (Global Scroll) */
-        /* ======================================= */
         body { 
             font-family: var(--x-font-family);
             font-size: 1.4rem; 
@@ -63,7 +60,6 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background-color: var(--x-border-dark); border-radius: 1rem; }
 
-        /* ปิดลูกศรขึ้นลงในช่องตัวเลข (Spinners) */
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -72,37 +68,60 @@
         input[type="number"] { -moz-appearance: textfield; }
 
         /* ======================================= */
-        /* 🔝 Header (Logo อยู่ตรงกลาง) */
+        /* 🔝 Header (จัดให้ตรงกับคอลัมน์ซ้าย) */
         /* ======================================= */
         .top-header {
             background: var(--x-bg-main); border-bottom: 1px solid var(--x-border);
             z-index: 1000; position: relative; width: 100%;
         }
+        .header-wrapper {
+            display: flex; width: 100%;
+        }
+        .header-left-col {
+            width: 55%; display: flex; justify-content: flex-end; /* ดันไปชิดเส้นกลาง */
+        }
         .header-content {
             display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
-            max-width: 1200px; margin: 0 auto; padding: 1.5rem 4rem;
+            width: 100%; max-width: 650px; /* กว้างเท่าเนื้อหาฝั่งซ้าย */
+            padding: 1.5rem 4rem 1.5rem 2rem; box-sizing: border-box;
         }
-        /* ชื่อเว็บตัวหนา และอยู่ตรงกลาง (grid-column: 2) */
+        
         .header-logo { grid-column: 2; font-size: 2.1rem; font-weight: bold; color: var(--x-primary); letter-spacing: -0.05rem; text-align: center;}
         
         .btn-clear { grid-column: 3; justify-self: end; background: transparent; color: var(--x-primary); border: none; font-weight: 600; font-size: 1.4rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 0.6rem; padding: 0.8rem 1.2rem; border-radius: var(--x-radius-base);}
         .btn-clear:hover { background: var(--x-primary-light); }
 
-        .layout-container { display: flex; flex: 1; width: 100%; max-width: 1200px; margin: 0 auto; align-items: flex-start; }
+        /* ======================================= */
+        /* โครงสร้างหลัก (สัดส่วน 55 : 45 ตาม Shopify) */
+        /* ======================================= */
+        .layout-container { display: flex; flex: 1; width: 100%; align-items: flex-start; }
 
-        /* ======================================= */
-        /* 🛒 ฝั่งซ้าย: จัดการข้อมูล */
-        /* ======================================= */
+        /* 🛒 ฝั่งซ้าย: จัดการข้อมูล (กว้าง 55% ดันเนื้อหาชิดขวา) */
         .management-panel {
-            flex: 1; 
+            width: 55%; 
             background-color: var(--x-bg-main);
-            padding: 4rem; box-sizing: border-box;
+            display: flex; justify-content: flex-end; /* สำคัญ: ดันเนื้อหาเข้าเส้นคั่นกลาง */
         }
         .management-content {
-            width: 100%; max-width: 500px; margin: 0 auto;
+            width: 100%; max-width: 650px; 
+            padding: 4rem 4rem 8rem 2rem; box-sizing: border-box;
         }
 
-        /* หัวข้อทั้งหมดตัวหนา */
+        /* 📄 ฝั่งขวา: สรุปยอด (กว้าง 45% ดันเนื้อหาชิดซ้าย) */
+        .summary-panel {
+            width: 45%; 
+            background-color: var(--x-bg-subdued);
+            border-left: 1px solid var(--x-border); transition: 0.3s;
+            position: sticky; top: 0; height: 100vh; overflow-y: auto;
+        }
+        .summary-content {
+            width: 100%; max-width: 500px;
+            padding: 4rem 2rem 8rem 4rem; box-sizing: border-box;
+        }
+
+        /* ======================================= */
+        /* สไตล์อื่นๆ */
+        /* ======================================= */
         .section-title { font-size: 1.8rem; font-weight: bold; margin-top: 4rem; margin-bottom: 1.5rem; color: var(--x-primary);}
 
         input[type="text"], input[type="number"]:not(.inline-fee-input) {
@@ -113,9 +132,6 @@
         input:focus { outline: none; border-color: var(--x-primary); box-shadow: 0 0 0 1px var(--x-primary); }
         input::placeholder { color: var(--x-text-subdued); }
 
-        /* ======================================= */
-        /* Dropdown Menu (มีแหลมๆ ด้านบน และตัวหนังสือบาง) */
-        /* ======================================= */
         .dropdown-container { position: relative; display: inline-block; }
         .dropdown-menu {
             position: absolute; right: 0; top: calc(100% + 8px);
@@ -125,14 +141,12 @@
             padding: 8px 0; overflow: visible;
         }
         .dropdown-menu.show { display: flex; }
-        
         .dropdown-menu::before {
             content: ''; position: absolute; top: -6px; right: 12px;
             width: 10px; height: 10px; background: var(--x-bg-main);
             border-top: 1px solid var(--x-border); border-left: 1px solid var(--x-border);
             transform: rotate(45deg); z-index: 1;
         }
-
         .dropdown-item {
             padding: 10px 16px; cursor: pointer; font-size: 1.4rem; font-weight: normal; 
             color: var(--x-text-main); transition: 0.2s; text-align: left; position: relative; z-index: 2;
@@ -149,52 +163,33 @@
         .option-btn:hover { color: var(--x-text-main); }
         .option-btn svg { width: 2rem; height: 2rem; }
 
-        /* ======================================= */
-        /* คอลเลคชั่น (ระบบ Highlight เมื่อขยาย) */
-        /* ======================================= */
+        /* คอลเลคชั่น */
         .collection-block { margin-bottom: 2rem; transition: 0.3s; border-radius: var(--x-radius-large); }
-        
-        /* สไตล์เมื่อ กางออก (Highlight) */
         .collection-block:not(.collapsed) { 
             background-color: var(--x-bg-subdued); 
             border: 1px solid var(--x-border); 
             padding: 1.5rem 2rem 2rem 2rem; 
         }
         .collection-block:not(.collapsed) .collection-header {
-            padding: 0 0 1.5rem 0;
-            border-bottom: 1px solid var(--x-border-dark);
-            margin-bottom: 1.5rem;
+            padding: 0 0 1.5rem 0; border-bottom: 1px solid var(--x-border-dark); margin-bottom: 1.5rem;
         }
-
-        /* สไตล์เมื่อ ยุบเก็บ (เส้นบาง) */
-        .collection-block.collapsed { 
-            border-bottom: 1px solid var(--x-border); 
-            padding: 0 0 1.5rem 0; 
-            border-radius: 0; 
-        }
-        .collection-block.collapsed .collection-header { 
-            padding: 1.5rem 0 0 0; 
-        }
+        .collection-block.collapsed { border-bottom: 1px solid var(--x-border); padding: 0 0 1.5rem 0; border-radius: 0; }
+        .collection-block.collapsed .collection-header { padding: 1.5rem 0 0 0; }
         
         .collection-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none;}
         .collection-block.collapsed .collection-body { display: none; }
         
         .collection-name-text { font-size: 1.6rem; font-weight: normal; color: var(--x-text-subdued); flex: 1; transition: 0.2s; }
         .collection-header:hover .collection-name-text { color: var(--x-text-main); }
-        
         .header-actions { display: flex; align-items: center; gap: 0.5rem; }
-        
         .chevron-box { background: var(--x-primary-light); color: var(--x-primary); width: 2.8rem; height: 2.8rem; border-radius: 0.6rem; display: flex; align-items: center; justify-content: center; transition: 0.3s;}
         .collection-block.collapsed .chevron-box { transform: rotate(180deg); }
 
-        /* ======================================= */
-        /* สินค้า (ไม่มีช่องกรอก ชื่อ/ราคาขนาดเท่ากัน) */
-        /* ======================================= */
+        /* สินค้า */
         .product-item { background: var(--x-bg-main); padding: 1.5rem; border-radius: var(--x-radius-base); margin-bottom: 1.5rem; border: 1px solid var(--x-border); transition: 0.2s;}
         .product-item:focus-within { border-color: var(--x-primary); box-shadow: 0 0 0 1px var(--x-primary); }
         
         .product-header-row { display: grid; grid-template-columns: 1fr auto auto; gap: 1.5rem; margin-bottom: 0.5rem; align-items: center;}
-
         .product-info-display { display: flex; flex-direction: column; gap: 0.2rem; justify-content: center; }
         .productName-display { font-size: 1.5rem; font-weight: normal; color: var(--x-text-main); }
         .productPrice-display { font-size: 1.5rem; color: var(--x-text-subdued); }
@@ -207,7 +202,6 @@
         
         .option-row { display: flex; align-items: center; gap: 1rem; margin-top: 1rem; padding-top: 1.2rem; border-top: 1px dashed var(--x-border); }
         .size-pills { display: flex; flex-wrap: wrap; gap: 0.6rem; flex: 1;}
-        
         .pill { padding: 0.6rem 1.4rem; border-radius: 5rem; background: var(--x-bg-main); color: var(--x-text-main); font-size: 1.2rem; border: 1px solid var(--x-border-dark); cursor: pointer; user-select: none; transition: 0.2s; font-weight: normal;}
         .pill:hover { border-color: var(--x-setting-gray); }
         .pill.active { background: var(--x-setting-gray); color: white; border-color: var(--x-setting-gray); }
@@ -216,13 +210,9 @@
         .btn-add svg { stroke-width: 2.5; width: 1.8rem; height: 1.8rem; }
         .btn-add:hover { text-decoration: underline;}
 
-        /* ======================================= */
         /* การตั้งค่า (Delivery & Fees) */
-        /* ======================================= */
         .fee-group-box { display: flex; flex-direction: column; margin-bottom: 4rem; }
-        
         .shipping-item { display: flex; align-items: center; padding: 1.5rem 0; border-bottom: 1px solid var(--x-border); gap: 1.5rem;}
-        
         .shipping-icon { width: 4.5rem; height: 4.5rem; background: var(--x-paypal); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
         .shipping-text { flex: 1; }
         .shipping-title { font-size: 1.4rem; font-weight: normal; color: var(--x-text-main); display: flex; align-items: center; gap: 0.5rem;}
@@ -238,20 +228,14 @@
         .fee-input-inline { width: 8rem !important; padding: 0.5rem !important; font-size: 1.4rem !important; text-align: right; border: none !important; background: transparent !important; box-shadow: none !important; color: var(--x-text-subdued) !important;}
         .fee-input-inline:focus { color: var(--x-text-main) !important; border-bottom: 1px solid var(--x-primary) !important; border-radius: 0 !important;}
 
-        /* ======================================= */
-        /* 🏦 ธนาคาร (Payment Box) */
-        /* ======================================= */
+        /* ธนาคาร (Payment Box) */
         .payment-box { border: 1px solid var(--x-border-dark); background: var(--x-bg-main); display: flex; flex-direction: column; margin-bottom: 1rem; border-radius: var(--x-radius-base); overflow: hidden;}
         .payment-item { display: flex; align-items: center; padding: 1.6rem 1.5rem; border-bottom: 1px solid var(--x-border); cursor: pointer; background: transparent; transition: 0.2s;}
         .payment-item:last-child { border-bottom: none; }
-        
         .payment-item.active { background-color: var(--x-primary-light); box-shadow: inset 0 0 0 1px var(--x-primary); border-bottom-color: transparent;} 
-        
         .dot-radio { appearance: none; width: 1.8rem; height: 1.8rem; border: 1px solid var(--x-border-dark); border-radius: 50%; margin: 0 1.5rem 0 0; outline: none; cursor: pointer; background: var(--x-bg-main); flex-shrink: 0; position: relative;}
         .dot-radio:checked { border: 6px solid var(--x-primary); background: var(--x-bg-main); }
-        
         .payment-text { flex: 1; font-size: 1.4rem; color: var(--x-text-main); font-weight: normal;}
-        
         .bank-badge { padding: 0.4rem 1rem; border-radius: 4px; border: 1px solid var(--x-border); font-size: 1.1rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; min-width: 5rem; text-align: center; color: #FFF; box-shadow: 0 1px 2px rgba(0,0,0,0.05);}
 
         .bank-popover { position: absolute; z-index: 2000; background: var(--x-bg-main); border: 1px solid var(--x-border); padding: 1rem; border-radius: var(--x-radius-large); box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 0.4rem; opacity: 0; visibility: hidden; transition: 0.2s; min-width: 16rem; max-height: 25rem; overflow-y: auto;}
@@ -260,72 +244,39 @@
         .bank-option:hover { background: var(--x-bg-subdued); }
         .bank-color-dot { width: 1.4rem; height: 1.4rem; border-radius: 50%; box-shadow: 0 1px 2px rgba(0,0,0,0.2);}
 
-        /* ======================================= */
-        /* 📄 ฝั่งขวา: สรุปยอด (Sticky ให้เกาะติดเวลาเลื่อน) */
-        /* ======================================= */
-        .summary-panel {
-            flex: 1; 
-            background-color: var(--x-bg-subdued);
-            border-left: 1px solid var(--x-border); transition: 0.3s;
-            position: sticky; top: 0; height: 100vh; overflow-y: auto; /* Fixed Right Panel */
-        }
-        
-        .summary-content {
-            width: 100%; max-width: 500px; margin: 0 auto;
-            padding: 4rem 4rem 8rem 4rem; box-sizing: border-box;
-        }
-
-        /* จำกัดโชว์บิล 3 รายการ แล้ว Scroll ได้ */
+        /* ฝั่งขวา: สรุปยอด */
         .visual-bill-wrapper { max-height: 23rem; overflow-y: auto; padding-right: 0.5rem; margin-bottom: 1rem;}
         .visual-bill-wrapper::-webkit-scrollbar { width: 0.4rem; }
         .visual-bill-wrapper::-webkit-scrollbar-thumb { background-color: var(--x-border-dark); border-radius: 1rem; }
 
-        /* ปรับบิลให้กระชับขึ้น */
         .summary-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 0.8rem 0; font-size: 1.4rem; }
-        
         .thumbnail { width: 6.4rem; height: 6.4rem; background: var(--x-bg-main); border-radius: var(--x-radius-large); border: 1px solid var(--x-border-dark); position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--x-text-subdued); box-sizing: border-box; margin-right: 1.5rem;}
         .thumbnail::after { content:''; position:absolute; inset: 0.4rem; border: 1px solid rgba(0,0,0,0.05); border-radius: 0.4rem; pointer-events:none;} 
-        
         .qty-badge { position: absolute; top: -0.8rem; right: -0.8rem; background: rgba(114, 114, 114, 0.9); color: white; font-size: 1.2rem; min-width: 2rem; height: 2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0 0.4rem; box-sizing: border-box; font-weight: normal; z-index: 2;}
         
         .totals-section { border-top: 1px solid var(--x-border); padding-top: 1rem; margin-top: 1rem;}
         .cost-line { display: flex; justify-content: space-between; padding: 0.4rem 0; font-size: 1.4rem; color: var(--x-text-main); }
         .cost-line .label { color: var(--x-text-subdued); }
-        
         .total-line { border-top: 1px solid var(--x-border); align-items: center; padding-top: 1.5rem; margin-top: 1rem; font-size: 1.6rem; color: var(--x-text-main);}
         .total-price { display: flex; align-items: baseline; gap: 0.8rem; }
         .total-currency { color: var(--x-text-subdued); font-size: 1.2rem; }
         .total-amount { font-size: 2.1rem; font-weight: bold; }
 
         .output-box-title { margin-top: 2.5rem; margin-bottom: 0.8rem; font-size: 1.6rem; font-weight: bold; color: var(--x-text-main); }
-        
         .output-wrapper { position: relative; width: 100%; }
         textarea.final-output { width: 100%; background: var(--x-bg-main); border: 1px solid var(--x-border); border-radius: var(--x-radius-base); padding: 1.2rem; padding-bottom: 4.5rem; font-family: inherit; font-size: 1.4rem; color: var(--x-text-main); resize: vertical; outline: none; line-height: 1.5; box-sizing: border-box;}
         textarea.final-output:focus { border-color: var(--x-primary); box-shadow: 0 0 0 1px var(--x-primary);}
 
-        /* ปุ่ม Copy (สีม่วง ไม่มีตัวอักษร) */
         .btn-copy-inline {
-            position: absolute;
-            bottom: 1.2rem;
-            right: 1.2rem;
-            background: var(--x-primary);
-            color: white;
-            border: none;
-            width: 3.6rem;
-            height: 3.6rem;
-            border-radius: var(--x-radius-base);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: absolute; bottom: 1.2rem; right: 1.2rem;
+            background: var(--x-primary); color: white; border: none;
+            width: 3.6rem; height: 3.6rem; border-radius: var(--x-radius-base);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .btn-copy-inline:hover { filter: brightness(1.1); transform: scale(1.05); }
 
-        /* ======================================= */
-        /* 🪟 Modal Popup (สำหรับแก้ไขสินค้า) */
-        /* ======================================= */
+        /* 🪟 Modal Popup */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 3000;
             display: none; align-items: center; justify-content: center; opacity: 0; transition: 0.3s;
@@ -345,37 +296,33 @@
         .btn-modal.save { background: var(--x-primary); color: white; border-color: var(--x-primary); }
         .btn-modal.save:hover { background: var(--x-primary-hover); }
 
-        /* ======================================= */
-        /* Footer Links (เปลี่ยนปุ่มเป็นข้อความลิงก์) */
-        /* ======================================= */
+        /* Footer Links */
         .footer-links { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--x-border); justify-content: center; align-items: center;}
         .footer-link { background: none; border: none; color: var(--x-primary); font-size: 1.4rem; cursor: pointer; text-decoration: underline; padding: 0; font-family: inherit;}
         .footer-link:hover { color: var(--x-primary-hover); }
         .footer-link.danger { color: var(--x-danger); text-decoration: underline;}
         .footer-link.danger:hover { color: darkred; }
 
-        /* ======================================= */
         /* Mobile Layout */
-        /* ======================================= */
         .mobile-summary-toggle { display: none; }
-
         @media (max-width: 1000px) {
-            .header-content { display: flex; justify-content: space-between; padding: 1.5rem 2rem; }
+            .header-left-col { width: 100%; justify-content: center; }
+            .header-content { display: flex; justify-content: space-between; padding: 1.5rem 2rem; width: 100%; }
             .header-logo { grid-column: auto; text-align: left; }
             .btn-clear { grid-column: auto; }
             
             .layout-container { flex-direction: column; overflow: visible;}
             
-            .summary-panel { order: 1; position: static; height: auto; overflow: visible; border-right: none; border-bottom: 1px solid var(--x-border); border-left: none;}
-            .summary-content { position: static; padding: 2rem; max-width: 100%; height: auto; display: none; }
+            .management-panel { width: 100%; padding: 3rem 2rem; }
+            .summary-panel { width: 100%; position: static; height: auto; overflow: visible; border-left: none; }
+            
+            .summary-content { padding: 2rem; max-width: 100%; display: none; }
             .summary-content.show { display: block; }
-
-            .management-panel { order: 2; padding: 3rem 2rem; max-width: 100%; height: auto; border-right: none;}
             
             .mobile-summary-toggle {
                 display: flex; justify-content: space-between; align-items: center;
                 background-color: var(--x-bg-subdued); padding: 1.5rem 2rem; cursor: pointer;
-                color: var(--x-primary); font-size: 1.4rem; font-weight: bold; border-bottom: 1px solid var(--x-border);
+                color: var(--x-primary); font-size: 1.4rem; font-weight: bold; border-bottom: 1px solid var(--x-border); border-top: 1px solid var(--x-border);
             }
             .product-header-row { grid-template-columns: 1fr auto auto; }
         }
@@ -384,11 +331,16 @@
 <body>
 
     <header class="top-header">
-        <div class="header-content">
-            <div></div> <div class="header-logo">Shop Management</div>
-            <button class="btn-clear" onclick="clearAllPills()" title="Clear Options">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
-            </button>
+        <div class="header-wrapper">
+            <div class="header-left-col">
+                <div class="header-content">
+                    <div></div>
+                    <div class="header-logo">Shop Management</div>
+                    <button class="btn-clear" onclick="clearAllPills()" title="Clear Options">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
+                    </button>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -482,7 +434,7 @@
                 </div>
                 
                 <div style="text-align: center; margin-top: 2.5rem; color: var(--x-text-subdued); font-size: 1.2rem;">
-                    Version 21.3
+                    Version 21.5
                 </div>
 
             </div>
@@ -548,9 +500,9 @@
     <div id="bankPopover" class="bank-popover"></div>
 
     <div class="modal-overlay" id="editModal">
-        <div class="modal-content" style="max-width: 450px;">
+        <div class="modal-content">
             <div class="modal-header">Edit Product</div>
-            <div class="modal-body" style="max-height: 65vh; overflow-y: auto;">
+            <div class="modal-body">
                 <div>
                     <label>Product Name</label>
                     <input type="text" id="modalName" placeholder="Enter product name..." style="margin-top:0.5rem;">
@@ -648,12 +600,10 @@
 
         banks.forEach(b => {
             const isChecked = b.id === selectedId ? 'checked' : '';
-            
             let code = b.bankCode || 'CUSTOM';
             let conf = bankConfig.find(x => x.code === code);
             let displayColor = conf ? conf.color : (b.customColor || '#808080');
             let displayCode = conf ? conf.code : 'CUST';
-
             if(!b.bankCode && b.color) displayColor = b.color;
             let bankName = b.text.split('\n')[0];
 
@@ -676,7 +626,6 @@
         event.preventDefault(); 
         event.stopPropagation();
         currentEditingBankId = bankId;
-        
         const popover = document.getElementById('bankPopover');
         const rect = event.currentTarget.getBoundingClientRect();
         
@@ -703,7 +652,6 @@
 
         popover.style.display = 'flex';
         let pHeight = popover.offsetHeight;
-        
         let spaceBelow = window.innerHeight - rect.bottom;
         if (spaceBelow < pHeight + 10) {
             popover.style.top = (rect.top + window.scrollY - pHeight - 5) + 'px'; 
@@ -768,9 +716,6 @@
         updateData();
     }
 
-    // ==========================================
-    // Save/Load Logic
-    // ==========================================
     function saveData() {
         localStorage.setItem('val_shipping', document.getElementById('val_shipping').value);
         localStorage.setItem('val_special', document.getElementById('val_special').value);
@@ -1138,7 +1083,6 @@
         document.getElementById('editModal').classList.add('show');
     }
 
-    // สร้างกล่อง Option โดยเมื่อลบออก เลขลำดับ 1,2,3 จะคำนวณใหม่เสมอ
     function addModalOptionRow(value = '', index = null) {
         const container = document.getElementById('modalOptionsContainer');
         const displayIndex = index || (container.children.length + 1);
@@ -1159,22 +1103,18 @@
         updateModalOptionIndexes();
     }
 
-    // ลบแถว Option และเรียงเลขใหม่
     function removeModalOptionRow(btn) {
         btn.closest('.option-row-modal').remove();
         updateModalOptionIndexes();
     }
 
-    // อัปเดตเลข Option ให้เรียง 1, 2, 3 ใหม่เสมอ
     function updateModalOptionIndexes() {
         const container = document.getElementById('modalOptionsContainer');
         const rows = container.querySelectorAll('.option-row-modal');
         rows.forEach((row, idx) => {
             const indexSpan = row.querySelector('.opt-index');
             const removeBtn = row.querySelector('span[onclick="removeModalOptionRow(this)"]');
-            
             if(indexSpan) indexSpan.innerText = idx + 1;
-            // ซ่อนปุ่มลบถ้าเหลือแถวเดียว ไม่งั้นเดี๋ยวเผลอลบเกลี้ยง
             if(removeBtn) removeBtn.style.display = idx > 0 ? 'block' : 'none'; 
         });
     }
@@ -1222,7 +1162,7 @@
     function exportData() {
         saveData();
         const exportObj = {
-            version: "v21.4",
+            version: "v21.5",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || defaultBanks,
             selectedBank: localStorage.getItem('bank') || '',
