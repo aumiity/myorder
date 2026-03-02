@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Text Transformer V9.3</title>
+    <title>Text Transformer V9.4</title>
     <style>
         /* --- Root & Theme --- */
         :root {
@@ -50,18 +50,18 @@
 
         /* Layout */
         .layout-container { display: flex; flex: 1; width: 100%; max-width: 1000px; margin: 0 auto; align-items: flex-start;}
-
         .management-panel { flex: 1; padding: 4rem; box-sizing: border-box; }
         .summary-panel { 
             flex: 1; background-color: var(--x-bg-subdued); border-left: 1px solid var(--x-border);
             position: sticky; top: 6rem; height: calc(100vh - 6rem); padding: 4rem; box-sizing: border-box; overflow-y: auto;
         }
 
-        /* --- Sections & Collapsible (กระชับระยะห่าง) --- */
+        /* --- Sections & Collapsible --- */
         .section-title { font-size: 1.8rem; font-weight: bold; color: var(--x-primary); margin: 0;}
-        
         .collapsible-section { border-top: 1px solid var(--x-border); padding-top: 1rem; margin-top: 1rem; }
         .section-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; }
+        
+        .header-actions { display: flex; gap: 0.5rem; align-items: center; }
 
         .chevron-box { 
             background: var(--x-primary-light); color: var(--x-primary); 
@@ -81,7 +81,6 @@
         }
         textarea.final-output:focus { border-color: var(--x-primary); background: var(--x-bg-main); box-shadow: 0 0 0 1px var(--x-primary);}
         
-        /* เปลี่ยนสีปุ่ม Copy ให้เป็นสีม่วง */
         .btn-copy-inline {
             position: absolute; bottom: 1.2rem; right: 1.2rem;
             background: var(--x-primary); color: white; border: none;
@@ -111,7 +110,7 @@
         input:checked + .slider { background-color: var(--x-primary); }
         input:checked + .slider:before { transform: translateX(1.8rem); content: '✓'; color: var(--x-primary); }
 
-        /* --- List (กระชับระยะห่าง) --- */
+        /* --- List --- */
         .list-item-row { 
             display: flex; align-items: center; gap: 1rem; padding: 0.8rem 0; 
             border-bottom: 1px solid var(--x-border); background: transparent; 
@@ -137,11 +136,11 @@
             position: absolute; right: 0; top: calc(100% + 8px);
             background: var(--x-bg-main); border: 1px solid var(--x-border);
             border-radius: var(--x-radius-base); box-shadow: var(--x-shadow-base);
-            z-index: 2000; min-width: 120px; display: none; flex-direction: column;
+            z-index: 2000; min-width: 140px; display: none; flex-direction: column;
             padding: 8px 0;
         }
         .dropdown-menu.show { display: flex; }
-        .dropdown-item { padding: 10px 16px; cursor: pointer; font-size: 1.4rem; color: var(--x-text-main); transition: 0.2s; }
+        .dropdown-item { padding: 10px 16px; cursor: pointer; font-size: 1.4rem; color: var(--x-text-main); transition: 0.2s; white-space: nowrap;}
         .dropdown-item:hover { background: var(--x-bg-subdued); }
         .dropdown-item.edit { color: var(--x-primary); }
         .dropdown-item.delete { color: var(--x-danger); }
@@ -211,8 +210,20 @@
             <div class="collapsible-section" id="sec-collection">
                 <div class="section-header">
                     <h2 class="section-title">Collection List</h2>
-                    <div class="chevron-box" onclick="toggleSection('sec-collection')">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                    <div class="header-actions">
+                        <div class="dropdown-container">
+                            <button class="option-btn" onclick="toggleDropdown(event, this)">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                            </button>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-item" onclick="bulkAction('collection', 'selectAll')">Select All</div>
+                                <div class="dropdown-item" onclick="bulkAction('collection', 'deselectAll')">Deselect All</div>
+                                <div class="dropdown-item delete" onclick="bulkAction('collection', 'deleteSelected')">Delete Selected</div>
+                            </div>
+                        </div>
+                        <div class="chevron-box" onclick="toggleSection('sec-collection')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                        </div>
                     </div>
                 </div>
                 <div class="section-body">
@@ -227,8 +238,20 @@
             <div class="collapsible-section" id="sec-replace">
                 <div class="section-header">
                     <h2 class="section-title">Replace List</h2>
-                    <div class="chevron-box" onclick="toggleSection('sec-replace')">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                    <div class="header-actions">
+                        <div class="dropdown-container">
+                            <button class="option-btn" onclick="toggleDropdown(event, this)">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                            </button>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-item" onclick="bulkAction('replace', 'selectAll')">Select All</div>
+                                <div class="dropdown-item" onclick="bulkAction('replace', 'deselectAll')">Deselect All</div>
+                                <div class="dropdown-item delete" onclick="bulkAction('replace', 'deleteSelected')">Delete Selected</div>
+                            </div>
+                        </div>
+                        <div class="chevron-box" onclick="toggleSection('sec-replace')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                        </div>
                     </div>
                 </div>
                 <div class="section-body">
@@ -289,7 +312,7 @@
                 <span style="color:var(--x-border-dark);">|</span>
                 <button class="btn-text" onclick="importData()">Import settings</button>
             </div>
-            <div style="text-align: center; color: var(--x-border-dark); font-size: 1.1rem; margin-top: 1rem;">Version 9.3</div>
+            <div style="text-align: center; color: var(--x-border-dark); font-size: 1.1rem; margin-top: 1rem;">Version 9.4</div>
         </aside>
     </div>
 
@@ -368,6 +391,37 @@
             if (!isShowing) menu.classList.add('show');
         }
         window.onclick = () => document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+
+        // --- Bulk Actions (New) ---
+        function bulkAction(type, action) {
+            const containerId = type === 'collection' ? 'collectionInputs' : 'replaceInputs';
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            if (action === 'selectAll') {
+                container.querySelectorAll('.list-check').forEach(cb => cb.checked = true);
+                processText();
+            } else if (action === 'deselectAll') {
+                container.querySelectorAll('.list-check').forEach(cb => cb.checked = false);
+                processText();
+            } else if (action === 'deleteSelected') {
+                const selectedRows = Array.from(container.querySelectorAll('.list-item-row')).filter(row => row.querySelector('.list-check').checked);
+                
+                if (selectedRows.length === 0) {
+                    showSystemModal({ type: 'alert', title: 'แจ้งเตือน', message: 'กรุณาเลือกอย่างน้อย 1 รายการเพื่อลบ', hideCancel: true });
+                    return;
+                }
+                
+                showSystemModal({
+                    title: 'ยืนยันการลบ',
+                    message: `คุณต้องการลบ ${selectedRows.length} รายการที่เลือก ใช่หรือไม่?`,
+                    onConfirm: () => {
+                        selectedRows.forEach(row => row.remove());
+                        processText();
+                    }
+                });
+            }
+        }
 
         function renderListRow(mode, from, to = "", checked = true) {
             const container = document.getElementById(mode === 'replace' ? 'replaceInputs' : 'collectionInputs');
@@ -453,11 +507,11 @@
             settings.layout = { col: document.getElementById('sec-collection').classList.contains('collapsed'), rep: document.getElementById('sec-replace').classList.contains('collapsed') };
             document.querySelectorAll('#replaceInputs .list-item-row').forEach(r => settings.replaceList.push({ f: r.querySelector('.val-from').value, t: r.querySelector('.val-to').value, a: r.querySelector('.list-check').checked }));
             document.querySelectorAll('#collectionInputs .list-item-row').forEach(r => settings.collectionList.push({ f: r.querySelector('.val-from').value, a: r.querySelector('.list-check').checked }));
-            localStorage.setItem('tt_config_v9_3', JSON.stringify(settings));
+            localStorage.setItem('tt_config_v9_4', JSON.stringify(settings));
         }
 
         function loadSettings() {
-            const saved = localStorage.getItem('tt_config_v9_3') || localStorage.getItem('tt_config_v9_2');
+            const saved = localStorage.getItem('tt_config_v9_4') || localStorage.getItem('tt_config_v9_3');
             if (saved) {
                 const config = JSON.parse(saved);
                 for (let id in config.options) if (document.getElementById(id)) document.getElementById(id).checked = config.options[id];
@@ -472,13 +526,13 @@
         }
 
         function exportData() {
-            const encoded = btoa(encodeURIComponent(localStorage.getItem('tt_config_v9_3')));
+            const encoded = btoa(encodeURIComponent(localStorage.getItem('tt_config_v9_4')));
             showSystemModal({ type: 'prompt', title: 'Export', message: 'คัดลอกรหัสนี้ไปใช้ Import:', value: encoded, readonly: true, hideCancel: true });
         }
 
         function importData() {
             showSystemModal({ type: 'prompt', title: 'Import', message: 'วางรหัส Export ที่นี่:', onConfirm: (code) => {
-                try { const decoded = decodeURIComponent(atob(code)); JSON.parse(decoded); localStorage.setItem('tt_config_v9_3', decoded); loadSettings(); } catch(e) {}
+                try { const decoded = decodeURIComponent(atob(code)); JSON.parse(decoded); localStorage.setItem('tt_config_v9_4', decoded); loadSettings(); } catch(e) {}
             }});
         }
 
@@ -489,8 +543,6 @@
             el.select(); 
             document.execCommand('copy'); 
             window.getSelection().removeAllRanges();
-            
-            // เอฟเฟกต์ย่อปุ่ม
             btn.style.transform = 'scale(0.9)';
             setTimeout(() => btn.style.transform = 'scale(1)', 150);
         }
