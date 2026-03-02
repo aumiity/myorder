@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Shop Management - V22.0</title>
+    <title>Shop Management - V22.1</title>
     <style>
         :root {
             --x-bg-main: hsl(0, 0%, 100%);
@@ -167,7 +167,7 @@
         .collection-block { 
             margin: 0 -1.5rem 1.5rem -1.5rem; 
             padding: 1.5rem; 
-            border-radius: 0; 
+            border-radius: var(--x-radius-large); 
             border-bottom: 1px solid var(--x-border);
             transition: background-color 0.2s;
         }
@@ -177,6 +177,7 @@
         }
         .collection-block.collapsed { 
             background-color: transparent; 
+            border-radius: 0; 
         }
         
         .collection-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none;}
@@ -296,7 +297,7 @@
         .btn-copy-inline:hover { filter: brightness(1.1); transform: scale(1.05); }
 
         /* ======================================= */
-        /* 🪟 Modals & Popups (Unified Design) */
+        /* 🪟 Modals & Popups */
         /* ======================================= */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 3000;
@@ -459,7 +460,7 @@
                 </div>
                 
                 <div style="text-align: center; margin-top: 2.5rem; color: var(--x-text-subdued); font-size: 1.2rem;">
-                    Version 22.0
+                    Version 22.1
                 </div>
 
             </div>
@@ -604,7 +605,7 @@
     };
 
     // ==========================================
-    // 🪟 GLOBAL MODAL LOGIC (แทน prompt/confirm)
+    // 🪟 GLOBAL MODAL LOGIC 
     // ==========================================
     let globalModalCallback = null;
 
@@ -671,7 +672,7 @@
     }
 
     // ==========================================
-    // Dropdown Logic (Global)
+    // Dropdown Logic (คลิกที่ไหนก็ปิดทันที)
     // ==========================================
     function toggleDropdown(e, btn) {
         e.stopPropagation();
@@ -681,10 +682,8 @@
         if (!isShowing) menu.classList.add('show');
     }
 
-    window.onclick = function(event) {
-        if (!event.target.closest('.dropdown-container')) {
-            document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
-        }
+    window.onclick = function() {
+        document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
     }
 
     function toggleMobileSummary() {
@@ -1295,7 +1294,7 @@
     function exportData() {
         saveData();
         const exportObj = {
-            version: "v22.0",
+            version: "v22.1",
             collections: JSON.parse(localStorage.getItem('orderDataV3')) || [],
             banks: JSON.parse(localStorage.getItem('bankData')) || defaultBanks,
             selectedBank: localStorage.getItem('bank') || '',
