@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Text Transformer V9</title>
+    <title>Text Transformer V9.2</title>
     <style>
         /* --- Root & Theme --- */
         :root {
@@ -48,7 +48,7 @@
         .header-content { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
         .header-logo { font-size: 2.1rem; font-weight: bold; color: var(--x-primary); }
 
-        /* Layout */
+        /* Layout (50:50 Symmetry) */
         .layout-container { display: flex; flex: 1; width: 100%; max-width: 1000px; margin: 0 auto; align-items: flex-start;}
 
         .management-panel { flex: 1; padding: 4rem; box-sizing: border-box; }
@@ -57,19 +57,12 @@
             position: sticky; top: 6rem; height: calc(100vh - 6rem); padding: 4rem; box-sizing: border-box; overflow-y: auto;
         }
 
-        /* --- Sections & Collapsible (Shop Style) --- */
+        /* --- Sections & Collapsible --- */
         .section-title { font-size: 1.8rem; font-weight: bold; color: var(--x-primary); margin: 0;}
         
-        .collapsible-section { 
-            border-top: 1px solid var(--x-border); 
-            padding-top: 1.5rem; 
-            margin-top: 1.5rem; 
-        }
-        .section-header { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding-bottom: 1.5rem;
-        }
-        /* ปุ่มย่อขยายแบบ Shop */
+        .collapsible-section { border-top: 1px solid var(--x-border); padding-top: 1.5rem; margin-top: 1.5rem; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1.5rem; }
+
         .chevron-box { 
             background: var(--x-primary-light); color: var(--x-primary); 
             width: 2.8rem; height: 2.8rem; border-radius: 0.6rem; 
@@ -78,7 +71,6 @@
         }
         .collapsible-section.collapsed .chevron-box { transform: rotate(180deg); }
         .collapsible-section.collapsed .section-body { display: none; }
-        .section-body { padding-bottom: 0.5rem; }
 
         /* Textarea Style */
         .output-wrapper { position: relative; width: 100%; margin-bottom: 1.5rem;}
@@ -96,7 +88,6 @@
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; transition: 0.2s;
         }
-        .btn-copy-inline:hover { filter: brightness(1.1); }
         .btn-paste-inline { top: 1.2rem; bottom: auto; background: var(--x-primary); }
 
         /* --- iOS Toggle Switch --- */
@@ -118,32 +109,22 @@
         input:checked + .slider { background-color: var(--x-primary); }
         input:checked + .slider:before { transform: translateX(1.8rem); content: '✓'; color: var(--x-primary); }
 
-        /* --- UI List Item (ไร้กรอบ ไร้เส้นล่าง) --- */
+        /* --- List (เส้นคั่นระหว่างรายการ) --- */
         .list-item-row { 
-            display: flex; align-items: center; gap: 1rem; padding: 0.5rem 0; 
-            background: transparent;
+            display: flex; align-items: center; gap: 1rem; padding: 1.2rem 0; 
+            border-bottom: 1px solid var(--x-border); background: transparent; 
         }
+        .list-item-row:last-child { border-bottom: none; } /* ซ่อนเส้นของรายการสุดท้าย */
         
         .list-info { flex: 1; font-size: 1.4rem; color: var(--x-text-main); width: 100%;}
-        .list-info.grid-mode { 
-            display: grid; 
-            grid-template-columns: 1fr 2rem 1fr; /* ล็อคขนาดให้ลูกศรอยู่ตรงกลางเป๊ะ */
-            gap: 0.8rem; align-items: center; 
-        }
-        .list-info.block-mode { display: block; }
-
-        .list-pill { 
-            font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
-            background: transparent; border: none; padding: 0; 
-            box-sizing: border-box; width: 100%;
-        }
+        .list-info.grid-mode { display: grid; grid-template-columns: 1fr 2rem 1fr; gap: 0.8rem; align-items: center; }
+        .list-pill { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: transparent; border: none; padding: 0; width: 100%; }
         .list-pill.center-text { text-align: center; }
-        .list-pill.left-text { text-align: left; }
-        
+
         .btn-add { 
             width: 100%; text-align: left; background: transparent; border: none; 
-            color: var(--x-primary); font-size: 1.4rem; cursor: pointer; padding: 0.5rem 0; 
-            display: flex; align-items: center; gap: 0.8rem; margin-top: 0.5rem; font-weight: 500;
+            color: var(--x-primary); font-size: 1.4rem; cursor: pointer; padding: 1rem 0 0.5rem 0; 
+            display: flex; align-items: center; gap: 0.8rem; font-weight: 500;
         }
         .btn-add svg { stroke-width: 2.5; width: 1.8rem; height: 1.8rem; }
         .btn-add:hover { text-decoration: underline; }
@@ -155,13 +136,10 @@
             background: var(--x-bg-main); border: 1px solid var(--x-border);
             border-radius: var(--x-radius-base); box-shadow: var(--x-shadow-base);
             z-index: 2000; min-width: 120px; display: none; flex-direction: column;
-            padding: 8px 0; overflow: visible;
+            padding: 8px 0;
         }
         .dropdown-menu.show { display: flex; }
-        .dropdown-item {
-            padding: 10px 16px; cursor: pointer; font-size: 1.4rem;
-            color: var(--x-text-main); transition: 0.2s; text-align: left; z-index: 2;
-        }
+        .dropdown-item { padding: 10px 16px; cursor: pointer; font-size: 1.4rem; color: var(--x-text-main); transition: 0.2s; }
         .dropdown-item:hover { background: var(--x-bg-subdued); }
         .dropdown-item.edit { color: var(--x-primary); }
         .dropdown-item.delete { color: var(--x-danger); }
@@ -171,8 +149,7 @@
             border-radius: 50%; display: flex; align-items: center; justify-content: center; 
             border: none; cursor: pointer; padding: 0; transition: 0.2s;
         }
-        .option-btn:hover { color: var(--x-text-main); background: var(--x-bg-subdued); }
-        .option-btn svg { width: 2rem; height: 2rem; }
+        .option-btn:hover { background: var(--x-bg-subdued); color: var(--x-text-main); }
 
         /* --- Modal Popup System --- */
         .modal-overlay {
@@ -180,13 +157,12 @@
             display: none; align-items: center; justify-content: center; opacity: 0; transition: 0.3s;
         }
         .modal-overlay.show { display: flex; opacity: 1; }
-        .modal-overlay.top-tier { z-index: 4000; } /* สำหรับ System Modal ให้อยู่บนสุด */
+        .modal-overlay.top-tier { z-index: 4000; } 
         
         .modal-content {
             background: var(--x-bg-main); border-radius: var(--x-radius-large); width: 100%; max-width: 400px;
             box-shadow: var(--x-shadow-modal); overflow: hidden; transform: translateY(20px); transition: 0.3s;
         }
-        .modal-overlay.show .modal-content { transform: translateY(0); }
         .modal-header { padding: 2rem; border-bottom: 1px solid var(--x-border); font-size: 1.6rem; font-weight: bold; color: var(--x-text-main); }
         .modal-body { padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
         .modal-body label { font-size: 1.3rem; color: var(--x-text-subdued); font-weight: 500; margin-bottom: -0.5rem;}
@@ -199,12 +175,10 @@
         
         .btn-modal { padding: 1rem 1.6rem; border-radius: var(--x-radius-base); border: 1px solid var(--x-border-dark); background: var(--x-bg-main); color: var(--x-text-main); cursor: pointer; font-size: 1.4rem; font-weight: 500;}
         .btn-modal.save { background: var(--x-primary); color: white; border-color: var(--x-primary); }
-        .btn-modal.save:hover { background: var(--x-primary-hover); }
 
-        /* Footer Links */
+        /* Footer */
         .footer-links { display: flex; gap: 1.5rem; justify-content: center; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--x-border); }
-        .btn-text { background: none; border: none; color: var(--x-text-subdued); cursor: pointer; font-size: 1.3rem; transition: 0.2s;}
-        .btn-text:hover { color: var(--x-primary); }
+        .btn-text { background: none; border: none; color: var(--x-text-subdued); cursor: pointer; font-size: 1.3rem; }
 
         @media (max-width: 800px) {
             .layout-container { flex-direction: column; }
@@ -313,7 +287,7 @@
                 <span style="color:var(--x-border-dark);">|</span>
                 <button class="btn-text" onclick="importData()">Import settings</button>
             </div>
-            <div style="text-align: center; color: var(--x-border-dark); font-size: 1.1rem; margin-top: 1rem;">Version 9.0</div>
+            <div style="text-align: center; color: var(--x-border-dark); font-size: 1.1rem; margin-top: 1rem;">Version 9.2</div>
         </aside>
     </div>
 
@@ -321,14 +295,8 @@
         <div class="modal-content">
             <div class="modal-header" id="modalTitle">Add Item</div>
             <div class="modal-body">
-                <div>
-                    <label id="lblFrom">ข้อความ</label>
-                    <input type="text" id="modalFrom" placeholder="..." style="margin-top:0.5rem;">
-                </div>
-                <div id="modalToContainer">
-                    <label>เปลี่ยนเป็น (To) *เว้นว่างหากต้องการลบทิ้ง</label>
-                    <input type="text" id="modalTo" placeholder="เช่น THB (เว้นว่าง = ลบ)" style="margin-top:0.5rem;">
-                </div>
+                <div><label id="lblFrom">ข้อความ</label><input type="text" id="modalFrom" placeholder="..."></div>
+                <div id="modalToContainer"><label>เปลี่ยนเป็น (To)</label><input type="text" id="modalTo" placeholder="เว้นว่าง = ลบ"></div>
             </div>
             <div class="modal-footer">
                 <button class="btn-modal" onclick="closeModal()">Cancel</button>
@@ -340,10 +308,7 @@
     <div class="modal-overlay top-tier" id="sysModal">
         <div class="modal-content">
             <div class="modal-header" id="sysModalTitle">Alert</div>
-            <div class="modal-body" style="gap: 1rem;">
-                <div id="sysModalMessage" style="font-size: 1.4rem; color: var(--x-text-main); line-height: 1.5; display:none;"></div>
-                <input type="text" id="sysModalInput" style="display:none; width: 100%; margin-top: 0.5rem;">
-            </div>
+            <div class="modal-body"><div id="sysModalMessage"></div><input type="text" id="sysModalInput" style="display:none; width: 100%;"></div>
             <div class="modal-footer">
                 <button class="btn-modal" id="sysModalCancel" onclick="closeSysModal()">Cancel</button>
                 <button class="btn-modal save" id="sysModalConfirm">OK</button>
@@ -355,7 +320,6 @@
         let currentEditingRow = null;
         let currentModalMode = 'replace';
 
-        // --- Init Theme ---
         const savedTheme = localStorage.getItem('tt_theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
 
@@ -366,47 +330,34 @@
             localStorage.setItem('tt_theme', target);
         }
 
-        // --- System Modal (Replace native alerts & prompts) ---
+        // --- System Modal ---
         let sysModalCallback = null;
         function showSystemModal(config) {
             document.getElementById('sysModalTitle').innerText = config.title || 'Notification';
-            
             const msgEl = document.getElementById('sysModalMessage');
             if(config.message) { msgEl.innerHTML = config.message; msgEl.style.display = 'block'; }
             else { msgEl.style.display = 'none'; }
-            
             const inpEl = document.getElementById('sysModalInput');
-            if(config.type === 'prompt') {
-                inpEl.style.display = 'block';
-                inpEl.value = config.value || '';
-                if(config.readonly) inpEl.setAttribute('readonly', 'true');
-                else inpEl.removeAttribute('readonly');
-            } else {
-                inpEl.style.display = 'none';
-            }
-
-            const cancelBtn = document.getElementById('sysModalCancel');
-            if(config.hideCancel) cancelBtn.style.display = 'none';
-            else cancelBtn.style.display = 'block';
-
+            if(config.type === 'prompt') { inpEl.style.display = 'block'; inpEl.value = config.value || ''; if(config.readonly) inpEl.setAttribute('readonly', 'true'); else inpEl.removeAttribute('readonly'); }
+            else { inpEl.style.display = 'none'; }
+            if(config.hideCancel) document.getElementById('sysModalCancel').style.display = 'none';
+            else document.getElementById('sysModalCancel').style.display = 'block';
             sysModalCallback = config.onConfirm || null;
             document.getElementById('sysModal').classList.add('show');
             if(config.type === 'prompt' && !config.readonly) setTimeout(() => inpEl.focus(), 100);
         }
         function closeSysModal() { document.getElementById('sysModal').classList.remove('show'); }
         document.getElementById('sysModalConfirm').onclick = () => {
-            let val = document.getElementById('sysModalInput').style.display === 'block' ? document.getElementById('sysModalInput').value : null;
+            let val = document.getElementById('sysModalInput').value;
             if (sysModalCallback) sysModalCallback(val);
             closeSysModal();
         };
 
-        // --- Accordion Logic ---
         function toggleSection(id) {
             document.getElementById(id).classList.toggle('collapsed');
             saveSettings(); 
         }
 
-        // --- Dropdown Management ---
         function toggleDropdown(e, btn) {
             e.stopPropagation();
             const menu = btn.nextElementSibling;
@@ -414,284 +365,123 @@
             document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
             if (!isShowing) menu.classList.add('show');
         }
-        window.onclick = function(event) {
-            if (!event.target.closest('.dropdown-container')) {
-                document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
-            }
-        }
+        window.onclick = () => document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
 
-        // --- Rendering Lists (Borderless Grid) ---
         function renderListRow(mode, from, to = "", checked = true) {
             const container = document.getElementById(mode === 'replace' ? 'replaceInputs' : 'collectionInputs');
             const row = document.createElement('div');
             row.className = 'list-item-row';
-            row.dataset.mode = mode;
-            
-            let infoHtml = '';
-            if (mode === 'replace') {
-                const displayTo = to ? to : '<span style="color:var(--x-danger); font-size:1.2rem;">(ลบข้อความ)</span>';
-                infoHtml = `
-                <div class="list-info grid-mode">
-                    <div class="list-pill center-text rep-from-text" title="${from}">${from}</div>
-                    <div style="color:var(--x-text-subdued); text-align:center;">→</div>
-                    <div class="list-pill center-text rep-to-text" title="${to}">${displayTo}</div>
-                </div>`;
-            } else {
-                infoHtml = `
-                <div class="list-info block-mode">
-                    <div class="list-pill left-text rep-from-text" title="${from}">${from}</div>
-                </div>`;
-            }
-
-            row.innerHTML = `
-                <input type="checkbox" class="list-check" ${checked ? 'checked' : ''} onchange="processText()" style="width:1.6rem; height:1.6rem; cursor:pointer;">
-                ${infoHtml}
-                <input type="hidden" class="val-from" value="${from}">
-                ${mode === 'replace' ? `<input type="hidden" class="val-to" value="${to}">` : ''}
-                
-                <div class="dropdown-container">
-                    <button class="option-btn" onclick="toggleDropdown(event, this)">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
-                    </button>
-                    <div class="dropdown-menu">
-                        <div class="dropdown-item edit" onclick="openModal('${mode}', this)">Edit</div>
-                        <div class="dropdown-item delete" onclick="deleteListRow(this)">Delete</div>
-                    </div>
-                </div>
-            `;
+            let infoHtml = mode === 'replace' ? 
+                `<div class="list-info grid-mode"><div class="list-pill center-text rep-from-text">${from}</div><div style="color:var(--x-text-subdued); text-align:center;">→</div><div class="list-pill center-text rep-to-text">${to || '(ลบ)'}</div></div>` :
+                `<div class="list-info block-mode"><div class="list-pill left-text rep-from-text">${from}</div></div>`;
+            row.innerHTML = `<input type="checkbox" class="list-check" ${checked ? 'checked' : ''} onchange="processText()" style="width:1.6rem; height:1.6rem;">${infoHtml}<input type="hidden" class="val-from" value="${from}">${mode === 'replace' ? `<input type="hidden" class="val-to" value="${to}">` : ''}<div class="dropdown-container"><button class="option-btn" onclick="toggleDropdown(event, this)"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button><div class="dropdown-menu"><div class="dropdown-item edit" onclick="openModal('${mode}', this)">Edit</div><div class="dropdown-item delete" onclick="deleteListRow(this)">Delete</div></div></div>`;
             container.appendChild(row);
         }
 
-        function deleteListRow(btn) {
-            btn.closest('.list-item-row').remove();
-            processText();
-        }
+        function deleteListRow(btn) { btn.closest('.list-item-row').remove(); processText(); }
 
-        // --- Item Modal ---
         function openModal(mode, btn = null) {
             currentModalMode = mode;
             currentEditingRow = btn ? btn.closest('.list-item-row') : null;
-            
-            const titleEl = document.getElementById('modalTitle');
-            const lblFrom = document.getElementById('lblFrom');
-            const toContainer = document.getElementById('modalToContainer');
-            const fromInput = document.getElementById('modalFrom');
-            const toInput = document.getElementById('modalTo');
-
-            if (mode === 'replace') {
-                titleEl.innerText = currentEditingRow ? 'Edit Replacement' : 'Add Replacement';
-                lblFrom.innerText = 'ค้นหาข้อความ (From)';
-                toContainer.style.display = 'block';
-                toInput.value = currentEditingRow ? currentEditingRow.querySelector('.val-to').value : '';
-            } else {
-                titleEl.innerText = currentEditingRow ? 'Edit Collection' : 'Add Collection Name';
-                lblFrom.innerText = 'ชื่อ Collection ที่ต้องการดักจับ';
-                toContainer.style.display = 'none';
-            }
-
-            fromInput.value = currentEditingRow ? currentEditingRow.querySelector('.val-from').value : '';
-            
-            if(btn) btn.closest('.dropdown-menu').classList.remove('show');
+            document.getElementById('modalTitle').innerText = mode === 'replace' ? 'Replacement' : 'Collection';
+            document.getElementById('modalToContainer').style.display = mode === 'replace' ? 'block' : 'none';
+            document.getElementById('modalFrom').value = currentEditingRow ? currentEditingRow.querySelector('.val-from').value : '';
+            if(mode === 'replace') document.getElementById('modalTo').value = currentEditingRow ? currentEditingRow.querySelector('.val-to').value : '';
             document.getElementById('generalModal').classList.add('show');
-            setTimeout(() => fromInput.focus(), 100);
         }
 
-        function closeModal() {
-            document.getElementById('generalModal').classList.remove('show');
-            currentEditingRow = null;
-        }
+        function closeModal() { document.getElementById('generalModal').classList.remove('show'); }
 
         function saveModal() {
             const from = document.getElementById('modalFrom').value.trim();
             const to = document.getElementById('modalTo').value.trim();
-            if(!from) {
-                showSystemModal({ type: 'alert', title: 'Warning', message: 'กรุณาระบุข้อความที่ต้องการใช้งาน', hideCancel: true });
-                return;
-            }
-
+            if(!from) return;
             if(currentEditingRow) {
                 currentEditingRow.querySelector('.val-from').value = from;
                 currentEditingRow.querySelector('.rep-from-text').innerText = from;
-                currentEditingRow.querySelector('.rep-from-text').title = from;
                 if(currentModalMode === 'replace') {
                     currentEditingRow.querySelector('.val-to').value = to;
-                    currentEditingRow.querySelector('.rep-to-text').title = to;
-                    currentEditingRow.querySelector('.rep-to-text').innerHTML = to ? to : '<span style="color:var(--x-danger); font-size:1.2rem;">(ลบข้อความ)</span>';
+                    currentEditingRow.querySelector('.rep-to-text').innerText = to || '(ลบ)';
                 }
-            } else {
-                renderListRow(currentModalMode, from, to, true);
-            }
-            closeModal();
-            processText();
+            } else renderListRow(currentModalMode, from, to, true);
+            closeModal(); processText();
         }
 
-        // --- Core Logic ---
+        // --- Core Logic V9.2 ---
         function processText() {
-            let text = document.getElementById('inputText').value;
+            let originalText = document.getElementById('inputText').value;
+            let text = originalText;
 
-            if (document.getElementById('opt_upper').checked) text = text.toUpperCase();
-            if (document.getElementById('opt_remove_prices').checked) text = text.replace(/\d{3,}/g, ''); 
-
+            // 1. Replace List 
             document.querySelectorAll('#replaceInputs .list-item-row').forEach(row => {
                 if (row.querySelector('.list-check').checked) {
                     const from = row.querySelector('.val-from').value;
                     const to = row.querySelector('.val-to').value;
-                    if (from) {
-                        const escapedFrom = from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                        text = text.replace(new RegExp(escapedFrom, 'gi'), to);
-                    }
+                    if (from) text = text.replace(new RegExp(from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), to);
                 }
             });
 
-            if (document.getElementById('opt_clean_space').checked) text = text.replace(/ {2,}/g, ' ');
-            
-            let activeCollections = [];
-            document.querySelectorAll('#collectionInputs .list-item-row').forEach(row => {
-                if (row.querySelector('.list-check').checked) {
-                    activeCollections.push(row.querySelector('.val-from').value);
-                }
-            });
+            // 2. Detect Collection
+            let activeCols = Array.from(document.querySelectorAll('#collectionInputs .list-item-row'))
+                .filter(r => r.querySelector('.list-check').checked)
+                .map(r => r.querySelector('.val-from').value.toUpperCase());
 
             let lines = text.split('\n').map(s => s.trim()).filter(s => s !== '');
-            let colNameFound = "";
-            let remainingLines = [];
-
-            for (let i = 0; i < lines.length; i++) {
-                let line = lines[i];
-                if (!colNameFound) {
-                    let match = activeCollections.find(c => line.toUpperCase().includes(c.toUpperCase()));
-                    if (match) {
-                        colNameFound = line; 
-                        continue; 
-                    }
-                }
-                remainingLines.push(line);
+            let colName = ""; let bodyLines = [];
+            for (let line of lines) {
+                if (!colName && activeCols.find(c => line.toUpperCase().includes(c))) colName = line;
+                else bodyLines.push(line);
             }
 
-            const isOneLine = document.getElementById('opt_one_line').checked;
+            // 3. One Line Format
+            let final = colName ? (document.getElementById('opt_one_line').checked ? `${colName} = ${bodyLines.join(' / ')}` : `${colName} =\n${bodyLines.join('\n')}`) : (document.getElementById('opt_one_line').checked ? bodyLines.join(' / ') : bodyLines.join('\n'));
 
-            if (lines.length > 0) {
-                if (colNameFound) {
-                    if (isOneLine) text = colNameFound + ' = ' + remainingLines.join(' / ');
-                    else text = colNameFound + ' =\n' + remainingLines.join('\n');
-                } else {
-                    if (isOneLine) text = remainingLines.join(' / ');
-                    else text = remainingLines.join('\n');
-                }
-            } else {
-                text = "";
-            }
+            // 4. Conditions
+            if (document.getElementById('opt_upper').checked) final = final.toUpperCase();
+            if (document.getElementById('opt_remove_prices').checked) final = final.replace(/\d{3,}/g, '');
+            if (document.getElementById('opt_clean_space').checked) final = final.replace(/ {2,}/g, ' ');
 
-            text = text.replace(/ = \/ /g, ' = ').replace(/ = $/g, ' =');
-            document.getElementById('outputText').value = text;
+            document.getElementById('outputText').value = final.replace(/ = \/ /g, ' = ').replace(/ = $/g, ' =');
             saveSettings();
         }
 
-        // --- Save / Load & Export / Import ---
         function saveSettings() {
             const settings = { options: {}, replaceList: [], collectionList: [], layout: {} };
             document.querySelectorAll('.save-state').forEach(el => settings.options[el.id] = el.checked);
-            
-            settings.layout.colCollapsed = document.getElementById('sec-collection').classList.contains('collapsed');
-            settings.layout.repCollapsed = document.getElementById('sec-replace').classList.contains('collapsed');
-
-            document.querySelectorAll('#replaceInputs .list-item-row').forEach(row => {
-                settings.replaceList.push({
-                    from: row.querySelector('.val-from').value,
-                    to: row.querySelector('.val-to').value,
-                    active: row.querySelector('.list-check').checked
-                });
-            });
-
-            document.querySelectorAll('#collectionInputs .list-item-row').forEach(row => {
-                settings.collectionList.push({
-                    from: row.querySelector('.val-from').value,
-                    active: row.querySelector('.list-check').checked
-                });
-            });
-
-            localStorage.setItem('tt_config_v9', JSON.stringify(settings));
+            settings.layout = { col: document.getElementById('sec-collection').classList.contains('collapsed'), rep: document.getElementById('sec-replace').classList.contains('collapsed') };
+            document.querySelectorAll('#replaceInputs .list-item-row').forEach(r => settings.replaceList.push({ f: r.querySelector('.val-from').value, t: r.querySelector('.val-to').value, a: r.querySelector('.list-check').checked }));
+            document.querySelectorAll('#collectionInputs .list-item-row').forEach(r => settings.collectionList.push({ f: r.querySelector('.val-from').value, a: r.querySelector('.list-check').checked }));
+            localStorage.setItem('tt_config_v9_2', JSON.stringify(settings));
         }
 
         function loadSettings() {
-            const saved = localStorage.getItem('tt_config_v9') || localStorage.getItem('tt_config_v8');
+            const saved = localStorage.getItem('tt_config_v9_2') || localStorage.getItem('tt_config_v9_1');
             if (saved) {
-                document.getElementById('replaceInputs').innerHTML = '';
-                document.getElementById('collectionInputs').innerHTML = '';
-                
                 const config = JSON.parse(saved);
-                for (let id in config.options) {
-                    if (document.getElementById(id)) document.getElementById(id).checked = config.options[id];
-                }
-                
-                if(config.layout) {
-                    if(config.layout.colCollapsed) document.getElementById('sec-collection').classList.add('collapsed');
-                    if(config.layout.repCollapsed) document.getElementById('sec-replace').classList.add('collapsed');
-                }
-
-                if (config.replaceList) config.replaceList.forEach(item => renderListRow('replace', item.from, item.to, item.active));
-                if (config.collectionList) config.collectionList.forEach(item => renderListRow('collection', item.from, "", item.active));
+                for (let id in config.options) if (document.getElementById(id)) document.getElementById(id).checked = config.options[id];
+                if(config.layout.col) document.getElementById('sec-collection').classList.add('collapsed');
+                if(config.layout.rep) document.getElementById('sec-replace').classList.add('collapsed');
+                config.replaceList.forEach(i => renderListRow('replace', i.f, i.t, i.a));
+                config.collectionList.forEach(i => renderListRow('collection', i.f, "", i.a));
             } else {
-                renderListRow('replace', "ราคา", "", true);
-                renderListRow('replace', "฿", "THB", false);
-                renderListRow('collection', "เสื้อยืด", "", true);
+                renderListRow('replace', "ราคา", ""); renderListRow('collection', "เสื้อยืด", "");
             }
-            processText(); 
+            processText();
         }
 
         function exportData() {
-            saveSettings();
-            const configStr = localStorage.getItem('tt_config_v9');
-            if(configStr) {
-                const encoded = btoa(encodeURIComponent(configStr));
-                navigator.clipboard.writeText(encoded).then(() => {
-                    showSystemModal({ type: 'alert', title: 'Export Success', message: '📋 Export Code คัดลอกลง Clipboard แล้ว!<br><br><span style="font-size:1.2rem; color:var(--x-text-subdued);">นำโค้ดที่คัดลอกนี้ไปวางในเมนู Import Settings ได้เลย</span>', hideCancel: true });
-                }).catch(() => {
-                    showSystemModal({ type: 'prompt', title: 'Export Code', message: 'กรุณาคัดลอกโค้ดด้านล่างนี้:', value: encoded, readonly: true, hideCancel: true });
-                });
-            }
+            const encoded = btoa(encodeURIComponent(localStorage.getItem('tt_config_v9_2')));
+            showSystemModal({ type: 'prompt', title: 'Export', message: 'คัดลอกรหัสนี้ไปใช้ Import:', value: encoded, readonly: true, hideCancel: true });
         }
 
         function importData() {
-            showSystemModal({
-                type: 'prompt', title: 'Import Settings', message: '📥 วาง Export Code ที่คุณคัดลอกมา:',
-                onConfirm: (code) => {
-                    if (!code) return;
-                    try {
-                        const decoded = decodeURIComponent(atob(code));
-                        JSON.parse(decoded); 
-                        localStorage.setItem('tt_config_v9', decoded);
-                        loadSettings();
-                        showSystemModal({ type: 'alert', title: 'Success', message: '✅ Import การตั้งค่าสำเร็จ!', hideCancel: true });
-                    } catch(e) {
-                        showSystemModal({ type: 'alert', title: 'Error', message: '❌ Code ไม่ถูกต้อง หรือไม่ใช่รหัสที่รองรับ กรุณาลองใหม่อีกครั้ง', hideCancel: true });
-                    }
-                }
-            });
+            showSystemModal({ type: 'prompt', title: 'Import', message: 'วางรหัส Export ที่นี่:', onConfirm: (code) => {
+                try { const decoded = decodeURIComponent(atob(code)); JSON.parse(decoded); localStorage.setItem('tt_config_v9_2', decoded); loadSettings(); } catch(e) {}
+            }});
         }
 
-        // --- Clipboard Functions ---
-        async function pasteText() {
-            try {
-                const text = await navigator.clipboard.readText();
-                document.getElementById('inputText').value = text;
-                processText();
-            } catch (err) {
-                showSystemModal({ type: 'alert', title: 'Browser Notification', message: 'เบราว์เซอร์ของคุณไม่อนุญาตให้เข้าถึง Clipboard อัตโนมัติ<br><br>กรุณากด <b>Ctrl+V</b> (หรือ Cmd+V บน Mac) เพื่อวางข้อความแทนครับ', hideCancel: true });
-            }
-        }
-
-        function copyText() {
-            const el = document.getElementById('outputText');
-            if(el.value.trim()) {
-                el.select();
-                document.execCommand('copy');
-                window.getSelection().removeAllRanges();
-                const btn = document.querySelector('.summary-panel .btn-copy-inline');
-                btn.style.background = 'var(--x-primary)';
-                setTimeout(() => btn.style.background = 'var(--x-setting-gray)', 500);
-            }
-        }
+        async function pasteText() { try { document.getElementById('inputText').value = await navigator.clipboard.readText(); processText(); } catch (e) {} }
+        function copyText() { const el = document.getElementById('outputText'); el.select(); document.execCommand('copy'); }
 
         window.onload = loadSettings;
     </script>
