@@ -3,191 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>UX Prototype - Shop Pay Style</title>
+    <title>Text Converter - Shop Style</title>
     <style>
+        /* ใช้ Root เดิมเป๊ะๆ เพื่อรักษา Mood & Tone */
         :root {
-            /* สีธีมแบบ Shop Pay Dark Mode */
-            --bg-left: #000000;
-            --bg-right: #111111;
-            --border: #333333;
-            --text-main: #FFFFFF;
-            --text-muted: #888888;
-            /* สีปุ่มแบบ Shop Pay (สีม่วงอมฟ้า หรือใช้สีฟ้าเดิมก็ได้) */
-            --primary: #5A31F4; 
-            --primary-hover: #4524C1;
+            --x-bg-main: hsl(0, 0%, 100%);
+            --x-bg-subdued: hsl(0, 0%, 96%); 
+            --x-border: hsl(0, 0%, 87%);
+            --x-border-dark: hsl(0, 0%, 84%);
+            --x-text-main: hsl(0, 0%, 0%);
+            --x-text-subdued: hsl(0, 0%, 44%);
+            --x-primary: #5b00ed; 
+            --x-primary-hover: #4a00c2;
+            --x-primary-light: #F5F6FF;
+            --x-radius-base: 8px;
+            --x-radius-large: 12px;
+            --x-shadow-base: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --x-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
+        [data-theme="dark"] {
+            --x-bg-main: #121212;       
+            --x-bg-subdued: #1A1A1A;      
+            --x-border: #333333;
+            --x-border-dark: #444444;
+            --x-text-main: #F5F5F5;
+            --x-text-subdued: #A0A0A0;
+            --x-primary: #8C52FF;
+            --x-primary-light: #2A1E4A;
+        }
+
+        html { font-size: 62.5%; }
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-            margin: 0; padding: 0; color: var(--text-main); 
-            display: flex; min-height: 100vh;
+            font-family: var(--x-font-family); font-size: 1.4rem; line-height: 1.5;
+            margin: 0; background-color: var(--x-bg-main); color: var(--x-text-main);
+            display: flex; flex-direction: column; min-height: 100vh;
         }
 
-        /* ======================================= */
-        /* ฝั่งซ้าย: พื้นที่เพิ่มสินค้า (60%) */
-        /* ======================================= */
-        .left-panel {
-            flex: 1.3;
-            background-color: var(--bg-left);
-            padding: 40px 10%;
-            overflow-y: auto;
+        /* Header */
+        .top-header { background: var(--x-bg-main); border-bottom: 1px solid var(--x-border); padding: 1.5rem 4rem; }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .header-logo { font-size: 2.1rem; font-weight: bold; color: var(--x-primary); }
+
+        .layout-container { display: flex; flex: 1; width: 100%; max-width: 1200px; margin: 0 auto; }
+
+        /* Left Panel: Input Area */
+        .management-panel { flex: 1.4; padding: 4rem 4rem 8rem 0; box-sizing: border-box; }
+        .section-title { font-size: 1.8rem; font-weight: bold; margin-bottom: 1.5rem; color: var(--x-primary); }
+
+        textarea {
+            width: 100%; background: var(--x-bg-subdued); border: 1px solid var(--x-border-dark);
+            padding: 1.5rem; border-radius: var(--x-radius-large); color: var(--x-text-main);
+            font-size: 1.6rem; min-height: 300px; resize: vertical; outline: none; transition: 0.2s;
+        }
+        textarea:focus { border-color: var(--x-primary); box-shadow: 0 0 0 1px var(--x-primary); background: var(--x-bg-main); }
+
+        /* Right Panel: Output & Controls */
+        .summary-panel { 
+            flex: 1; background-color: var(--x-bg-subdued); border-left: 1px solid var(--x-border);
+            position: sticky; top: 0; height: 100vh; padding: 4rem; box-sizing: border-box;
         }
 
-        .header-logo { font-size: 1.5rem; font-weight: bold; margin-bottom: 40px; display: flex; align-items: center; gap: 10px;}
+        .tool-group { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+        .btn-tool {
+            background: var(--x-bg-main); border: 1px solid var(--x-border-dark);
+            padding: 1.2rem; border-radius: var(--x-radius-base); cursor: pointer;
+            color: var(--x-text-main); font-weight: 500; transition: 0.2s;
+        }
+        .btn-tool:hover { border-color: var(--x-primary); color: var(--x-primary); background: var(--x-primary-light); }
 
-        /* ดีไซน์ Input แบบ Shop Pay (เรียบ ขอบบาง) */
-        .mock-input {
-            width: 100%; background: transparent; border: 1px solid var(--border);
-            padding: 15px; border-radius: 8px; color: white; font-size: 1rem;
-            box-sizing: border-box; margin-bottom: 15px;
+        .output-box {
+            background: var(--x-bg-main); border: 1px solid var(--x-border);
+            padding: 1.5rem; border-radius: var(--x-radius-large); margin-top: 1rem;
+            min-height: 150px; white-space: pre-wrap; word-break: break-word; position: relative;
         }
 
-        .mock-collection {
-            margin-bottom: 40px;
+        .btn-copy {
+            background: var(--x-primary); color: white; border: none; width: 100%;
+            padding: 1.5rem; border-radius: var(--x-radius-base); font-weight: bold;
+            margin-top: 2rem; cursor: pointer; transition: 0.3s;
         }
+        .btn-copy:hover { background: var(--x-primary-hover); transform: translateY(-2px); }
 
-        .product-row {
-            display: flex; gap: 10px; margin-bottom: 15px;
-        }
-
-        .product-row .mock-input { margin-bottom: 0; }
-
-        /* ======================================= */
-        /* ฝั่งขวา: สรุปยอด (40%) Sticky */
-        /* ======================================= */
-        .right-panel {
-            flex: 0.8;
-            background-color: var(--bg-right);
-            border-left: 1px solid var(--border);
-            padding: 40px 5%;
-            position: relative;
-        }
-
-        /* กล่องให้ฝั่งขวาล็อกติดหน้าจอเวลา Scroll */
-        .sticky-summary {
-            position: sticky;
-            top: 40px;
-        }
-
-        /* รายการในบิล */
-        .summary-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 0; border-bottom: 1px solid var(--border);
-        }
-
-        /* ปุ่มหลักขนาดใหญ่แบบ Shopify */
-        .btn-pay {
-            width: 100%; background: var(--primary); color: white; border: none;
-            padding: 20px; border-radius: 12px; font-size: 1.2rem; font-weight: bold;
-            cursor: pointer; margin-top: 30px; transition: 0.2s;
-        }
-        .btn-pay:hover { background: var(--primary-hover); }
-
-        /* ======================================= */
-        /* Mobile Layout (สไตล์มือถือ Shopify) */
-        /* ======================================= */
-        .mobile-summary-toggle { display: none; }
-
-        @media (max-width: 900px) {
-            body { flex-direction: column; }
-            
-            .left-panel { padding: 20px; order: 2; flex: none; overflow-y: visible;}
-            .right-panel { padding: 0; order: 1; border-left: none; border-bottom: 1px solid var(--border); flex: none; }
-
-            /* ปุ่มกดกาง/หุบ สรุปยอดบนมือถือ */
-            .mobile-summary-toggle {
-                display: flex; justify-content: space-between; align-items: center;
-                background-color: var(--bg-right); padding: 20px; cursor: pointer;
-                color: var(--primary); font-weight: bold;
-            }
-
-            .sticky-summary { position: static; padding: 20px; display: none; }
-            .sticky-summary.show { display: block; } /* โชว์เมื่อกดกางบนมือถือ */
+        @media (max-width: 1000px) {
+            .layout-container { flex-direction: column; }
+            .summary-panel { position: static; height: auto; border-left: none; border-top: 1px solid var(--x-border); padding: 2rem; }
+            .management-panel { padding: 2rem; }
         }
     </style>
 </head>
 <body>
 
-    <aside class="right-panel">
-        <div class="mobile-summary-toggle" onclick="toggleMobileSummary()">
-            <span id="toggle-text">🛒 แสดงสรุปยอดโอน (ดูบิล) ▾</span>
-            <span style="color: white; font-size: 1.2rem;">฿450.00</span>
+    <header class="top-header">
+        <div class="header-content">
+            <div class="header-logo">Text Transformer Pro</div>
+            <button class="btn-tool" onclick="toggleTheme()">🌗 Mode</button>
         </div>
+    </header>
 
-        <div class="sticky-summary" id="summary-box">
-            <h3 style="margin-top:0;">สรุปยอดโอน</h3>
+    <div class="layout-container">
+        <main class="management-panel">
+            <h2 class="section-title">Input Text</h2>
+            <textarea id="inputText" placeholder="พิมพ์หรือวางข้อความที่นี่..." oninput="autoConvert()"></textarea>
+        </main>
+
+        <aside class="summary-panel">
+            <h2 class="section-title">Tools</h2>
+            <div class="tool-group">
+                <button class="btn-tool" onclick="transform('upper')">ABC (ตัวพิมพ์ใหญ่)</button>
+                <button class="btn-tool" onclick="transform('lower')">abc (ตัวพิมพ์เล็ก)</button>
+                <button class="btn-tool" onclick="transform('clean')">ลบช่องว่างส่วนเกิน</button>
+                <button class="btn-tool" onclick="transform('reverse')">ย้อนกลับข้อความ</button>
+            </div>
+
+            <h2 class="section-title">Preview Result</h2>
+            <div class="output-box" id="outputPreview">ผลลัพธ์จะปรากฏที่นี่...</div>
             
-            <div class="summary-item">
-                <div style="display:flex; align-items:center; gap:15px;">
-                    <div style="width: 50px; height: 50px; background: #222; border-radius: 8px; border: 1px solid #444;"></div>
-                    <span>เสื้อลายดอก (M) x1</span>
-                </div>
-                <span>฿200.00</span>
-            </div>
-            <div class="summary-item">
-                <div style="display:flex; align-items:center; gap:15px;">
-                    <div style="width: 50px; height: 50px; background: #222; border-radius: 8px; border: 1px solid #444;"></div>
-                    <span>กางเกงยีนส์ (L) x1</span>
-                </div>
-                <span>฿200.00</span>
-            </div>
-
-            <div class="summary-item" style="border-bottom: none; margin-top: 15px;">
-                <span style="color: var(--text-muted);">ค่าจัดส่ง</span>
-                <span>฿50.00</span>
-            </div>
-            
-            <div class="summary-item" style="border-bottom: none; font-size: 1.5rem; font-weight: bold;">
-                <span>รวมทั้งหมด</span>
-                <span>฿450.00</span>
-            </div>
-
-            <button class="btn-pay">📋 คัดลอกข้อความสรุปยอด</button>
-        </div>
-    </aside>
-
-    <main class="left-panel">
-        <div class="header-logo">
-            🛍️ Order Management
-        </div>
-
-        <h2 style="margin-bottom: 20px;">ข้อมูลสินค้า (คอลเลคชั่นที่ 1)</h2>
-        
-        <div class="mock-collection">
-            <input type="text" class="mock-input" placeholder="ชื่อคอลเลคชั่น (เช่น เสื้อลายดอก)">
-            
-            <div class="product-row">
-                <input type="text" class="mock-input" style="flex:2;" placeholder="ชื่อสินค้า">
-                <input type="text" class="mock-input" style="flex:1;" placeholder="ราคา">
-                <input type="text" class="mock-input" style="flex:1;" placeholder="จำนวน">
-            </div>
-            
-            <button style="background:transparent; color: var(--primary); border:none; cursor:pointer; font-weight:bold;">+ เพิ่มสินค้าใหม่</button>
-        </div>
-
-        <h2 style="margin-bottom: 20px; margin-top: 40px;">การตั้งค่าจัดส่ง & ธนาคาร</h2>
-        <input type="text" class="mock-input" placeholder="ค่าจัดส่ง (เช่น 50)">
-        <input type="text" class="mock-input" placeholder="หักมัดจำ">
-        
-        <select class="mock-input" style="appearance: auto;">
-            <option>กสิกรไทย - 123456789</option>
-            <option>ไทยพาณิชย์ - 987654321</option>
-        </select>
-
-    </main>
+            <button class="btn-copy" onclick="copyToClipboard()">Copy Result</button>
+        </aside>
+    </div>
 
     <script>
-        // ฟังก์ชันกาง/หุบ บิลสรุปยอดสำหรับจอมือถือ
-        function toggleMobileSummary() {
-            const summaryBox = document.getElementById('summary-box');
-            const toggleText = document.getElementById('toggle-text');
-            summaryBox.classList.toggle('show');
-            
-            if(summaryBox.classList.contains('show')) {
-                toggleText.innerText = "🛒 ซ่อนสรุปยอดโอน ▴";
-            } else {
-                toggleText.innerText = "🛒 แสดงสรุปยอดโอน (ดูบิล) ▾";
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            document.documentElement.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+        }
+
+        function transform(type) {
+            const input = document.getElementById('inputText').value;
+            let result = "";
+
+            switch(type) {
+                case 'upper': result = input.toUpperCase(); break;
+                case 'lower': result = input.toLowerCase(); break;
+                case 'clean': result = input.trim().replace(/\s+/g, ' '); break;
+                case 'reverse': result = input.split('').reverse().join(''); break;
             }
+            document.getElementById('outputPreview').innerText = result;
+        }
+
+        function autoConvert() {
+            const input = document.getElementById('inputText').value;
+            document.getElementById('outputPreview').innerText = input;
+        }
+
+        function copyToClipboard() {
+            const text = document.getElementById('outputPreview').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('คัดลอกข้อความสำเร็จ!');
+            });
         }
     </script>
 </body>
