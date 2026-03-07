@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Text Transformer V9.6</title>
+    <title>Text Transformer V9.7</title>
     <style>
-        /* --- Root & Theme (เหมือนเดิมจาก V9.5) --- */
+        /* --- CSS Root & Theme (Shop V21 Style) --- */
         :root {
             --x-bg-main: hsl(0, 0%, 100%);
             --x-bg-subdued: hsl(0, 0%, 96%); 
@@ -35,14 +35,15 @@
         body { 
             font-family: var(--x-font-family); font-size: 1.4rem; line-height: 1.5;
             margin: 0; background-color: var(--x-bg-main); color: var(--x-text-main);
-            display: flex; flex-direction: column; min-height: 100vh; transition: background-color 0.3s;
+            display: flex; flex-direction: column; min-height: 100vh;
         }
 
-        /* Header & Layout */
+        /* Header */
         .top-header { background: var(--x-bg-main); border-bottom: 1px solid var(--x-border); padding: 1.5rem 2rem; position: sticky; top:0; z-index: 1000;}
         .header-content { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
         .header-logo { font-size: 2.1rem; font-weight: bold; color: var(--x-primary); }
 
+        /* Layout */
         .layout-container { display: flex; flex: 1; width: 100%; max-width: 1000px; margin: 0 auto; }
         .management-panel { flex: 1; padding: 4rem; box-sizing: border-box; }
         .summary-panel { 
@@ -59,33 +60,41 @@
         .output-wrapper { position: relative; width: 100%; margin-bottom: 1.5rem;}
         textarea.final-output { 
             width: 100%; background: var(--x-bg-subdued); border: 1px solid var(--x-border-dark); 
-            border-radius: var(--x-radius-large); padding: 1.5rem; font-family: inherit; font-size: 1.4rem; 
-            color: var(--x-text-main); resize: vertical; outline: none; box-sizing: border-box;
+            border-radius: var(--x-radius-large); padding: 1.5rem; font-family: inherit; font-size: 1.4rem; color: var(--x-text-main); resize: vertical; outline: none; box-sizing: border-box;
         }
 
-        /* Switches & Rows */
+        /* iOS Toggle Switch */
         .shipping-item { display: flex; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid var(--x-border); gap: 1rem; }
         .ios-switch { position: relative; display: inline-block; width: 4.2rem; height: 2.4rem; flex-shrink: 0; }
         .ios-switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; inset: 0; background-color: var(--x-border-dark); border-radius: 3rem; transition: .3s; cursor: pointer;}
         .slider:before { position: absolute; content: ""; height: 2rem; width: 2rem; left: 0.2rem; bottom: 0.2rem; background-color: white; border-radius: 50%; transition: .3s; }
         input:checked + .slider { background-color: var(--x-primary); }
-        input:checked + .slider:before { transform: translateX(1.8rem); }
+        input:checked + .slider:before { transform: translateX(1.8rem); content: '✓'; color: var(--x-primary); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
 
+        /* List Items & Bulk Menu */
         .list-item-row { display: flex; align-items: center; gap: 1rem; padding: 0.8rem 0; border-bottom: 1px solid var(--x-border); }
-        .list-info { flex: 1; font-size: 1.4rem; color: var(--x-text-main); }
+        .list-info { flex: 1; font-size: 1.4rem; }
         .grid-mode { display: grid; grid-template-columns: 1fr 2rem 1fr; gap: 0.8rem; align-items: center; }
-
-        .btn-add { background: transparent; border: none; color: var(--x-primary); font-weight: 500; cursor: pointer; padding: 1rem 0; display: flex; align-items: center; gap: 0.5rem; }
         
-        /* Modal & Dropdown (เหมือน V9.5) */
+        .option-btn { background: transparent; border: none; color: var(--x-setting-gray); cursor: pointer; padding: 0.5rem; border-radius: 50%; }
+        .option-btn:hover { background: var(--x-bg-subdued); }
+
+        .dropdown-container { position: relative; }
+        .dropdown-menu { position: absolute; right: 0; top: 100%; background: var(--x-bg-main); border: 1px solid var(--x-border); border-radius: 8px; box-shadow: var(--x-shadow-base); display: none; z-index: 100; min-width: 120px; }
+        .dropdown-menu.show { display: block; }
+        .dropdown-item { padding: 1rem; cursor: pointer; }
+        .dropdown-item:hover { background: var(--x-bg-subdued); }
+        .dropdown-item.delete { color: var(--x-danger); }
+
+        /* Modal */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 3000; display: none; align-items: center; justify-content: center; }
         .modal-overlay.show { display: flex; }
-        .modal-content { background: var(--x-bg-main); border-radius: var(--x-radius-large); width: 90%; max-width: 400px; padding: 2rem; }
+        .modal-content { background: var(--x-bg-main); border-radius: 12px; width: 90%; max-width: 400px; padding: 2.5rem; box-shadow: var(--x-shadow-modal); }
 
         @media (max-width: 800px) {
             .layout-container { flex-direction: column; }
-            .summary-panel { position: static; height: auto; border-left: none; width: 100%; }
+            .summary-panel { position: static; height: auto; border-left: none; width: 100%; padding: 2rem; }
         }
     </style>
 </head>
@@ -94,13 +103,13 @@
     <header class="top-header">
         <div class="header-content">
             <div class="header-logo">Text Transformer</div>
-            <button onclick="toggleTheme()" style="background:none; border:1px solid var(--x-border); padding:0.6rem 1.2rem; border-radius:var(--x-radius-base); cursor:pointer; color:inherit;">🌗 Theme</button>
+            <button onclick="toggleTheme()" style="background:none; border:1px solid var(--x-border); padding:0.6rem 1.2rem; border-radius:8px; cursor:pointer; color:inherit;">🌗 Theme</button>
         </div>
     </header>
 
     <div class="layout-container">
         <main class="management-panel">
-            <h2 class="section-title">Input Text</h2>
+            <h2 class="section-title" style="margin-bottom: 1.5rem;">Input Text</h2>
             <div class="output-wrapper">
                 <textarea id="inputText" class="final-output" style="min-height: 200px;" placeholder="วางข้อความที่นี่..." oninput="processText()"></textarea>
             </div>
@@ -108,17 +117,33 @@
             <div class="collapsible-section" id="sec-collection">
                 <div class="section-header">
                     <h2 class="section-title">Collection List</h2>
+                    <div class="dropdown-container">
+                        <button class="option-btn" onclick="toggleDropdown(event, this)">⋮</button>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-item" onclick="bulkAction('collection', 'selectAll')">Select All</div>
+                            <div class="dropdown-item" onclick="bulkAction('collection', 'deselectAll')">Deselect All</div>
+                            <div class="dropdown-item delete" onclick="bulkAction('collection', 'deleteSelected')">Delete Selected</div>
+                        </div>
+                    </div>
                 </div>
                 <div id="collectionInputs"></div>
-                <button class="btn-add" onclick="openModal('collection')">➕ Add collection name</button>
+                <button onclick="openModal('collection')" style="background:none; border:none; color:var(--x-primary); cursor:pointer; padding:1rem 0;">+ Add Collection</button>
             </div>
 
             <div class="collapsible-section" id="sec-replace">
                 <div class="section-header">
                     <h2 class="section-title">Replace List</h2>
+                    <div class="dropdown-container">
+                        <button class="option-btn" onclick="toggleDropdown(event, this)">⋮</button>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-item" onclick="bulkAction('replace', 'selectAll')">Select All</div>
+                            <div class="dropdown-item" onclick="bulkAction('replace', 'deselectAll')">Deselect All</div>
+                            <div class="dropdown-item delete" onclick="bulkAction('replace', 'deleteSelected')">Delete Selected</div>
+                        </div>
+                    </div>
                 </div>
                 <div id="replaceInputs"></div>
-                <button class="btn-add" onclick="openModal('replace')">➕ Add replacement</button>
+                <button onclick="openModal('replace')" style="background:none; border:none; color:var(--x-primary); cursor:pointer; padding:1rem 0;">+ Add Replacement</button>
             </div>
         </main>
 
@@ -137,32 +162,43 @@
                 <label class="ios-switch"><input type="checkbox" id="opt_remove_prices" onchange="processText()"><span class="slider"></span></label>
             </div>
 
-            <h2 class="section-title" style="margin-top:3rem;">Result (One Line Mode)</h2>
+            <h2 class="section-title" style="margin-top:3rem;">Result</h2>
             <div class="output-wrapper">
-                <textarea id="outputText" class="final-output" style="min-height: 180px; background: var(--x-bg-main);" readonly></textarea>
-                <button onclick="copyToClipboard()" style="margin-top:1rem; width:100%; padding:1rem; background:var(--x-primary); color:white; border:none; border-radius:8px; cursor:pointer;">Copy Result</button>
+                <textarea id="outputText" class="final-output" style="min-height: 200px; background: var(--x-bg-main);" readonly placeholder="รอข้อความ..."></textarea>
+                <button onclick="copyToClipboard()" style="margin-top:1rem; width:100%; padding:1.2rem; background:var(--x-primary); color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Copy Result</button>
             </div>
             
-            <div style="text-align: center; color: var(--x-border-dark); font-size: 1.1rem; margin-top: 2rem;">Version 9.6</div>
+            <div style="display:flex; gap:1rem; justify-content:center; margin-top:2rem;">
+                <button onclick="exportSettings()" style="background:none; border:none; color:var(--x-text-subdued); cursor:pointer;">Export</button>
+                <button onclick="importSettings()" style="background:none; border:none; color:var(--x-text-subdued); cursor:pointer;">Import</button>
+            </div>
+            <div style="text-align: center; color: var(--x-border-dark); font-size: 1.1rem; margin-top: 1rem;">Version 9.7</div>
         </aside>
     </div>
 
     <div class="modal-overlay" id="generalModal">
         <div class="modal-content">
-            <h3 id="modalTitle">Add Item</h3>
-            <input type="text" id="modalFrom" placeholder="ข้อความ..." style="width:100%; padding:1rem; margin:1rem 0; box-sizing:border-box;">
-            <input type="text" id="modalTo" placeholder="เปลี่ยนเป็น..." style="width:100%; padding:1rem; margin:1rem 0; box-sizing:border-box;">
+            <h3 id="modalTitle" style="margin-top:0;">Add Item</h3>
+            <div style="margin-bottom:1.5rem;">
+                <label style="font-size:1.2rem; color:var(--x-text-subdued);">ข้อความต้นทาง</label>
+                <input type="text" id="modalFrom" style="width:100%; padding:1rem; border:1px solid var(--x-border); border-radius:5px; box-sizing:border-box;">
+            </div>
+            <div id="modalToContainer" style="margin-bottom:1.5rem;">
+                <label style="font-size:1.2rem; color:var(--x-text-subdued);">เปลี่ยนเป็น</label>
+                <input type="text" id="modalTo" style="width:100%; padding:1rem; border:1px solid var(--x-border); border-radius:5px; box-sizing:border-box;">
+            </div>
             <div style="display:flex; gap:1rem; justify-content:flex-end;">
-                <button onclick="closeModal()">Cancel</button>
-                <button onclick="saveModal()" style="background:var(--x-primary); color:white; border:none; padding:0.8rem 1.5rem; border-radius:5px;">Save</button>
+                <button onclick="closeModal()" style="background:none; border:none; cursor:pointer;">Cancel</button>
+                <button onclick="saveModal()" style="background:var(--x-primary); color:white; border:none; padding:0.8rem 1.8rem; border-radius:5px; cursor:pointer;">Save</button>
             </div>
         </div>
     </div>
 
     <script>
         let currentModalMode = 'replace';
+        let currentEditingRow = null;
 
-        // --- Logic หลัก V9.6 (แก้ไขการรวมบรรทัด) ---
+        // --- Logic หลัก V9.7 (คั่นด้วย / และบรรทัดเดียว) ---
         function processText() {
             let text = document.getElementById('inputText').value;
 
@@ -175,7 +211,7 @@
                 }
             });
 
-            // 2. ดึงชื่อคอลเลคชัน
+            // 2. Collection Grouping
             let activeCols = Array.from(document.querySelectorAll('#collectionInputs .list-item-row'))
                 .filter(r => r.querySelector('.list-check').checked)
                 .map(r => r.querySelector('.val-from').value.trim());
@@ -184,10 +220,8 @@
             let resultGroups = [];
             let currentGroup = null;
 
-            // 3. จัดกลุ่ม
             for (let line of lines) {
                 let foundCol = activeCols.find(c => line.toLowerCase().includes(c.toLowerCase()));
-
                 if (foundCol) {
                     if (currentGroup) resultGroups.push(currentGroup);
                     currentGroup = { header: line, items: [] };
@@ -199,29 +233,28 @@
             }
             if (currentGroup) resultGroups.push(currentGroup);
 
-            // 4. แปลงเป็นบรรทัดเดียวกัน คั่นด้วย / (หัวใจสำคัญของ V9.6)
+            // 3. Formatting Output (รวมเป็นบรรทัดเดียว คั่นด้วย /)
             let formattedGroups = resultGroups.map(group => {
-                let headerPart = group.header ? `${group.header} = ` : "";
-                let itemsPart = group.items.join(' / ');
-                return headerPart + itemsPart;
+                let h = group.header ? group.header + " = " : "";
+                let i = group.items.join(' / ');
+                return h + i;
             });
 
-            // รวมทุกคอลเลคชั่นเข้าด้วยกัน คั่นด้วย / 
             let final = formattedGroups.join(' / ');
 
-            // 5. Conditions
+            // 4. Conditions
             if (document.getElementById('opt_upper').checked) final = final.toUpperCase();
             if (document.getElementById('opt_remove_prices').checked) final = final.replace(/\d{3,}/g, '');
             if (document.getElementById('opt_clean_space').checked) final = final.replace(/ {2,}/g, ' ');
 
-            // ลบ / ที่อาจจะซ้ำซ้อนกัน
-            final = final.replace(/\/ \//g, '/').replace(/ \/ $/g, '');
+            // Clean up extra slashes & spaces
+            final = final.split('/').map(s => s.trim()).filter(s => s !== "" && s !== "=").join(' / ');
 
             document.getElementById('outputText').value = final.trim();
-            saveToStorage();
+            saveSettings();
         }
 
-        // --- UI & Storage Functions (เหมือนเดิม) ---
+        // --- UI Functions ---
         function renderListRow(mode, from, to = "", checked = true) {
             const container = document.getElementById(mode === 'replace' ? 'replaceInputs' : 'collectionInputs');
             const row = document.createElement('div');
@@ -229,20 +262,53 @@
             row.innerHTML = `
                 <input type="checkbox" class="list-check" ${checked ? 'checked' : ''} onchange="processText()">
                 <div class="list-info ${mode === 'replace' ? 'grid-mode' : ''}">
-                    <span>${from}</span>
-                    ${mode === 'replace' ? `<span>→</span><span>${to || '(ลบ)'}</span>` : ''}
+                    <span class="txt-from">${from}</span>
+                    ${mode === 'replace' ? `<span>→</span><span class="txt-to">${to || '(ลบ)'}</span>` : ''}
                 </div>
                 <input type="hidden" class="val-from" value="${from}">
                 ${mode === 'replace' ? `<input type="hidden" class="val-to" value="${to}">` : ''}
-                <button onclick="this.parentElement.remove(); processText();" style="color:red; border:none; background:none; cursor:pointer;">✕</button>
+                <div class="dropdown-container">
+                    <button class="option-btn" onclick="toggleDropdown(event, this)">⋮</button>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-item" onclick="editRow(this, '${mode}')">Edit</div>
+                        <div class="dropdown-item delete" onclick="this.closest('.list-item-row').remove(); processText();">Delete</div>
+                    </div>
+                </div>
             `;
             container.appendChild(row);
         }
 
+        function toggleDropdown(e, btn) {
+            e.stopPropagation();
+            document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+            btn.nextElementSibling.classList.toggle('show');
+        }
+
+        function bulkAction(type, action) {
+            const container = document.getElementById(type === 'collection' ? 'collectionInputs' : 'replaceInputs');
+            if (action === 'selectAll') container.querySelectorAll('.list-check').forEach(c => c.checked = true);
+            if (action === 'deselectAll') container.querySelectorAll('.list-check').forEach(c => c.checked = false);
+            if (action === 'deleteSelected') container.querySelectorAll('.list-item-row').forEach(r => { if(r.querySelector('.list-check').checked) r.remove(); });
+            processText();
+        }
+
         function openModal(mode) {
             currentModalMode = mode;
+            currentEditingRow = null;
             document.getElementById('modalTitle').innerText = mode === 'replace' ? 'Add Replacement' : 'Add Collection';
-            document.getElementById('modalTo').style.display = mode === 'replace' ? 'block' : 'none';
+            document.getElementById('modalToContainer').style.display = mode === 'replace' ? 'block' : 'none';
+            document.getElementById('modalFrom').value = '';
+            document.getElementById('modalTo').value = '';
+            document.getElementById('generalModal').classList.add('show');
+        }
+
+        function editRow(btn, mode) {
+            currentEditingRow = btn.closest('.list-item-row');
+            currentModalMode = mode;
+            document.getElementById('modalTitle').innerText = 'Edit Item';
+            document.getElementById('modalToContainer').style.display = mode === 'replace' ? 'block' : 'none';
+            document.getElementById('modalFrom').value = currentEditingRow.querySelector('.val-from').value;
+            if(mode === 'replace') document.getElementById('modalTo').value = currentEditingRow.querySelector('.val-to').value;
             document.getElementById('generalModal').classList.add('show');
         }
 
@@ -251,36 +317,74 @@
         function saveModal() {
             const from = document.getElementById('modalFrom').value.trim();
             const to = document.getElementById('modalTo').value.trim();
-            if (from) renderListRow(currentModalMode, from, to);
+            if (!from) return;
+
+            if (currentEditingRow) {
+                currentEditingRow.querySelector('.val-from').value = from;
+                currentEditingRow.querySelector('.txt-from').innerText = from;
+                if(currentModalMode === 'replace') {
+                    currentEditingRow.querySelector('.val-to').value = to;
+                    currentEditingRow.querySelector('.txt-to').innerText = to || '(ลบ)';
+                }
+            } else {
+                renderListRow(currentModalMode, from, to);
+            }
             closeModal();
             processText();
         }
 
         function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme');
-            document.documentElement.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+            const curr = document.documentElement.getAttribute('data-theme');
+            document.documentElement.setAttribute('data-theme', curr === 'dark' ? 'light' : 'dark');
         }
 
         function copyToClipboard() {
             const el = document.getElementById('outputText');
             el.select();
             document.execCommand('copy');
-            alert('คัดลอกแล้ว!');
+            alert('คัดลอกสำเร็จ!');
         }
 
-        function saveToStorage() {
+        // --- Storage Functions ---
+        function saveSettings() {
             const data = {
                 replace: Array.from(document.querySelectorAll('#replaceInputs .list-item-row')).map(r => ({f: r.querySelector('.val-from').value, t: r.querySelector('.val-to').value, a: r.querySelector('.list-check').checked})),
-                collection: Array.from(document.querySelectorAll('#collectionInputs .list-item-row')).map(r => ({f: r.querySelector('.val-from').value, a: r.querySelector('.list-check').checked}))
+                collection: Array.from(document.querySelectorAll('#collectionInputs .list-item-row')).map(r => ({f: r.querySelector('.val-from').value, a: r.querySelector('.list-check').checked})),
+                options: {
+                    upper: document.getElementById('opt_upper').checked,
+                    space: document.getElementById('opt_clean_space').checked,
+                    price: document.getElementById('opt_remove_prices').checked
+                }
             };
-            localStorage.setItem('tt_v96_settings', JSON.stringify(data));
+            localStorage.setItem('tt_v97_config', JSON.stringify(data));
         }
 
+        function exportSettings() {
+            const data = localStorage.getItem('tt_v97_config');
+            navigator.clipboard.writeText(data);
+            alert('Exported to clipboard!');
+        }
+
+        function importSettings() {
+            const val = prompt('Paste configuration here:');
+            if (val) {
+                localStorage.setItem('tt_v97_config', val);
+                location.reload();
+            }
+        }
+
+        window.onclick = () => document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+
         window.onload = () => {
-            const saved = JSON.parse(localStorage.getItem('tt_v96_settings'));
+            const saved = JSON.parse(localStorage.getItem('tt_v97_config'));
             if (saved) {
-                saved.replace.forEach(i => renderListRow('replace', i.f, i.t, i.a));
-                saved.collection.forEach(i => renderListRow('collection', i.f, '', i.a));
+                if(saved.replace) saved.replace.forEach(i => renderListRow('replace', i.f, i.t, i.a));
+                if(saved.collection) saved.collection.forEach(i => renderListRow('collection', i.f, '', i.a));
+                if(saved.options) {
+                    document.getElementById('opt_upper').checked = saved.options.upper;
+                    document.getElementById('opt_clean_space').checked = saved.options.space;
+                    document.getElementById('opt_remove_prices').checked = saved.options.price;
+                }
             }
             processText();
         };
