@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Text Transformer V9.6</title>
+    <title>Text Transformer V9.7</title>
     <style>
         /* --- Root & Theme --- */
         :root {
@@ -60,9 +60,7 @@
         .section-title { font-size: 1.8rem; font-weight: bold; color: var(--x-primary); margin: 0;}
         .collapsible-section { border-top: 1px solid var(--x-border); padding-top: 1rem; margin-top: 1rem; }
         .section-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; }
-        
         .header-actions { display: flex; gap: 0.5rem; align-items: center; }
-
         .chevron-box { 
             background: var(--x-primary-light); color: var(--x-primary); 
             width: 2.8rem; height: 2.8rem; border-radius: 0.6rem; 
@@ -111,71 +109,39 @@
         input:checked + .slider:before { transform: translateX(1.8rem); content: '✓'; color: var(--x-primary); }
 
         /* --- List --- */
-        .list-item-row { 
-            display: flex; align-items: center; gap: 1rem; padding: 0.8rem 0; 
-            border-bottom: 1px solid var(--x-border); background: transparent; 
-        }
+        .list-item-row { display: flex; align-items: center; gap: 1rem; padding: 0.8rem 0; border-bottom: 1px solid var(--x-border); background: transparent; }
         .list-item-row:last-child { border-bottom: none; }
-        
         .list-info { flex: 1; font-size: 1.4rem; color: var(--x-text-main); width: 100%;}
         .list-info.grid-mode { display: grid; grid-template-columns: 1fr 2rem 1fr; gap: 0.8rem; align-items: center; }
         .list-pill { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: transparent; border: none; padding: 0; width: 100%; }
         .list-pill.center-text { text-align: center; }
-
-        .btn-add { 
-            width: 100%; text-align: left; background: transparent; border: none; 
-            color: var(--x-primary); font-size: 1.4rem; cursor: pointer; padding: 0.8rem 0 0.5rem 0; 
-            display: flex; align-items: center; gap: 0.8rem; font-weight: 500;
-        }
+        .btn-add { width: 100%; text-align: left; background: transparent; border: none; color: var(--x-primary); font-size: 1.4rem; cursor: pointer; padding: 0.8rem 0 0.5rem 0; display: flex; align-items: center; gap: 0.8rem; font-weight: 500; }
         .btn-add svg { stroke-width: 2.5; width: 1.8rem; height: 1.8rem; }
-        .btn-add:hover { text-decoration: underline; }
 
-        /* --- Dropdown Menu --- */
+        /* --- Dropdown --- */
         .dropdown-container { position: relative; display: inline-block; }
-        .dropdown-menu {
-            position: absolute; right: 0; top: calc(100% + 8px);
-            background: var(--x-bg-main); border: 1px solid var(--x-border);
-            border-radius: var(--x-radius-base); box-shadow: var(--x-shadow-base);
-            z-index: 2000; min-width: 140px; display: none; flex-direction: column;
-            padding: 8px 0;
-        }
+        .dropdown-menu { position: absolute; right: 0; top: calc(100% + 8px); background: var(--x-bg-main); border: 1px solid var(--x-border); border-radius: var(--x-radius-base); box-shadow: var(--x-shadow-base); z-index: 2000; min-width: 140px; display: none; flex-direction: column; padding: 8px 0; }
         .dropdown-menu.show { display: flex; }
         .dropdown-item { padding: 10px 16px; cursor: pointer; font-size: 1.4rem; color: var(--x-text-main); transition: 0.2s; white-space: nowrap;}
         .dropdown-item:hover { background: var(--x-bg-subdued); }
-        .dropdown-item.edit { color: var(--x-primary); }
         .dropdown-item.delete { color: var(--x-danger); }
-        
-        .option-btn { 
-            width: 3.2rem; height: 3.2rem; background: transparent; color: var(--x-setting-gray); 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-            border: none; cursor: pointer; padding: 0; transition: 0.2s;
-        }
+        .option-btn { width: 3.2rem; height: 3.2rem; background: transparent; color: var(--x-setting-gray); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; padding: 0; transition: 0.2s; }
         .option-btn:hover { background: var(--x-bg-subdued); color: var(--x-text-main); }
 
         /* --- Modal Popup System --- */
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 3000;
-            display: none; align-items: center; justify-content: center; opacity: 0; transition: 0.3s;
-        }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 3000; display: none; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
         .modal-overlay.show { display: flex; opacity: 1; }
         .modal-overlay.top-tier { z-index: 4000; } 
-        
-        .modal-content {
-            background: var(--x-bg-main); border-radius: var(--x-radius-large); width: 100%; max-width: 400px;
-            box-shadow: var(--x-shadow-modal); overflow: hidden; transform: translateY(20px); transition: 0.3s;
-        }
+        .modal-content { background: var(--x-bg-main); border-radius: var(--x-radius-large); width: 100%; max-width: 400px; box-shadow: var(--x-shadow-modal); overflow: hidden; transform: translateY(20px); transition: 0.3s; }
         .modal-header { padding: 2rem; border-bottom: 1px solid var(--x-border); font-size: 1.6rem; font-weight: bold; color: var(--x-text-main); }
         .modal-body { padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
         .modal-body label { font-size: 1.3rem; color: var(--x-text-subdued); font-weight: 500; margin-bottom: -0.5rem;}
-        .modal-body input { 
-            width: 100%; background: transparent; border: 1px solid var(--x-border-dark); 
-            padding: 1.2rem; border-radius: var(--x-radius-base); color: var(--x-text-main); font-size: 1.4rem; box-sizing: border-box;
-        }
+        .modal-body input { width: 100%; background: transparent; border: 1px solid var(--x-border-dark); padding: 1.2rem; border-radius: var(--x-radius-base); color: var(--x-text-main); font-size: 1.4rem; box-sizing: border-box; }
         .modal-body input:focus { border-color: var(--x-primary); outline: none; }
         .modal-footer { padding: 1.5rem 2rem; border-top: 1px solid var(--x-border); display: flex; justify-content: flex-end; gap: 1rem; background: var(--x-bg-subdued);}
-        
         .btn-modal { padding: 1rem 1.6rem; border-radius: var(--x-radius-base); border: 1px solid var(--x-border-dark); background: var(--x-bg-main); color: var(--x-text-main); cursor: pointer; font-size: 1.4rem; font-weight: 500;}
         .btn-modal.save { background: var(--x-primary); color: white; border-color: var(--x-primary); }
+        .btn-text-btn { background: none; border: none; color: var(--x-primary); font-size: 1.2rem; cursor: pointer; padding: 0; font-weight: 500;}
 
         /* Footer */
         .footer-links { display: flex; gap: 1.5rem; justify-content: center; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--x-border); }
@@ -286,7 +252,7 @@
             <div class="shipping-item">
                 <div class="shipping-text">
                     <div class="shipping-title">Remove Price</div>
-                    <div class="shipping-subtitle">ลบเลขราคา (3 หลักติดกันขึ้นไป)</div>
+                    <div class="shipping-subtitle">ลบเลขราคา (3-5 หลักโดดๆ)</div>
                 </div>
                 <label class="ios-switch"><input type="checkbox" class="save-state" id="opt_remove_prices" onchange="processText()"><span class="slider"></span></label>
             </div>
@@ -312,7 +278,7 @@
                 <span style="color:var(--x-border-dark);">|</span>
                 <button class="btn-text" onclick="importData()">Import settings</button>
             </div>
-            <div style="text-align: center; color: var(--x-border-dark); font-size: 1.1rem; margin-top: 1rem;">Version 9.6</div>
+            <div style="text-align: center; color: var(--x-border-dark); font-size: 1.1rem; margin-top: 1rem;">Version 9.7</div>
         </aside>
     </div>
 
@@ -321,7 +287,13 @@
             <div class="modal-header" id="modalTitle">Add Item</div>
             <div class="modal-body">
                 <div><label id="lblFrom">ข้อความ</label><input type="text" id="modalFrom" placeholder="..."></div>
-                <div id="modalToContainer"><label>เปลี่ยนเป็น (To)</label><input type="text" id="modalTo" placeholder="เว้นว่าง = ลบ"></div>
+                <div id="modalToContainer">
+                    <label>เปลี่ยนเป็น (To)</label>
+                    <input type="text" id="modalTo" placeholder="เว้นว่าง = ลบทิ้ง">
+                    <div style="margin-top:0.8rem;">
+                        <button class="btn-text-btn" onclick="document.getElementById('modalTo').value='(space)'">+ แทนที่ด้วยช่องว่าง</button>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn-modal" onclick="closeModal()">Cancel</button>
@@ -355,8 +327,6 @@
             localStorage.setItem('tt_theme', target);
         }
 
-        // --- System Modal ---
-        let sysModalCallback = null;
         function showSystemModal(config) {
             document.getElementById('sysModalTitle').innerText = config.title || 'Notification';
             const msgEl = document.getElementById('sysModalMessage');
@@ -392,34 +362,14 @@
         }
         window.onclick = () => document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
 
-        // --- Bulk Actions ---
         function bulkAction(type, action) {
             const containerId = type === 'collection' ? 'collectionInputs' : 'replaceInputs';
             const container = document.getElementById(containerId);
-            if (!container) return;
-
-            if (action === 'selectAll') {
-                container.querySelectorAll('.list-check').forEach(cb => cb.checked = true);
-                processText();
-            } else if (action === 'deselectAll') {
-                container.querySelectorAll('.list-check').forEach(cb => cb.checked = false);
-                processText();
-            } else if (action === 'deleteSelected') {
-                const selectedRows = Array.from(container.querySelectorAll('.list-item-row')).filter(row => row.querySelector('.list-check').checked);
-                
-                if (selectedRows.length === 0) {
-                    showSystemModal({ type: 'alert', title: 'แจ้งเตือน', message: 'กรุณาเลือกอย่างน้อย 1 รายการเพื่อลบ', hideCancel: true });
-                    return;
-                }
-                
-                showSystemModal({
-                    title: 'ยืนยันการลบ',
-                    message: `คุณต้องการลบ ${selectedRows.length} รายการที่เลือก ใช่หรือไม่?`,
-                    onConfirm: () => {
-                        selectedRows.forEach(row => row.remove());
-                        processText();
-                    }
-                });
+            if (action === 'selectAll') { container.querySelectorAll('.list-check').forEach(cb => cb.checked = true); processText(); }
+            else if (action === 'deselectAll') { container.querySelectorAll('.list-check').forEach(cb => cb.checked = false); processText(); }
+            else if (action === 'deleteSelected') {
+                const selected = Array.from(container.querySelectorAll('.list-item-row')).filter(r => r.querySelector('.list-check').checked);
+                if (selected.length > 0) showSystemModal({ title: 'Confirm Delete', message: `ลบ ${selected.length} รายการที่เลือก?`, onConfirm: () => { selected.forEach(r => r.remove()); processText(); }});
             }
         }
 
@@ -428,7 +378,7 @@
             const row = document.createElement('div');
             row.className = 'list-item-row';
             let infoHtml = mode === 'replace' ? 
-                `<div class="list-info grid-mode"><div class="list-pill center-text rep-from-text">${from}</div><div style="color:var(--x-text-subdued); text-align:center;">→</div><div class="list-pill center-text rep-to-text">${to || '(ลบ)'}</div></div>` :
+                `<div class="list-info grid-mode"><div class="list-pill center-text rep-from-text">${from}</div><div style="color:var(--x-text-subdued); text-align:center;">→</div><div class="list-pill center-text rep-to-text">${to || '(ลบทิ้ง)'}</div></div>` :
                 `<div class="list-info block-mode"><div class="list-pill left-text rep-from-text">${from}</div></div>`;
             row.innerHTML = `<input type="checkbox" class="list-check" ${checked ? 'checked' : ''} onchange="processText()" style="width:1.6rem; height:1.6rem;">${infoHtml}<input type="hidden" class="val-from" value="${from}">${mode === 'replace' ? `<input type="hidden" class="val-to" value="${to}">` : ''}<div class="dropdown-container"><button class="option-btn" onclick="toggleDropdown(event, this)"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button><div class="dropdown-menu"><div class="dropdown-item edit" onclick="openModal('${mode}', this)">Edit</div><div class="dropdown-item delete" onclick="deleteListRow(this)">Delete</div></div></div>`;
             container.appendChild(row);
@@ -457,23 +407,30 @@
                 currentEditingRow.querySelector('.rep-from-text').innerText = from;
                 if(currentModalMode === 'replace') {
                     currentEditingRow.querySelector('.val-to').value = to;
-                    currentEditingRow.querySelector('.rep-to-text').innerText = to || '(ลบ)';
+                    currentEditingRow.querySelector('.rep-to-text').innerText = to || '(ลบทิ้ง)';
                 }
             } else renderListRow(currentModalMode, from, to, true);
             closeModal(); processText();
         }
 
-        // --- Core Logic V9.6 (Strict One-Line Formatting) ---
+        // --- Core Logic V9.7 (Spacebar Support & Simple Price Removal) ---
         function processText() {
             let originalText = document.getElementById('inputText').value;
             let text = originalText;
 
-            // 1. Replace List 
+            // 1. Replace List (ทำเป็นอันดับแรก)
             document.querySelectorAll('#replaceInputs .list-item-row').forEach(row => {
                 if (row.querySelector('.list-check').checked) {
                     const from = row.querySelector('.val-from').value;
-                    const to = row.querySelector('.val-to').value;
-                    if (from) text = text.replace(new RegExp(from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), to);
+                    let to = row.querySelector('.val-to').value;
+                    
+                    // แปลง (space) เป็นช่องว่างจริง
+                    if (to === '(space)') to = ' ';
+
+                    if (from) {
+                        const escapedFrom = from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                        text = text.replace(new RegExp(escapedFrom, 'gi'), to);
+                    }
                 }
             });
 
@@ -483,52 +440,42 @@
                 .map(r => r.querySelector('.val-from').value.toUpperCase());
 
             let lines = text.split('\n').map(s => s.trim()).filter(s => s !== '');
-            
             let blocks = [];
             let currentBlock = { colName: "", items: [] };
 
             for (let line of lines) {
                 let isCollection = activeCols.find(c => line.toUpperCase().includes(c));
-                
                 if (isCollection) {
-                    if (currentBlock.colName || currentBlock.items.length > 0) {
-                        blocks.push(currentBlock);
-                    }
+                    if (currentBlock.colName || currentBlock.items.length > 0) blocks.push(currentBlock);
                     currentBlock = { colName: line, items: [] };
                 } else {
                     currentBlock.items.push(line);
                 }
             }
-            if (currentBlock.colName || currentBlock.items.length > 0) {
-                blocks.push(currentBlock);
-            }
+            if (currentBlock.colName || currentBlock.items.length > 0) blocks.push(currentBlock);
 
-            // 3. จัด Format การแสดงผล 
+            // 3. Formatting
             let isOneLine = document.getElementById('opt_one_line').checked;
-            
             let formattedBlocks = blocks.map(block => {
-                if (block.items.length === 0) {
-                    return block.colName ? `${block.colName} =` : "";
-                }
-
+                if (block.items.length === 0) return block.colName ? `${block.colName} =` : "";
                 let itemsStr = isOneLine ? block.items.join(' / ') : block.items.join('\n');
-                
-                if (block.colName) {
-                    return isOneLine ? `${block.colName} = ${itemsStr}` : `${block.colName} =\n${itemsStr}`;
-                } else {
-                    return itemsStr;
-                }
-            }).filter(str => str !== ""); // กรองบรรทัดว่างออก
+                return block.colName ? (isOneLine ? `${block.colName} = ${itemsStr}` : `${block.colName} =\n${itemsStr}`) : itemsStr;
+            }).filter(str => str !== "");
 
-            // --- หัวใจสำคัญของ V9.6: ถ้าเปิด One Line ให้เอาบล็อกมาต่อกันด้วย / แทนการขึ้นบรรทัดใหม่ ---
             let final = isOneLine ? formattedBlocks.join(' / ') : formattedBlocks.join('\n');
 
-            // 4. Conditions
+            // 4. Conditions (UPPERCASE -> Price -> Clean Space)
             if (document.getElementById('opt_upper').checked) final = final.toUpperCase();
-            if (document.getElementById('opt_remove_prices').checked) final = final.replace(/\d{3,}/g, '');
-            if (document.getElementById('opt_clean_space').checked) final = final.replace(/ {2,}/g, ' ');
+            
+            if (document.getElementById('opt_remove_prices').checked) {
+                // ลบตัวเลข 3-5 หลักที่แยกเป็นอิสระ (ถูกล้อมด้วยช่องว่าง หรือจุดเริ่มต้น/จบประโยค)
+                final = final.replace(/(^|\s)\d{3,5}(\s|$)/g, '$1$2');
+            }
 
-            // ทำความสะอาดพวก / ซ้อน / เผื่อไว้
+            if (document.getElementById('opt_clean_space').checked) {
+                final = final.replace(/ {2,}/g, ' ');
+            }
+
             document.getElementById('outputText').value = final.replace(/ = \/ /g, ' = ').replace(/ = $/g, ' =').trim();
             saveSettings();
         }
@@ -539,16 +486,17 @@
             settings.layout = { col: document.getElementById('sec-collection').classList.contains('collapsed'), rep: document.getElementById('sec-replace').classList.contains('collapsed') };
             document.querySelectorAll('#replaceInputs .list-item-row').forEach(r => settings.replaceList.push({ f: r.querySelector('.val-from').value, t: r.querySelector('.val-to').value, a: r.querySelector('.list-check').checked }));
             document.querySelectorAll('#collectionInputs .list-item-row').forEach(r => settings.collectionList.push({ f: r.querySelector('.val-from').value, a: r.querySelector('.list-check').checked }));
-            localStorage.setItem('tt_config_v9_6', JSON.stringify(settings));
+            localStorage.setItem('tt_config_v9_7', JSON.stringify(settings));
         }
 
         function loadSettings() {
-            const saved = localStorage.getItem('tt_config_v9_6') || localStorage.getItem('tt_config_v9_5');
+            const saved = localStorage.getItem('tt_config_v9_7') || localStorage.getItem('tt_config_v9_6');
             if (saved) {
                 const config = JSON.parse(saved);
                 for (let id in config.options) if (document.getElementById(id)) document.getElementById(id).checked = config.options[id];
                 if(config.layout.col) document.getElementById('sec-collection').classList.add('collapsed');
                 if(config.layout.rep) document.getElementById('sec-replace').classList.add('collapsed');
+                document.getElementById('replaceInputs').innerHTML = ''; document.getElementById('collectionInputs').innerHTML = '';
                 config.replaceList.forEach(i => renderListRow('replace', i.f, i.t, i.a));
                 config.collectionList.forEach(i => renderListRow('collection', i.f, "", i.a));
             } else {
@@ -558,26 +506,18 @@
         }
 
         function exportData() {
-            const encoded = btoa(encodeURIComponent(localStorage.getItem('tt_config_v9_6')));
+            const encoded = btoa(encodeURIComponent(localStorage.getItem('tt_config_v9_7')));
             showSystemModal({ type: 'prompt', title: 'Export', message: 'คัดลอกรหัสนี้ไปใช้ Import:', value: encoded, readonly: true, hideCancel: true });
         }
 
         function importData() {
             showSystemModal({ type: 'prompt', title: 'Import', message: 'วางรหัส Export ที่นี่:', onConfirm: (code) => {
-                try { const decoded = decodeURIComponent(atob(code)); JSON.parse(decoded); localStorage.setItem('tt_config_v9_6', decoded); loadSettings(); } catch(e) {}
+                try { const decoded = decodeURIComponent(atob(code)); JSON.parse(decoded); localStorage.setItem('tt_config_v9_7', decoded); loadSettings(); } catch(e) {}
             }});
         }
 
         async function pasteText() { try { document.getElementById('inputText').value = await navigator.clipboard.readText(); processText(); } catch (e) {} }
-        
-        function copyText(btn) { 
-            const el = document.getElementById('outputText'); 
-            el.select(); 
-            document.execCommand('copy'); 
-            window.getSelection().removeAllRanges();
-            btn.style.transform = 'scale(0.9)';
-            setTimeout(() => btn.style.transform = 'scale(1)', 150);
-        }
+        function copyText(btn) { const el = document.getElementById('outputText'); el.select(); document.execCommand('copy'); window.getSelection().removeAllRanges(); btn.style.transform = 'scale(0.9)'; setTimeout(() => btn.style.transform = 'scale(1)', 150); }
 
         window.onload = loadSettings;
     </script>
