@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Text Transformer V9.7</title>
+    <title>Text Transformer V9.8</title>
     <style>
         /* --- Root & Theme --- */
         :root {
@@ -260,7 +260,7 @@
             <div class="shipping-item">
                 <div class="shipping-text">
                     <div class="shipping-title">One Line Format</div>
-                    <div class="shipping-subtitle">จัดรูปแบบเป็นบรรทัดเดียว คั่นด้วย /</div>
+                    <div class="shipping-subtitle">รวมบรรทัด คั่นหมวดด้วย // คั่นของด้วย /</div>
                 </div>
                 <label class="ios-switch"><input type="checkbox" class="save-state" id="opt_one_line" onchange="processText()"><span class="slider"></span></label>
             </div>
@@ -278,7 +278,7 @@
                 <span style="color:var(--x-border-dark);">|</span>
                 <button class="btn-text" onclick="importData()">Import settings</button>
             </div>
-            <div style="text-align: center; color: var(--x-border-dark); font-size: 1.1rem; margin-top: 1rem;">Version 9.7</div>
+            <div style="text-align: center; color: var(--x-border-dark); font-size: 1.1rem; margin-top: 1rem;">Version 9.8</div>
         </aside>
     </div>
 
@@ -413,18 +413,17 @@
             closeModal(); processText();
         }
 
-        // --- Core Logic V9.7 (Spacebar Support & Simple Price Removal) ---
+        // --- Core Logic V9.8 (Double Slash / Spacebar Support) ---
         function processText() {
             let originalText = document.getElementById('inputText').value;
             let text = originalText;
 
-            // 1. Replace List (ทำเป็นอันดับแรก)
+            // 1. Replace List
             document.querySelectorAll('#replaceInputs .list-item-row').forEach(row => {
                 if (row.querySelector('.list-check').checked) {
                     const from = row.querySelector('.val-from').value;
                     let to = row.querySelector('.val-to').value;
                     
-                    // แปลง (space) เป็นช่องว่างจริง
                     if (to === '(space)') to = ' ';
 
                     if (from) {
@@ -458,17 +457,20 @@
             let isOneLine = document.getElementById('opt_one_line').checked;
             let formattedBlocks = blocks.map(block => {
                 if (block.items.length === 0) return block.colName ? `${block.colName} =` : "";
+                
+                // ถ้ารวมบรรทัด ให้ใช้ / คั่นแต่ละรายการย่อย
                 let itemsStr = isOneLine ? block.items.join(' / ') : block.items.join('\n');
+                
                 return block.colName ? (isOneLine ? `${block.colName} = ${itemsStr}` : `${block.colName} =\n${itemsStr}`) : itemsStr;
             }).filter(str => str !== "");
 
-            let final = isOneLine ? formattedBlocks.join(' / ') : formattedBlocks.join('\n');
+            // ถ้ารวมบรรทัด ให้ใช้ // คั่นระหว่างคอลเลคชัน (หมวดหมู่)
+            let final = isOneLine ? formattedBlocks.join(' // ') : formattedBlocks.join('\n');
 
-            // 4. Conditions (UPPERCASE -> Price -> Clean Space)
+            // 4. Conditions
             if (document.getElementById('opt_upper').checked) final = final.toUpperCase();
             
             if (document.getElementById('opt_remove_prices').checked) {
-                // ลบตัวเลข 3-5 หลักที่แยกเป็นอิสระ (ถูกล้อมด้วยช่องว่าง หรือจุดเริ่มต้น/จบประโยค)
                 final = final.replace(/(^|\s)\d{3,5}(\s|$)/g, '$1$2');
             }
 
@@ -476,7 +478,8 @@
                 final = final.replace(/ {2,}/g, ' ');
             }
 
-            document.getElementById('outputText').value = final.replace(/ = \/ /g, ' = ').replace(/ = $/g, ' =').trim();
+            // ทำความสะอาดเครื่องหมายเกิน เผื่อกรณีคอลเลคชันเปล่าๆ ไปเจอเครื่องหมาย // หรือ /
+            document.getElementById('outputText').value = final.replace(/ = \/\/ /g, ' = ').replace(/ = \/ /g, ' = ').replace(/ = $/g, ' =').trim();
             saveSettings();
         }
 
@@ -486,11 +489,11 @@
             settings.layout = { col: document.getElementById('sec-collection').classList.contains('collapsed'), rep: document.getElementById('sec-replace').classList.contains('collapsed') };
             document.querySelectorAll('#replaceInputs .list-item-row').forEach(r => settings.replaceList.push({ f: r.querySelector('.val-from').value, t: r.querySelector('.val-to').value, a: r.querySelector('.list-check').checked }));
             document.querySelectorAll('#collectionInputs .list-item-row').forEach(r => settings.collectionList.push({ f: r.querySelector('.val-from').value, a: r.querySelector('.list-check').checked }));
-            localStorage.setItem('tt_config_v9_7', JSON.stringify(settings));
+            localStorage.setItem('tt_config_v9_8', JSON.stringify(settings));
         }
 
         function loadSettings() {
-            const saved = localStorage.getItem('tt_config_v9_7') || localStorage.getItem('tt_config_v9_6');
+            const saved = localStorage.getItem('tt_config_v9_8') || localStorage.getItem('tt_config_v9_7');
             if (saved) {
                 const config = JSON.parse(saved);
                 for (let id in config.options) if (document.getElementById(id)) document.getElementById(id).checked = config.options[id];
@@ -506,13 +509,13 @@
         }
 
         function exportData() {
-            const encoded = btoa(encodeURIComponent(localStorage.getItem('tt_config_v9_7')));
+            const encoded = btoa(encodeURIComponent(localStorage.getItem('tt_config_v9_8')));
             showSystemModal({ type: 'prompt', title: 'Export', message: 'คัดลอกรหัสนี้ไปใช้ Import:', value: encoded, readonly: true, hideCancel: true });
         }
 
         function importData() {
             showSystemModal({ type: 'prompt', title: 'Import', message: 'วางรหัส Export ที่นี่:', onConfirm: (code) => {
-                try { const decoded = decodeURIComponent(atob(code)); JSON.parse(decoded); localStorage.setItem('tt_config_v9_7', decoded); loadSettings(); } catch(e) {}
+                try { const decoded = decodeURIComponent(atob(code)); JSON.parse(decoded); localStorage.setItem('tt_config_v9_8', decoded); loadSettings(); } catch(e) {}
             }});
         }
 
