@@ -5,30 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Text Transformer V9.8</title>
     <style>
-        /* --- Root & Theme --- */
+        /* --- Root & Theme (Claude UI Style) --- */
         :root {
-            --x-bg-main: hsl(0, 0%, 100%);
-            --x-bg-subdued: hsl(0, 0%, 96%); 
-            --x-border: hsl(0, 0%, 87%);
-            --x-border-dark: hsl(0, 0%, 84%);
-            --x-text-main: hsl(0, 0%, 0%);
-            --x-text-subdued: hsl(0, 0%, 44%);
-            --x-primary: #5b00ed; 
-            --x-primary-hover: #4a00c2;
-            --x-primary-light: #F5F6FF;
-            --x-setting-gray: #808080;
-            --x-danger: #D91C1C;
+            /* Claude Light Theme */
+            --x-bg-main: #FAF9F6;
+            --x-bg-subdued: #FFFFFF; 
+            --x-border: #E5E3D8;
+            --x-border-dark: #D4D2C7;
+            --x-text-main: #2D2C28;
+            --x-text-subdued: #76746A;
+            --x-primary: #D97757; /* Claude Terracotta */
+            --x-primary-hover: #C56648;
+            --x-primary-light: #F4EBE6;
+            --x-setting-gray: #888888;
+            --x-danger: #D93B3B;
             --x-radius-base: 8px;
             --x-radius-large: 12px;
-            --x-shadow-base: 0 4px 12px rgba(0, 0, 0, 0.1);
-            --x-shadow-modal: 0 10px 30px rgba(0, 0, 0, 0.2);
-            --x-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --x-shadow-base: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --x-shadow-modal: 0 10px 30px rgba(0, 0, 0, 0.1);
+            
+            /* Claude Fonts */
+            --x-font-family: "Söhne", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --x-font-serif: "Tiempos Text", "Tiempos", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
         }
 
         [data-theme="dark"] {
-            --x-bg-main: #121212; --x-bg-subdued: #1A1A1A; --x-border: #333333;
-            --x-border-dark: #444444; --x-text-main: #F5F5F5; --x-text-subdued: #A0A0A0;
-            --x-primary: #8C52FF; --x-primary-light: #2A1E4A;
+            /* Claude Dark Theme */
+            --x-bg-main: #18181A;
+            --x-bg-subdued: #27272A;
+            --x-border: #3F3F46;
+            --x-border-dark: #52525B;
+            --x-text-main: #E4E4E7;
+            --x-text-subdued: #A1A1AA;
+            --x-primary: #D87B56; 
+            --x-primary-light: #3D2D27;
         }
 
         html { font-size: 62.5%; }
@@ -46,7 +56,8 @@
         /* Header */
         .top-header { background: var(--x-bg-main); border-bottom: 1px solid var(--x-border); padding: 1.5rem 2rem; position: sticky; top:0; z-index: 1000;}
         .header-content { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .header-logo { font-size: 2.1rem; font-weight: bold; color: var(--x-primary); }
+        /* ใช้ฟอนต์แบบ Serif ในส่วนโลโก้เพื่อให้ดูเป็น Claude */
+        .header-logo { font-size: 2.2rem; font-family: var(--x-font-serif); font-weight: 500; color: var(--x-text-main); letter-spacing: -0.02em;}
 
         /* Layout */
         .layout-container { display: flex; flex: 1; width: 100%; max-width: 1000px; margin: 0 auto; align-items: flex-start;}
@@ -57,7 +68,8 @@
         }
 
         /* --- Sections & Collapsible --- */
-        .section-title { font-size: 1.8rem; font-weight: bold; color: var(--x-primary); margin: 0;}
+        /* ใช้ฟอนต์แบบ Serif สำหรับหัวข้อ */
+        .section-title { font-size: 1.8rem; font-family: var(--x-font-serif); font-weight: 500; color: var(--x-text-main); margin: 0; letter-spacing: -0.01em;}
         .collapsible-section { border-top: 1px solid var(--x-border); padding-top: 1rem; margin-top: 1rem; }
         .section-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; }
         .header-actions { display: flex; gap: 0.5rem; align-items: center; }
@@ -75,9 +87,9 @@
         textarea.final-output { 
             width: 100%; background: var(--x-bg-subdued); border: 1px solid var(--x-border-dark); 
             border-radius: var(--x-radius-large); padding: 1.5rem; padding-bottom: 1.5rem; 
-            font-family: inherit; font-size: 1.4rem; color: var(--x-text-main); resize: vertical; outline: none; box-sizing: border-box; transition: 0.2s;
+            font-family: var(--x-font-family); font-size: 1.4rem; color: var(--x-text-main); resize: vertical; outline: none; box-sizing: border-box; transition: 0.2s;
         }
-        textarea.final-output:focus { border-color: var(--x-primary); background: var(--x-bg-main); box-shadow: 0 0 0 1px var(--x-primary);}
+        textarea.final-output:focus { border-color: var(--x-primary); background: var(--x-bg-main); box-shadow: 0 0 0 2px var(--x-primary-light);}
         
         .btn-copy-inline {
             position: absolute; bottom: 1.2rem; right: 1.2rem;
@@ -87,14 +99,15 @@
             cursor: pointer; transition: 0.2s;
         }
         .btn-copy-inline:hover { background: var(--x-primary-hover); }
-        .btn-paste-inline { top: 1.2rem; bottom: auto; }
+        .btn-paste-inline { top: 1.2rem; bottom: auto; background: var(--x-bg-main); border: 1px solid var(--x-border-dark); color: var(--x-text-main); }
+        .btn-paste-inline:hover { background: var(--x-bg-subdued); }
 
         /* --- iOS Toggle Switch --- */
         .shipping-item { display: flex; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid var(--x-border); gap: 1rem; }
         .shipping-item:last-child { border-bottom: none; }
         .shipping-text { flex: 1; }
-        .shipping-title { font-size: 1.4rem; font-weight: 600; color: var(--x-text-main); }
-        .shipping-subtitle { font-size: 1.1rem; color: var(--x-text-subdued); margin-top: 0.1rem;}
+        .shipping-title { font-size: 1.4rem; font-weight: 500; color: var(--x-text-main); }
+        .shipping-subtitle { font-size: 1.2rem; color: var(--x-text-subdued); margin-top: 0.1rem;}
         
         .ios-switch { position: relative; display: inline-block; width: 4.2rem; height: 2.4rem; flex-shrink: 0; }
         .ios-switch input { opacity: 0; width: 0; height: 0; }
@@ -113,7 +126,7 @@
         .list-item-row:last-child { border-bottom: none; }
         .list-info { flex: 1; font-size: 1.4rem; color: var(--x-text-main); width: 100%;}
         .list-info.grid-mode { display: grid; grid-template-columns: 1fr 2rem 1fr; gap: 0.8rem; align-items: center; }
-        .list-pill { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: transparent; border: none; padding: 0; width: 100%; }
+        .list-pill { font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: transparent; border: none; padding: 0; width: 100%; }
         .list-pill.center-text { text-align: center; }
         .btn-add { width: 100%; text-align: left; background: transparent; border: none; color: var(--x-primary); font-size: 1.4rem; cursor: pointer; padding: 0.8rem 0 0.5rem 0; display: flex; align-items: center; gap: 0.8rem; font-weight: 500; }
         .btn-add svg { stroke-width: 2.5; width: 1.8rem; height: 1.8rem; }
@@ -132,20 +145,23 @@
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 3000; display: none; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
         .modal-overlay.show { display: flex; opacity: 1; }
         .modal-overlay.top-tier { z-index: 4000; } 
-        .modal-content { background: var(--x-bg-main); border-radius: var(--x-radius-large); width: 100%; max-width: 400px; box-shadow: var(--x-shadow-modal); overflow: hidden; transform: translateY(20px); transition: 0.3s; }
-        .modal-header { padding: 2rem; border-bottom: 1px solid var(--x-border); font-size: 1.6rem; font-weight: bold; color: var(--x-text-main); }
+        .modal-content { background: var(--x-bg-main); border-radius: var(--x-radius-large); width: 100%; max-width: 400px; box-shadow: var(--x-shadow-modal); overflow: hidden; transform: translateY(20px); transition: 0.3s; border: 1px solid var(--x-border); }
+        .modal-header { padding: 2rem; border-bottom: 1px solid var(--x-border); font-size: 1.6rem; font-weight: 500; font-family: var(--x-font-serif); color: var(--x-text-main); }
         .modal-body { padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
         .modal-body label { font-size: 1.3rem; color: var(--x-text-subdued); font-weight: 500; margin-bottom: -0.5rem;}
-        .modal-body input { width: 100%; background: transparent; border: 1px solid var(--x-border-dark); padding: 1.2rem; border-radius: var(--x-radius-base); color: var(--x-text-main); font-size: 1.4rem; box-sizing: border-box; }
-        .modal-body input:focus { border-color: var(--x-primary); outline: none; }
+        .modal-body input { width: 100%; background: transparent; border: 1px solid var(--x-border-dark); padding: 1.2rem; border-radius: var(--x-radius-base); color: var(--x-text-main); font-size: 1.4rem; box-sizing: border-box; transition: 0.2s;}
+        .modal-body input:focus { border-color: var(--x-primary); outline: none; box-shadow: 0 0 0 2px var(--x-primary-light);}
         .modal-footer { padding: 1.5rem 2rem; border-top: 1px solid var(--x-border); display: flex; justify-content: flex-end; gap: 1rem; background: var(--x-bg-subdued);}
-        .btn-modal { padding: 1rem 1.6rem; border-radius: var(--x-radius-base); border: 1px solid var(--x-border-dark); background: var(--x-bg-main); color: var(--x-text-main); cursor: pointer; font-size: 1.4rem; font-weight: 500;}
+        .btn-modal { padding: 1rem 1.6rem; border-radius: var(--x-radius-base); border: 1px solid var(--x-border-dark); background: var(--x-bg-main); color: var(--x-text-main); cursor: pointer; font-size: 1.4rem; font-weight: 500; transition: 0.2s;}
+        .btn-modal:hover { background: var(--x-bg-subdued); }
         .btn-modal.save { background: var(--x-primary); color: white; border-color: var(--x-primary); }
+        .btn-modal.save:hover { background: var(--x-primary-hover); }
         .btn-text-btn { background: none; border: none; color: var(--x-primary); font-size: 1.2rem; cursor: pointer; padding: 0; font-weight: 500;}
 
         /* Footer */
         .footer-links { display: flex; gap: 1.5rem; justify-content: center; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--x-border); }
-        .btn-text { background: none; border: none; color: var(--x-text-subdued); cursor: pointer; font-size: 1.3rem; }
+        .btn-text { background: none; border: none; color: var(--x-text-subdued); cursor: pointer; font-size: 1.3rem; transition: 0.2s;}
+        .btn-text:hover { color: var(--x-text-main); }
 
         @media (max-width: 800px) {
             .layout-container { flex-direction: column; }
@@ -159,7 +175,7 @@
     <header class="top-header">
         <div class="header-content">
             <div class="header-logo">Text Transformer</div>
-            <button onclick="toggleTheme()" style="background:none; border:1px solid var(--x-border); padding:0.6rem 1.2rem; border-radius:var(--x-radius-base); cursor:pointer; color:inherit; font-weight:500;">🌗 Theme</button>
+            <button onclick="toggleTheme()" style="background:none; border:1px solid var(--x-border-dark); padding:0.6rem 1.2rem; border-radius:var(--x-radius-base); cursor:pointer; color:inherit; font-weight:500; font-size: 1.3rem;">🌗 Theme</button>
         </div>
     </header>
 
@@ -231,7 +247,7 @@
         </main>
 
         <aside class="summary-panel">
-            <h2 class="section-title" style="margin-top:0;">Conditions</h2>
+            <h2 class="section-title" style="margin-top:0; margin-bottom: 1.5rem;">Conditions</h2>
 
             <div class="shipping-item">
                 <div class="shipping-text">
@@ -265,7 +281,7 @@
                 <label class="ios-switch"><input type="checkbox" class="save-state" id="opt_one_line" onchange="processText()"><span class="slider"></span></label>
             </div>
 
-            <h2 class="section-title" style="margin-top:3rem;">Result</h2>
+            <h2 class="section-title" style="margin-top:4rem; margin-bottom: 1.5rem;">Result</h2>
             <div class="output-wrapper" style="margin-bottom: 0;">
                 <textarea id="outputText" class="final-output" style="min-height: 180px; background: var(--x-bg-main);" readonly placeholder="รอข้อความ..."></textarea>
                 <button class="btn-copy-inline" onclick="copyText(this)" title="Copy Result">
@@ -278,7 +294,7 @@
                 <span style="color:var(--x-border-dark);">|</span>
                 <button class="btn-text" onclick="importData()">Import settings</button>
             </div>
-            <div style="text-align: center; color: var(--x-border-dark); font-size: 1.1rem; margin-top: 1rem;">Version 9.8</div>
+            <div style="text-align: center; color: var(--x-border-dark); font-size: 1.1rem; margin-top: 1rem; font-family: var(--x-font-family);">Version 9.8 (Claude Edition)</div>
         </aside>
     </div>
 
@@ -380,7 +396,7 @@
             let infoHtml = mode === 'replace' ? 
                 `<div class="list-info grid-mode"><div class="list-pill center-text rep-from-text">${from}</div><div style="color:var(--x-text-subdued); text-align:center;">→</div><div class="list-pill center-text rep-to-text">${to || '(ลบทิ้ง)'}</div></div>` :
                 `<div class="list-info block-mode"><div class="list-pill left-text rep-from-text">${from}</div></div>`;
-            row.innerHTML = `<input type="checkbox" class="list-check" ${checked ? 'checked' : ''} onchange="processText()" style="width:1.6rem; height:1.6rem;">${infoHtml}<input type="hidden" class="val-from" value="${from}">${mode === 'replace' ? `<input type="hidden" class="val-to" value="${to}">` : ''}<div class="dropdown-container"><button class="option-btn" onclick="toggleDropdown(event, this)"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button><div class="dropdown-menu"><div class="dropdown-item edit" onclick="openModal('${mode}', this)">Edit</div><div class="dropdown-item delete" onclick="deleteListRow(this)">Delete</div></div></div>`;
+            row.innerHTML = `<input type="checkbox" class="list-check" ${checked ? 'checked' : ''} onchange="processText()" style="width:1.6rem; height:1.6rem; accent-color: var(--x-primary);"><div style="flex:1;">${infoHtml}</div><input type="hidden" class="val-from" value="${from}">${mode === 'replace' ? `<input type="hidden" class="val-to" value="${to}">` : ''}<div class="dropdown-container"><button class="option-btn" onclick="toggleDropdown(event, this)"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button><div class="dropdown-menu"><div class="dropdown-item edit" onclick="openModal('${mode}', this)">Edit</div><div class="dropdown-item delete" onclick="deleteListRow(this)">Delete</div></div></div>`;
             container.appendChild(row);
         }
 
@@ -413,7 +429,7 @@
             closeModal(); processText();
         }
 
-        // --- Core Logic V9.8 (Double Slash / Spacebar Support) ---
+        // --- Core Logic V9.8 ---
         function processText() {
             let originalText = document.getElementById('inputText').value;
             let text = originalText;
@@ -458,13 +474,11 @@
             let formattedBlocks = blocks.map(block => {
                 if (block.items.length === 0) return block.colName ? `${block.colName} =` : "";
                 
-                // ถ้ารวมบรรทัด ให้ใช้ / คั่นแต่ละรายการย่อย
                 let itemsStr = isOneLine ? block.items.join(' / ') : block.items.join('\n');
                 
                 return block.colName ? (isOneLine ? `${block.colName} = ${itemsStr}` : `${block.colName} =\n${itemsStr}`) : itemsStr;
             }).filter(str => str !== "");
 
-            // ถ้ารวมบรรทัด ให้ใช้ // คั่นระหว่างคอลเลคชัน (หมวดหมู่)
             let final = isOneLine ? formattedBlocks.join(' // ') : formattedBlocks.join('\n');
 
             // 4. Conditions
@@ -478,7 +492,6 @@
                 final = final.replace(/ {2,}/g, ' ');
             }
 
-            // ทำความสะอาดเครื่องหมายเกิน เผื่อกรณีคอลเลคชันเปล่าๆ ไปเจอเครื่องหมาย // หรือ /
             document.getElementById('outputText').value = final.replace(/ = \/\/ /g, ' = ').replace(/ = \/ /g, ' = ').replace(/ = $/g, ' =').trim();
             saveSettings();
         }
